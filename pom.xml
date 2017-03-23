@@ -8,6 +8,9 @@
   <name>clickerQuest-root</name>
   <modules>
     <module>webapp</module>
+    <module>services</module>
+    <module>interfaces</module>
+    <module>model</module>
   </modules>
 
   <properties>
