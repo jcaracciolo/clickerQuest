@@ -1,0 +1,33 @@
+This is a multi-module project for Web Aplication Proyects, ITBA.
+This aplicacion is an Idle game in development.
+
+BOOTSTRAP IN INTELLiJ IDEA
+ - clone the project
+ - start IntelliJ Idea and select import project7
+ - select the root folder of the git repository
+ - Maven
+ - Select:
+ 	* Import Maven projects automatically
+ 	* create IntelliJ IDEA modules
+ 	* create module groups for mult-module Maven projects
+ 	* Keep source and test folders on reimport
+ 	* Exclude build directory
+ 	* User Maven output directories
+ 	* Sources
+ 	* Documentation
+
+  - Continue with import
+  - Select the webapp/src/main/java folder and rigth click -> Mark directory as -> Sources Root
+
+  Configure jetty:
+
+  - Download the plugin from this site (if you already have jetty Runner as plugin uninstall it)
+        https://plugins.jetbrains.com/plugin/download?updateId=22888
+  - File -> Settings -> Plugins -> install from disk
+  - Select the downloaded zip
+  - Restart IDEA
+  - Run -> Edit Configurations
+  - Select jetty Runner
+  - Setup Path = '\' , Webapp Folder = 'webapp/src/main/webapp' , Classes Folder = 'webapp/target/classes'
+  - Done
+  IMPORTANT: DO NOT UPDATE THE JETTY PLUGIN OR IT WILL NOT WORK
