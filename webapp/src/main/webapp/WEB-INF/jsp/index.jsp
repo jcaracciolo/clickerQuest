@@ -1,8 +1,6 @@
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
 <html>
-<head>
-    <title><c:out> Tag Example</title>
-</head>
 <body>
-<c:out value="${'<tag> , &'}"/>
+<h2>Hello ${greeting}!</h2>
 </body>
+</html>

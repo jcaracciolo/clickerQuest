@@ -12,6 +12,7 @@
 
   <properties>
     <springVersion>4.2.5.RELEASE</springVersion>
+    <junitVersion>3.8.1</junitVersion>
     <servlet-apiVersion>2.5</servlet-apiVersion>
     <jstlVersion>1.2</jstlVersion>
   </properties>
@@ -26,16 +27,24 @@
       </dependency>
 
       <dependency>
-        <groupId>javax.servlet</groupId>
-        <artifactId>servlet-api</artifactId>
-        <version>${servlet-apiVersion}</version>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <version>${junitVersion}</version>
+        <scope>test</scope>
+      </dependency>
+
+      <dependency>
+        <groupId>jstl</groupId>
+        <artifactId>jstl</artifactId>
+        <version>${jstlVersion}</version>
         <scope>provided</scope>
       </dependency>
 
       <dependency>
         <groupId>javax.servlet</groupId>
-        <artifactId>jstl</artifactId>
-        <version>${jstlVersion}</version>
+        <artifactId>servlet-api</artifactId>
+        <version>${servlet-apiVersion}</version>
+        <scope>provided</scope>
       </dependency>
 
     </dependencies>
