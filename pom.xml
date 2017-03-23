@@ -11,6 +11,7 @@
     <module>services</module>
     <module>interfaces</module>
     <module>model</module>
+    <module>persistence</module>
   </modules>
 
   <properties>

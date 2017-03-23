@@ -29,5 +29,6 @@ BOOTSTRAP IN INTELLiJ IDEA
   - Run -> Edit Configurations
   - Select jetty Runner
   - Setup Path = '\' , Webapp Folder = 'webapp/src/main/webapp' , Classes Folder = 'webapp/target/classes'
+  - Down, before Launch, run Maven Goal with the command "clean compile"
   - Done
   IMPORTANT: DO NOT UPDATE THE JETTY PLUGIN OR IT WILL NOT WORK
