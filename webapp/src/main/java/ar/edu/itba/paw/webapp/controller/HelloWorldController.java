@@ -6,6 +6,7 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.UserDao;
 import ar.edu.itba.paw.interfaces.UserService;
+import ar.edu.itba.paw.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,4 +38,9 @@ public class HelloWorldController {
         return mav;
     }
 
+    @RequestMapping("/create")
+    public ModelAndView create(@RequestParam(value = "name", required = true) final String username) {
+        final User u = userService.create(username);
+        return new ModelAndView("redirect:/user/" + u.getId());
+    }
 }

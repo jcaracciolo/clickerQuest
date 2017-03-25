@@ -19,10 +19,17 @@
     <junitVersion>3.8.1</junitVersion>
     <servlet-apiVersion>2.5</servlet-apiVersion>
     <jstlVersion>1.2</jstlVersion>
+    <postgresqlVersion>9.3-1102-jdbc41</postgresqlVersion>
   </properties>
 
   <dependencyManagement>
     <dependencies>
+
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-context</artifactId>
+        <version>${springVersion}</version>
+      </dependency>
 
       <dependency>
         <groupId>org.springframework</groupId>
@@ -49,6 +56,18 @@
         <artifactId>servlet-api</artifactId>
         <version>${servlet-apiVersion}</version>
         <scope>provided</scope>
+      </dependency>
+
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-jdbc</artifactId>
+        <version>${springVersion}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.postgresql</groupId>
+        <artifactId>postgresql</artifactId>
+        <version>${postgresqlVersion}</version>
       </dependency>
 
     </dependencies>

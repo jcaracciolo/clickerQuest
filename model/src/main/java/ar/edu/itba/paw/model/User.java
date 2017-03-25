@@ -6,9 +6,9 @@ package ar.edu.itba.paw.model;
 public class User {
 
     private String name;
-    private int id;
+    private long id;
 
-    public User(String name,int id){
+    public User(String name, long id){
         this.name = name;
         this.id = id;
     }
@@ -17,7 +17,7 @@ public class User {
         return name;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
