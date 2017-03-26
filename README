@@ -32,3 +32,19 @@ BOOTSTRAP IN INTELLiJ IDEA
   - Down, before Launch, run Maven Goal with the command "clean compile"
   - Done
   IMPORTANT: DO NOT UPDATE THE JETTY PLUGIN OR IT WILL NOT WORK
+
+  Configure Postgres:
+  - Install postgres (sudo apt-get install postgresql)
+  - Start postres server (sudo service postgresql start)
+  - Change to user "postgres" (sudo su postgres)
+  - Create root user (createusername root) (si tira error no pasa nada)
+  - Create main database (createdb clickerQuest -O root)
+  - Enter psql (psql)
+  - Change root password (ALTER USER root WITH PASSWORD 'root')
+  - Type ( \g ) to send the query
+  - "ALTER ROLE" Means it was successful
+  - ( \q ) Exit psql
+  - ??
+  - Profit!!
+
+
