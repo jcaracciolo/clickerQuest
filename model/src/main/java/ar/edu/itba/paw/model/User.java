@@ -1,31 +1,26 @@
 package ar.edu.itba.paw.model;
 
-/**
- * Created by juanfra on 23/03/17.
- */
 public class User {
 
-    private long id;
     private String username;
-    private String password;
+    private String loginToken;
+    private long id;
 
-
-    public User(long id, String username, String password){
-        this.id = id;
+    public User( String username, long id,String loginToken){
         this.username = username;
-        this.password = password;
+        this.loginToken = loginToken;
+        this.id = id;
+    }
+
+    public long getId(){
+        return id;
     }
 
     public String getUsername() {
         return username;
     }
 
-    public long getId() {
-        return id;
+    public String getLoginToken() {
+        return loginToken;
     }
-
-    public String getPassword() {
-        return password;
-    }
-
 }

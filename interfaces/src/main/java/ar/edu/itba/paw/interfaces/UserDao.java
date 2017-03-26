@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.interfaces;
 
+import ar.edu.itba.paw.model.PublicUser;
 import ar.edu.itba.paw.model.User;
 
 /**
@@ -7,7 +8,11 @@ import ar.edu.itba.paw.model.User;
  */
 public interface UserDao {
 
-    User findById(long id);
+    PublicUser findById(long id);
+
+//    User validateToken (String token, long id );
+
+//    User login(String username, String password);
 
     /**
      * Create a new user.
@@ -15,5 +20,5 @@ public interface UserDao {
      * @param username The name of the user.
      * @return The created user.
      */
-    User create(String username, String Password);
+    User create(String username, String password);
 }

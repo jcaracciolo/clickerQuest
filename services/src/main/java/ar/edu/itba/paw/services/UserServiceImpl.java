@@ -2,6 +2,7 @@ package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.interfaces.UserDao;
 import ar.edu.itba.paw.interfaces.UserService;
+import ar.edu.itba.paw.model.PublicUser;
 import ar.edu.itba.paw.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,7 +16,7 @@ public class UserServiceImpl implements UserService {
     @Autowired
     UserDao userDao;
 
-    public User findById(long id) {
+    public PublicUser findById(long id) {
         return userDao.findById(id);
     }
 

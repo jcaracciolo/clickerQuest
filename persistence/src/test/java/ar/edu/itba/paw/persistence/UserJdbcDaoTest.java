@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.persistence;
 
+import ar.edu.itba.paw.model.PublicUser;
 import ar.edu.itba.paw.model.User;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,6 +15,7 @@ import javax.sql.DataSource;
 
 import static junit.framework.TestCase.assertNotNull;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 /**
  * Unit test for UserDao implementation in Jdbc
@@ -41,7 +43,7 @@ public class UserJdbcDaoTest {
         final User user = userDao.create(USERNAME, PASSWORD);
         assertNotNull(user);
         assertEquals(USERNAME, user.getUsername());
-        assertEquals(PASSWORD, user.getPassword());
+        assertEquals(PASSWORD, user.getLoginToken());
         assertEquals(0,user.getId());
         assertEquals(1, JdbcTestUtils.countRowsInTable(jdbcTemplate, "users"));
     }
@@ -63,6 +65,27 @@ public class UserJdbcDaoTest {
         assertEquals(0,user1.getId());
         assertEquals(1,user2.getId());
         assertEquals(2,user3.getId());
+    }
 
+    @Test
+    public void testUserRetrieval() {
+        final String username1 = USERNAME;
+        final String username2 = USERNAME + "2";
+
+        final User user1 = userDao.create(username1, PASSWORD);
+        final User user2 = userDao.create(username2, PASSWORD + "2");
+
+        final PublicUser retrievedUser1 = userDao.findByName(username1);
+        final PublicUser retrievedUser2 = userDao.findByName(username2);
+
+        assertNotNull(user1);
+        assertNotNull(user2);
+        assertNotNull(retrievedUser1);
+        assertNotNull(retrievedUser2);
+
+        assertEquals(user1.getId(),retrievedUser1.getId());
+        assertEquals(user1.getUsername(),retrievedUser1.getUsername());
+        assertEquals(user2.getId(),retrievedUser2.getId());
+        assertEquals(user2.getUsername(),retrievedUser2.getUsername());
     }
 }
