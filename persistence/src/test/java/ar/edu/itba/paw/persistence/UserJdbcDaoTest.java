@@ -33,7 +33,7 @@ public class UserJdbcDaoTest {
     @Before
     public void setUp() {
         jdbcTemplate = new JdbcTemplate(ds);
-        JdbcTestUtils.deleteFromTables(jdbcTemplate, "users");
+        jdbcTemplate.execute("TRUNCATE TABLE users RESTART IDENTITY AND COMMIT");
     }
 
     @Test
@@ -42,6 +42,27 @@ public class UserJdbcDaoTest {
         assertNotNull(user);
         assertEquals(USERNAME, user.getUsername());
         assertEquals(PASSWORD, user.getPassword());
+        assertEquals(0,user.getId());
         assertEquals(1, JdbcTestUtils.countRowsInTable(jdbcTemplate, "users"));
+    }
+
+    @Test
+    public void testId() {
+        final String username1 = USERNAME;
+        final String username2 = USERNAME + "2";
+        final String username3 = USERNAME + "3";
+
+        final User user1 = userDao.create(username1, PASSWORD);
+        final User user2 = userDao.create(username2, PASSWORD);
+        final User user3 = userDao.create(username3, PASSWORD);
+
+        assertNotNull(user1);
+        assertNotNull(user2);
+        assertNotNull(user3);
+        assertEquals(3, JdbcTestUtils.countRowsInTable(jdbcTemplate, "users"));
+        assertEquals(0,user1.getId());
+        assertEquals(1,user2.getId());
+        assertEquals(2,user3.getId());
+
     }
 }
