@@ -26,7 +26,7 @@ public class HelloWorldController {
     @RequestMapping("/user/{userId}")
     public ModelAndView helloWorld(@PathVariable int userId) {
         final ModelAndView mav = new ModelAndView("user");
-        mav.addObject("username",userDao.findById(userId).getName());
+        mav.addObject("username",userDao.findById(userId).getUsername());
         mav.addObject("userId",userDao.findById(userId).getId());
         return mav;
     }
@@ -40,7 +40,7 @@ public class HelloWorldController {
 
     @RequestMapping("/create")
     public ModelAndView create(@RequestParam(value = "name", required = true) final String username) {
-        final User u = userService.create(username);
+        final User u = userService.create(username,"password");
         return new ModelAndView("redirect:/user/" + u.getId());
     }
 }

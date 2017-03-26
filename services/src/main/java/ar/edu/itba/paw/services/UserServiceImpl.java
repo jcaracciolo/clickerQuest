@@ -16,10 +16,10 @@ public class UserServiceImpl implements UserService {
     UserDao userDao;
 
     public User findById(long id) {
-        return new User("JuanFra",id);
+        return userDao.findById(id);
     }
 
-    public User create(String username) {
-        return userDao.create(username);
+    public User create(String username, String password) {
+        return userDao.create(username,password);
     }
 }

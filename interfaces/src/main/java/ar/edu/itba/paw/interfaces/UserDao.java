@@ -15,5 +15,5 @@ public interface UserDao {
      * @param username The name of the user.
      * @return The created user.
      */
-    User create(String username);
+    User create(String username, String Password);
 }

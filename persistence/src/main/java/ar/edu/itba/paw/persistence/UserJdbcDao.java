@@ -19,7 +19,7 @@ import java.util.Map;
  * Created by juanfra on 23/03/17.
  */
 @Repository
-public class UserDaoImpl implements UserDao {
+public class UserJdbcDao implements UserDao {
 
     private JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert jdbcInsert;
@@ -27,22 +27,17 @@ public class UserDaoImpl implements UserDao {
 
     private final static RowMapper<User> ROW_MAPPER = new RowMapper<User>() {
                 public User mapRow(ResultSet rs, int rowNum) throws SQLException {
-                    return new User(rs.getString("username"), rs.getInt("userid"));
+                    return new User(rs.getInt("userid"), rs.getString("username"),rs.getString("password"));
                 }
             };
 
     @Autowired
-    public UserDaoImpl(final DataSource ds) {
+    public UserJdbcDao(final DataSource ds) {
         jdbcTemplate = new JdbcTemplate(ds);
 
         jdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
                 .withTableName("users")
                 .usingGeneratedKeyColumns("userid");
-
-        jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS users ("
-                        + "userid SERIAL PRIMARY KEY,"
-                        + "username varchar(100)"
-                        + ")");
     }
 
     public User findById(final long id) {
@@ -53,12 +48,12 @@ public class UserDaoImpl implements UserDao {
         return list.get(0);
     }
 
-    @Override
-    public User create(String username) {
+    public User create(String username, String password) {
         final Map<String, Object> args = new HashMap();
-        args.put("username", username); // la key es el nombre de la columna
+        args.put("username", username);
+        args.put("password", password);
         final Number userId = jdbcInsert.executeAndReturnKey(args);
-        return new User(username, userId.longValue());
+        return new User(userId.longValue(), username, password);
     }
 
 }
