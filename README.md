@@ -20,6 +20,7 @@ This aplicacion is an Idle game in development.
 ### Configure jetty:
 
 - Download the plugin [from this site](https://plugins.jetbrains.com/plugin/download?updateId=22888) (if you already have jetty Runner as plugin uninstall it)
+- If you are a Mac user, jump straight to the steps [described in this link](https://www.jetbrains.com/help/idea/2016.3/installing-updating-and-uninstalling-repository-plugins.html)
 - File -> Settings -> Plugins -> install from disk
 - Select the downloaded zip
 - Restart IDEA
