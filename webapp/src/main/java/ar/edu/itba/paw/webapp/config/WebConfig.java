@@ -26,6 +26,11 @@ import javax.sql.DataSource;
 public class WebConfig {
 
     // --------- WEBAPP
+
+    /**
+     * ViewResolver for the Webapp. JSP files located in WEB-INF/jsp/ will composed
+     * the different views of our Webapp
+     */
     @Bean
     public ViewResolver viewResolver() {
 
@@ -38,23 +43,11 @@ public class WebConfig {
     }
 
     // ---------- PERSISTENCE
-    @Value("classpath:schema.sql")
-    private Resource schemaSql;
 
-    @Bean
-    public DataSourceInitializer dataSourceInitializer(final DataSource ds) {
-        final DataSourceInitializer dsi = new DataSourceInitializer();
-        dsi.setDataSource(ds);
-        dsi.setDatabasePopulator(databasePopulator());
-        return dsi;
-    }
-
-    private DatabasePopulator databasePopulator() {
-        final ResourceDatabasePopulator dbp = new ResourceDatabasePopulator();
-        dbp.addScript(schemaSql);
-        return dbp;
-    }
-
+    /**
+     * DataSource which indicates how the application should access the database. Sets up
+     * the port, address, database name, user and password for it, as well as the driver.
+     */
     @Bean
     public DataSource dataSource() {
 
@@ -67,5 +60,31 @@ public class WebConfig {
 
     }
 
+    /**
+     * Initializer for the database, creates a new DataSource in which {@see DatabasePopulator}
+     * will be in charge of populating it at the beginning of the process
+     */
+    @Bean
+    public DataSourceInitializer dataSourceInitializer(final DataSource ds) {
+        final DataSourceInitializer dsi = new DataSourceInitializer();
+        dsi.setDataSource(ds);
+        dsi.setDatabasePopulator(databasePopulator());
+        return dsi;
+    }
+
+    /**
+     * Schema to be executed at the start of the WebApp to setup the project's database
+     */
+    @Value("classpath:schema.sql")
+    private Resource schemaSql;
+    /**
+     * DatabasePopulator that loads the corresponding script, in charge of populating
+     * the database.
+     */
+    private DatabasePopulator databasePopulator() {
+        final ResourceDatabasePopulator dbp = new ResourceDatabasePopulator();
+        dbp.addScript(schemaSql);
+        return dbp;
+    }
 
 }

@@ -11,10 +11,14 @@ import javax.sql.DataSource;
 /**
  * Created by juanfra on 25/03/17.
  */
-@ComponentScan({ "ar.edu.itba.paw.persistence", })
+@ComponentScan({ "ar.edu.itba.paw.persistence" })
 @Configuration
 public class TestConfig {
 
+    /**
+     * DataSource for the Testing of the Persistence Module. It uses a new HSQLDB dataBase
+     * stored temporarily in memory
+     */
     @Bean
     public DataSource dataSource() {
         final SimpleDriverDataSource ds = new SimpleDriverDataSource();
