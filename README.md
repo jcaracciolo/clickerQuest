@@ -7,13 +7,13 @@ This aplicacion is an Idle game in development.
 - Select the root folder of the git repository
 - From the three available options, choose Maven
 - Select the following options:
-  * Import Maven projects automatically
-  * Create IntelliJ IDEA modules for aggregator projects
-  * Create module groups for mult-module Maven projects
-  * Keep source and test folders on reimpor
-  * Exclude build directory
-  * User Maven output directories: `Detect automatically`
-  * Automatically download: `Sources` and `Documentation`
+  - [ ] Import Maven projects automatically
+  - [ ] Create IntelliJ IDEA modules for aggregator projects
+  - [ ] Create module groups for mult-module Maven projects
+  - [ ] Keep source and test folders on reimport
+  - [ ] Exclude build directory
+  - [ ] User Maven output directories: `Detect automatically`
+  - [ ] Automatically download: `Sources` and `Documentation`
 - Continue with import
 - Select the webapp/src/main/java folder and rigth click -> Mark directory as -> Sources Root
 
