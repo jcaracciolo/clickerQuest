@@ -16,4 +16,6 @@ public interface UserDao {
      * @return The created user.
      */
     User create(String username, String Password);
+
+    String getIconPath(final long id);
 }

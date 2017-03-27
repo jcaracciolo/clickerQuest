@@ -56,4 +56,9 @@ public class UserJdbcDao implements UserDao {
         return new User(userId.longValue(), username, password);
     }
 
+    //TODO make a correct implementation
+    public String getIconPath(final long id) {
+        return "\\resources\\" + id + ".jpg";
+    }
+
 }

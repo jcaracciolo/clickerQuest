@@ -10,7 +10,6 @@ import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.webapp.form.UserForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -29,8 +28,10 @@ public class HelloWorldController {
     @RequestMapping("/user")
     public ModelAndView helloWorld(@RequestParam("userId") int userId) {
         final ModelAndView mav = new ModelAndView("user");
-        mav.addObject("username",userDao.findById(userId).getUsername());
-        mav.addObject("userId",userDao.findById(userId).getId());
+        User user = userDao.findById(userId);
+        mav.addObject("username",user.getUsername());
+        mav.addObject("userId",user.getId());
+        mav.addObject("userIcon",userDao.getIconPath(user.getId()));
         return mav;
     }
 
@@ -56,4 +57,5 @@ public class HelloWorldController {
         final User u = userService.create(form.getUsername(), form.getPassword());
         return new ModelAndView("redirect:/user?userId=" + u.getId());
     }
+
 }
