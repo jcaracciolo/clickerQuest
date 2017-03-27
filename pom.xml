@@ -21,6 +21,8 @@
     <jstlVersion>1.2</jstlVersion>
     <postgresqlVersion>9.3-1102-jdbc41</postgresqlVersion>
     <hsqldbVersion>2.3.1</hsqldbVersion>
+    <javaxValidation-apiVersion>1.0.0.GA</javaxValidation-apiVersion>
+    <hibernateValidatorVersion>4.3.1.Final</hibernateValidatorVersion>
   </properties>
 
   <dependencyManagement>
@@ -83,6 +85,18 @@
         <artifactId>hsqldb</artifactId>
         <version>${hsqldbVersion}</version>
         <scope>test</scope>
+      </dependency>
+
+      <dependency>
+        <groupId>javax.validation</groupId>
+        <artifactId>validation-api</artifactId>
+        <version>${javaxValidation-apiVersion}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.hibernate</groupId>
+        <artifactId>hibernate-validator</artifactId>
+        <version>${hibernateValidatorVersion}</version>
       </dependency>
 
     </dependencies>
