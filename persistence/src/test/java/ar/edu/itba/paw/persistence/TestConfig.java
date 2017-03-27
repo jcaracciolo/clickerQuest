@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 
 import javax.sql.DataSource;
+import java.sql.Driver;
 
 /**
  * Created by juanfra on 25/03/17.
@@ -17,6 +18,7 @@ public class TestConfig {
 
     @Bean
     public DataSource dataSource() {
+
         final SimpleDriverDataSource ds = new SimpleDriverDataSource();
         ds.setDriverClass(JDBCDriver.class);
         ds.setUrl("jdbc:hsqldb:mem:paw");
