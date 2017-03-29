@@ -23,6 +23,9 @@
     <hsqldbVersion>2.3.1</hsqldbVersion>
     <javaxValidation-apiVersion>1.0.0.GA</javaxValidation-apiVersion>
     <hibernateValidatorVersion>4.3.1.Final</hibernateValidatorVersion>
+
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
   </properties>
 
   <dependencyManagement>

@@ -2,6 +2,7 @@
 <html>
 <body>
 <h2>Hello ${username}, your id is ${userId}!</h2>
-<img src="${pageContext.request.contextPath}${userIcon}"/>
+<c:url var="context" value="${userIcon}"/>
+<img src="${context}"/>
 </body>
 </html>

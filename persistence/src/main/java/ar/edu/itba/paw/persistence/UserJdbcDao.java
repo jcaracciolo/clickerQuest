@@ -23,13 +23,9 @@ public class UserJdbcDao implements UserDao {
 
     private JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert jdbcInsert;
-
-
-    private final static RowMapper<User> ROW_MAPPER = new RowMapper<User>() {
-                public User mapRow(ResultSet rs, int rowNum) throws SQLException {
-                    return new User(rs.getInt("userid"), rs.getString("username"),rs.getString("password"));
-                }
-            };
+    
+    private final static RowMapper<User> ROW_MAPPER = (rs, rowNum) ->
+            new User(rs.getInt("userid"), rs.getString("username"),rs.getString("password"));
 
     @Autowired
     public UserJdbcDao(final DataSource ds) {
@@ -58,7 +54,7 @@ public class UserJdbcDao implements UserDao {
 
     //TODO make a correct implementation
     public String getIconPath(final long id) {
-        return "\\resources\\" + id + ".jpg";
+        return "resources/" + id + ".jpg";
     }
 
 }
