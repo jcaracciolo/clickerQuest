@@ -2,7 +2,7 @@
 <html>
 <body>
 <h2>Hello ${username}, your id is ${userId}!</h2>
-<c:url var="context" value="${userIcon}"/>
-<img src="${context}"/>
+<c:url var="image" value="${userIcon}"/>
+<img src="${image}"/>
 </body>
 </html>

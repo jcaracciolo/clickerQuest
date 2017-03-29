@@ -12,7 +12,6 @@
   <packaging>war</packaging>
   <name>webapp Maven Webapp</name>
   <url>http://maven.apache.org</url>
-
   <dependencies>
 
     <dependency>
