@@ -6,26 +6,26 @@
     <%--<link rel="stylesheet" href="<c:url value="/css/style.css"/>" />--%>
 </head>
 <body>
-<h2><spring:message code="signUp.register"/><</h2>
-<c:url value="/create" var="postPath"/>
-<form:form modelAttribute="registerForm" action="${postPath}" method="post">
+<h2><spring:message code="signUp.register"/></h2>
+    <c:url value="/create" var="postPath"/>
+    <form:form modelAttribute="registerForm" action="${postPath}" method="post">
     <div>
-        <form:label path="username">Username: </form:label>
+        <form:label path="username"><spring:message code="signUp.username"/>: </form:label>
         <form:input type="text" path="username"/>
         <form:errors path="username" cssClass="formError" element="p"/>
     </div>
     <div>
-        <form:label path="password">Password: </form:label>
+        <form:label path="username"><spring:message code="signUp.password"/>: </form:label>
         <form:input type="password" path="password" />
         <form:errors path="password" cssClass="formError" element="p"/>
     </div>
     <div>
-        <form:label path="repeatPassword">Repeat password: </form:label>
+        <form:label path="username"><spring:message code="signUp.repeat-password"/>: </form:label>
         <form:input type="password" path="repeatPassword"/>
         <form:errors path="repeatPassword" cssClass="formError" element="p"/>
     </div>
     <div>
-        <input type="submit" value="Register!"/>
+        <input type="submit" value="<spring:message code="signUp.register"/>!"/>
     </div>
 </form:form>
 </body>
