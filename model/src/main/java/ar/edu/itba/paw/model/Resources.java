@@ -1,6 +1,4 @@
 package ar.edu.itba.paw.model;
-import com.sun.istack.internal.Nullable;
-import sun.plugin.dom.exception.InvalidStateException;
 
 /**
  * Created by juanfra on 31/03/17.
@@ -14,11 +12,10 @@ public enum Resources {
             case IRON: return "iron";
             case GOLD: return "gold";
             case MONEY: return "money";
-            default: throw new InvalidStateException("There is no string for this resource");
+            default: throw new RuntimeException("There is no string for this resource");
         }
     }
 
-    @Nullable
     public static Resources fromString(String s){
         switch (s.toLowerCase()) {
             case "wood": return WOOD;
@@ -28,6 +25,4 @@ public enum Resources {
             default: return null;
         }
     }
-
-
 }

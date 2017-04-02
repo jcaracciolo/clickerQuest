@@ -56,8 +56,19 @@ public class HelloWorldController {
             return index(form);
         }
 
-        final User u = userService.create(form.getUsername(), form.getPassword());
+        final User u = userService.create(form.getUsername(), form.getPassword(),"1.jpg");
         return new ModelAndView("redirect:/user?userId=" + u.getId());
+    }
+
+    @RequestMapping(value = "/{userId}/game")
+    public ModelAndView mainGameView(@PathVariable long userId){
+        ModelAndView mav = new ModelAndView("GameView");
+        mav.addObject("user",userService.findById(userId));
+        mav.addObject("storage",userService.getUserStorage(userId));
+        mav.addObject("factories",userService.getUserFactories(userId));
+        mav.addObject("productions",userService.getUserProductions(userId));
+        return mav;
+
     }
 
 }

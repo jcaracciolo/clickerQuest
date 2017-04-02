@@ -25,7 +25,7 @@ public class UserJdbcDao implements UserDao {
     private final SimpleJdbcInsert jdbcInsert;
     
     private final static RowMapper<User> ROW_MAPPER = (rs, rowNum) ->
-            new User(rs.getInt("userid"), rs.getString("username"),rs.getString("password"));
+            new User(rs.getInt("userid"), rs.getString("username"),rs.getString("password"),"1.img");
 
     @Autowired
     public UserJdbcDao(final DataSource ds) {
@@ -49,7 +49,7 @@ public class UserJdbcDao implements UserDao {
         args.put("username", username);
         args.put("password", password);
         final Number userId = jdbcInsert.executeAndReturnKey(args);
-        return new User(userId.longValue(), username, password);
+        return new User(userId.longValue(), username, password,"1.img");
     }
 
     //TODO make a correct implementation

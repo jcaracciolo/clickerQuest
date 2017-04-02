@@ -1,7 +1,5 @@
 package ar.edu.itba.paw.model;
 
-import sun.plugin.dom.exception.InvalidStateException;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -9,8 +7,11 @@ import java.util.Random;
 /**
  * Created by juanfra on 31/03/17.
  */
-public enum Factories {
-    NOTHINGFORWOOD, WOODFORIRON, IRONFORGOLD, WOODFORGOLD;
+public enum FactoryType {
+    NOTHINGFORWOOD,
+    WOODFORIRON,
+    IRONFORGOLD,
+    WOODFORGOLD;
 
     public Recipe getRecipe() {
         Random rng = new Random();
@@ -37,7 +38,7 @@ public enum Factories {
                 output.add(gold);
                 break;
             default:
-                throw new InvalidStateException("There is no Recipe for this factory");
+                throw new RuntimeException("There is no Recipe for this factory");
         }
 
         return new Recipe(input,output);
@@ -49,11 +50,12 @@ public enum Factories {
             case WOODFORIRON: return 1;
             case IRONFORGOLD: return 2;
             case WOODFORGOLD: return 3;
+            default: throw new RuntimeException("There is no ID for the corresponding FactoryType");
         }
     }
 
-    public static Factories getById(long id){
-        for (Factories f:Factories.values()){
+    public static FactoryType getById(long id){
+        for (FactoryType f: FactoryType.values()){
             if(f.getId() == id){
                 return f;
             }

@@ -7,7 +7,6 @@ public class Production {
     private Resources resource;
     private double rate;
 
-
     public String toString(){
         return resource + " " + rate + "/s";
     }

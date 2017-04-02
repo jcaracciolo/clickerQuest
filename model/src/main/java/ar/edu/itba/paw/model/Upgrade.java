@@ -8,28 +8,18 @@ public class Upgrade {
     private String description;
     private int factoryId;
     private int cost;
-    private double inputDivider;
-    private double outputMultiplier;
-    private double inputReduction;
-    private double outputReduction;
 
-
-    public Upgrade(int id, String description, int factoryId, int cost, double inputDivider, double outputMultiplier, double inputReduction, double outputReduction) {
+    public Upgrade(long id, String description, int factoryId, int cost) {
         this.id = id;
         this.description = description;
         this.factoryId = factoryId;
         this.cost = cost;
-        this.inputDivider = inputDivider;
-        this.outputMultiplier = outputMultiplier;
-        this.inputReduction = inputReduction;
-        this.outputReduction = outputReduction;
     }
 
     public String toString() {
         return description;
     }
-
-
+    
     public String getDescription() {
         return description;
     }
@@ -44,21 +34,5 @@ public class Upgrade {
 
     public int getFactoryId() {
         return factoryId;
-    }
-
-    public double getInputDivider() {
-        return inputDivider;
-    }
-
-    public double getOutputMultiplier() {
-        return outputMultiplier;
-    }
-
-    public double getInputReduction() {
-        return inputReduction;
-    }
-
-    public double getOutputReduction() {
-        return outputReduction;
     }
 }
