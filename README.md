@@ -56,10 +56,10 @@ IMPORTANT: DO NOT UPDATE THE JETTY PLUGIN OR IT WILL NOT WORK
 	* long userId
 	* FactoryType type
 	* double amount
+	* long level
 	* double inputReduction
 	* double outputMultiplier
 	* double costReduction
-	* long upgradeID
 
 #### Production
 	* Resources resource
@@ -93,6 +93,10 @@ IMPORTANT: DO NOT UPDATE THE JETTY PLUGIN OR IT WILL NOT WORK
     * lastStorageUpdated
     * token
     * password
+
+
+#### ArtLujo
+    * 
 
 
 
