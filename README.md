@@ -49,54 +49,54 @@ IMPORTANT: DO NOT UPDATE THE JETTY PLUGIN OR IT WILL NOT WORK
 ### Models
 
 #### Amount
-    * Resources resource
-	* double amount
+    - Resources resource
+	- double amount
 
 #### Factory
-	* long userId
-	* FactoryType type
-	* double amount
-	* long level
-	* double inputReduction
-	* double outputMultiplier
-	* double costReduction
-
-#### Production
-	* Resources resource
-	* double rate
-
-#### Recipe
-	* List<Production> input
-	* List<Production> output
-
-#### Upgrade
-	* long id
-	* String description
-	* int factoryId
-	* int cost
-
-#### User
-	* long id
-	* String username
-	* String password
-	* String profileImage
+	- __long userId__
+	- __FactoryType type__
+	- double amount
+	- long level
+	- double inputReduction
+	- double outputMultiplier
+	- double costReduction
 
 #### Wealth
-    * long userId
-    * resourceType
-    * production
-    * storage
-    * lastUpdated
+    - __long userId__
+    - __resourceType__
+    - production
+    - storage
+    - lastUpdated
+
+#### Production
+	- Resources resource
+	- double rate
+
+#### Recipe
+	- List<Production> input
+	- List<Production> output
+
+#### Upgrade
+	- long id
+	- String description
+	- int factoryId
+	- int cost
+
+#### User
+	- long id
+	- String username
+	- String password
+	- String profileImage
 
 #### UserMetadata
-    * long userId
-    * lastStorageUpdated
-    * token
-    * password
+    - long userId
+    - lastStorageUpdated
+    - token
+    - password
 
 
 #### ArtLujo
-    * 
+    *
 
 
 
