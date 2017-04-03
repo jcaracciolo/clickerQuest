@@ -46,3 +46,53 @@ IMPORTANT: DO NOT UPDATE THE JETTY PLUGIN OR IT WILL NOT WORK
 - Profit!!
 
 
+### Models
+
+#### Amount
+    * Resources resource
+	* double amount
+
+#### Factory
+	* long userId
+	* FactoryType type
+	* double amount
+	* double inputReduction
+	* double outputMultiplier
+	* double costReduction
+	* long upgradeID
+
+#### Production
+	* Resources resource
+	* double rate
+
+#### Recipe
+	* List<Production> input
+	* List<Production> output
+
+#### Upgrade
+	* long id
+	* String description
+	* int factoryId
+	* int cost
+
+#### User
+	* long id
+	* String username
+	* String password
+	* String profileImage
+	
+#### Wealth
+    * long userId
+    * resourceType
+    * production
+    * storage
+    * lastUpdated
+
+#### UserMetadata
+    * long userId
+    * lastStorageUpdated
+    * token
+    * password
+
+
+
