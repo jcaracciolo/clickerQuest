@@ -53,8 +53,8 @@ IMPORTANT: DO NOT UPDATE THE JETTY PLUGIN OR IT WILL NOT WORK
 	double amount
 
 #### Factory
-	*long userId*
-    *FactoryType type*
+	* long userId *
+    * FactoryType type *
 	double amount
 	long level
 	double inputReduction
@@ -62,8 +62,8 @@ IMPORTANT: DO NOT UPDATE THE JETTY PLUGIN OR IT WILL NOT WORK
 	double costReduction
 
 #### Wealth
-    *long userId*
-    *resourceType*
+    * long userId *
+    * int resourceType *
     production
     storage
     lastUpdated
