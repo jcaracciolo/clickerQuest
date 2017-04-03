@@ -1,0 +1,54 @@
+.upgradeButton.btn.waves-light {
+	width: 100%;
+	height: 100%;
+	padding: 0;
+}
+
+.complete-height.card {
+	height: 100vh;
+	margin: 0;
+}
+
+.main-frame.row {
+	margin: 0;	
+}
+
+p {
+	font-size: .7rem
+}
+
+p.centered-text {
+	text-align: center;
+}
+
+p.username {
+	font-size: 1.2rem;
+}
+
+div.section {
+	padding: 0;
+}
+
+div.divider {
+	margin: 0.6rem;
+}
+
+div.no-padding {
+	padding: 0;
+}
+
+.row.factory-card {
+	margin: 0;
+}
+
+.card-image.profile-picture {
+	max-width: 12rem;
+}
+
+.row.factory-row {
+	display: flex;
+}
+
+.factory-main {
+	max-width: 17rem;
+}
