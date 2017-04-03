@@ -18,4 +18,5 @@ public interface UserService {
     List<Amount> getUserStorage(long id);
     List<Factory> getUserFactories(long id);
 
+
 }

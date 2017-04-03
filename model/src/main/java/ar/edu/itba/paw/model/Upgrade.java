@@ -7,7 +7,7 @@ public class Upgrade {
     private long id;
     private String description;
     private int factoryId;
-    private int cost;
+    private double cost;
 
     public Upgrade(long id, String description, int factoryId, int cost) {
         this.id = id;
@@ -24,7 +24,7 @@ public class Upgrade {
         return description;
     }
 
-    public int getCost() {
+    public double getCost() {
         return cost;
     }
 

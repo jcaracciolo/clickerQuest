@@ -1,19 +1,19 @@
 package ar.edu.itba.paw.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
 
 /**
  * Created by juanfra on 31/03/17.
  */
 public class Factory {
+
     private long owner;
     private FactoryType type;
     private double amount;
     private double inputReduction;
     private double outputMultiplier;
     private double costReduction;
-    private long upgradeID;
+    private long level;
 
     public Factory(long owner, FactoryType type, double amount,
                    double inputReduction, double outputMultiplier, double costReduction, long upgradeID) {
@@ -23,7 +23,7 @@ public class Factory {
         this.inputReduction = inputReduction;
         this.outputMultiplier = outputMultiplier;
         this.costReduction = costReduction;
-        this.upgradeID = upgradeID;
+        this.level = upgradeID;
     }
 
     public long getOwner() {
@@ -38,32 +38,14 @@ public class Factory {
         return amount;
     }
 
-    public double getInputReduction() {
-        return inputReduction;
-    }
+    //PROCESS WITH MULTIPLIERS
+    public Map<Resources,Double> getCost() { return type.getCost(); }
 
-    public double getOutputMultiplier() {
-        return outputMultiplier;
-    }
+    //PROCESS WITH MULTIPLIERS
+    public Map<Resources,Double> getRecipe() { return type.getRecipe(); }
 
-    public double getCostReduction() {
-        return costReduction;
-    }
-
-    public long getUpgradeID() {
-        return upgradeID;
-    }
-
-    public List<Amount> getCost(){
-        return new ArrayList();
-    }
-
-    public Upgrade getUpgrade() {
-        return new Upgrade(owner,"Super Upgrade",2,300);
-    }
-
-    public Recipe getRecipe() {
-        return type.getRecipe();
+    public long getLevel() {
+        return level;
     }
 
     public String getImage(){

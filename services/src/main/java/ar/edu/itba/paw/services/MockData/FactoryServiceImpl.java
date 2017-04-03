@@ -9,11 +9,11 @@ import ar.edu.itba.paw.model.Upgrade;
  */
 public class FactoryServiceImpl implements FactoryService {
 
-    public Upgrade getUpgradeById(long id) {
+    public Upgrade getUpgradeById(int id) {
         return new Upgrade(id,"Super Upgrade",2,300);
     }
 
-    public FactoryType getFactoryById(long id) {
+    public FactoryType getFactoryById(int id) {
         return FactoryType.getById(id);
     }
 }

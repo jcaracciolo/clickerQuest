@@ -7,6 +7,8 @@ import ar.edu.itba.paw.model.Upgrade;
  * Created by juanfra on 02/04/17.
  */
 public interface FactoryService {
-    public Upgrade getUpgradeById(long id);
-    public FactoryType getFactoryById(long id);
+
+    public Upgrade getUpgradeById(int id);
+    public FactoryType getFactoryById(int id);
+
 }

@@ -1,8 +1,6 @@
 package ar.edu.itba.paw.model;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 /**
  * Created by juanfra on 31/03/17.
@@ -13,38 +11,37 @@ public enum FactoryType {
     IRONFORGOLD,
     WOODFORGOLD;
 
-    public Recipe getRecipe() {
+    public Map<Resources,Double> getRecipe() {
         Random rng = new Random();
-        List<Production> input = new ArrayList<>();
-        List<Production> output = new ArrayList<>();
+        Map<Resources,Double> recipe = new HashMap<>();
         //TODO implement correct factories
-        Production wood = new Production(Resources.WOOD,rng.nextDouble()*5);
-        Production iron = new Production(Resources.WOOD,rng.nextDouble()*5);
-        Production gold = new Production(Resources.WOOD,rng.nextDouble()*5);
+        Double wood = rng.nextDouble()*5;
+        Double iron = rng.nextDouble()*5;
+        Double gold = rng.nextDouble()*5;
 
         switch (this) {
             case NOTHINGFORWOOD:
-                output.add(wood);
+                recipe.put(Resources.WOOD,wood);
                 break;
             case WOODFORIRON:
-                input.add(wood);
-                output.add(iron);
+                recipe.put(Resources.WOOD,-wood);
+                recipe.put(Resources.IRON,iron);
                 break;
             case IRONFORGOLD:
-                input.add(iron);
-                output.add(gold);
+                recipe.put(Resources.IRON,-iron);
+                recipe.put(Resources.GOLD,gold);
             case WOODFORGOLD:
-                input.add(wood);
-                output.add(gold);
+                recipe.put(Resources.WOOD,-wood);
+                recipe.put(Resources.GOLD,gold);
                 break;
             default:
-                throw new RuntimeException("There is no Recipe for this factory");
+                throw new RuntimeException("There is no ResourcePackage for this factory");
         }
 
-        return new Recipe(input,output);
+        return recipe;
     }
 
-    public long getId() {
+    public int getId() {
         switch (this){
             case NOTHINGFORWOOD: return 0;
             case WOODFORIRON: return 1;
@@ -54,7 +51,9 @@ public enum FactoryType {
         }
     }
 
-    public static FactoryType getById(long id){
+    public Map<Resources,Double> getCost() { return null; }
+
+    public static FactoryType getById(int id){
         for (FactoryType f: FactoryType.values()){
             if(f.getId() == id){
                 return f;
