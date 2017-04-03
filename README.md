@@ -80,7 +80,7 @@ IMPORTANT: DO NOT UPDATE THE JETTY PLUGIN OR IT WILL NOT WORK
 	* String username
 	* String password
 	* String profileImage
-	
+
 #### Wealth
     * long userId
     * resourceType
