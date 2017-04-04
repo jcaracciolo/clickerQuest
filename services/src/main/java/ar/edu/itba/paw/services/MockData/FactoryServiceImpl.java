@@ -14,6 +14,6 @@ public class FactoryServiceImpl implements FactoryService {
     }
 
     public FactoryType getFactoryById(int id) {
-        return FactoryType.getById(id);
+        return FactoryType.fromId(id);
     }
 }

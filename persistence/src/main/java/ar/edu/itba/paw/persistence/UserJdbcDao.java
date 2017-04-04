@@ -1,7 +1,7 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.UserDao;
-import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -9,11 +9,7 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by juanfra on 23/03/17.
@@ -21,40 +17,123 @@ import java.util.Map;
 @Repository
 public class UserJdbcDao implements UserDao {
 
+    private static class RowWealth {
+        long userid;
+        ResourceType resourceType;
+        double production;
+        double storage;
+        Date lastUpdate;
+
+        public RowWealth(long userid, ResourceType resourceType, double production, double storage, Date lastUpdate) {
+            this.userid = userid;
+            this.resourceType = resourceType;
+            this.production = production;
+            this.storage = storage;
+            this.lastUpdate = lastUpdate;
+        }
+    }
+
     private JdbcTemplate jdbcTemplate;
-    private final SimpleJdbcInsert jdbcInsert;
-    
-    private final static RowMapper<User> ROW_MAPPER = (rs, rowNum) ->
-            new User(rs.getInt("userid"), rs.getString("username"),rs.getString("password"),"1.img");
+    private final SimpleJdbcInsert jdbcInsertUsers;
+    private final SimpleJdbcInsert jdbcInsertFactories;
+    private final SimpleJdbcInsert jdbcInsertWealths;
+
+    private final static RowMapper<User> USER_ROW_MAPPER = (rs, rowNum) ->
+            new User(rs.getLong("userid"),
+                    rs.getString("username"),
+                    rs.getString("password"),
+                    rs.getString("profileImage"));
+
+    private final static RowMapper<Factory> FACTORY_ROW_MAPPER = (rs, rowNum) ->
+            new Factory(rs.getLong("userid"),
+                    FactoryType.fromId(rs.getInt("type")),
+                    rs.getDouble("amount"),
+                    rs.getDouble("inputReduction"),
+                    rs.getDouble("outputMultiplier"),
+                    rs.getDouble("costReduction"),
+                    Upgrade.getBylevelAndType(rs.getInt("level"),FactoryType.fromId(rs.getInt("type")))
+                    );
+
+    private final static RowMapper<RowWealth> WEALTH_ROW_MAPPER = (rs, rowNum) ->
+            new RowWealth(rs.getLong("userid"),
+                    ResourceType.fromId(rs.getInt("resourceType")),
+                    rs.getDouble("production"),
+                    rs.getDouble("storage"),
+                    rs.getDate("lastUpdated"));
+
+
 
     @Autowired
     public UserJdbcDao(final DataSource ds) {
         jdbcTemplate = new JdbcTemplate(ds);
 
-        jdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
+        jdbcInsertUsers = new SimpleJdbcInsert(jdbcTemplate)
                 .withTableName("users")
                 .usingGeneratedKeyColumns("userid");
+
+        jdbcInsertFactories = new SimpleJdbcInsert(jdbcTemplate)
+                .withTableName("factories");
+
+        jdbcInsertWealths = new SimpleJdbcInsert(jdbcTemplate)
+                .withTableName("wealths");
     }
 
-    public User findById(final long id) {
-        final List<User> list = jdbcTemplate.query("SELECT * FROM users WHERE userid = ?", ROW_MAPPER, id);
+    //region Update
+    public User create(String username, String password) {
+        final Map<String, Object> args = new HashMap();
+        args.put("username", username);
+        args.put("password", password);
+        final Number userId = jdbcInsertUsers.executeAndReturnKey(args);
+        return new User(userId.longValue(), username, password,"1.img");
+    }
+    //endregion
+
+    //region Retrieval
+    public User findById(final long userid) {
+        final List<User> list = jdbcTemplate.query("SELECT * FROM users WHERE userid = ?", USER_ROW_MAPPER, userid);
         if (list.isEmpty()) {
             return null;
         }
         return list.get(0);
     }
 
-    public User create(String username, String password) {
-        final Map<String, Object> args = new HashMap();
-        args.put("username", username);
-        args.put("password", password);
-        final Number userId = jdbcInsert.executeAndReturnKey(args);
-        return new User(userId.longValue(), username, password,"1.img");
-    }
-
     //TODO make a correct implementation
-    public String getIconPath(final long id) {
-        return "resources/" + id + ".jpg";
+    public String getProfileImage(final long userid) {
+        final List<User> list = jdbcTemplate.query("SELECT * FROM users WHERE userid = ?", USER_ROW_MAPPER, userid);
+        if (list.isEmpty()) {
+            return null;
+        }
+        return list.get(0).getProfileImage();
     }
 
+    @Override
+    public ResourcePackage getUserProductions(long userid) {
+        return getUserWealth(userid).getProductions();
+    }
+
+    @Override
+    public ResourcePackage getUserStorage(long userid) {
+        return getUserWealth(userid).getStorage();
+    }
+
+    @Override
+    public Collection<Factory> getUserFactories(long userid) {
+        final List<Factory> list = jdbcTemplate.query("SELECT * FROM factories WHERE userid = ?", FACTORY_ROW_MAPPER, userid);
+        return list;
+    }
+
+    @Override
+    public Wealth getUserWealth(long userid) {
+        final List<RowWealth> list = jdbcTemplate.query("SELECT * FROM factories WHERE userid = ?", WEALTH_ROW_MAPPER, userid);
+        Map<ResourceType,Double> storage = new HashMap<>();
+        Map<ResourceType,Double> productions = new HashMap<>();
+        for (RowWealth rw: list) {
+            storage.put(rw.resourceType,rw.storage);
+            productions.put(rw.resourceType,rw.production);
+        }
+
+        return new Wealth(userid,new Date(),
+                new ResourcePackage(storage),new ResourcePackage(productions));
+    }
+    //endregion
 }
