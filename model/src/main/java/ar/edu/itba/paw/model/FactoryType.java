@@ -11,9 +11,9 @@ public enum FactoryType {
     IRONFORGOLD,
     WOODFORGOLD;
 
-    public Map<Resources,Double> getRecipe() {
+    public ResourcePackage getRecipe() {
         Random rng = new Random();
-        Map<Resources,Double> recipe = new HashMap<>();
+        ResourcePackageBuilder recipeBuilder = new ResourcePackageBuilder();
         //TODO implement correct factories
         Double wood = rng.nextDouble()*5;
         Double iron = rng.nextDouble()*5;
@@ -21,24 +21,25 @@ public enum FactoryType {
 
         switch (this) {
             case NOTHINGFORWOOD:
-                recipe.put(Resources.WOOD,wood);
+                recipeBuilder.addItem(Resources.WOOD,wood);
                 break;
             case WOODFORIRON:
-                recipe.put(Resources.WOOD,-wood);
-                recipe.put(Resources.IRON,iron);
+                recipeBuilder.addItem(Resources.WOOD,-wood);
+                recipeBuilder.addItem(Resources.IRON,iron);
                 break;
             case IRONFORGOLD:
-                recipe.put(Resources.IRON,-iron);
-                recipe.put(Resources.GOLD,gold);
+                recipeBuilder.addItem(Resources.IRON,-iron);
+                recipeBuilder.addItem(Resources.GOLD,gold);
+                break;
             case WOODFORGOLD:
-                recipe.put(Resources.WOOD,-wood);
-                recipe.put(Resources.GOLD,gold);
+                recipeBuilder.addItem(Resources.WOOD,-wood);
+                recipeBuilder.addItem(Resources.GOLD,gold);
                 break;
             default:
                 throw new RuntimeException("There is no ResourcePackage for this factory");
         }
 
-        return recipe;
+        return recipeBuilder.buildPackage();
     }
 
     public int getId() {
@@ -51,7 +52,29 @@ public enum FactoryType {
         }
     }
 
-    public Map<Resources,Double> getCost() { return null; }
+    public ResourcePackage getCost() {
+        ResourcePackageBuilder costBuilder = new ResourcePackageBuilder();
+
+        switch (this) {
+            case NOTHINGFORWOOD:
+                costBuilder.addItem(Resources.WOOD,10D);
+                break;
+            case WOODFORIRON:
+                costBuilder.addItem(Resources.WOOD,100D);
+                break;
+            case IRONFORGOLD:
+                costBuilder.addItem(Resources.WOOD,100D);
+                costBuilder.addItem(Resources.IRON,100D);
+            case WOODFORGOLD:
+                costBuilder.addItem(Resources.IRON,100D);
+                costBuilder.addItem(Resources.WOOD,100D);
+                costBuilder.addItem(Resources.GOLD,1000D);
+                break;
+            default:
+                throw new RuntimeException("There is no ResourcePackage for this factory");
+        }
+        return costBuilder.buildPackage();
+    }
 
     public static FactoryType getById(int id){
         for (FactoryType f: FactoryType.values()){

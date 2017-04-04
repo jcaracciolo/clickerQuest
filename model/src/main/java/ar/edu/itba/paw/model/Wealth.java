@@ -1,63 +1,32 @@
 package ar.edu.itba.paw.model;
 
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 /**
- * Created by daniel on 4/3/17.
+ * Created by juanfra on 03/04/17.
  */
 public class Wealth {
 
-    private long userId;
-    private int resourceType;
-    private int production; // int?
-    private int storage; // int?
-    private Date lastUpdated;
+    public long owner;
+    public Date lastUpdated;
+    //Already calculated data, ready for display
+    public ResourcePackage storage;
+    public ResourcePackage productions;
 
-    public Wealth(long userId, int resourceType, int production, int storage, Date lastUpdated) {
-        this.userId = userId;
-        this.resourceType = resourceType;
-        this.production = production;
-        this.storage = storage;
+    public Wealth(long owner, Date lastUpdated, ResourcePackage storage, ResourcePackage productions) {
+        this.owner = owner;
         this.lastUpdated = lastUpdated;
-    }
-
-    public long getUserId() {
-        return userId;
-    }
-
-    public int getResourceType() {
-        return resourceType;
-    }
-
-    public int getProduction() {
-        return production;
-    }
-
-    public int getStorage() {
-        return storage;
-    }
-
-    public Date getLastUpdated() {
-        return lastUpdated;
-    }
-
-    public void setUserId(long userId) {
-        this.userId = userId;
-    }
-
-    public void setResourceType(int resourceType) {
-        this.resourceType = resourceType;
-    }
-
-    public void setProduction(int production) {
-        this.production = production;
-    }
-
-    public void setStorage(int storage) {
         this.storage = storage;
+        this.productions = productions;
     }
 
-    public void setLastUpdated(Date lastUpdated) {
-        this.lastUpdated = lastUpdated;
+    public Map<Resources,String> getStoredResources(){
+        return storage.getFormatedOutputs();
+    }
+
+    public Map<Resources,String> getProduction(){
+        return productions.getFormatedOutputs();
     }
 }
