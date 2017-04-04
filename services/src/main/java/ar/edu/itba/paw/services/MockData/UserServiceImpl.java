@@ -8,9 +8,7 @@ import ar.edu.itba.paw.model.Factory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 /**
  * Created by juanfra on 23/03/17.
@@ -31,23 +29,23 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<Production> getUserProductions(long id) {
-        List<Production> productions = new ArrayList<>();
+    public ResourcePackage getUserProductions(long id) {
+        Map<Resources,Double> productions = new HashMap<>();
         Random rng = new Random();
         for (Resources r:Resources.values()) {
-            productions.add(new Production(r,rng.nextDouble()*10));
+            productions.put(r,rng.nextDouble()*15);
         }
-        return productions;
+        return new ResourcePackage(productions);
     }
 
     @Override
-    public List<Amount> getUserStorage(long id) {
-        List<Amount> storage = new ArrayList<>();
+    public ResourcePackage getUserStorage(long id) {
+        Map<Resources,Double> storage = new HashMap<>();
         Random rng = new Random();
         for (Resources r:Resources.values()) {
-            storage.add(new Amount(r,rng.nextInt(10000)));
+            storage.put(r,Math.floor(rng.nextDouble()*1000));
         }
-        return storage;
+        return new ResourcePackage(storage);
     }
 
     @Override

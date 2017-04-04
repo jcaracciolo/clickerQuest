@@ -2,16 +2,19 @@ package ar.edu.itba.paw.model;
 
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+
 
 /**
  * Created by julian on 4/4/17.
  */
 public class ResourcePackage {
 
-    private HashMap<Resources, Double> resources;
+    private Map<Resources, Double> resources;
 
-    public ResourcePackage(HashMap<Resources, Double> items) {
+    public ResourcePackage(Map<Resources, Double> items) {
         this.resources = items;
     }
 
@@ -32,7 +35,7 @@ public class ResourcePackage {
         return builder.buildPackage();
     }
 
-    Set<Resources> getResources(){
+    public Set<Resources> getResources(){
         return resources.keySet();
     }
 
@@ -68,7 +71,7 @@ public class ResourcePackage {
         return map;
     }
 
-    static String formatValue(Double value){
+    public static String formatValue(Double value){
         if(value<1000) {
             DecimalFormat df = new DecimalFormat("#.##");
             df.setRoundingMode(RoundingMode.FLOOR);
@@ -79,7 +82,7 @@ public class ResourcePackage {
 
     private static char[] c = new char[]{'k', 'm', 'b', 't'};
     /**
-     * Recursive implementation, invokes itself for each factor of a thousand, increasing the class on each invokation.
+     * Recursive implementation, invokes itself for each factor of a thousand, increasing the class on each invocation.
      * @param n the number to format
      * @param iteration in fact this is the class from the array c
      * @return a String representing the number n formatted in a cool looking way.
@@ -87,6 +90,7 @@ public class ResourcePackage {
     private static String coolFormat(double n, int iteration) {
         double d = ((long) n / 100) / 10.0;
         boolean isRound = (d * 10) %10 == 0;//true if the decimal part is equal to 0 (then it's trimmed anyway)
+
         return (d < 1000? //this determines the class, i.e. 'k', 'm' etc
                 ((d > 99.9 || isRound || (!isRound && d > 9.99)? //this decides whether to trim the decimals
                         (int) d * 10 / 10 : d + "" // (int) d * 10 / 10 drops the decimal
