@@ -39,10 +39,12 @@ public class Factory {
     }
 
     //PROCESS WITH MULTIPLIERS
-    public Map<Resources,Double> getCost() { return type.getCost(); }
+    public ResourcePackage getCost() { return type.getCost(); }
 
     //PROCESS WITH MULTIPLIERS
-    public Map<Resources,Double> getRecipe() { return type.getRecipe(); }
+    public ResourcePackage getRecipe() {
+        return type.getRecipe().applyMultipliers(amount,inputReduction,outputMultiplier);
+    }
 
     public long getLevel() {
         return level;

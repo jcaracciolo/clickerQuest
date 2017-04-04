@@ -12,10 +12,10 @@ public class Wealth {
     public long owner;
     public Date lastUpdated;
     //Already calculated data, ready for display
-    public Map<Resources,Double> storage;
-    public Map<Resources,Double> productions;
+    public ResourcePackage storage;
+    public ResourcePackage productions;
 
-    public Wealth(long owner, Date lastUpdated, Map<Resources,Double> storage, Map<Resources,Double> productions) {
+    public Wealth(long owner, Date lastUpdated, ResourcePackage storage, ResourcePackage productions) {
         this.owner = owner;
         this.lastUpdated = lastUpdated;
         this.storage = storage;
@@ -25,5 +25,11 @@ public class Wealth {
     //public ResourcePackage Map<Resource,Double>getInputs (solo inputs en valor positivo, formateados(?)
     //                          Map<Resource,Double>getOutputs (solo inputs en valor positivo, formateados(?)
 
+    public Map<Resources,String> getStoredResources(){
+        return storage.getFormatedOutputs();
+    }
 
+    public Map<Resources,String> getProduction(){
+        return productions.getFormatedOutputs();
+    }
 }
