@@ -60,4 +60,5 @@ public class Factory {
     public String getImage(){
         return "1.img";
     }
+
 }
