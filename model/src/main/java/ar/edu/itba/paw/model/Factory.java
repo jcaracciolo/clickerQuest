@@ -52,4 +52,8 @@ public class Factory {
     public String getImage(){
         return "1.img";
     }
+
+    public double getAmount() {
+        return amount;
+    }
 }

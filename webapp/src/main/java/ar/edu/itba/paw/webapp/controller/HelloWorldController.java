@@ -62,7 +62,7 @@ public class HelloWorldController {
 
     @RequestMapping(value = "/{userId}/game")
     public ModelAndView mainGameView(@PathVariable long userId){
-        ModelAndView mav = new ModelAndView("GameView");
+        ModelAndView mav = new ModelAndView("game");
         mav.addObject("user",userService.findById(userId));
         mav.addObject("storage",userService.getUserStorage(userId));
         mav.addObject("factories",userService.getUserFactories(userId));
