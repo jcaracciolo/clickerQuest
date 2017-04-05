@@ -61,7 +61,4 @@ public class Factory {
         return "1.img";
     }
 
-    public double getAmount() {
-        return amount;
-    }
 }
