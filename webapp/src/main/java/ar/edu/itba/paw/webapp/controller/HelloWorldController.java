@@ -24,16 +24,13 @@ public class HelloWorldController {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private UserDao userDao;
-
     @RequestMapping("/user")
     public ModelAndView helloWorld(@RequestParam("userId") int userId) {
         final ModelAndView mav = new ModelAndView("user");
-        User user = userDao.findById(userId);
+        User user = userService.findById(userId);
         mav.addObject("username",user.getUsername());
         mav.addObject("userId",user.getId());
-        mav.addObject("userIcon",userDao.getIconPath(user.getId()));
+        mav.addObject("userIcon",userService.getProfileImage(user.getId()));
         return mav;
     }
 

@@ -16,10 +16,6 @@ public class User {
     private String password;
     private String profileImage;
 
-    private ResourcePackage productions;
-    private ResourcePackage storage;
-    private Collection<Factory> factories;
-
     public User(long id, String username, String password, String profileImage) {
         this.id = id;
         this.username = username;

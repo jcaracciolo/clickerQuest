@@ -20,5 +20,5 @@ public interface UserService {
 
     Collection<Factory> getUserFactories(long id);
 
-
+    String getProfileImage(long userid);
 }

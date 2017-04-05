@@ -30,9 +30,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResourcePackage getUserProductions(long id) {
-        Map<Resources,Double> productions = new HashMap<>();
+        Map<ResourceType,Double> productions = new HashMap<>();
         Random rng = new Random();
-        for (Resources r:Resources.values()) {
+        for (ResourceType r: ResourceType.values()) {
             productions.put(r,rng.nextDouble()*15);
         }
         return new ResourcePackage(productions);
@@ -40,9 +40,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResourcePackage getUserStorage(long id) {
-        Map<Resources,Double> storage = new HashMap<>();
+        Map<ResourceType,Double> storage = new HashMap<>();
         Random rng = new Random();
-        for (Resources r:Resources.values()) {
+        for (ResourceType r: ResourceType.values()) {
             storage.put(r,Math.floor(rng.nextDouble()*1000));
         }
         return new ResourcePackage(storage);
@@ -54,9 +54,14 @@ public class UserServiceImpl implements UserService {
         Random rng = new Random();
         for (FactoryType f:FactoryType.values()) {
             int amount = rng.nextInt(10)>7 ? 0 : rng.nextInt(1000);
-            factories.add(new Factory(id,f,amount,1,1,1,0));
+            factories.add(new Factory(id,f,amount,1,1,1,new Upgrade(0,"super Upgrade 2",f,0)));
         }
         return factories;
+    }
+
+    @Override
+    public String getProfileImage(long userid) {
+        return userDao.getProfileImage(userid);
     }
 
 }

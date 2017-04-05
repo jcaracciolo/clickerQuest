@@ -77,13 +77,13 @@ IMPORTANT: DO NOT UPDATE THE JETTY PLUGIN OR IT WILL NOT WORK
 	List<Production> output
 
 #### Upgrade
-	long id
+	long level
 	String description
 	int factoryId
 	int cost
 
 #### User
-	long id
+	long level
 	String username
 	String password
 	String profileImage

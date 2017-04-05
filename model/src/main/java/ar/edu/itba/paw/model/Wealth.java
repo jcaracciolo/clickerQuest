@@ -1,7 +1,6 @@
 package ar.edu.itba.paw.model;
 
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -22,11 +21,19 @@ public class Wealth {
         this.productions = productions;
     }
 
-    public Map<Resources,String> getStoredResources(){
+    public ResourcePackage getStorage() {
+        return storage;
+    }
+
+    public ResourcePackage getProductions() {
+        return productions;
+    }
+
+    public Map<ResourceType,String> getStoredResources(){
         return storage.getFormatedOutputs();
     }
 
-    public Map<Resources,String> getProduction(){
+    public Map<ResourceType,String> getProduction(){
         return productions.getFormatedOutputs();
     }
 }

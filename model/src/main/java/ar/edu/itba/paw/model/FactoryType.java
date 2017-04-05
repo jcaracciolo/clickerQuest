@@ -21,19 +21,19 @@ public enum FactoryType {
 
         switch (this) {
             case NOTHINGFORWOOD:
-                recipeBuilder.addItem(Resources.WOOD,wood);
+                recipeBuilder.addItem(ResourceType.WOOD,wood);
                 break;
             case WOODFORIRON:
-                recipeBuilder.addItem(Resources.WOOD,-wood);
-                recipeBuilder.addItem(Resources.IRON,iron);
+                recipeBuilder.addItem(ResourceType.WOOD,-wood);
+                recipeBuilder.addItem(ResourceType.IRON,iron);
                 break;
             case IRONFORGOLD:
-                recipeBuilder.addItem(Resources.IRON,-iron);
-                recipeBuilder.addItem(Resources.GOLD,gold);
+                recipeBuilder.addItem(ResourceType.IRON,-iron);
+                recipeBuilder.addItem(ResourceType.GOLD,gold);
                 break;
             case WOODFORGOLD:
-                recipeBuilder.addItem(Resources.WOOD,-wood);
-                recipeBuilder.addItem(Resources.GOLD,gold);
+                recipeBuilder.addItem(ResourceType.WOOD,-wood);
+                recipeBuilder.addItem(ResourceType.GOLD,gold);
                 break;
             default:
                 throw new RuntimeException("There is no ResourcePackage for this factory");
@@ -57,18 +57,18 @@ public enum FactoryType {
 
         switch (this) {
             case NOTHINGFORWOOD:
-                costBuilder.addItem(Resources.WOOD,10D);
+                costBuilder.addItem(ResourceType.WOOD,10D);
                 break;
             case WOODFORIRON:
-                costBuilder.addItem(Resources.WOOD,100D);
+                costBuilder.addItem(ResourceType.WOOD,100D);
                 break;
             case IRONFORGOLD:
-                costBuilder.addItem(Resources.WOOD,100D);
-                costBuilder.addItem(Resources.IRON,100D);
+                costBuilder.addItem(ResourceType.WOOD,100D);
+                costBuilder.addItem(ResourceType.IRON,100D);
             case WOODFORGOLD:
-                costBuilder.addItem(Resources.IRON,100D);
-                costBuilder.addItem(Resources.WOOD,100D);
-                costBuilder.addItem(Resources.GOLD,1000D);
+                costBuilder.addItem(ResourceType.IRON,100D);
+                costBuilder.addItem(ResourceType.WOOD,100D);
+                costBuilder.addItem(ResourceType.GOLD,1000D);
                 break;
             default:
                 throw new RuntimeException("There is no ResourcePackage for this factory");
@@ -76,7 +76,7 @@ public enum FactoryType {
         return costBuilder.buildPackage();
     }
 
-    public static FactoryType getById(int id){
+    public static FactoryType fromId(int id){
         for (FactoryType f: FactoryType.values()){
             if(f.getId() == id){
                 return f;

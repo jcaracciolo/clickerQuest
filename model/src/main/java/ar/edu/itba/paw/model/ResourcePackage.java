@@ -12,9 +12,9 @@ import java.util.Set;
  */
 public class ResourcePackage {
 
-    private Map<Resources, Double> resources;
+    private Map<ResourceType, Double> resources;
 
-    public ResourcePackage(Map<Resources, Double> items) {
+    public ResourcePackage(Map<ResourceType, Double> items) {
         this.resources = items;
     }
 
@@ -27,7 +27,7 @@ public class ResourcePackage {
         ResourcePackageBuilder builder = new ResourcePackageBuilder();
         if(amount <= 0) return builder.buildPackage();
 
-        for (Resources res : getResources()){
+        for (ResourceType res : getResources()){
             Double value = resources.get(res);
             if(value > 0) builder.addItem(res,value*amount*outputMultiplier);
             else builder.addItem(res,value*amount/inputReduction);
@@ -35,15 +35,15 @@ public class ResourcePackage {
         return builder.buildPackage();
     }
 
-    public Set<Resources> getResources(){
+    public Set<ResourceType> getResources(){
         return resources.keySet();
     }
 
-    public Double getValue(Resources resource){
+    public Double getValue(ResourceType resource){
         return resources.get(resource);
     }
 
-    public  String formatResource(Resources resource){
+    public  String formatResource(ResourceType resource){
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(resource.toString());
         stringBuilder.append(" = ");
@@ -51,20 +51,20 @@ public class ResourcePackage {
         return stringBuilder.toString();
     }
 
-    public Map<Resources,String> getFormatedInputs(){
-        Map<Resources,String> map = new HashMap<>();
+    public Map<ResourceType,String> getFormatedInputs(){
+        Map<ResourceType,String> map = new HashMap<>();
 
-        for (Resources res: getResources()){
+        for (ResourceType res: getResources()){
             Double value = resources.get(res);
             if(value < 0) map.put(res,formatValue(-value));
         }
         return map;
     }
 
-    public Map<Resources,String> getFormatedOutputs(){
-        Map<Resources,String> map = new HashMap<>();
+    public Map<ResourceType,String> getFormatedOutputs(){
+        Map<ResourceType,String> map = new HashMap<>();
 
-        for (Resources res: getResources()){
+        for (ResourceType res: getResources()){
             Double value = resources.get(res);
             if(value > 0) map.put(res,formatValue(value));
         }

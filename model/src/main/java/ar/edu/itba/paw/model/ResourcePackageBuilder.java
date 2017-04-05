@@ -7,13 +7,13 @@ import java.util.HashMap;
  * Created by julian on 4/4/17.
  */
 public class ResourcePackageBuilder {
-    private HashMap<Resources, Double> resources;
+    private HashMap<ResourceType, Double> resources;
 
     public ResourcePackageBuilder() {
         resources = new HashMap<>();
     }
 
-    public boolean addItem(Resources resource, Double amount){
+    public boolean addItem(ResourceType resource, Double amount){
         if(resources.containsKey(resource)) resources.put(resource, resources.get(resource) + amount);
         else resources.put(resource,amount);
         return resources.get(resource) >= 0;
@@ -27,7 +27,7 @@ public class ResourcePackageBuilder {
         ResourcePackageBuilder builder = new ResourcePackageBuilder();
 
         for (ResourcePackage resourcePackage:resourcePackages){
-            for (Resources resource : resourcePackage.getResources()) {
+            for (ResourceType resource : resourcePackage.getResources()) {
                 builder.addItem(resource, resourcePackage.getValue(resource));
             }
         }
