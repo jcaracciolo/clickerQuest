@@ -4,16 +4,20 @@ package ar.edu.itba.paw.model;
  * Created by juanfra on 31/03/17.
  */
 public class Upgrade {
+    private FactoryType factoryType;
     private long level;
     private String description;
-    private FactoryType factoryType;
     private double cost;
 
-    public Upgrade(long level, String description, FactoryType factoryType, int cost) {
+    public Upgrade(FactoryType factoryType, long level, String description, double cost) {
         this.level = level;
         this.description = description;
         this.factoryType = factoryType;
         this.cost = cost;
+    }
+
+    public static Upgrade getUpgrade(FactoryType type, long level) {
+        return new Upgrade(type, level,"Upgrade n°" + level, 300*level);
     }
 
     public String toString() {
@@ -36,7 +40,4 @@ public class Upgrade {
         return factoryType;
     }
 
-    public static Upgrade getBylevelAndType(int level, FactoryType type){
-        return new Upgrade(level,"Upgrade n°" + level,type,300*level);
-    }
 }

@@ -8,14 +8,14 @@ import java.util.Map;
  */
 public class Wealth {
 
-    public long owner;
+    public long userid;
     public Date lastUpdated;
     //Already calculated data, ready for display
     public ResourcePackage storage;
     public ResourcePackage productions;
 
-    public Wealth(long owner, Date lastUpdated, ResourcePackage storage, ResourcePackage productions) {
-        this.owner = owner;
+    public Wealth(long userid, Date lastUpdated, ResourcePackage storage, ResourcePackage productions) {
+        this.userid = userid;
         this.lastUpdated = lastUpdated;
         this.storage = storage;
         this.productions = productions;

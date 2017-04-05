@@ -22,14 +22,25 @@ public class UserJdbcDao implements UserDao {
         ResourceType resourceType;
         double production;
         double storage;
-        Date lastUpdate;
+        Date lastUpdated;
 
-        public RowWealth(long userid, ResourceType resourceType, double production, double storage, Date lastUpdate) {
+        public RowWealth(long userid, ResourceType resourceType, double production, double storage, Date lastUpdated) {
             this.userid = userid;
             this.resourceType = resourceType;
             this.production = production;
             this.storage = storage;
-            this.lastUpdate = lastUpdate;
+            this.lastUpdated = lastUpdated;
+        }
+
+        static Collection<RowWealth> getRowWealths(Wealth w){
+            List<RowWealth> rows = new ArrayList<>();
+            for (ResourceType r:ResourceType.values()) {
+                rows.add(new RowWealth(w.userid,r,
+                        w.getProductions().getValue(r),
+                        w.getStorage().getValue(r),
+                        new Date()));
+            }
+            return rows;
         }
     }
 
@@ -38,11 +49,21 @@ public class UserJdbcDao implements UserDao {
     private final SimpleJdbcInsert jdbcInsertFactories;
     private final SimpleJdbcInsert jdbcInsertWealths;
 
+    //region ROWMAPPER
     private final static RowMapper<User> USER_ROW_MAPPER = (rs, rowNum) ->
             new User(rs.getLong("userid"),
                     rs.getString("username"),
                     rs.getString("password"),
                     rs.getString("profileImage"));
+
+    private final static ReverseRowMapper<User> USER_REVERSE_ROW_MAPPER = (us) ->
+    {
+        final Map<String, Object> args = new HashMap();
+        args.put("username", us.getUsername());
+        args.put("password", us.getPassword());
+        args.put("profileImage", us.getProfileImage());
+        return args;
+    };
 
     private final static RowMapper<Factory> FACTORY_ROW_MAPPER = (rs, rowNum) ->
             new Factory(rs.getLong("userid"),
@@ -51,8 +72,22 @@ public class UserJdbcDao implements UserDao {
                     rs.getDouble("inputReduction"),
                     rs.getDouble("outputMultiplier"),
                     rs.getDouble("costReduction"),
-                    Upgrade.getBylevelAndType(rs.getInt("level"),FactoryType.fromId(rs.getInt("type")))
+                    Upgrade.getUpgrade(FactoryType.fromId(rs.getInt("type")),rs.getInt("level"))
                     );
+
+    private final static ReverseRowMapper<Factory> FACTORY_REVERSE_ROW_MAPPER = (f) ->
+    {
+        final Map<String, Object> args = new HashMap();
+        args.put("userid", f.getUserid());
+        args.put("type", f.getType().getId());
+        args.put("amount", f.getAmount());
+        args.put("inputReduction", f.getInputReduction());
+        args.put("outputMultiplier", f.getOutputMultiplier());
+        args.put("costReduction", f.getCostReduction());
+        args.put("level", f.getUpgrade().getLevel());
+        return args;
+
+    };
 
     private final static RowMapper<RowWealth> WEALTH_ROW_MAPPER = (rs, rowNum) ->
             new RowWealth(rs.getLong("userid"),
@@ -61,6 +96,18 @@ public class UserJdbcDao implements UserDao {
                     rs.getDouble("storage"),
                     rs.getDate("lastUpdated"));
 
+    private final static ReverseRowMapper<RowWealth> WEALTH_REVERSE_ROW_MAPPER = (rw) ->
+    {
+        final Map<String, Object> args = new HashMap();
+        args.put("userid", rw.userid);
+        args.put("resourceType", rw.resourceType);
+        args.put("production",rw.production);
+        args.put("storage", rw.storage);
+        args.put("lastUpdated", rw.lastUpdated);
+        return args;
+
+    };
+    //endregion
 
 
     @Autowired
@@ -79,13 +126,25 @@ public class UserJdbcDao implements UserDao {
     }
 
     //region Update
-    public User create(String username, String password) {
-        final Map<String, Object> args = new HashMap();
-        args.put("username", username);
-        args.put("password", password);
-        final Number userId = jdbcInsertUsers.executeAndReturnKey(args);
-        return new User(userId.longValue(), username, password,"1.img");
+    public User create(String username, String password,String img) {
+        final User us = new User(0,username,password,img);
+
+        final Number userId = jdbcInsertUsers.executeAndReturnKey(USER_REVERSE_ROW_MAPPER.toArgs(us));
+
+        for (FactoryType type: FactoryType.values()){
+            final Factory f = new Factory(userId.longValue(),type,0,1,1,1,Upgrade.getUpgrade(type,0));
+            jdbcInsertFactories.execute(FACTORY_REVERSE_ROW_MAPPER.toArgs(f));
+        }
+
+        for (ResourceType rt: ResourceType.values()) {
+            final RowWealth rw = new RowWealth(userId.longValue(),rt,0D,0D,new Date());
+            jdbcInsertWealths.execute(WEALTH_REVERSE_ROW_MAPPER.toArgs(rw));
+        }
+
+        return new User(userId.longValue(), username,password,img);
     }
+
+
     //endregion
 
     //region Retrieval
@@ -118,8 +177,7 @@ public class UserJdbcDao implements UserDao {
 
     @Override
     public Collection<Factory> getUserFactories(long userid) {
-        final List<Factory> list = jdbcTemplate.query("SELECT * FROM factories WHERE userid = ?", FACTORY_ROW_MAPPER, userid);
-        return list;
+        return jdbcTemplate.query("SELECT * FROM factories WHERE userid = ?", FACTORY_ROW_MAPPER, userid);
     }
 
     @Override

@@ -54,7 +54,7 @@ public class UserServiceImpl implements UserService {
         Random rng = new Random();
         for (FactoryType f:FactoryType.values()) {
             int amount = rng.nextInt(10)>7 ? 0 : rng.nextInt(1000);
-            factories.add(new Factory(id,f,amount,1,1,1,new Upgrade(0,"super Upgrade 2",f,0)));
+            factories.add(new Factory(id,f,amount,1,1,1,new Upgrade(f, 0,"super Upgrade 2", 0)));
         }
         return factories;
     }
