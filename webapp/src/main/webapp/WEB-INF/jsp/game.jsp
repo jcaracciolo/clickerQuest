@@ -109,7 +109,7 @@
                             </div>
                         </div>
                         <div class="col s4">
-                            <c:set var="factoryRecipe" value="${factory.getType().getRecipe()}"/>
+                            <c:set var="factoryRecipe" value="${factory.getRecipe()}"/>
                             <c:forEach items="${factoryRecipe.getResources()}" var="res">
                                 <c:set var="inputMap" value="${factoryRecipe.formatedInputs}"/>
                                 <c:if test="${inputMap.get(res) != null}">
