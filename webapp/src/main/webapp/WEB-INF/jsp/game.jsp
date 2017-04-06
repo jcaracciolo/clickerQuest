@@ -25,11 +25,6 @@
 </head>
 
 <body>
-<!--Import jQuery before materialize.js-->
-<script type="text/javascript" src="/resources/js/game.js"></script>
-<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-<script type="text/javascript" src="/resources/js/materialize.min.js"></script>
-
 <div class="row main-frame">
     <!-- LEFT PANEL -->
     <div class="col no-padding s2">
@@ -63,7 +58,7 @@
     <div class="col no-padding s7">
         <!-- FIRST ROW -->
         <div class="row factory-row">
-            <c:forEach items="${factories}" var="factory">
+            <c:forEach items="${factories}" var="factory" varStatus="loop">
                 <div class="col s4 factory-main">
                     <div class="card">
                         <div class="card-content">
@@ -71,14 +66,12 @@
                             <c:set var="factoryRecipe" value="${factory.getRecipe()}"/>
                             <c:forEach items="${factoryRecipe.getResources()}" var="res">
                                 <c:set var="inputMap" value="${factoryRecipe.formatedInputs}"/>
-                                <%--<c:if test="${intputMap.get(res) > 0}">--%>
                                     <p class="centered-text"><c:out value="${inputMap.get(res)} ${res}/s"/></p>
-                                <%--</c:if>--%>
                             </c:forEach>
                             <div class="card-image">
                                 <img class="factory-image" src="/resources/${factory.getImage()}" alt="factory_icon"/>
                             </div>
-                            <p class="centered-text">${factory.amount}</p>
+                            <p id="factoryCant${loop.index}" class="centered-text">${factory.amount}</p>
                             <p>Producing:</p>
                             <c:forEach items="${factoryRecipe.getResources()}" var="res">
                                 <c:set var="outputMap" value="${factoryRecipe.formatedOutputs}"/>
@@ -97,13 +90,13 @@
         <div class="complete-height card indigo darken-1">
             <div class="card-content white-text">
                 <span class="card-title">Factories</span>
-                <c:forEach items="${factories}" var="factory">
+                <c:forEach items="${factories}" var="factory" varStatus="loop">
                 <div class="divider"></div>
                 <div class="section">
                     <!-- BEGINING OF FACTORY CARD -->
                     <div class="row factory-card">
                         <div class="col s3">
-                            <div class="card-image factory-icon">
+                            <div id="buyFactory${loop.index}" class="buyFactoryBtn card-image factory-icon">
                                 <img src="/resources/${factory.getImage()}" alt="factory_icon"/>
                             </div>
                             <div>
@@ -153,4 +146,11 @@
     </div>
 </div>
 </body>
+
+
+<!--Import jQuery before materialize.js-->
+<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+<script type="text/javascript" src="/resources/js/materialize.min.js"></script>
+<script type="text/javascript" src="/resources/js/game.js"></script>
+
 </html>
