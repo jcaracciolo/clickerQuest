@@ -1,9 +1,11 @@
 package ar.edu.itba.paw.interfaces;
 
 import ar.edu.itba.paw.model.Factory;
-import ar.edu.itba.paw.model.ResourcePackage;
+import ar.edu.itba.paw.model.packages.Production;
+import ar.edu.itba.paw.model.packages.ResourcePackage;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.Wealth;
+import ar.edu.itba.paw.model.packages.Storage;
 
 import java.util.Collection;
 
@@ -24,8 +26,8 @@ public interface UserDao {
 
     String getProfileImage(final long userid);
 
-    ResourcePackage getUserProductions(long userid);
-    ResourcePackage getUserStorage(long userid);
+    Production getUserProductions(long userid);
+    Storage getUserStorage(long userid);
     Collection<Factory> getUserFactories(long userid);
     Wealth getUserWealth(long userid);
 

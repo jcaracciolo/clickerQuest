@@ -2,6 +2,9 @@ package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.UserDao;
 import ar.edu.itba.paw.model.*;
+import ar.edu.itba.paw.model.packages.Production;
+import ar.edu.itba.paw.model.packages.ResourcePackage;
+import ar.edu.itba.paw.model.packages.Storage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -166,12 +169,12 @@ public class UserJdbcDao implements UserDao {
     }
 
     @Override
-    public ResourcePackage getUserProductions(long userid) {
+    public Production getUserProductions(long userid) {
         return getUserWealth(userid).getProductions();
     }
 
     @Override
-    public ResourcePackage getUserStorage(long userid) {
+    public Storage getUserStorage(long userid) {
         return getUserWealth(userid).getStorage();
     }
 
@@ -190,8 +193,8 @@ public class UserJdbcDao implements UserDao {
             productions.put(rw.resourceType,rw.production);
         }
 
-        return new Wealth(userid,new Date(),
-                new ResourcePackage(storage),new ResourcePackage(productions));
+        return new Wealth(userid,Calendar.getInstance(),
+                getUserStorage(userid),getUserProductions(userid));
     }
     //endregion
 }

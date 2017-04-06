@@ -1,4 +1,6 @@
-package ar.edu.itba.paw.model;
+package ar.edu.itba.paw.model.packages;
+
+import ar.edu.itba.paw.model.ResourceType;
 
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
@@ -43,37 +45,49 @@ public class ResourcePackage {
         return resources.get(resource);
     }
 
-    public  String formatResource(ResourceType resource){
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(resource.toString());
-        stringBuilder.append(" = ");
-        stringBuilder.append(coolFormat(resources.get(resource),0));
-        return stringBuilder.toString();
+
+    public Map<ResourceType,String> getFormatedInputs(Boolean integers){
+        Map<ResourceType,String> map = new HashMap<>();
+
+        for (ResourceType res: getResources()){
+            Double value = resources.get(res);
+            if(value < 0) map.put(res,formatValue(-value,integers));
+        }
+        return map;
     }
 
     public Map<ResourceType,String> getFormatedInputs(){
-        Map<ResourceType,String> map = new HashMap<>();
-
-        for (ResourceType res: getResources()){
-            Double value = resources.get(res);
-            if(value < 0) map.put(res,formatValue(-value));
-        }
-        return map;
+        return getFormatedInputs(false);
     }
 
     public Map<ResourceType,String> getFormatedOutputs(){
+        return getFormatedOutputs(false);
+    }
+
+    public Map<ResourceType,String> getFormatedOutputs(Boolean integers){
         Map<ResourceType,String> map = new HashMap<>();
 
         for (ResourceType res: getResources()){
             Double value = resources.get(res);
-            if(value > 0) map.put(res,formatValue(value));
+            if(value > 0) map.put(res,formatValue(value, integers));
         }
         return map;
     }
 
-    public static String formatValue(Double value){
+    public static void printPackage(Package resourcePackage){
+        System.out.println("outputs");
+        for(ResourceType res: resourcePackage.getFormatedOutputs().keySet()){
+            System.out.println(res + " " + resourcePackage.getFormatedOutputs().get(res));
+        }
+        System.out.println("inputs");
+        for(ResourceType res: resourcePackage.getFormatedInputs().keySet()){
+            System.out.println(res + " " + resourcePackage.getFormatedInputs().get(res));
+        }
+    }
+
+    public static String formatValue(Double value, Boolean integers){
         if(value<1000) {
-            DecimalFormat df = new DecimalFormat("#.##");
+            DecimalFormat df = new DecimalFormat(integers?"#":"#.##");
             df.setRoundingMode(RoundingMode.FLOOR);
             return df.format(value);
         }

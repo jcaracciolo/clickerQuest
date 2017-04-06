@@ -1,6 +1,7 @@
-package ar.edu.itba.paw.model;
+package ar.edu.itba.paw.model.packages;
 
-import java.util.Collection;
+import ar.edu.itba.paw.model.ResourceType;
+
 import java.util.HashMap;
 
 /**
@@ -23,15 +24,15 @@ public class ResourcePackageBuilder {
         return new ResourcePackage(resources);
     }
 
-    public static ResourcePackage sumPackages(Collection<ResourcePackage> resourcePackages) {
-        ResourcePackageBuilder builder = new ResourcePackageBuilder();
-
-        for (ResourcePackage resourcePackage:resourcePackages){
-            for (ResourceType resource : resourcePackage.getResources()) {
-                builder.addItem(resource, resourcePackage.getValue(resource));
-            }
-        }
-
-        return builder.buildPackage();
-    }
+//    public static ResourcePackage sumPackages(Collection<Production> resourcePackages) {
+//        ResourcePackageBuilder builder = new ResourcePackageBuilder();
+//
+//        for (ResourcePackage resourcePackage:resourcePackages){
+//            for (ResourceType resource : resourcePackage.getResources()) {
+//                builder.addItem(resource, resourcePackage.getValue(resource));
+//            }
+//        }
+//
+//        return builder.buildPackage();
+//    }
 }

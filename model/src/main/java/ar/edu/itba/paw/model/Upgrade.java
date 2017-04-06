@@ -9,6 +9,8 @@ public class Upgrade {
     private String description;
     private double cost;
 
+
+
     public Upgrade(FactoryType factoryType, long level, String description, double cost) {
         this.level = level;
         this.description = description;
@@ -18,6 +20,10 @@ public class Upgrade {
 
     public static Upgrade getUpgrade(FactoryType type, long level) {
         return new Upgrade(type, level,"Upgrade n°" + level, 300*level);
+    }
+
+    public static Double getInputReduction(long level){
+        return 1+ 0.1 *level;
     }
 
     public String toString() {
