@@ -58,7 +58,7 @@ public class Factory {
         return type.getRecipe().applyMultipliers(amount,inputReduction,outputMultiplier);
     }
     public String getImage(){
-        return "1.img";
+        return "factory_icon.png";
     }
 
 }

@@ -5,6 +5,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.core.io.Resource;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
@@ -52,13 +53,31 @@ public class WebConfig {
      * the port, address, database name, user and password for it, as well as the driver.
      */
     @Bean
-    public DataSource dataSource() {
+    @Profile("default")
+    public DataSource devDataSource() {
 
         final SimpleDriverDataSource ds = new SimpleDriverDataSource();
         ds.setDriverClass(org.postgresql.Driver.class);
         ds.setUrl("jdbc:postgresql://localhost/clickerQuest");
         ds.setUsername("root");
         ds.setPassword("root");
+        return ds;
+
+    }
+
+    /**
+     * DataSource which indicates how the application should access the database. Sets up
+     * the port, address, database name, user and password for it, as well as the driver.
+     */
+    @Bean
+    @Profile("production")
+    public DataSource productionDataSource() {
+
+        final SimpleDriverDataSource ds = new SimpleDriverDataSource();
+        ds.setDriverClass(org.postgresql.Driver.class);
+        ds.setUrl("jdbc:postgresql://10.16.1.110/paw-2017a-4");
+        ds.setUsername("paw-2017a-4");
+        ds.setPassword("ooc4Choo");
         return ds;
 
     }

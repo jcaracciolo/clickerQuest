@@ -28,9 +28,9 @@ public class HelloWorldController {
     public ModelAndView helloWorld(@RequestParam("userId") int userId) {
         final ModelAndView mav = new ModelAndView("user");
         User user = userService.findById(userId);
-        mav.addObject("username",user.getUsername());
-        mav.addObject("userId",user.getId());
-        mav.addObject("userIcon",userService.getProfileImage(user.getId()));
+//        mav.addObject("username",user.getUsername());
+//        mav.addObject("userId",user.getId());
+//        mav.addObject("userIcon",userService.getProfileImage(user.getId()));
         return mav;
     }
 

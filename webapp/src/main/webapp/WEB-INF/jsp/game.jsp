@@ -26,8 +26,9 @@
 
 <body>
 <!--Import jQuery before materialize.js-->
+<script type="text/javascript" src="/resources/js/game.js"></script>
 <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-<script type="text/javascript" src="js/materialize.min.js"></script>
+<script type="text/javascript" src="/resources/js/materialize.min.js"></script>
 
 <div class="row main-frame">
     <!-- LEFT PANEL -->
@@ -37,7 +38,8 @@
                 <span class="card-title">Profile</span>
                 <div class="section">
                     <div class="card-image profile-picture">
-                        <img class="profile" src="/resources/profile_image_2.jpg" alt="factory_img"/>
+                        <%--<img class="profile" src="/resources/profile_image_2.jpg" alt="factory_img"/>--%>
+                        <img class="profile" src="/resources/${user.getProfileImage()}" alt="factory_img"/>
                     </div>
                     <p class="username"><c:out value="${user.username}"/></p>
                 </div>
@@ -61,15 +63,29 @@
     <div class="col no-padding s7">
         <!-- FIRST ROW -->
         <div class="row factory-row">
-
             <c:forEach items="${factories}" var="factory">
                 <div class="col s4 factory-main">
                     <div class="card">
                         <div class="card-content">
+                            <p>Consuming:</p>
+                            <c:set var="factoryRecipe" value="${factory.getRecipe()}"/>
+                            <c:forEach items="${factoryRecipe.getResources()}" var="res">
+                                <c:set var="inputMap" value="${factoryRecipe.formatedInputs}"/>
+                                <%--<c:if test="${intputMap.get(res) > 0}">--%>
+                                    <p class="centered-text"><c:out value="${inputMap.get(res)} ${res}/s"/></p>
+                                <%--</c:if>--%>
+                            </c:forEach>
                             <div class="card-image">
-                                <img class="factory-image" src="/resources/factory_icon.png" alt="factory_icon"/>
+                                <img class="factory-image" src="/resources/${factory.getImage()}" alt="factory_icon"/>
                             </div>
-                            <p class="centered-text">X${factory.amount}</p>
+                            <p class="centered-text">${factory.amount}</p>
+                            <p>Producing:</p>
+                            <c:forEach items="${factoryRecipe.getResources()}" var="res">
+                                <c:set var="outputMap" value="${factoryRecipe.formatedOutputs}"/>
+                                <c:if test="${outputMap.get(res) != null}">
+                                    <p class="centered-text"><c:out value="${outputMap.get(res)} ${res}/s"/></p>
+                                </c:if>
+                            </c:forEach>
                         </div>
                     </div>
                 </div>
@@ -82,15 +98,16 @@
             <div class="card-content white-text">
                 <span class="card-title">Factories</span>
                 <c:forEach items="${factories}" var="factory">
-                    <div class="divider"></div>
-                    <div class="section">
+                <div class="divider"></div>
+                <div class="section">
                     <!-- BEGINING OF FACTORY CARD -->
                     <div class="row factory-card">
                         <div class="col s3">
                             <div class="card-image factory-icon">
-                                <img src="factory_icon.png" alt="factory_icon"/>
+                                <img src="/resources/${factory.getImage()}" alt="factory_icon"/>
                             </div>
                             <div>
+                                <p>Cost:</p>
                                 <c:set var="factoryCost" value="${factory.getCost()}"/>
                                 <c:forEach items="${factoryCost.getResources()}" var="res">
                                     <c:set var="costMap" value="${factoryCost.formatedOutputs}"/>
@@ -99,30 +116,34 @@
                             </div>
                         </div>
                         <div class="col s4">
-                            <c:set var="factoryRecipe" value="${factory.getRecipe()}"/>
+                            <c:set var="factoryRecipe" value="${factory.getType().getRecipe()}"/>
                             <c:forEach items="${factoryRecipe.getResources()}" var="res">
                                 <c:set var="inputMap" value="${factoryRecipe.formatedInputs}"/>
-                                <p class="centered-text"><c:out value="${inputMap.get(res)} ${res}"/></p>
+                                <c:if test="${inputMap.get(res) != null}">
+                                    <p class="centered-text"><c:out value="${inputMap.get(res)} ${res}"/></p>
+                                </c:if>
                             </c:forEach>
                             <div class="card-image col s12">
                                 <img src="/resources/arrow_ingredients.png" t alt="embudo"/>
                             </div>
                             <c:forEach items="${factoryRecipe.getResources()}" var="res">
                                 <c:set var="outputMap" value="${factoryRecipe.formatedOutputs}"/>
-                                <p class="centered-text"><c:out value="${outputMap.get(res)} ${res}"/></p>
+                                <c:if test="${outputMap.get(res) != null}">
+                                    <p class="centered-text"><c:out value="${outputMap.get(res)} ${res}"/></p>
+                                </c:if>
                             </c:forEach>
                         </div>
                         <div class="col s4">
                             <button type="button" class="waves-effect waves-light upgradeButton btn">
                                 <div class="card-image">
-                                    <img src="upgrade_icon.png" alt="upgrade_icon"/>
+                                    <img src="/resources/upgrade_icon.png" alt="upgrade_icon"/>
                                 </div>
                                 <p>UPGRADE</p>
                             </button>
                         </div>
                     </div>
                     <!-- END OF FACTORY CARD -->
-                </c:forEach>
+                    </c:forEach>
                 </div>
                 <div class="divider"></div>
             </div>

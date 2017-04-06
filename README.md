@@ -25,8 +25,11 @@ This aplicacion is an Idle game in development.
 - Select the downloaded zip
 - Restart IDEA
 - Run -> Edit Configurations
-- Select jetty Runner
+- '+' -> select Jetty Runner -> name it 'Development'
 - Setup Path = '\' , Webapp Folder = 'webapp/src/main/webapp' , Classes Folder = 'webapp/target/classes'
+- '+' -> select Jetty Runner -> name it 'Production'
+- Setup Path = '\' , Webapp Folder = 'webapp/src/main/webapp' , Classes Folder = 'webapp/target/classes'
+- Env Args -> Name: 'spring.profiles.active' Value: 'production'
 - Down, before Launch, run Maven Goal with the command "clean compile"
 - Done
 IMPORTANT: DO NOT UPDATE THE JETTY PLUGIN OR IT WILL NOT WORK
