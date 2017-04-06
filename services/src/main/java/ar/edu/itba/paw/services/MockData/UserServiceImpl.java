@@ -31,16 +31,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Production getUserProductions(long id) {
-        Collection<SingleFactoryProduction> productions = new ArrayList<>();
-        productions.add(new Recipe(FactoryType.WOODFORGOLD).applyMultipliers(1,1,1D,1));
-        productions.add(new Recipe(FactoryType.WOODFORGOLD).applyMultipliers(2,1,1D,1));
-
-        return new Production(productions);
+        return userDao.getUserProductions(id);
     }
 
     @Override
     public Storage getUserStorage(long id) {
-        return new Storage(getUserProductions(id),15);
+        return userDao.getUserStorage(id);
     }
 
     @Override

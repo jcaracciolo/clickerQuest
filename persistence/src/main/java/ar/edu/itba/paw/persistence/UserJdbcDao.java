@@ -142,6 +142,7 @@ public class UserJdbcDao implements UserDao {
         for (ResourceType rt: ResourceType.values()) {
             final RowWealth rw = new RowWealth(userId.longValue(),rt,0D,0D,new Date());
             jdbcInsertWealths.execute(WEALTH_REVERSE_ROW_MAPPER.toArgs(rw));
+
         }
 
         return new User(userId.longValue(), username,password,img);
@@ -188,13 +189,23 @@ public class UserJdbcDao implements UserDao {
         final List<RowWealth> list = jdbcTemplate.query("SELECT * FROM factories WHERE userid = ?", WEALTH_ROW_MAPPER, userid);
         Map<ResourceType,Double> storage = new HashMap<>();
         Map<ResourceType,Double> productions = new HashMap<>();
+        Map<ResourceType,Calendar> lastUpdated = new HashMap<>();
         for (RowWealth rw: list) {
             storage.put(rw.resourceType,rw.storage);
             productions.put(rw.resourceType,rw.production);
+            lastUpdated.put(rw.resourceType,toCalendar(rw.lastUpdated));
         }
 
-        return new Wealth(userid,Calendar.getInstance(),
-                getUserStorage(userid),getUserProductions(userid));
+        Production production = new Production(new ResourcePackage(productions));
+        Storage st = new Storage(new ResourcePackage(storage),lastUpdated);
+
+        return new Wealth(userid,Calendar.getInstance(),st,production);
     }
     //endregion
+
+    private static Calendar toCalendar(Date date){
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        return cal;
+    }
 }
