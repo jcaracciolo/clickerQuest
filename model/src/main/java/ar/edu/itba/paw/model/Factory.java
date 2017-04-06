@@ -65,6 +65,6 @@ public class Factory {
     }
 
     public String getImage(){
-        return "1.img";
+        return "factory_icon.png";
     }
 }
