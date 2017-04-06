@@ -14,14 +14,16 @@ import java.util.Map;
  */
 public class Storage implements Package{
     private ResourcePackage resourcePackage;
+    Map<ResourceType, Calendar> lastUpdated;
 
-    public Storage() {
-        this.resourcePackage = new ResourcePackageBuilder().buildPackage();
+    public Storage(ResourcePackage resourcePackage, Map<ResourceType,Calendar> lastUpdated) {
+        this.lastUpdated = lastUpdated;
+        this.resourcePackage = resourcePackage;
     }
-
-    public Storage(Storage storage, Production production, Map<ResourceType,Calendar> lastUpdated) {
-        this.resourcePackage = calculateProducedResources(storage,production,lastUpdated);
-    }
+//
+//    public Storage(Storage storage, Production production, Map<ResourceType,Calendar> lastUpdated) {
+//        this.resourcePackage = calculateProducedResources(storage,production,lastUpdated);
+//    }
 
     private ResourcePackage calculateProducedResources(Storage storage, Production production, Map<ResourceType, Calendar> lastUpdated){
         ResourcePackageBuilder resourcePackageBuilder = new ResourcePackageBuilder();

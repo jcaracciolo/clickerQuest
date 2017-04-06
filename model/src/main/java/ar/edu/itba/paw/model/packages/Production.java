@@ -15,6 +15,10 @@ public class Production implements Package {
         this.resourcePackage = sumPackages(productions);
     }
 
+    public Production(ResourcePackage resourcePackage){
+        this.resourcePackage = resourcePackage;
+    }
+
     private ResourcePackage sumPackages(Collection<SingleFactoryProduction> productions ) {
         ResourcePackageBuilder builder = new ResourcePackageBuilder();
 
