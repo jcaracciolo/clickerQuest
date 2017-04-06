@@ -1,5 +1,8 @@
 package ar.edu.itba.paw.model;
 
+import ar.edu.itba.paw.model.packages.FactoryCost;
+import ar.edu.itba.paw.model.packages.Recipe;
+
 /**
  * Created by juanfra on 31/03/17.
  */
@@ -12,6 +15,7 @@ public class Factory {
     private double outputMultiplier;
     private double costReduction;
     private Upgrade upgrade;
+
     public Factory(long userid, FactoryType type, double amount, double inputReduction, double outputMultiplier, double costReduction, Upgrade upgrade) {
         this.userid = userid;
         this.type = type;
@@ -51,14 +55,16 @@ public class Factory {
     }
 
     //PROCESS WITH MULTIPLIERS
-    public ResourcePackage getCost() { return type.getCost(); }
+    public FactoryCost getCost() {
+        return new FactoryCost(type);
+    }
 
     //PROCESS WITH MULTIPLIERS
-    public ResourcePackage getRecipe() {
-        return type.getRecipe().applyMultipliers(amount,inputReduction,outputMultiplier);
+    public Recipe getRecipe() {
+        return new Recipe(type);
     }
+
     public String getImage(){
         return "factory_icon.png";
     }
-
 }

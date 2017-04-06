@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.model.Wealth;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,6 +25,7 @@ import static org.junit.Assert.assertEquals;
 public class UserJdbcDaoTest {
     private static final String PASSWORD = "Password";
     private static final String USERNAME = "Username";
+    private static final String IMAGE = "asda.png";
     @Autowired
     private DataSource ds;
     @Autowired
@@ -38,7 +40,7 @@ public class UserJdbcDaoTest {
 
     @Test
     public void testCreate() {
-        final User user = userDao.create(USERNAME, PASSWORD);
+        final User user = userDao.create(USERNAME, PASSWORD,IMAGE);
         assertNotNull(user);
         assertEquals(USERNAME, user.getUsername());
         assertEquals(PASSWORD, user.getPassword());
@@ -52,9 +54,9 @@ public class UserJdbcDaoTest {
         final String username2 = USERNAME + "2";
         final String username3 = USERNAME + "3";
 
-        final User user1 = userDao.create(username1, PASSWORD);
-        final User user2 = userDao.create(username2, PASSWORD);
-        final User user3 = userDao.create(username3, PASSWORD);
+        final User user1 = userDao.create(username1, PASSWORD,IMAGE);
+        final User user2 = userDao.create(username2, PASSWORD,IMAGE);
+        final User user3 = userDao.create(username3, PASSWORD,IMAGE);
 
         assertNotNull(user1);
         assertNotNull(user2);
@@ -64,5 +66,11 @@ public class UserJdbcDaoTest {
         assertEquals(1,user2.getId());
         assertEquals(2,user3.getId());
 
+    }
+
+    @Test
+    public void testWealth() {
+        final User user = userDao.create(USERNAME, PASSWORD,IMAGE);
+        Wealth wealth = userDao.getUserWealth(user.getId());
     }
 }

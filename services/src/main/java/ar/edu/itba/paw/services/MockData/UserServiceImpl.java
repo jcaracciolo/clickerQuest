@@ -5,6 +5,7 @@ import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.model.FactoryType;
 import ar.edu.itba.paw.model.Factory;
+import ar.edu.itba.paw.model.packages.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,23 +30,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResourcePackage getUserProductions(long id) {
-        Map<ResourceType,Double> productions = new HashMap<>();
-        Random rng = new Random();
-        for (ResourceType r: ResourceType.values()) {
-            productions.put(r,rng.nextDouble()*15);
-        }
-        return new ResourcePackage(productions);
+    public Production getUserProductions(long id) {
+        Collection<SingleFactoryProduction> productions = new ArrayList<>();
+        productions.add(new Recipe(FactoryType.WOODFORGOLD).applyMultipliers(1,1,1D,1));
+        productions.add(new Recipe(FactoryType.WOODFORGOLD).applyMultipliers(2,1,1D,1));
+
+        return new Production(productions);
     }
 
     @Override
-    public ResourcePackage getUserStorage(long id) {
-        Map<ResourceType,Double> storage = new HashMap<>();
-        Random rng = new Random();
-        for (ResourceType r: ResourceType.values()) {
-            storage.put(r,Math.floor(rng.nextDouble()*1000));
-        }
-        return new ResourcePackage(storage);
+    public Storage getUserStorage(long id) {
+        return new Storage(getUserProductions(id),15);
     }
 
     @Override

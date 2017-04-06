@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.model;
 
+import ar.edu.itba.paw.model.packages.*;
 import junit.framework.TestCase;
 
 import java.util.ArrayList;
@@ -15,40 +16,23 @@ public class ResourcePackageTest
 {
     @org.junit.Test
     public void testCreate() {
-        ResourcePackage resourcePackage = FactoryType.IRONFORGOLD.getRecipe();
-        System.out.println("outputs");
-        for(ResourceType res: resourcePackage.getFormatedOutputs().keySet()){
-            System.out.println(res + " " + resourcePackage.getFormatedOutputs().get(res));
-        }
-        System.out.println("inputs");
-        for(ResourceType res: resourcePackage.getFormatedInputs().keySet()){
-            System.out.println(res + " " + resourcePackage.getFormatedInputs().get(res));
-        }
+        Recipe recipe = new Recipe(FactoryType.WOODFORIRON);
+//        ResourcePackage.printPackage(recipe);
 
-        ResourcePackage multi = resourcePackage.applyMultipliers(3d,1.5d,5d);
+        Collection<SingleFactoryProduction> productions = new ArrayList<>();
+        SingleFactoryProduction singleFactoryProduction = recipe
+                .applyMultipliers(2,1,2D,1);
+        ResourcePackage.printPackage(singleFactoryProduction);
 
-        System.out.println("outputs");
-        for(ResourceType res: multi.getFormatedOutputs().keySet()){
-            System.out.println(res + " " + multi.getFormatedOutputs().get(res));
-        }
-        System.out.println("inputs");
-        for(ResourceType res: multi.getFormatedInputs().keySet()){
-            System.out.println(res + " " + multi.getFormatedInputs().get(res));
-        }
+        productions.add(singleFactoryProduction);
 
-        Collection<ResourcePackage> collection = new ArrayList<>();
-        collection.add(resourcePackage);collection.add(multi);
-        ResourcePackage sum = ResourcePackageBuilder.sumPackages(collection);
+        singleFactoryProduction = new Recipe(FactoryType.IRONFORGOLD)
+                .applyMultipliers(4,1.2,2D,1);
+        ResourcePackage.printPackage(singleFactoryProduction);
 
-        System.out.println("outputs");
-        for(ResourceType res: sum.getFormatedOutputs().keySet()){
-            System.out.println(res + " " + sum.getFormatedOutputs().get(res));
-        }
-        System.out.println("inputs");
-        for(ResourceType res: sum.getFormatedInputs().keySet()){
-            System.out.println(res + " " + sum.getFormatedInputs().get(res));
-        }
+        productions.add(singleFactoryProduction);
+
+        Production production = new Production(productions);
+        ResourcePackage.printPackage(production);
     }
-
-
 }
