@@ -25,9 +25,9 @@ public class UserJdbcDao implements UserDao {
         ResourceType resourceType;
         double production;
         double storage;
-        Date lastUpdated;
+        long lastUpdated;
 
-        public RowWealth(long userid, ResourceType resourceType, double production, double storage, Date lastUpdated) {
+        public RowWealth(long userid, ResourceType resourceType, double production, double storage, long lastUpdated) {
             this.userid = userid;
             this.resourceType = resourceType;
             this.production = production;
@@ -41,7 +41,7 @@ public class UserJdbcDao implements UserDao {
                 rows.add(new RowWealth(w.userid,r,
                         w.getProductions().getValue(r),
                         w.getStorage().getValue(r),
-                        new Date()));
+                        w.getLastUpdated().getTimeInMillis()));
             }
             return rows;
         }
@@ -97,13 +97,13 @@ public class UserJdbcDao implements UserDao {
                     ResourceType.fromId(rs.getInt("resourceType")),
                     rs.getDouble("production"),
                     rs.getDouble("storage"),
-                    rs.getDate("lastUpdated"));
+                    rs.getLong("lastUpdated"));
 
     private final static ReverseRowMapper<RowWealth> WEALTH_REVERSE_ROW_MAPPER = (rw) ->
     {
         final Map<String, Object> args = new HashMap();
         args.put("userid", rw.userid);
-        args.put("resourceType", rw.resourceType);
+        args.put("resourceType", rw.resourceType.getId());
         args.put("production",rw.production);
         args.put("storage", rw.storage);
         args.put("lastUpdated", rw.lastUpdated);
@@ -140,9 +140,9 @@ public class UserJdbcDao implements UserDao {
         }
 
         for (ResourceType rt: ResourceType.values()) {
-            final RowWealth rw = new RowWealth(userId.longValue(),rt,0D,0D,new Date());
-            jdbcInsertWealths.execute(WEALTH_REVERSE_ROW_MAPPER.toArgs(rw));
-
+            final RowWealth rw = new RowWealth(userId.longValue(),rt,0D,0D,Calendar.getInstance().getTimeInMillis());
+                    Map<String,Object> m = WEALTH_REVERSE_ROW_MAPPER.toArgs(rw);
+            jdbcInsertWealths.execute(m);
         }
 
         return new User(userId.longValue(), username,password,img);
@@ -186,7 +186,7 @@ public class UserJdbcDao implements UserDao {
 
     @Override
     public Wealth getUserWealth(long userid) {
-        final List<RowWealth> list = jdbcTemplate.query("SELECT * FROM factories WHERE userid = ?", WEALTH_ROW_MAPPER, userid);
+        final List<RowWealth> list = jdbcTemplate.query("SELECT * FROM wealths WHERE userid = ?", WEALTH_ROW_MAPPER, userid);
         Map<ResourceType,Double> storage = new HashMap<>();
         Map<ResourceType,Double> productions = new HashMap<>();
         Map<ResourceType,Calendar> lastUpdated = new HashMap<>();
@@ -201,11 +201,11 @@ public class UserJdbcDao implements UserDao {
 
         return new Wealth(userid,Calendar.getInstance(),st,production);
     }
-    //endregion
 
-    private static Calendar toCalendar(Date date){
+    private static Calendar toCalendar(long milis){
         Calendar cal = Calendar.getInstance();
-        cal.setTime(date);
+        cal.setTimeInMillis(milis);
         return cal;
     }
+    //endregion
 }

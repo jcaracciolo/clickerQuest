@@ -36,6 +36,8 @@ public class UserJdbcDaoTest {
     public void setUp() {
         jdbcTemplate = new JdbcTemplate(ds);
         jdbcTemplate.execute("TRUNCATE TABLE users RESTART IDENTITY AND COMMIT");
+        jdbcTemplate.execute("TRUNCATE TABLE factories RESTART IDENTITY AND COMMIT");
+        jdbcTemplate.execute("TRUNCATE TABLE wealths RESTART IDENTITY AND COMMIT");
     }
 
     @Test

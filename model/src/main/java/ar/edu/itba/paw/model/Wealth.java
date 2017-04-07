@@ -5,7 +5,6 @@ import ar.edu.itba.paw.model.packages.ResourcePackage;
 import ar.edu.itba.paw.model.packages.Storage;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Map;
 
 /**
@@ -26,7 +25,13 @@ public class Wealth {
         this.productions = productions;
     }
 
+    public long getUserid() {
+        return userid;
+    }
 
+    public Calendar getLastUpdated() {
+        return lastUpdated;
+    }
 
     public Storage getStorage() {
         return storage;

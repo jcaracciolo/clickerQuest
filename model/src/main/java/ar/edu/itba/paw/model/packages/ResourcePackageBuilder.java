@@ -3,21 +3,26 @@ package ar.edu.itba.paw.model.packages;
 import ar.edu.itba.paw.model.ResourceType;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by julian on 4/4/17.
  */
-public class ResourcePackageBuilder {
-    private HashMap<ResourceType, Double> resources;
+public class ResourcePackageBuilder<T> {
+    private Map<ResourceType, Double> resources;
 
     public ResourcePackageBuilder() {
         resources = new HashMap<>();
     }
 
     public boolean addItem(ResourceType resource, Double amount){
-        if(resources.containsKey(resource)) resources.put(resource, resources.get(resource) + amount);
-        else resources.put(resource,amount);
-        return resources.get(resource) >= 0;
+        if(resources.containsKey(resource)) {
+            resources.put(resource, resources.get(resource) + amount);
+            return true;
+        } else {
+            resources.put(resource,amount);
+            return false;
+        }
     }
 
     public ResourcePackage buildPackage(){

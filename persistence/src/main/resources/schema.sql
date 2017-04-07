@@ -23,5 +23,5 @@ CREATE TABLE IF NOT EXISTS wealths (
   resourceType INT,
   production DOUBLE PRECISION,
   storage DOUBLE PRECISION,
-  lastUpdated DATE
+  lastUpdated BIGINT
 )

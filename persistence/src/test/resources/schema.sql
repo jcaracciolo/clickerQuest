@@ -16,10 +16,10 @@ CREATE TABLE IF NOT EXISTS factories (
 );
 
 CREATE TABLE IF NOT EXISTS wealths (
-  userid BIGINT ,
+  userid BIGINT,
   resourceType INTEGER,
   production DOUBLE,
   storage DOUBLE,
-  lastUpdated DATE,
+  lastUpdated BIGINT,
   PRIMARY KEY(userid, resourceType)
 )
