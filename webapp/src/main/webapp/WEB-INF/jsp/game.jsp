@@ -63,7 +63,7 @@
                     <div class="card">
                         <div class="card-content">
                             <p>Consuming:</p>
-                            <c:set var="factoryRecipe" value="${factory.getRecipe()}"/>
+                            <c:set var="factoryRecipe" value="${factory.getSingleFactoryProduction()}"/>
                             <c:forEach items="${factoryRecipe.getResources()}" var="res">
                                 <c:set var="inputMap" value="${factoryRecipe.formatedInputs}"/>
                                     <p class="centered-text"><c:out value="${inputMap.get(res)} ${res}/s"/></p>

@@ -33,26 +33,22 @@ public class Recipe implements Package{
     private ResourcePackage getRecipeResourcePackage(FactoryType factoryType) {
         Random rng = new Random();
         ResourcePackageBuilder recipeBuilder = new ResourcePackageBuilder();
-        //TODO implement correct factories
-        Double wood = rng.nextDouble() * 5;
-        Double iron = rng.nextDouble() * 5;
-        Double gold = rng.nextDouble() * 5;
 
         switch (factoryType) {
             case NOTHINGFORWOOD:
-                recipeBuilder.addItem(ResourceType.WOOD, wood);
+                recipeBuilder.addItem(ResourceType.WOOD, 3D);
                 break;
             case WOODFORIRON:
-                recipeBuilder.addItem(ResourceType.WOOD, -wood);
-                recipeBuilder.addItem(ResourceType.IRON, iron);
+                recipeBuilder.addItem(ResourceType.WOOD, -3D);
+                recipeBuilder.addItem(ResourceType.IRON, 1D);
                 break;
             case IRONFORGOLD:
-                recipeBuilder.addItem(ResourceType.IRON, -iron);
-                recipeBuilder.addItem(ResourceType.GOLD, gold);
+                recipeBuilder.addItem(ResourceType.IRON, -2D);
+                recipeBuilder.addItem(ResourceType.GOLD, 1D);
                 break;
             case WOODFORGOLD:
-                recipeBuilder.addItem(ResourceType.WOOD, -wood);
-                recipeBuilder.addItem(ResourceType.GOLD, gold);
+                recipeBuilder.addItem(ResourceType.WOOD, -10D);
+                recipeBuilder.addItem(ResourceType.GOLD, 1D);
                 break;
             default:
                 throw new RuntimeException("There is no ResourcePackage for this factory");

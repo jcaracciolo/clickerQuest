@@ -20,23 +20,6 @@ public class ResourcePackage {
         this.resources = items;
     }
 
-
-    //This method asumes that "this" is a "recipe" meaning it does not have any multipliers added, only the raw sum of the factory recipe
-    //Positive resource values are interpreted as outputs, negative ones as inputs. OF A SINGLE FACTORY TYPE.
-    //THIS IS NOT MEANT TO BE USED WHEN THE PACKAGE REPRESENTS THE OUTPUT OF MORE THAN 1 FACTORY TYPE.
-    public ResourcePackage applyMultipliers(double amount, double inputReduction, double outputMultiplier)
-    {
-        ResourcePackageBuilder builder = new ResourcePackageBuilder();
-        if(amount <= 0) return builder.buildPackage();
-
-        for (ResourceType res : getResources()){
-            Double value = resources.get(res);
-            if(value > 0) builder.addItem(res,value*amount*outputMultiplier);
-            else builder.addItem(res,value*amount/inputReduction);
-        }
-        return builder.buildPackage();
-    }
-
     public Set<ResourceType> getResources(){
         return resources.keySet();
     }
@@ -69,7 +52,7 @@ public class ResourcePackage {
 
         for (ResourceType res: getResources()){
             Double value = resources.get(res);
-            if(value > 0) map.put(res,formatValue(value, integers));
+            map.put(res,formatValue(value, integers));
         }
         return map;
     }

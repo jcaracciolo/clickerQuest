@@ -22,11 +22,11 @@ public class UserServiceImpl implements UserService {
     UserDao userDao;
 
     public User findById(long id) {
-        return new User(id,"JuanFra","pass","1.jpg");
+        return userDao.findById(id);
     }
 
-    public User create(String username, String Password, String img) {
-        return findById(1);
+    public User create(String username, String password, String img) {
+        return userDao.create(username,password,"1.jpg");
     }
 
     @Override
@@ -40,14 +40,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<Factory> getUserFactories(long id) {
-        List<Factory> factories = new ArrayList<>();
-        Random rng = new Random();
-        for (FactoryType f:FactoryType.values()) {
-            int amount = rng.nextInt(10)>7 ? 0 : rng.nextInt(1000);
-            factories.add(new Factory(id,f,amount,1,1,1,new Upgrade(f, 0,"super Upgrade 2", 0)));
-        }
-        return factories;
+    public Collection<Factory> getUserFactories(long id) {
+        return userDao.getUserFactories(id);
     }
 
     @Override

@@ -2,6 +2,7 @@ package ar.edu.itba.paw.model;
 
 import ar.edu.itba.paw.model.packages.Production;
 import ar.edu.itba.paw.model.packages.ResourcePackage;
+import ar.edu.itba.paw.model.packages.SingleFactoryProduction;
 import ar.edu.itba.paw.model.packages.Storage;
 
 import java.util.Calendar;
@@ -17,6 +18,7 @@ public class Wealth {
     //Already calculated data, ready for display
     public Storage storage;
     public Production productions;
+    public Map<FactoryType,SingleFactoryProduction> singleProductions;
 
     public Wealth(long userid, Calendar lastUpdated, Storage storage, Production productions) {
         this.userid = userid;
@@ -34,7 +36,7 @@ public class Wealth {
     }
 
     public Storage getStorage() {
-        return storage;
+        return storage.getUpdatedStorage(productions,Calendar.getInstance());
     }
 
     public Production getProductions() {

@@ -2,6 +2,7 @@ package ar.edu.itba.paw.model;
 
 import ar.edu.itba.paw.model.packages.FactoryCost;
 import ar.edu.itba.paw.model.packages.Recipe;
+import ar.edu.itba.paw.model.packages.SingleFactoryProduction;
 
 /**
  * Created by juanfra on 31/03/17.
@@ -64,7 +65,12 @@ public class Factory {
         return new Recipe(type);
     }
 
+    public SingleFactoryProduction getSingleFactoryProduction() {
+        return new Recipe(type).applyMultipliers(amount,inputReduction,outputMultiplier,1);
+    }
+
     public String getImage(){
         return "factory_icon.png";
     }
+
 }
