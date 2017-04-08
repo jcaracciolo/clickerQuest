@@ -242,6 +242,20 @@ public class UserJdbcDao implements UserDao {
     }
 
     @Override
+    public Factory getUserFactory(long userid,FactoryType f) {
+        List<Factory> list =
+                jdbcTemplate.query("SELECT * FROM factories WHERE userid = ? AND type = ?", FACTORY_ROW_MAPPER, userid,f.getId());
+
+        if(list.isEmpty() || list.size() > 1) {
+            // TODO log this
+            return null;
+        } else {
+            return list.get(0);
+        }
+    }
+
+
+    @Override
     public Wealth getUserWealth(long userid) {
         final List<RowWealth> list = jdbcTemplate.query("SELECT * FROM wealths WHERE userid = ?", WEALTH_ROW_MAPPER, userid);
         Map<ResourceType,Double> storage = new HashMap<>();

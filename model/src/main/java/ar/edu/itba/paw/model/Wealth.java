@@ -50,4 +50,8 @@ public class Wealth {
     public Map<ResourceType,String> getProduction(){
         return productions.getFormatedOutputs();
     }
+
+    public Wealth purchaseResult(Factory f) {
+        return new Wealth(userid,lastUpdated,storage,productions);
+    }
 }

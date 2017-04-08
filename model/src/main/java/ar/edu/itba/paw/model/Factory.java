@@ -73,4 +73,14 @@ public class Factory {
         return "factory_icon.png";
     }
 
+    public Factory purchaseResult() {
+        return new Factory(userid,type,
+                amount +1,
+                inputReduction,outputMultiplier,costReduction,upgrade);
+    }
+
+    public boolean isBuyable(Wealth w) {
+        //TODO
+        return true;
+    }
 }

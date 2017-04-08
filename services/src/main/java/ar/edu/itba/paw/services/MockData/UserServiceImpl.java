@@ -30,6 +30,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Wealth getUserWealth(long id) {
+        return userDao.getUserWealth(id);
+    }
+
+    @Override
     public Production getUserProductions(long id) {
         return userDao.getUserProductions(id);
     }
@@ -37,6 +42,26 @@ public class UserServiceImpl implements UserService {
     @Override
     public Storage getUserStorage(long id) {
         return userDao.getUserStorage(id);
+    }
+
+    @Override
+    public boolean purchaseFactory(long userid, FactoryType type) {
+        Wealth w = getUserWealth(userid);
+        Factory f = userDao.getUserFactory(userid,type);
+        if( f.isBuyable(w)) {
+            Wealth wealth = w.purchaseResult(f);
+            Factory factory = f.purchaseResult();
+
+            wealth = userDao.update(wealth);
+            factory = userDao.update(factory);
+
+            if(factory != null && wealth != null) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        return false;
     }
 
     @Override

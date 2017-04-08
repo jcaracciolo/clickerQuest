@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.interfaces;
 
 import ar.edu.itba.paw.model.Factory;
+import ar.edu.itba.paw.model.FactoryType;
 import ar.edu.itba.paw.model.packages.Production;
 import ar.edu.itba.paw.model.packages.ResourcePackage;
 import ar.edu.itba.paw.model.User;
@@ -27,9 +28,15 @@ public interface UserDao {
     String getProfileImage(final long userid);
 
     Production getUserProductions(long userid);
+
     Storage getUserStorage(long userid);
+
     Collection<Factory> getUserFactories(long userid);
+    Factory getUserFactory(long userid,FactoryType f);
+    Factory update(Factory f);
+
     Wealth getUserWealth(long userid);
+    Wealth update(Wealth w);
 
 
 }
