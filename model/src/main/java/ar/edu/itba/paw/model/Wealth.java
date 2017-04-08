@@ -52,6 +52,7 @@ public class Wealth {
     }
 
     public Wealth purchaseResult(Factory f) {
+        Storage s = storage.purchase(f);
         return new Wealth(userid,lastUpdated,storage,productions);
     }
 }
