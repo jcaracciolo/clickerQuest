@@ -74,7 +74,7 @@ public class ResourcePackage {
             df.setRoundingMode(RoundingMode.FLOOR);
             return df.format(value);
         }
-        return coolFormat(value,0);
+        return value.toString(); //coolFormat(value,0);
     }
 
     private static char[] c = new char[]{'k', 'm', 'b', 't'};
