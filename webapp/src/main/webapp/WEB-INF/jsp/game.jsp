@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <%--<jsp:useBean id="user" type="ar.edu.itba.paw.model.User"/>--%>
 <%--<jsp:useBean id="storage" type="ar.edu.itba.paw.model.ResourcePackage"/>--%>
@@ -41,16 +42,22 @@
             </div>
             <div class="divider"></div>
             <div class="card-content white-text">
+                <span class="card-title">Storage</span>
+                <div id="storage">
+                    <c:forEach items="${storage.resources}" var="resource">
+                        <c:set var="storageMap" value="${storage.formatedOutputs}"/>
+                        <p><c:out value="${resource}"/>
+                            <fmt:formatNumber value="${storageMap.get(resource)}" pattern="#" minFractionDigits="0" maxFractionDigits="0"/></p>
+                        <%--<c:out value="${storageMap.get(resource)}"/></p>--%>
+                    </c:forEach>
+                </div>
                 <span class="card-title">Production</span>
-                <c:forEach items="${storage.resources}" var="resource">
-                    <c:set var="storageMap" value="${storage.formatedOutputs}"/>
-                    <p><c:out value="${resource}"/> <c:out value="${storageMap.get(resource)}"/></p>
-                </c:forEach>
-                <span class="card-title">Rate</span>
-                <c:forEach items="${productions.resources}" var="resource">
-                    <c:set var="rateMap" value="${productions.formatedOutputs}"/>
-                    <p><c:out value="${rateMap.get(resource)} ${resource}"/>/s</p>
-                </c:forEach>
+                    <div id="production">
+                    <c:forEach items="${productions.resources}" var="resource">
+                        <c:set var="rateMap" value="${productions.formatedOutputs}"/>
+                        <p><c:out value="${rateMap.get(resource)} ${resource}"/>/s</p>
+                    </c:forEach>
+                </div>
             </div>
         </div>
     </div>
@@ -66,7 +73,7 @@
                             <c:set var="factoryRecipe" value="${factory.getSingleFactoryProduction()}"/>
                             <c:forEach items="${factoryRecipe.getResources()}" var="res">
                                 <c:set var="inputMap" value="${factoryRecipe.formatedInputs}"/>
-                                    <p class="centered-text"><c:out value="${inputMap.get(res)} ${res}/s"/></p>
+                                <p class="centered-text"><c:out value="${inputMap.get(res)} ${res}/s"/></p>
                             </c:forEach>
                             <div class="card-image">
                                 <img class="factory-image" src="/resources/${factory.getImage()}" alt="factory_icon"/>
