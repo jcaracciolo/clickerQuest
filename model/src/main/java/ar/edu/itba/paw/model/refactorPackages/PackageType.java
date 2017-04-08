@@ -7,7 +7,7 @@ import ar.edu.itba.paw.model.refactorPackages.Implementations.*;
  * Created by juanfra on 08/04/17.
  */
 public enum PackageType {
-    FactoryCostType,RecipeType,StorageTypeType,ProductionType,SingleProductionType;
+    FactoryCostType,RecipeType,StorageType,ProductionType,SingleProductionType;
 
     public PackageBuilder packageBuilder(){
         switch (this){
@@ -17,7 +17,7 @@ public enum PackageType {
             case RecipeType:
                 return new PackageBuilder(Recipe.VALIDATOR,Recipe.CREATOR);
 
-            case StorageTypeType:
+            case StorageType:
                 return new PackageBuilder(Storage.VALIDATOR,Storage.CREATOR);
 
             case ProductionType:

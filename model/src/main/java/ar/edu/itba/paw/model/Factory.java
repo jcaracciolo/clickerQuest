@@ -1,8 +1,7 @@
 package ar.edu.itba.paw.model;
 
-import ar.edu.itba.paw.model.packages.FactoryCost;
-import ar.edu.itba.paw.model.packages.Recipe;
-import ar.edu.itba.paw.model.packages.SingleFactoryProduction;
+import ar.edu.itba.paw.model.refactorPackages.Implementations.FactoryCost;
+import ar.edu.itba.paw.model.refactorPackages.Implementations.SingleProduction;
 
 /**
  * Created by juanfra on 31/03/17.
@@ -55,18 +54,12 @@ public class Factory {
         return upgrade;
     }
 
-    //PROCESS WITH MULTIPLIERS
     public FactoryCost getCost() {
-        return new FactoryCost(type);
+        return type.getCost().applyMultipliers(amount,costReduction);
     }
 
-    //PROCESS WITH MULTIPLIERS
-    public Recipe getRecipe() {
-        return new Recipe(type);
-    }
-
-    public SingleFactoryProduction getSingleFactoryProduction() {
-        return new Recipe(type).applyMultipliers(amount,inputReduction,outputMultiplier,1);
+    public SingleProduction getSingleProduction() {
+        return type.getRecipe().applyMultipliers(amount,inputReduction,outputMultiplier,1);
     }
 
     public String getImage(){

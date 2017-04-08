@@ -1,9 +1,8 @@
 package ar.edu.itba.paw.model;
 
-import ar.edu.itba.paw.model.packages.Production;
-import ar.edu.itba.paw.model.packages.ResourcePackage;
-import ar.edu.itba.paw.model.packages.SingleFactoryProduction;
-import ar.edu.itba.paw.model.packages.Storage;
+import ar.edu.itba.paw.model.refactorPackages.Implementations.Productions;
+import ar.edu.itba.paw.model.refactorPackages.Implementations.SingleProduction;
+import ar.edu.itba.paw.model.refactorPackages.Implementations.Storage;
 
 import java.util.Calendar;
 import java.util.Map;
@@ -14,15 +13,13 @@ import java.util.Map;
 public class Wealth {
 
     public long userid;
-    public Calendar lastUpdated;
     //Already calculated data, ready for display
     public Storage storage;
-    public Production productions;
-    public Map<FactoryType,SingleFactoryProduction> singleProductions;
+    public Productions productions;
+    public Map<FactoryType,SingleProduction> singleProductions;
 
-    public Wealth(long userid, Calendar lastUpdated, Storage storage, Production productions) {
+    public Wealth(long userid, Storage storage, Productions productions) {
         this.userid = userid;
-        this.lastUpdated = lastUpdated;
         this.storage = storage;
         this.productions = productions;
     }
@@ -31,28 +28,24 @@ public class Wealth {
         return userid;
     }
 
-    public Calendar getLastUpdated() {
-        return lastUpdated;
-    }
-
     public Storage getStorage() {
-        return storage.getUpdatedStorage(productions,Calendar.getInstance());
+        return storage.getUpdatedStorage(productions);
     }
 
-    public Production getProductions() {
+    public Productions getProductions() {
         return productions;
     }
 
     public Map<ResourceType,String> getStoredResources(){
-        return storage.getFormatedOutputs();
+        return storage.formatted();
     }
 
     public Map<ResourceType,String> getProduction(){
-        return productions.getFormatedOutputs();
+        return productions.formatted();
     }
 
     public Wealth purchaseResult(Factory f) {
-        Storage s = storage.purchase(f);
-        return new Wealth(userid,lastUpdated,storage,productions);
+       // Storage s = storage.purchase(f);
+        return new Wealth(userid,storage,productions);
     }
 }

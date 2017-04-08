@@ -1,10 +1,8 @@
 package ar.edu.itba.paw.model.refactorPackages.Implementations;
 
+import ar.edu.itba.paw.model.FactoryType;
 import ar.edu.itba.paw.model.ResourceType;
-import ar.edu.itba.paw.model.refactorPackages.Creator;
-import ar.edu.itba.paw.model.refactorPackages.Formatter;
-import ar.edu.itba.paw.model.refactorPackages.ResourcePackage;
-import ar.edu.itba.paw.model.refactorPackages.Validator;
+import ar.edu.itba.paw.model.refactorPackages.*;
 
 import java.util.Map;
 
@@ -18,7 +16,19 @@ public class FactoryCost extends ResourcePackage {
 
     FactoryCost(Map<ResourceType, Double> map) {
         resources = super.generate(map,VALIDATOR);
-        formatter = ResourcePackage::coolFormat;
+        formatter = (d) -> formatValue(d,true);
+    }
+
+    public FactoryCost applyMultipliers(double amount, double costReduction) {
+        PackageBuilder<FactoryCost> builder = new PackageBuilder<>(VALIDATOR,CREATOR);
+        if(amount > 0) {
+            for (ResourceType res : resources.keySet()){
+                Double value = resources.get(res);
+                builder.putItem(res,value / costReduction * amount);
+            }
+        }
+
+        return builder.buildPackage();
     }
 
 }

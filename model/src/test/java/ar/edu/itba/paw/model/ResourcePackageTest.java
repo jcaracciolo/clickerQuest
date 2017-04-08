@@ -1,6 +1,10 @@
 package ar.edu.itba.paw.model;
 
-import ar.edu.itba.paw.model.packages.*;
+import ar.edu.itba.paw.model.refactorPackages.Implementations.Productions;
+import ar.edu.itba.paw.model.refactorPackages.Implementations.Recipe;
+import ar.edu.itba.paw.model.refactorPackages.Implementations.SingleProduction;
+import ar.edu.itba.paw.model.refactorPackages.PackageBuilder;
+import ar.edu.itba.paw.model.refactorPackages.PackageType;
 import junit.framework.TestCase;
 
 import java.util.ArrayList;
@@ -16,23 +20,27 @@ public class ResourcePackageTest
 {
     @org.junit.Test
     public void testCreate() {
-        Recipe recipe = new Recipe(FactoryType.WOODFORIRON);
+        Recipe recipe = FactoryType.WOODFORIRON.getRecipe();
 //        ResourcePackage.printPackage(recipe);
 
-        Collection<SingleFactoryProduction> productions = new ArrayList<>();
-        SingleFactoryProduction singleFactoryProduction = recipe
+        Collection<SingleProduction> productions = new ArrayList<>();
+        SingleProduction singleProduction = recipe
                 .applyMultipliers(2,1,2D,1);
-        ResourcePackage.printPackage(singleFactoryProduction);
+        singleProduction.printPackage();
 
-        productions.add(singleFactoryProduction);
+        productions.add(singleProduction);
 
-        singleFactoryProduction = new Recipe(FactoryType.IRONFORGOLD)
+        singleProduction = FactoryType.IRONFORGOLD.getRecipe()
                 .applyMultipliers(4,1.2,2D,1);
-        ResourcePackage.printPackage(singleFactoryProduction);
+        singleProduction.printPackage();
 
-        productions.add(singleFactoryProduction);
+        productions.add(singleProduction);
 
-        Production production = new Production(productions);
-        ResourcePackage.printPackage(production);
+        PackageBuilder<Productions> builder = PackageType.ProductionType.packageBuilder();
+        for(SingleProduction sp: productions){
+            builder.putItems(sp);
+        }
+        Productions finalProductions = builder.buildPackage();
+        finalProductions.printPackage();
     }
 }

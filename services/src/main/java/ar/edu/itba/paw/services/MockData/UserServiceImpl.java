@@ -5,7 +5,8 @@ import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.model.FactoryType;
 import ar.edu.itba.paw.model.Factory;
-import ar.edu.itba.paw.model.packages.*;
+import ar.edu.itba.paw.model.refactorPackages.Implementations.Productions;
+import ar.edu.itba.paw.model.refactorPackages.Implementations.Storage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,7 +36,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Production getUserProductions(long id) {
+    public Productions getUserProductions(long id) {
         return userDao.getUserProductions(id);
     }
 

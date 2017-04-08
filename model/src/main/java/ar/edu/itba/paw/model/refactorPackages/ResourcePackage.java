@@ -2,6 +2,8 @@ package ar.edu.itba.paw.model.refactorPackages;
 
 import ar.edu.itba.paw.model.ResourceType;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -43,7 +45,47 @@ public abstract class ResourcePackage {
 
     private static char[] c = new char[]{'k', 'm', 'b', 't'};
 
-    protected static String coolFormat(double n){
+    public void printPackage(){
+        System.out.println("outputs");
+        for(ResourceType res: getFormattedOutputs().keySet()){
+            System.out.println(res + " " + getFormattedOutputs().get(res));
+        }
+        System.out.println("inputs");
+        for(ResourceType res: getFormattedInputs().keySet()){
+            System.out.println(res + " " + getFormattedInputs().get(res));
+        }
+    }
+
+    public static String formatValue(Double value, Boolean integers){
+        if(value<1000) {
+            DecimalFormat df = new DecimalFormat(integers?"#":"#.##");
+            df.setRoundingMode(RoundingMode.FLOOR);
+            return df.format(value);
+        }
+        return value.toString(); //coolFormat(value,0);
+    }
+
+    protected Map<ResourceType,String> getFormattedInputs(){
+        Map<ResourceType,String> map = new HashMap<>();
+
+        for (ResourceType res: getResources()){
+            Double value = resources.get(res);
+            if(value < 0) map.put(res,formatter.format(-value));
+        }
+        return map;
+    }
+
+    protected Map<ResourceType,String> getFormattedOutputs(){
+        Map<ResourceType,String> map = new HashMap<>();
+
+        for (ResourceType res: getResources()){
+            Double value = resources.get(res);
+            map.put(res,formatter.format(value));
+        }
+        return map;
+    }
+
+    private static String coolFormat(double n){
         return coolFormat(n,0);
     }
 

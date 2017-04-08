@@ -2,9 +2,10 @@ package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.UserDao;
 import ar.edu.itba.paw.model.*;
-import ar.edu.itba.paw.model.packages.Production;
-import ar.edu.itba.paw.model.packages.ResourcePackage;
-import ar.edu.itba.paw.model.packages.Storage;
+import ar.edu.itba.paw.model.refactorPackages.Implementations.Productions;
+import ar.edu.itba.paw.model.refactorPackages.Implementations.Storage;
+import ar.edu.itba.paw.model.refactorPackages.PackageBuilder;
+import ar.edu.itba.paw.model.refactorPackages.PackageType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -41,7 +42,7 @@ public class UserJdbcDao implements UserDao {
                 rows.add(new RowWealth(w.userid,r,
                         w.getProductions().getValue(r),
                         w.getStorage().getValue(r),
-                        w.getLastUpdated().getTimeInMillis()));
+                        w.getStorage().getLastUpdated(r).getTimeInMillis()));
             }
             return rows;
         }
@@ -179,7 +180,7 @@ public class UserJdbcDao implements UserDao {
 
     public Wealth update(Wealth w) {
         Storage s = w.getStorage();
-        Production p = w.getProductions();
+        Productions p = w.getProductions();
         for(ResourceType r: ResourceType.values()) {
             int rows = jdbcTemplate.update(
                     "UPDATE wealths SET " +
@@ -227,7 +228,7 @@ public class UserJdbcDao implements UserDao {
     }
 
     @Override
-    public Production getUserProductions(long userid) {
+    public Productions getUserProductions(long userid) {
         return getUserWealth(userid).getProductions();
     }
 
@@ -258,19 +259,15 @@ public class UserJdbcDao implements UserDao {
     @Override
     public Wealth getUserWealth(long userid) {
         final List<RowWealth> list = jdbcTemplate.query("SELECT * FROM wealths WHERE userid = ?", WEALTH_ROW_MAPPER, userid);
-        Map<ResourceType,Double> storage = new HashMap<>();
-        Map<ResourceType,Double> productions = new HashMap<>();
-        Map<ResourceType,Calendar> lastUpdated = new HashMap<>();
+        PackageBuilder<Storage> storage = PackageType.StorageType.packageBuilder();
+        PackageBuilder<Productions> productions = PackageType.ProductionType.packageBuilder();
+
         for (RowWealth rw: list) {
-            storage.put(rw.resourceType,rw.storage);
-            productions.put(rw.resourceType,rw.production);
-            lastUpdated.put(rw.resourceType,toCalendar(rw.lastUpdated));
+            storage.putItemWithDate(rw.resourceType,rw.storage,toCalendar(rw.lastUpdated));
+            productions.putItem(rw.resourceType,rw.production);
         }
 
-        Production production = new Production(new ResourcePackage(productions));
-        Storage st = new Storage(new ResourcePackage(storage),lastUpdated);
-
-        return new Wealth(userid,Calendar.getInstance(),st,production);
+        return new Wealth(userid,storage.buildPackage(),productions.buildPackage());
     }
 
     private static Calendar toCalendar(long milis){

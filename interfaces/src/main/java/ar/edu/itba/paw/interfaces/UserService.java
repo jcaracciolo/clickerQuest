@@ -3,10 +3,9 @@ package ar.edu.itba.paw.interfaces;
 import ar.edu.itba.paw.model.Factory;
 import ar.edu.itba.paw.model.FactoryType;
 import ar.edu.itba.paw.model.Wealth;
-import ar.edu.itba.paw.model.packages.Production;
-import ar.edu.itba.paw.model.packages.ResourcePackage;
 import ar.edu.itba.paw.model.User;
-import ar.edu.itba.paw.model.packages.Storage;
+import ar.edu.itba.paw.model.refactorPackages.Implementations.Productions;
+import ar.edu.itba.paw.model.refactorPackages.Implementations.Storage;
 
 import java.util.Collection;
 
@@ -20,7 +19,7 @@ public interface UserService {
     User create(String username, String Password, String img);
 
     Wealth getUserWealth(long id);
-    Production getUserProductions(long id);
+    Productions getUserProductions(long id);
     Storage getUserStorage(long id);
 
     boolean purchaseFactory(long userid, FactoryType f);

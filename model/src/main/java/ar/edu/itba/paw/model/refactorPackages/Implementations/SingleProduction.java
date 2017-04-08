@@ -1,10 +1,7 @@
 package ar.edu.itba.paw.model.refactorPackages.Implementations;
 
 import ar.edu.itba.paw.model.ResourceType;
-import ar.edu.itba.paw.model.refactorPackages.Creator;
-import ar.edu.itba.paw.model.refactorPackages.Formatter;
-import ar.edu.itba.paw.model.refactorPackages.ResourcePackage;
-import ar.edu.itba.paw.model.refactorPackages.Validator;
+import ar.edu.itba.paw.model.refactorPackages.*;
 
 import java.util.Map;
 
@@ -18,6 +15,14 @@ public class SingleProduction extends ResourcePackage {
 
     SingleProduction(Map<ResourceType, Double> map) {
         resources = super.generate(map,VALIDATOR);
-        formatter = (d) -> coolFormat(d) + "/s";
+        formatter = (d) -> formatValue(d,false) + "/s";
+    }
+
+    public Map<ResourceType,String> getFormattedInputs(){
+        return super.getFormattedInputs();
+    }
+
+    public Map<ResourceType,String> getFormattedOutputs(){
+        return super.getFormattedOutputs();
     }
 }
