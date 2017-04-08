@@ -18,12 +18,4 @@ public class Productions extends ResourcePackage {
         resources = super.generate(map,VALIDATOR);
         formatter = (d) -> formatValue(d,false) + "/s";
     }
-
-    public Map<ResourceType,String> getFormattedInputs(){
-        return super.getFormattedInputs();
-    }
-
-    public Map<ResourceType,String> getFormattedOutputs(){
-        return super.getFormattedOutputs();
-    }
 }
