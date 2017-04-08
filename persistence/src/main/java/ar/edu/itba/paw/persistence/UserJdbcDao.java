@@ -149,14 +149,62 @@ public class UserJdbcDao implements UserDao {
         return new User(userId.longValue(), username,password,img);
     }
 
-//    public boolean purchaseFactory(final long userid, FactoryType factoryType, long increase){
-//
-//        jdbcTemplate.update(
-//                "UPDATE factories SET amount = amount + ? WHERE userid = ? AND type = ?", increase, userid, factoryType.getId());
-//        jdbcTemplate.update(
-//                "UPDATE wealths SET amount = amount + ? WHERE userid = ? AND type = ?", increase, userid, factoryType.getId());
-//        return true;
-//    }
+    public Factory update(Factory f) {
+        int rows = jdbcTemplate.update(
+                    "UPDATE factories SET " +
+                            "amount = ?," +
+                            "inputReducton = ?," +
+                            "outputMultiplier = ?," +
+                            "costReduction = ?," +
+                            "level = ?" +
+                            " WHERE (userid = ?) AND (type = ?);",
+                    f.getAmount(),
+                    f.getInputReduction(),
+                    f.getOutputMultiplier(),
+                    f.getCostReduction(),
+                    f.getUpgrade().getLevel(),
+                    f.getUserid(),
+                    f.getType());
+
+        if(rows == 1) {
+            return f;
+        } else if (rows == 0) {
+            //TODO log no update
+           return null;
+        } else {
+            //TODO multiple updates
+            return null;
+        }
+    }
+
+    public Wealth update(Wealth w) {
+        Storage s = w.getStorage();
+        Production p = w.getProductions();
+        for(ResourceType r: ResourceType.values()) {
+            int rows = jdbcTemplate.update(
+                    "UPDATE wealths SET " +
+                            "production = ?," +
+                            "storage = ?," +
+                            "lastUpdated = ?" +
+                            " WHERE (userid = ?) AND (type = ?);",
+                    p.getValue(r),
+                    s.getValue(r),
+                    Calendar.getInstance().getTimeInMillis(),
+                    w.getUserid(),
+                    r);
+
+            if (rows == 0) {
+                //TODO log no update
+                return null;
+            } else {
+                //TODO multiple updates
+                return null;
+            }
+        }
+
+        return w;
+
+    }
 
     //endregion
 
