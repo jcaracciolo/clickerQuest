@@ -3,6 +3,7 @@ package ar.edu.itba.paw.model;
 import ar.edu.itba.paw.model.refactorPackages.Implementations.FactoryCost;
 import ar.edu.itba.paw.model.refactorPackages.Implementations.Recipe;
 import ar.edu.itba.paw.model.refactorPackages.PackageBuilder;
+import ar.edu.itba.paw.model.refactorPackages.PackageType;
 
 import java.util.*;
 
@@ -35,7 +36,7 @@ public enum FactoryType {
     }
 
     public FactoryCost getCost(){
-        PackageBuilder<FactoryCost> costBuilder = new PackageBuilder<>(FactoryCost.VALIDATOR,FactoryCost.CREATOR);
+        PackageBuilder<FactoryCost> costBuilder = PackageType.FactoryCostType.packageBuilder();
 
         switch (this) {
             case NOTHINGFORWOOD:
@@ -61,7 +62,7 @@ public enum FactoryType {
 
     public Recipe getRecipe() {
         Random rng = new Random();
-        PackageBuilder<Recipe> recipeBuilder = new PackageBuilder<>(Recipe.VALIDATOR,Recipe.CREATOR);
+        PackageBuilder<Recipe> recipeBuilder = PackageType.RecipeType.packageBuilder();
 
         switch (this) {
             case NOTHINGFORWOOD:

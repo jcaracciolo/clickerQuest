@@ -18,7 +18,7 @@ public class Recipe extends ResourcePackage {
     }
 
     public SingleProduction applyMultipliers(double amount, double inputReduction, double outputMultiplier, int level) {
-        PackageBuilder<SingleProduction> builder = new PackageBuilder(VALIDATOR,CREATOR);
+        PackageBuilder<SingleProduction> builder = PackageType.SingleProductionType.packageBuilder();
         if(amount > 0) {
             for (ResourceType res : resources.keySet()){
                 Double value = resources.get(res);

@@ -20,7 +20,7 @@ public class FactoryCost extends ResourcePackage {
     }
 
     public FactoryCost applyMultipliers(double amount, double costReduction) {
-        PackageBuilder<FactoryCost> builder = new PackageBuilder<>(VALIDATOR,CREATOR);
+        PackageBuilder<FactoryCost> builder = PackageType.FactoryCostType.packageBuilder();
         if(amount > 0) {
             for (ResourceType res : resources.keySet()){
                 Double value = resources.get(res);

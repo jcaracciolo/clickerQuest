@@ -3,9 +3,11 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <%--<jsp:useBean id="user" type="ar.edu.itba.paw.model.User"/>--%>
-<%--<jsp:useBean id="storage" type="ar.edu.itba.paw.model.ResourcePackage"/>--%>
-<%--<jsp:useBean id="production" type="ar.edu.itba.paw.model.ResourcePackage"/>--%>
-<%--<jsp:useBean id="factoryCost" type="ar.edu.itba.paw.model.ResourcePackage"/>--%>
+<%--<jsp:useBean id="storage" type="ar.edu.itba.paw.model.refactorPackages.Implementations.SingleProduction"/>--%>
+<%--<jsp:useBean id="storage" type="ar.edu.itba.paw.model.refactorPackages.Implementations.FactoryCost"/>--%>
+<%--<jsp:useBean id="storage" type="ar.edu.itba.paw.model.refactorPackages.Implementations.Productions"/>--%>
+<%--<jsp:useBean id="storage" type="ar.edu.itba.paw.model.refactorPackages.Implementations.Recipe"/>--%>
+<%--<jsp:useBean id="storage" type="ar.edu.itba.paw.model.refactorPackages.Implementations.Storage"/>--%>
 <%--<jsp:useBean id="factory" type="ar.edu.itba.paw.model.Factory"/>--%>
 
 <!DOCTYPE html>
@@ -35,7 +37,7 @@
                 <div class="section">
                     <div class="card-image profile-picture">
                         <%--<img class="profile" src="/resources/profile_image_2.jpg" alt="factory_img"/>--%>
-                        <img class="profile" src="/resources/${user.getProfileImage()}" alt="factory_img"/>
+                        <img class="profile" src="/resources/${user.profileImage}" alt="factory_img"/>
                     </div>
                     <p class="username"><c:out value="${user.username}"/></p>
                 </div>
@@ -44,17 +46,17 @@
             <div class="card-content white-text">
                 <span class="card-title">Storage</span>
                 <div id="storage">
-                    <c:forEach items="${storage.resources}" var="resource">
-                        <c:set var="storageMap" value="${storage.formatedOutputs}"/>
+                    <c:set var="storageMap" value="${storage.getUpdatedStorage(productions)}"/>
+                    <c:forEach items="${storageMap.resources}" var="resource">
                         <p><c:out value="${resource}"/>
-                            <fmt:formatNumber value="${storageMap.get(resource)}" pattern="#" minFractionDigits="0" maxFractionDigits="0"/></p>
+                            <fmt:formatNumber value="${storageMap.getValue(resource)}" pattern="#" minFractionDigits="0" maxFractionDigits="0"/></p>
                         <%--<c:out value="${storageMap.get(resource)}"/></p>--%>
                     </c:forEach>
                 </div>
                 <span class="card-title">Production</span>
                     <div id="production">
-                    <c:forEach items="${productions.resources}" var="resource">
-                        <c:set var="rateMap" value="${productions.formatedOutputs}"/>
+                        <c:set var="rateMap" value="${productions.formatted()}"/>
+                        <c:forEach items="${productions.resources}" var="resource">
                         <p><c:out value="${rateMap.get(resource)} ${resource}"/>/s</p>
                     </c:forEach>
                 </div>
@@ -70,9 +72,9 @@
                     <div class="card">
                         <div class="card-content">
                             <p>Consuming:</p>
-                            <c:set var="factoryRecipe" value="${factory.getSingleFactoryProduction()}"/>
-                            <c:forEach items="${factoryRecipe.getResources()}" var="res">
-                                <c:set var="inputMap" value="${factoryRecipe.formatedInputs}"/>
+                            <c:set var="factoryRecipe" value="${factory.singleProduction}"/>
+                            <c:set var="inputMap" value="${factoryRecipe.formattedInputs}"/>
+                            <c:forEach items="${factoryRecipe.resources}" var="res">
                                 <p class="centered-text"><c:out value="${inputMap.get(res)} ${res}/s"/></p>
                             </c:forEach>
                             <div class="card-image">
@@ -80,8 +82,8 @@
                             </div>
                             <p id="factoryCant${loop.index}" class="centered-text">${factory.amount}</p>
                             <p>Producing:</p>
-                            <c:forEach items="${factoryRecipe.getResources()}" var="res">
-                                <c:set var="outputMap" value="${factoryRecipe.formatedOutputs}"/>
+                            <c:set var="outputMap" value="${factoryRecipe.formattedOutputs}"/>
+                            <c:forEach items="${factoryRecipe.resources}" var="res">
                                 <c:if test="${outputMap.get(res) != null}">
                                     <p class="centered-text"><c:out value="${outputMap.get(res)} ${res}/s"/></p>
                                 </c:if>
@@ -108,17 +110,17 @@
                             </div>
                             <div>
                                 <p>Cost:</p>
-                                <c:set var="factoryCost" value="${factory.getCost()}"/>
-                                <c:forEach items="${factoryCost.getResources()}" var="res">
-                                    <c:set var="costMap" value="${factoryCost.formatedOutputs}"/>
+                                <c:set var="factoryCost" value="${factory.cost}"/>
+                                <c:forEach items="${factoryCost.resources}" var="res">
+                                    <c:set var="costMap" value="${factoryCost.formatted()}"/>
                                     <p class="centered-text"><c:out value="${costMap.get(res)} ${res}"/>/s</p>
                                 </c:forEach>
                             </div>
                         </div>
                         <div class="col s4">
-                            <c:set var="factoryRecipe" value="${factory.getRecipe()}"/>
-                            <c:forEach items="${factoryRecipe.getResources()}" var="res">
-                                <c:set var="inputMap" value="${factoryRecipe.formatedInputs}"/>
+                            <c:set var="factoryRecipe" value="${factory.type.recipe}"/>
+                            <c:forEach items="${factoryRecipe.resources}" var="res">
+                                <c:set var="inputMap" value="${factoryRecipe.formattedInputs}"/>
                                 <c:if test="${inputMap.get(res) != null}">
                                     <p class="centered-text"><c:out value="${inputMap.get(res)} ${res}"/></p>
                                 </c:if>
@@ -126,8 +128,8 @@
                             <div class="card-image col s12">
                                 <img src="/resources/arrow_ingredients.png" t alt="embudo"/>
                             </div>
-                            <c:forEach items="${factoryRecipe.getResources()}" var="res">
-                                <c:set var="outputMap" value="${factoryRecipe.formatedOutputs}"/>
+                            <c:forEach items="${factoryRecipe.resources}" var="res">
+                                <c:set var="outputMap" value="${factoryRecipe.formattedOutputs}"/>
                                 <c:if test="${outputMap.get(res) != null}">
                                     <p class="centered-text"><c:out value="${outputMap.get(res)} ${res}"/></p>
                                 </c:if>

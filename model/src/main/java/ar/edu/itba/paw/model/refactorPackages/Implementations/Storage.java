@@ -40,18 +40,20 @@ public class Storage extends ResourcePackage {
     }
 
     public Storage getUpdatedStorage(Productions production, Calendar now){
-        PackageBuilder<Storage> resourcePackageBuilder = new PackageBuilder(VALIDATOR,CREATOR);
+        PackageBuilder<Storage> resourcePackageBuilder = PackageType.StorageType.packageBuilder();
 
         for (ResourceType resourceType: resources.keySet()){
-            resourcePackageBuilder.addItem(resourceType,resources.get(resourceType));
+            resourcePackageBuilder.putItem(resourceType,resources.get(resourceType));
         }
+
         for (ResourceType resourceType: production.getResources()){
             long seconds = ChronoUnit.SECONDS.between(lastUpdated.get(resourceType).toInstant(), now.toInstant());
 
             Double value = Math.ceil(production.getValue(resourceType) * seconds);
             if(value <0 ) throw new RuntimeException("Negative Production in storage calculation!");
 
-            resourcePackageBuilder.putItem(resourceType, value );
+            resourcePackageBuilder.addItem(resourceType, value);
+            resourcePackageBuilder.setLastUpdated(resourceType, now);
         }
         return resourcePackageBuilder.buildPackage();
     }

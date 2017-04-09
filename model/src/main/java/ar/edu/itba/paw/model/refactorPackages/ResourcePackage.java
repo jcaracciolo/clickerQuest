@@ -80,7 +80,7 @@ public abstract class ResourcePackage {
 
         for (ResourceType res: getResources()){
             Double value = resources.get(res);
-            map.put(res,formatter.format(value));
+            if(value > 0) map.put(res,formatter.format(value));
         }
         return map;
     }
