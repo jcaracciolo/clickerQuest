@@ -6,6 +6,7 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.UserDao;
 import ar.edu.itba.paw.interfaces.UserService;
+import ar.edu.itba.paw.model.Factory;
 import ar.edu.itba.paw.model.FactoryType;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.webapp.form.UserForm;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.util.*;
 
 @Controller
 public class HelloWorldController {
@@ -62,9 +64,18 @@ public class HelloWorldController {
     @RequestMapping(value = "/{userId}/game")
     public ModelAndView mainGameView(@PathVariable long userId){
         ModelAndView mav = new ModelAndView("game");
-        mav.addObject("user",userService.findById(userId));
+
+        List<Factory> factories = new ArrayList<>(userService.getUserFactories(userId));
+        Collections.sort(factories, new Comparator<Factory>() {
+            @Override
+            public int compare(Factory f1, Factory f2) {
+                return f1.getType().getId() - f2.getType().getId();
+            }
+        });
+
+                mav.addObject("user", userService.findById(userId));
         mav.addObject("storage",userService.getUserStorage(userId));
-        mav.addObject("factories",userService.getUserFactories(userId));
+        mav.addObject("factories",factories);
         mav.addObject("productions",userService.getUserProductions(userId));
         return mav;
     }
