@@ -1,29 +1,28 @@
 package ar.edu.itba.paw.model;
 
+import ar.edu.itba.paw.model.packages.Implementations.BaseCost;
 import ar.edu.itba.paw.model.packages.Implementations.FactoryCost;
-import ar.edu.itba.paw.model.packages.Implementations.Recipe;
+import ar.edu.itba.paw.model.packages.Implementations.BaseRecipe;
 import ar.edu.itba.paw.model.packages.PackageBuilder;
 import ar.edu.itba.paw.model.packages.PackageType;
-
-import java.util.*;
 
 /**
  * Created by juanfra on 31/03/17.
  */
 public enum FactoryType {
-    NOTHINGFORWOOD,
-    WOODFORIRON,
-    IRONFORGOLD,
-    WOODFORGOLD;
+    NOTHINGFORWOOD(0),
+    WOODFORIRON(1),
+    IRONFORGOLD(2),
+    WOODFORGOLD(3);
+
+    private int id;
+    FactoryType(int i){
+        id=i;
+    }
+
 
     public int getId() {
-        switch (this){
-            case NOTHINGFORWOOD: return 0;
-            case WOODFORIRON: return 1;
-            case IRONFORGOLD: return 2;
-            case WOODFORGOLD: return 3;
-            default: throw new RuntimeException("There is no ID for the corresponding FactoryType");
-        }
+        return id;
     }
 
     public static FactoryType fromId(int id){
@@ -35,8 +34,8 @@ public enum FactoryType {
         return null;
     }
 
-    public FactoryCost getCost(){
-        PackageBuilder<FactoryCost> costBuilder = PackageType.FactoryCostType.packageBuilder();
+    public BaseCost getBaseCost(){
+        PackageBuilder<BaseCost> costBuilder = PackageType.BaseCostType.packageBuilder();
 
         switch (this) {
             case NOTHINGFORWOOD:
@@ -48,10 +47,11 @@ public enum FactoryType {
             case IRONFORGOLD:
                 costBuilder.putItem(ResourceType.WOOD,100D);
                 costBuilder.putItem(ResourceType.IRON,100D);
+                break;
             case WOODFORGOLD:
                 costBuilder.putItem(ResourceType.IRON,100D);
                 costBuilder.putItem(ResourceType.WOOD,100D);
-                costBuilder.putItem(ResourceType.GOLD,1000D);
+                costBuilder.putItem(ResourceType.GOLD,1000D)    ;
                 break;
             default:
                 throw new RuntimeException("There is no cost for this factory");
@@ -60,8 +60,8 @@ public enum FactoryType {
         return costBuilder.buildPackage();
     }
 
-    public Recipe getRecipe() {
-        PackageBuilder<Recipe> recipeBuilder = PackageType.RecipeType.packageBuilder();
+    public BaseRecipe getBaseRecipe() {
+        PackageBuilder<BaseRecipe> recipeBuilder = PackageType.BaseRecipeType.packageBuilder();
 
         switch (this) {
             case NOTHINGFORWOOD:

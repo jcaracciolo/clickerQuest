@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.model.packages.Implementations;
 
+import ar.edu.itba.paw.model.Factory;
 import ar.edu.itba.paw.model.FactoryType;
 import ar.edu.itba.paw.model.ResourceType;
 import ar.edu.itba.paw.model.packages.*;

@@ -22,6 +22,14 @@ public class SingleProduction extends ResourcePackage {
         return super.getFormattedInputs();
     }
 
+    public Map<ResourceType,Double> getInputs() {
+        return super.getInputs();
+    }
+
+    public Map<ResourceType,Double> getOutputs(){
+        return super.getOutputs();
+    }
+
     public Map<ResourceType,String> getFormattedOutputs(){
         return super.getFormattedOutputs();
     }

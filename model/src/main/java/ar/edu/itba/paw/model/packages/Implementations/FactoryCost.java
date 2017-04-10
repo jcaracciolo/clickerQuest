@@ -17,17 +17,4 @@ public class FactoryCost extends ResourcePackage {
         resources = super.generate(map,VALIDATOR);
         formatter = (d) -> formatValue(d,true);
     }
-
-    public FactoryCost applyMultipliers(double amount, double costReduction) {
-        PackageBuilder<FactoryCost> builder = PackageType.FactoryCostType.packageBuilder();
-        if(amount > 0) {
-            for (ResourceType res : resources.keySet()){
-                Double value = resources.get(res);
-                builder.putItem(res,value / costReduction * amount);
-            }
-        }
-
-        return builder.buildPackage();
-    }
-
 }

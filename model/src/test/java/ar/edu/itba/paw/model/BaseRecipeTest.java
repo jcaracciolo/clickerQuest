@@ -5,5 +5,5 @@ import junit.framework.TestCase;
 /**
  * Created by daniel on 4/3/17.
  */
-public class RecipeTest extends TestCase {
+public class BaseRecipeTest extends TestCase {
 }

@@ -25,9 +25,9 @@ public class PackageBuilder<T extends ResourcePackage> {
 
     public PackageBuilder<T> putItem(ResourceType resource, Double amount){
         if(!validator.validates(amount)) {
-            return null;
+            throw new RuntimeException("Validator invalid");
         }else if(resources.containsKey(resource)) {
-            return null;
+            throw new RuntimeException("Key alredy put");
         } else {
             resources.put(resource,amount);
             return this;
@@ -43,7 +43,7 @@ public class PackageBuilder<T extends ResourcePackage> {
         }
 
         if(!validator.validates(toAdd)) {
-            return null;
+            throw new RuntimeException("Validator invalid");
         }else {
             resources.put(resource, toAdd);
             return this;
@@ -75,7 +75,7 @@ public class PackageBuilder<T extends ResourcePackage> {
             lastUpdated.put(resource,time);
             return this;
         } else {
-            return null;
+            throw new RuntimeException("Resource not set yet");
         }
     }
 

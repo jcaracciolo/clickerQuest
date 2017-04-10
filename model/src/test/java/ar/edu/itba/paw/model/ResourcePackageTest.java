@@ -1,7 +1,7 @@
 package ar.edu.itba.paw.model;
 
 import ar.edu.itba.paw.model.packages.Implementations.Productions;
-import ar.edu.itba.paw.model.packages.Implementations.Recipe;
+import ar.edu.itba.paw.model.packages.Implementations.BaseRecipe;
 import ar.edu.itba.paw.model.packages.Implementations.SingleProduction;
 import ar.edu.itba.paw.model.packages.PackageBuilder;
 import ar.edu.itba.paw.model.packages.PackageType;
@@ -20,7 +20,7 @@ public class ResourcePackageTest
 {
     @org.junit.Test
     public void testCreate() {
-        Recipe recipe = FactoryType.WOODFORIRON.getRecipe();
+        BaseRecipe recipe = FactoryType.WOODFORIRON.getBaseRecipe();
 //        ResourcePackage.printPackage(recipe);
 
         Collection<SingleProduction> productions = new ArrayList<>();
@@ -30,7 +30,7 @@ public class ResourcePackageTest
 
         productions.add(singleProduction);
 
-        singleProduction = FactoryType.IRONFORGOLD.getRecipe()
+        singleProduction = FactoryType.IRONFORGOLD.getBaseRecipe()
                 .applyMultipliers(4,1.2,2D,1);
         singleProduction.printPackage();
 

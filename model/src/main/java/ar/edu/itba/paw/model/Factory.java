@@ -1,7 +1,8 @@
 package ar.edu.itba.paw.model;
 
-import ar.edu.itba.paw.model.packages.Implementations.FactoryCost;
-import ar.edu.itba.paw.model.packages.Implementations.SingleProduction;
+import ar.edu.itba.paw.model.packages.Implementations.*;
+
+import java.util.Map;
 
 /**
  * Created by juanfra on 31/03/17.
@@ -50,16 +51,21 @@ public class Factory {
         return costReduction;
     }
 
+    public Recipe getRecipe() {
+        return  type.getBaseRecipe()
+                .calculateRecipe(inputReduction,outputMultiplier,upgrade.getLevel());
+    }
+
     public Upgrade getUpgrade() {
         return upgrade;
     }
 
     public FactoryCost getCost() {
-        return type.getCost().applyMultipliers(amount,costReduction);
+        return type.getBaseCost().calculateCost(amount,costReduction);
     }
 
     public SingleProduction getSingleProduction() {
-        return type.getRecipe().applyMultipliers(amount,inputReduction,outputMultiplier,1);
+        return type.getBaseRecipe().calculateProduction(amount,inputReduction,outputMultiplier,1);
     }
 
     public String getImage(){
@@ -73,7 +79,24 @@ public class Factory {
     }
 
     public boolean isBuyable(Wealth w) {
-        //TODO
+        FactoryCost cost = getCost();
+        Storage storage = w.getStorage();
+
+        for (ResourceType r: cost.getResources()) {
+            if(cost.getValue(r) > storage.getValue(r)){
+                return false;
+            }
+        }
+
+        Map<ResourceType,Double> need = type.getBaseRecipe().getInputs();
+        Productions productions = w.getProductions();
+
+        for (ResourceType r: need.keySet()) {
+            if(need.get(r) > productions.getValue(r)){
+                return false;
+            }
+        }
+
         return true;
     }
 }

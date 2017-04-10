@@ -6,9 +6,10 @@ import ar.edu.itba.paw.model.packages.*;
 import java.util.Map;
 
 /**
- * Created by juanfra on 08/04/17.
+ * Created by juanfra on 10/04/17.
  */
-public class Recipe extends ResourcePackage {
+public class Recipe extends ResourcePackage{
+
     public static Validator<Double> VALIDATOR = (d) -> d!=0;
     public static Creator<Recipe> CREATOR = (pb) -> new Recipe(pb.getResources());
 
@@ -17,19 +18,12 @@ public class Recipe extends ResourcePackage {
         formatter = (d) -> formatValue(d,false) + "/s";
     }
 
-    public SingleProduction applyMultipliers(double amount, double inputReduction, double outputMultiplier, int level) {
-        PackageBuilder<SingleProduction> builder = PackageType.SingleProductionType.packageBuilder();
-        if(amount > 0) {
-            for (ResourceType res : resources.keySet()){
-                Double value = resources.get(res);
-                if(value > 0) {
-                    builder.putItem(res,value*amount*outputMultiplier);
-                }
-                else builder.putItem(res,value*amount/inputReduction);
-            }
-        }
+    public Map<ResourceType,Double> getInputs() {
+        return super.getInputs();
+    }
 
-        return builder.buildPackage();
+    public Map<ResourceType,Double> getOutputs(){
+        return super.getOutputs();
     }
 
     public Map<ResourceType,String> getFormattedInputs(){
@@ -39,5 +33,4 @@ public class Recipe extends ResourcePackage {
     public Map<ResourceType,String> getFormattedOutputs(){
         return super.getFormattedOutputs();
     }
-
 }

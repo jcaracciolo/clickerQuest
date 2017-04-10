@@ -78,12 +78,32 @@ public abstract class ResourcePackage {
         return map;
     }
 
+    protected Map<ResourceType,Double> getInputs(){
+        Map<ResourceType,Double> map = new HashMap<>();
+
+        for (ResourceType res: getResources()){
+            Double value = resources.get(res);
+            if(value < 0) map.put(res,-value);
+        }
+        return map;
+    }
+
     protected Map<ResourceType,String> getFormattedOutputs(){
         Map<ResourceType,String> map = new HashMap<>();
 
         for (ResourceType res: getResources()){
             Double value = resources.get(res);
             if(value > 0) map.put(res,formatter.format(value));
+        }
+        return map;
+    }
+
+    protected Map<ResourceType,Double> getOutputs(){
+        Map<ResourceType,Double> map = new HashMap<>();
+
+        for (ResourceType res: getResources()){
+            Double value = resources.get(res);
+            if(value < 0) map.put(res,value);
         }
         return map;
     }
@@ -110,5 +130,11 @@ public abstract class ResourcePackage {
 
     }
 
+    protected <R extends ResourcePackage,P extends ResourcePackage> R map(PackageBuilder<R> builder, Transformer<Double,Double> t) {
+        for (ResourceType res : resources.keySet()){
+            builder.putItem(res,t.transform(resources.get(res)));
+        }
 
+        return builder.buildPackage();
+    }
 }

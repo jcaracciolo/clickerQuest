@@ -6,7 +6,7 @@
 <%--<jsp:useBean id="storage" type="ar.edu.itba.paw.model.packagesntations.SingleProduction"/>--%>
 <%--<jsp:useBean id="storage" type="ar.edu.itba.paw.model.packagesntations.FactoryCost"/>--%>
 <%--<jsp:useBean id="storage" type="ar.edu.itba.paw.model.packagesntations.Productions"/>--%>
-<%--<jsp:useBean id="storage" type="ar.edu.itba.paw.model.packagesntations.Recipe"/>--%>
+<%--<jsp:useBean id="storage" type="ar.edu.itba.paw.model.packagesntations.BaseRecipe"/>--%>
 <%--<jsp:useBean id="storage" type="ar.edu.itba.paw.model.packagesntations.Storage"/>--%>
 <%--<jsp:useBean id="factory" type="ar.edu.itba.paw.model.Factory"/>--%>
 
@@ -18,7 +18,6 @@
           media="screen,projection"/>
     <link type="text/css" rel="stylesheet" href="<c:url value="/resources/css/materialize.min.css"/>"
           media="screen,projection"/>
-    <link href="<c:url value="/resources/" />" rel="stylesheet">
 
     <!--Import Google Icon Font-->
     <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -57,7 +56,7 @@
                     <div id="production">
                         <c:set var="rateMap" value="${productions.formatted()}"/>
                         <c:forEach items="${productions.resources}" var="resource">
-                        <p><c:out value="${rateMap.get(resource)} ${resource}"/>/s</p>
+                        <p><c:out value="${rateMap.get(resource)} ${resource}"/></p>
                     </c:forEach>
                 </div>
             </div>
@@ -71,12 +70,14 @@
                 <div class="col s4 factory-main">
                     <div class="card">
                         <div class="card-content">
+                            <c:if test="${factory.amount != 0}">
                             <p>Consuming:</p>
                             <c:set var="factoryRecipe" value="${factory.singleProduction}"/>
                             <c:set var="inputMap" value="${factoryRecipe.formattedInputs}"/>
                             <c:forEach items="${factoryRecipe.resources}" var="res">
-                                <p class="centered-text"><c:out value="${inputMap.get(res)} ${res}/s"/></p>
+                                <p class="centered-text"><c:out value="${inputMap.get(res)} ${res}"/></p>
                             </c:forEach>
+                            </c:if>
                             <div class="card-image">
                                 <img class="factory-image" src="/resources/${factory.getImage()}" alt="factory_icon"/>
                             </div>
@@ -85,7 +86,7 @@
                             <c:set var="outputMap" value="${factoryRecipe.formattedOutputs}"/>
                             <c:forEach items="${factoryRecipe.resources}" var="res">
                                 <c:if test="${outputMap.get(res) != null}">
-                                    <p class="centered-text"><c:out value="${outputMap.get(res)} ${res}/s"/></p>
+                                    <p class="centered-text"><c:out value="${outputMap.get(res)} ${res}"/></p>
                                 </c:if>
                             </c:forEach>
                         </div>
@@ -113,12 +114,12 @@
                                 <c:set var="factoryCost" value="${factory.cost}"/>
                                 <c:forEach items="${factoryCost.resources}" var="res">
                                     <c:set var="costMap" value="${factoryCost.formatted()}"/>
-                                    <p class="centered-text"><c:out value="${costMap.get(res)} ${res}"/>/s</p>
+                                    <p class="centered-text"><c:out value="${costMap.get(res)} ${res}"/></p>
                                 </c:forEach>
                             </div>
                         </div>
                         <div class="col s4">
-                            <c:set var="factoryRecipe" value="${factory.type.recipe}"/>
+                            <c:set var="factoryRecipe" value="${factory.type.baseRecipe}"/>
                             <c:forEach items="${factoryRecipe.resources}" var="res">
                                 <c:set var="inputMap" value="${factoryRecipe.formattedInputs}"/>
                                 <c:if test="${inputMap.get(res) != null}">

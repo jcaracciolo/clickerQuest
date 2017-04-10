@@ -11,11 +11,11 @@ import java.util.Map;
  */
 public class Wealth {
 
-    public long userid;
+    private long userid;
     //Already calculated data, ready for display
-    public Storage storage;
-    public Productions productions;
-    public Map<FactoryType,SingleProduction> singleProductions;
+    private Storage storage;
+    private Productions productions;
+    private Map<FactoryType,SingleProduction> singleProductions;
 
     public Wealth(long userid, Storage storage, Productions productions) {
         this.userid = userid;
@@ -48,8 +48,8 @@ public class Wealth {
             return null;
         }
         Storage calculatedStorage = storage.getUpdatedStorage(productions);
-        Recipe recipe = f.getType().getRecipe();
-        FactoryCost cost = f.getType().getCost();
+        Recipe recipe = f.getRecipe();
+        FactoryCost cost = f.getCost();
         PackageBuilder<Storage> storageBuilder = PackageType.StorageType.packageBuilder();
         PackageBuilder<Productions> productionsBuilder = PackageType.ProductionType.packageBuilder();
 
@@ -63,7 +63,7 @@ public class Wealth {
             }
 
             if (recipe.contains(r)){
-                productionsBuilder.addItem(r,f.getType().getRecipe().getValue(r));
+                productionsBuilder.addItem(r,recipe.getValue(r));
             }
         }
 

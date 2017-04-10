@@ -39,7 +39,7 @@ public class UserJdbcDao implements UserDao {
         static Collection<RowWealth> getRowWealths(Wealth w){
             List<RowWealth> rows = new ArrayList<>();
             for (ResourceType r:ResourceType.values()) {
-                rows.add(new RowWealth(w.userid,r,
+                rows.add(new RowWealth(w.getUserid(),r,
                         w.getProductions().getValue(r),
                         w.getStorage().getValue(r),
                         w.getStorage().getLastUpdated(r).getTimeInMillis()));
