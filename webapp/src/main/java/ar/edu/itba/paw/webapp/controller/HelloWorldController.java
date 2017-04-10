@@ -76,4 +76,12 @@ public class HelloWorldController {
         return null;
     }
 
+    @RequestMapping(value = "/{userId}/purchaseTest")
+    public ModelAndView purchaseDemo(@PathVariable long userId){
+
+        userService.purchaseFactory(userId, FactoryType.fromId(0));
+        return new ModelAndView("redirect:/" + userId + "/game");
+
+    }
+
 }

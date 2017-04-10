@@ -1,8 +1,8 @@
 package ar.edu.itba.paw.model;
 
-import ar.edu.itba.paw.model.packages.Implementations.Productions;
-import ar.edu.itba.paw.model.packages.Implementations.SingleProduction;
-import ar.edu.itba.paw.model.packages.Implementations.Storage;
+import ar.edu.itba.paw.model.packages.Implementations.*;
+import ar.edu.itba.paw.model.packages.PackageBuilder;
+import ar.edu.itba.paw.model.packages.PackageType;
 
 import java.util.Map;
 
@@ -44,7 +44,30 @@ public class Wealth {
     }
 
     public Wealth purchaseResult(Factory f) {
-       // Storage s = storage.purchase(f);
-        return new Wealth(userid,storage,productions);
+        if (! f.isBuyable(this)) {
+            return null;
+        }
+        Storage calculatedStorage = storage.getUpdatedStorage(productions);
+        Recipe recipe = f.getType().getRecipe();
+        FactoryCost cost = f.getType().getCost();
+        PackageBuilder<Storage> storageBuilder = PackageType.StorageType.packageBuilder();
+        PackageBuilder<Productions> productionsBuilder = PackageType.ProductionType.packageBuilder();
+
+
+        for (ResourceType r: ResourceType.values() ) {
+            storageBuilder.putItemWithDate(r,calculatedStorage.getValue(r),calculatedStorage.getLastUpdated(r));
+            productionsBuilder.putItem(r,productions.getValue(r));
+
+            if (cost.contains(r)) {
+                storageBuilder.addItem(r, -cost.getValue(r));
+            }
+
+            if (recipe.contains(r)){
+                productionsBuilder.addItem(r,f.getType().getRecipe().getValue(r));
+            }
+        }
+
+
+        return new Wealth(userid,storageBuilder.buildPackage(),productionsBuilder.buildPackage());
     }
 }

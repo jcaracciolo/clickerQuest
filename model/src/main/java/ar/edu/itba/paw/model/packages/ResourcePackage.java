@@ -28,6 +28,9 @@ public abstract class ResourcePackage {
     public Double getValue(ResourceType resource){
         return resources.get(resource);
     }
+    public boolean contains(ResourceType resource){
+        return resources.containsKey(resource);
+    }
 
     protected Map<ResourceType,Double> generate(Map<ResourceType,Double> m, Validator<Double> v){
         Map<ResourceType,Double> newMap = new HashMap<>();
