@@ -1,7 +1,7 @@
-package ar.edu.itba.paw.model.refactorPackages.Implementations;
+package ar.edu.itba.paw.model.packages.Implementations;
 
 import ar.edu.itba.paw.model.ResourceType;
-import ar.edu.itba.paw.model.refactorPackages.*;
+import ar.edu.itba.paw.model.packages.*;
 
 import java.time.temporal.ChronoUnit;
 import java.util.Calendar;

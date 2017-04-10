@@ -3,11 +3,11 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <%--<jsp:useBean id="user" type="ar.edu.itba.paw.model.User"/>--%>
-<%--<jsp:useBean id="storage" type="ar.edu.itba.paw.model.refactorPackages.Implementations.SingleProduction"/>--%>
-<%--<jsp:useBean id="storage" type="ar.edu.itba.paw.model.refactorPackages.Implementations.FactoryCost"/>--%>
-<%--<jsp:useBean id="storage" type="ar.edu.itba.paw.model.refactorPackages.Implementations.Productions"/>--%>
-<%--<jsp:useBean id="storage" type="ar.edu.itba.paw.model.refactorPackages.Implementations.Recipe"/>--%>
-<%--<jsp:useBean id="storage" type="ar.edu.itba.paw.model.refactorPackages.Implementations.Storage"/>--%>
+<%--<jsp:useBean id="storage" type="ar.edu.itba.paw.model.packagesntations.SingleProduction"/>--%>
+<%--<jsp:useBean id="storage" type="ar.edu.itba.paw.model.packagesntations.FactoryCost"/>--%>
+<%--<jsp:useBean id="storage" type="ar.edu.itba.paw.model.packagesntations.Productions"/>--%>
+<%--<jsp:useBean id="storage" type="ar.edu.itba.paw.model.packagesntations.Recipe"/>--%>
+<%--<jsp:useBean id="storage" type="ar.edu.itba.paw.model.packagesntations.Storage"/>--%>
 <%--<jsp:useBean id="factory" type="ar.edu.itba.paw.model.Factory"/>--%>
 
 <!DOCTYPE html>

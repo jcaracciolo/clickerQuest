@@ -1,9 +1,9 @@
 package ar.edu.itba.paw.model;
 
-import ar.edu.itba.paw.model.refactorPackages.Implementations.FactoryCost;
-import ar.edu.itba.paw.model.refactorPackages.Implementations.Recipe;
-import ar.edu.itba.paw.model.refactorPackages.PackageBuilder;
-import ar.edu.itba.paw.model.refactorPackages.PackageType;
+import ar.edu.itba.paw.model.packages.Implementations.FactoryCost;
+import ar.edu.itba.paw.model.packages.Implementations.Recipe;
+import ar.edu.itba.paw.model.packages.PackageBuilder;
+import ar.edu.itba.paw.model.packages.PackageType;
 
 import java.util.*;
 

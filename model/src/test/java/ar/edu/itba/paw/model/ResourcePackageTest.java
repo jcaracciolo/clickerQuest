@@ -1,10 +1,10 @@
 package ar.edu.itba.paw.model;
 
-import ar.edu.itba.paw.model.refactorPackages.Implementations.Productions;
-import ar.edu.itba.paw.model.refactorPackages.Implementations.Recipe;
-import ar.edu.itba.paw.model.refactorPackages.Implementations.SingleProduction;
-import ar.edu.itba.paw.model.refactorPackages.PackageBuilder;
-import ar.edu.itba.paw.model.refactorPackages.PackageType;
+import ar.edu.itba.paw.model.packages.Implementations.Productions;
+import ar.edu.itba.paw.model.packages.Implementations.Recipe;
+import ar.edu.itba.paw.model.packages.Implementations.SingleProduction;
+import ar.edu.itba.paw.model.packages.PackageBuilder;
+import ar.edu.itba.paw.model.packages.PackageType;
 import junit.framework.TestCase;
 
 import java.util.ArrayList;

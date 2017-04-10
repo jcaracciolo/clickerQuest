@@ -2,10 +2,10 @@ package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.UserDao;
 import ar.edu.itba.paw.model.*;
-import ar.edu.itba.paw.model.refactorPackages.Implementations.Productions;
-import ar.edu.itba.paw.model.refactorPackages.Implementations.Storage;
-import ar.edu.itba.paw.model.refactorPackages.PackageBuilder;
-import ar.edu.itba.paw.model.refactorPackages.PackageType;
+import ar.edu.itba.paw.model.packages.Implementations.Productions;
+import ar.edu.itba.paw.model.packages.Implementations.Storage;
+import ar.edu.itba.paw.model.packages.PackageBuilder;
+import ar.edu.itba.paw.model.packages.PackageType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;

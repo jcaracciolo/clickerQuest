@@ -4,8 +4,8 @@ import ar.edu.itba.paw.model.Factory;
 import ar.edu.itba.paw.model.FactoryType;
 import ar.edu.itba.paw.model.Wealth;
 import ar.edu.itba.paw.model.User;
-import ar.edu.itba.paw.model.refactorPackages.Implementations.Productions;
-import ar.edu.itba.paw.model.refactorPackages.Implementations.Storage;
+import ar.edu.itba.paw.model.packages.Implementations.Productions;
+import ar.edu.itba.paw.model.packages.Implementations.Storage;
 
 import java.util.Collection;
 

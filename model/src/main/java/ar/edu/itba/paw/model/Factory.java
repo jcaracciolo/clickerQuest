@@ -1,7 +1,7 @@
 package ar.edu.itba.paw.model;
 
-import ar.edu.itba.paw.model.refactorPackages.Implementations.FactoryCost;
-import ar.edu.itba.paw.model.refactorPackages.Implementations.SingleProduction;
+import ar.edu.itba.paw.model.packages.Implementations.FactoryCost;
+import ar.edu.itba.paw.model.packages.Implementations.SingleProduction;
 
 /**
  * Created by juanfra on 31/03/17.

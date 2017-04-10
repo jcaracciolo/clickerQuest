@@ -1,4 +1,4 @@
-package ar.edu.itba.paw.model.refactorPackages;
+package ar.edu.itba.paw.model.packages;
 
 /**
  * Created by juanfra on 08/04/17.

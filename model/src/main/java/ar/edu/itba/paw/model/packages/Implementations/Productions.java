@@ -1,9 +1,8 @@
-package ar.edu.itba.paw.model.refactorPackages.Implementations;
+package ar.edu.itba.paw.model.packages.Implementations;
 import ar.edu.itba.paw.model.ResourceType;
-import ar.edu.itba.paw.model.refactorPackages.Creator;
-import ar.edu.itba.paw.model.refactorPackages.Formatter;
-import ar.edu.itba.paw.model.refactorPackages.ResourcePackage;
-import ar.edu.itba.paw.model.refactorPackages.Validator;
+import ar.edu.itba.paw.model.packages.Creator;
+import ar.edu.itba.paw.model.packages.ResourcePackage;
+import ar.edu.itba.paw.model.packages.Validator;
 
 import java.util.Map;
 

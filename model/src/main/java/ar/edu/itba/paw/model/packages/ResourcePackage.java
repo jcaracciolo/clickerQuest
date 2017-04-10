@@ -1,4 +1,4 @@
-package ar.edu.itba.paw.model.refactorPackages;
+package ar.edu.itba.paw.model.packages;
 
 import ar.edu.itba.paw.model.ResourceType;
 

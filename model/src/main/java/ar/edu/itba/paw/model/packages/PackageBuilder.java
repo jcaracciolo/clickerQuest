@@ -1,9 +1,8 @@
-package ar.edu.itba.paw.model.refactorPackages;
+package ar.edu.itba.paw.model.packages;
 
 import ar.edu.itba.paw.model.ResourceType;
 
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 

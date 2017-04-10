@@ -1,7 +1,7 @@
-package ar.edu.itba.paw.model.refactorPackages;
+package ar.edu.itba.paw.model.packages;
 
 
-import ar.edu.itba.paw.model.refactorPackages.Implementations.*;
+import ar.edu.itba.paw.model.packages.Implementations.*;
 
 /**
  * Created by juanfra on 08/04/17.
