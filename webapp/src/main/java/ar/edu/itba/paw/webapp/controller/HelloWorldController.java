@@ -6,10 +6,12 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.UserDao;
 import ar.edu.itba.paw.interfaces.UserService;
+import ar.edu.itba.paw.model.FactoryType;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.webapp.form.UserForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -65,7 +67,13 @@ public class HelloWorldController {
         mav.addObject("factories",userService.getUserFactories(userId));
         mav.addObject("productions",userService.getUserProductions(userId));
         return mav;
+    }
 
+    @RequestMapping(value = "/buyFactory", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public @ResponseBody ModelAndView buyFactory(@RequestParam("factoryID") final int factoryID) {
+        FactoryType factoryType = FactoryType.fromId(factoryID);
+        System.out.println(factoryType + " " + factoryID);
+        return null;
     }
 
 }
