@@ -6,6 +6,7 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.UserDao;
 import ar.edu.itba.paw.interfaces.UserService;
+import ar.edu.itba.paw.model.FactoryType;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.webapp.form.UserForm;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,6 +66,14 @@ public class HelloWorldController {
         mav.addObject("factories",userService.getUserFactories(userId));
         mav.addObject("productions",userService.getUserProductions(userId));
         return mav;
+
+    }
+
+    @RequestMapping(value = "/{userId}/purchaseTest")
+    public ModelAndView purchaseDemo(@PathVariable long userId){
+
+        userService.purchaseFactory(userId, FactoryType.fromId(0));
+        return new ModelAndView("redirect:/" + userId + "/game");
 
     }
 

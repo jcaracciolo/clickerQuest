@@ -154,7 +154,7 @@ public class UserJdbcDao implements UserDao {
         int rows = jdbcTemplate.update(
                     "UPDATE factories SET " +
                             "amount = ?," +
-                            "inputReducton = ?," +
+                            "inputReduction = ?," +
                             "outputMultiplier = ?," +
                             "costReduction = ?," +
                             "level = ?" +
@@ -165,7 +165,7 @@ public class UserJdbcDao implements UserDao {
                     f.getCostReduction(),
                     f.getUpgrade().getLevel(),
                     f.getUserid(),
-                    f.getType());
+                    f.getType().getId());
 
         if(rows == 1) {
             return f;
@@ -187,12 +187,12 @@ public class UserJdbcDao implements UserDao {
                             "production = ?," +
                             "storage = ?," +
                             "lastUpdated = ?" +
-                            " WHERE (userid = ?) AND (type = ?);",
+                            " WHERE (userid = ?) AND (resourceType = ?);",
                     p.getValue(r),
                     s.getValue(r),
                     Calendar.getInstance().getTimeInMillis(),
                     w.getUserid(),
-                    r);
+                    r.getId());
 
             if (rows == 0) {
                 //TODO log no update

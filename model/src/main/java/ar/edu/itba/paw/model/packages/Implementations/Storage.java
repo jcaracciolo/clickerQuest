@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.model.packages.Implementations;
 
+import ar.edu.itba.paw.model.FactoryType;
 import ar.edu.itba.paw.model.ResourceType;
 import ar.edu.itba.paw.model.packages.*;
 
@@ -35,21 +36,22 @@ public class Storage extends ResourcePackage {
     public Calendar getLastUpdated(ResourceType resourceType) {
         return lastUpdated.get(resourceType);
     }
-    public Storage getUpdatedStorage(Productions production) {
-        return getUpdatedStorage(production,Calendar.getInstance());
+
+    public Storage getUpdatedStorage(Productions productions) {
+        return getUpdatedStorage(productions,Calendar.getInstance());
     }
 
-    public Storage getUpdatedStorage(Productions production, Calendar now){
+    public Storage getUpdatedStorage(Productions productions, Calendar now){
         PackageBuilder<Storage> resourcePackageBuilder = PackageType.StorageType.packageBuilder();
 
         for (ResourceType resourceType: resources.keySet()){
             resourcePackageBuilder.putItem(resourceType,resources.get(resourceType));
         }
 
-        for (ResourceType resourceType: production.getResources()){
+        for (ResourceType resourceType: productions.getResources()){
             long seconds = ChronoUnit.SECONDS.between(lastUpdated.get(resourceType).toInstant(), now.toInstant());
 
-            Double value = Math.ceil(production.getValue(resourceType) * seconds);
+            Double value = Math.ceil(productions.getValue(resourceType) * seconds);
             if(value <0 ) throw new RuntimeException("Negative Production in storage calculation!");
 
             resourcePackageBuilder.addItem(resourceType, value);
@@ -57,4 +59,5 @@ public class Storage extends ResourcePackage {
         }
         return resourcePackageBuilder.buildPackage();
     }
+
 }
