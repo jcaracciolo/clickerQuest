@@ -69,19 +69,10 @@ public class HelloWorldController {
         return mav;
     }
 
-    @RequestMapping(value = "/buyFactory", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody ModelAndView buyFactory(@RequestParam("factoryID") final int factoryID) {
-        FactoryType factoryType = FactoryType.fromId(factoryID);
-        System.out.println(factoryType + " " + factoryID);
-        return null;
-    }
-
-    @RequestMapping(value = "/{userId}/purchaseTest")
-    public ModelAndView purchaseDemo(@PathVariable long userId){
-
-        userService.purchaseFactory(userId, FactoryType.fromId(0));
+    @RequestMapping(value = "/{userId}/buyFactory")
+    public ModelAndView purchaseDemo(@PathVariable long userId, @RequestParam("factoryId") final int factoryId){
+        userService.purchaseFactory(userId, FactoryType.fromId(factoryId));
         return new ModelAndView("redirect:/" + userId + "/game");
-
     }
 
 }

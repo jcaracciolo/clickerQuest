@@ -2,7 +2,7 @@
  * Created by epord on 05/04/17.
  */
 
-
+var userId =window.location.href.split("/")[3];
 
 var storage = document.getElementById("storage");
 var production = document.getElementById("production");
@@ -44,32 +44,15 @@ var buyFactoryButtons = document.getElementsByClassName("buyFactoryBtn");
 for (var i = 0; i < buyFactoryButtons.length; i++) {
     buyFactoryButtons[i].addEventListener("click", function () {
         console.log("buying...");
-        $.post("/buyFactory",
+        $.post("/" + userId +"/buyFactory",
             {
-                factoryID: getNumberInString(this.id)
+                userId: userId,
+                factoryId: getNumberInString(this.id)
             }, function() { location.reload() });
     })
 }
-    // for (var i = 0; i < buyFactoryButtons.length; i++) {
-//     buyFactoryButtons[i].addEventListener("click", function () {
-//         // $.ajax({
-//         //     type: "POST",
-//         //     url: "submit.htm",
-//         //     data: { factoryID: 1 } // parameters
-//         // });
 
 
-//         // var factoryCount = getNumberInString(this.id);
-//         // var elementID = "factoryCant" + factoryCount;
-//         // var cantFactories = parseInt(document.getElementById(elementID).innerHTML);
-//         // document.getElementById(elementID).innerHTML = (cantFactories + 1).toString()
-//     })
-// }
-
-
-function refreshPageFunc() {
-    alert("Refresh!!");
-}
 
 // Gets all numbers of a string consecutively in an int
 // QW3RT4 -> 34

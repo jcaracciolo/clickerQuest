@@ -80,7 +80,7 @@
                             <div class="card-image">
                                 <img class="factory-image" src="/resources/${factory.getImage()}" alt="factory_icon"/>
                             </div>
-                            <p id="factoryCant${loop.index}" class="centered-text">${factory.amount}</p>
+                            <p id="factoryCant${factory.getType().getId()}" class="centered-text">${factory.amount}</p>
                             <p>Producing:</p>
                             <c:set var="outputMap" value="${factoryRecipe.formattedOutputs}"/>
                             <c:forEach items="${factoryRecipe.resources}" var="res">
@@ -105,7 +105,7 @@
                     <!-- BEGINING OF FACTORY CARD -->
                     <div class="row factory-card">
                         <div class="col s3">
-                            <div id="buyFactory${loop.index}" class="buyFactoryBtn card-image factory-icon">
+                            <div id="buyFactory${factory.getType().getId()}" class="buyFactoryBtn card-image factory-icon">
                                 <img src="/resources/${factory.getImage()}" alt="factory_icon"/>
                             </div>
                             <div>
