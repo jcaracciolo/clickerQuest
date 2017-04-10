@@ -58,7 +58,7 @@ public class HelloWorldController {
         }
 
         final User u = userService.create(form.getUsername(), form.getPassword(),"1.jpg");
-        return new ModelAndView("redirect:/user?userId=" + u.getId());
+        return new ModelAndView("redirect:/" + u.getId() + "/game");
     }
 
     @RequestMapping(value = "/{userId}/game")
@@ -66,14 +66,9 @@ public class HelloWorldController {
         ModelAndView mav = new ModelAndView("game");
 
         List<Factory> factories = new ArrayList<>(userService.getUserFactories(userId));
-        Collections.sort(factories, new Comparator<Factory>() {
-            @Override
-            public int compare(Factory f1, Factory f2) {
-                return f1.getType().getId() - f2.getType().getId();
-            }
-        });
+        Collections.sort(factories, (f1,f2) -> f1.getType().getId() - f2.getType().getId());
 
-                mav.addObject("user", userService.findById(userId));
+        mav.addObject("user", userService.findById(userId));
         mav.addObject("storage",userService.getUserStorage(userId));
         mav.addObject("factories",factories);
         mav.addObject("productions",userService.getUserProductions(userId));

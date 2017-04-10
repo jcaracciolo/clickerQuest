@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS users (
   userid BIGSERIAL PRIMARY KEY,
-  username varchar(100),
+  username varchar(100) UNIQUE ,
   password varchar(100),
   profileImage varchar(100)
 );
@@ -12,7 +12,8 @@ CREATE TABLE IF NOT EXISTS factories (
   inputReduction DOUBLE PRECISION,
   outputMultiplier DOUBLE PRECISION,
   costReduction DOUBLE PRECISION,
-  level INT
+  level INT,
+  PRIMARY KEY(userid, type)
 );
 
 CREATE TABLE IF NOT EXISTS wealths (
@@ -20,5 +21,6 @@ CREATE TABLE IF NOT EXISTS wealths (
   resourceType INT,
   production DOUBLE PRECISION,
   storage DOUBLE PRECISION,
-  lastUpdated BIGINT
+  lastUpdated BIGINT,
+  PRIMARY KEY(userid, resourceType)
 )

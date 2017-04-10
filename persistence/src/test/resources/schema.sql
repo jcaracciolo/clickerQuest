@@ -1,7 +1,8 @@
 CREATE TABLE IF NOT EXISTS users (
   userid INTEGER IDENTITY PRIMARY KEY,
-  username varchar(100),
-  password varchar(100)
+  username varchar(100) UNIQUE,
+  password varchar(100),
+  P
 );
 
 CREATE TABLE IF NOT EXISTS factories (

@@ -67,17 +67,16 @@
         <!-- FIRST ROW -->
         <div class="row factory-row">
             <c:forEach items="${factories}" var="factory" varStatus="loop">
+                <c:if test="${factory.amount != 0}">
                 <div class="col s4 factory-main">
                     <div class="card">
                         <div class="card-content">
-                            <c:if test="${factory.amount != 0}">
                             <p>Consuming:</p>
                             <c:set var="factoryRecipe" value="${factory.singleProduction}"/>
                             <c:set var="inputMap" value="${factoryRecipe.formattedInputs}"/>
                             <c:forEach items="${factoryRecipe.resources}" var="res">
                                 <p class="centered-text"><c:out value="${inputMap.get(res)} ${res}"/></p>
                             </c:forEach>
-                            </c:if>
                             <div class="card-image">
                                 <img class="factory-image" src="/resources/${factory.getImage()}" alt="factory_icon"/>
                             </div>
@@ -92,6 +91,7 @@
                         </div>
                     </div>
                 </div>
+                </c:if>
             </c:forEach>
         </div>
     </div>

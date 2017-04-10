@@ -60,7 +60,7 @@ public abstract class ResourcePackage {
     }
 
     public static String formatValue(Double value, Boolean integers){
-        if(value<1000) {
+        if(value<=1000) {
             DecimalFormat df = new DecimalFormat(integers?"#":"#.##");
             df.setRoundingMode(RoundingMode.FLOOR);
             return df.format(value);
