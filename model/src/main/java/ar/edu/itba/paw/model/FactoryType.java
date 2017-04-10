@@ -61,7 +61,6 @@ public enum FactoryType {
     }
 
     public Recipe getRecipe() {
-        Random rng = new Random();
         PackageBuilder<Recipe> recipeBuilder = PackageType.RecipeType.packageBuilder();
 
         switch (this) {

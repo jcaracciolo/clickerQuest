@@ -190,14 +190,14 @@ public class UserJdbcDao implements UserDao {
                             " WHERE (userid = ?) AND (resourceType = ?);",
                     p.getValue(r),
                     s.getValue(r),
-                    Calendar.getInstance().getTimeInMillis(),
+                    s.getLastUpdated(r).getTimeInMillis(),
                     w.getUserid(),
                     r.getId());
 
             if (rows == 0) {
                 //TODO log no update
                 return null;
-            } else {
+            } else if(rows >1) {
                 //TODO multiple updates
                 return null;
             }

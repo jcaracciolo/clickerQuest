@@ -35,13 +35,17 @@ public class PackageBuilder<T extends ResourcePackage> {
     }
 
     public PackageBuilder<T> addItem(ResourceType resource,Double amount) {
-        if(!validator.validates(amount)) {
-            return null;
-        }else if(resources.containsKey(resource)) {
-            resources.put(resource,resources.get(resource) + amount);
-            return this;
+        Double toAdd;
+        if(resources.containsKey(resource)) {
+            toAdd = resources.get(resource) + amount;
         } else {
-            resources.put(resource,amount);
+            toAdd = amount;
+        }
+
+        if(!validator.validates(toAdd)) {
+            return null;
+        }else {
+            resources.put(resource, toAdd);
             return this;
         }
     }
