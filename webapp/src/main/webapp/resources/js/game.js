@@ -48,8 +48,18 @@ for (var i = 0; i < buyFactoryButtons.length; i++) {
             {
                 userId: userId,
                 factoryId: getNumberInString(this.id)
-            }, function() { location.reload() });
+            });
     })
+
+    $("#buyFactory" + i).clickSpark({
+        particleImagePath: '/resources/star_icon.png',
+        particleCount: 55,
+        particleSpeed: 10,
+        particleSize: 12,
+        particleRotationSpeed: 20,
+        animationType:'explosion',
+        callback: function() { location.reload() }
+    }); ;
 }
 
 
