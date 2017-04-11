@@ -16,6 +16,8 @@ import java.util.Collection;
 public interface UserService {
 
     User findById(long id);
+    User findByUsername(String username);
+
     User create(String username, String Password, String img);
 
     Wealth getUserWealth(long id);

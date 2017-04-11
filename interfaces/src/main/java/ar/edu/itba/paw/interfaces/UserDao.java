@@ -15,6 +15,7 @@ import java.util.Collection;
 public interface UserDao {
 
     User findById(long id);
+    User findByUsername(String username);
 
     /**
      * Create a new user.

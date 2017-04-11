@@ -37,11 +37,14 @@ public class HelloWorldController {
         return mav;
     }
 
-    @RequestMapping(value = "/startGame", method = { RequestMethod.POST })
+    @RequestMapping(value = "/startGame", method = { RequestMethod.GET })
     public ModelAndView startGamePOST(@RequestParam("username") final String username){
-        // TODO: get id of user with username
-        System.out.println("username: " + username);
-        return new ModelAndView("redirect:/" + "1" + "/game");
+        User u = userService.findByUsername(username);
+        if(u!= null){
+            System.out.println("username: " + username);
+            return new ModelAndView("redirect:/" + u.getId() + "/game");
+        }
+        return new ModelAndView("index");
     }
 
     @RequestMapping(value = "/register")

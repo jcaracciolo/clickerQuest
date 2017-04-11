@@ -60,6 +60,7 @@ public class UserJdbcDao implements UserDao {
                     rs.getString("password"),
                     rs.getString("profileImage"));
 
+
     private final static ReverseRowMapper<User> USER_REVERSE_ROW_MAPPER = (us) ->
     {
         final Map<String, Object> args = new HashMap();
@@ -212,6 +213,15 @@ public class UserJdbcDao implements UserDao {
     //region Retrieval
     public User findById(final long userid) {
         final List<User> list = jdbcTemplate.query("SELECT * FROM users WHERE userid = ?", USER_ROW_MAPPER, userid);
+        if (list.isEmpty()) {
+            return null;
+        }
+        return list.get(0);
+    }
+
+    @Override
+    public User findByUsername(String username) {
+        final List<User> list = jdbcTemplate.query("SELECT * FROM users WHERE username = ?", USER_ROW_MAPPER, username);
         if (list.isEmpty()) {
             return null;
         }
