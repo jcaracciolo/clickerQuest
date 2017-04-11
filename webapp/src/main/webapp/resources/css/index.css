@@ -1,0 +1,37 @@
+
+body {
+    background-color: #4eace2;
+    text-align: center;
+}
+
+#logo {
+    display: block;
+    margin: 0 auto;
+    padding-top: 5%;
+}
+
+#usernameInput {
+    display: block;
+    margin: 0 auto;
+    margin-top: 5%;
+    width: 15em;
+    font-size: 1.2em;
+}
+
+#play {
+    display: block;
+    margin: 0 auto;
+    margin-top: 1rem;
+    height: 3.5rem;
+    width: auto;
+}
+
+#register {
+    display: inline-block;
+    margin-top: 1.8rem;
+    color: #121212;
+    text-decoration: underline;
+}
+#register.mouseOver {
+     color: #dddddd;
+ }

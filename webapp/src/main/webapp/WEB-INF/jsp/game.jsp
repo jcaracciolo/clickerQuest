@@ -35,8 +35,7 @@
                 <span class="card-title">Profile</span>
                 <div class="section">
                     <div class="card-image profile-picture">
-                        <%--<img class="profile" src="/resources/profile_image_2.jpg" alt="factory_img"/>--%>
-                        <img class="profile" src="/resources/${user.profileImage}" alt="factory_img"/>
+                        <img class="profile" src="/resources/profile_images/${user.profileImage}" alt="factory_img"/>
                     </div>
                     <p class="username"><c:out value="${user.username}"/></p>
                 </div>

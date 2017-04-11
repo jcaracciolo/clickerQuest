@@ -32,9 +32,9 @@ public class HelloWorldController {
     public ModelAndView helloWorld(@RequestParam("userId") int userId) {
         final ModelAndView mav = new ModelAndView("user");
         User user = userService.findById(userId);
-//        mav.addObject("username",user.getUsername());
-//        mav.addObject("userId",user.getId());
-//        mav.addObject("userIcon",userService.getProfileImage(user.getId()));
+        mav.addObject("username",user.getUsername());
+        mav.addObject("userId",user.getId());
+        mav.addObject("userIcon",userService.getProfileImage(user.getId()));
         return mav;
     }
 
@@ -43,6 +43,19 @@ public class HelloWorldController {
         ModelAndView mav = new ModelAndView("index");
         mav.addObject("message","Congratulations, you successfully setup the project (quite an achievement)");
         return mav;
+    }
+
+    @RequestMapping(value = "/startGame", method = { RequestMethod.POST })
+    public ModelAndView startGamePOST(@RequestParam("username") final String username){
+        // TODO: get id of user with username
+        System.out.println("username: " + username);
+        return new ModelAndView("redirect:/" + "1" + "/game");
+    }
+
+    @RequestMapping(value = "/register")
+    public ModelAndView registerPOST(){
+        System.out.println("redirecting to /register...");
+        return new ModelAndView("redirect:/create");
     }
 
     @RequestMapping(value = "/create", method = { RequestMethod.GET })
