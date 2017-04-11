@@ -28,16 +28,8 @@ public class HelloWorldController {
     @Autowired
     private UserService userService;
 
-    @RequestMapping("/user")
-    public ModelAndView helloWorld(@RequestParam("userId") int userId) {
-        final ModelAndView mav = new ModelAndView("user");
-        User user = userService.findById(userId);
-        mav.addObject("username",user.getUsername());
-        mav.addObject("userId",user.getId());
-        mav.addObject("userIcon",userService.getProfileImage(user.getId()));
-        return mav;
-    }
 
+    // INDEX
     @RequestMapping("/")
     public ModelAndView index(@ModelAttribute("registerForm") final UserForm form) {
         ModelAndView mav = new ModelAndView("index");
@@ -58,6 +50,9 @@ public class HelloWorldController {
         return new ModelAndView("redirect:/create");
     }
 
+
+
+    // CREATE
     @RequestMapping(value = "/create", method = { RequestMethod.GET })
     public ModelAndView createGET(@Valid @ModelAttribute("registerForm") final UserForm form, final BindingResult errors) {
         return new ModelAndView("registerForm");
@@ -74,6 +69,9 @@ public class HelloWorldController {
         return new ModelAndView("redirect:/" + u.getId() + "/game");
     }
 
+
+
+    // GAME
     @RequestMapping(value = "/{userId}/game")
     public ModelAndView mainGameView(@PathVariable long userId){
         ModelAndView mav = new ModelAndView("game");

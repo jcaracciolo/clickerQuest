@@ -9,6 +9,14 @@
 	margin: 0;
 }
 
+div.buyFactorySection.col {
+	padding-top: 0.5em;
+}
+
+div.buyFactorySection:hover {
+	background-color: rgba(0, 0, 0, 0.18);
+}
+
 .main-frame.row {
 	margin: 0;	
 }

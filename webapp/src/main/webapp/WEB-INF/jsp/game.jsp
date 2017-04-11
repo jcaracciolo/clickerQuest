@@ -104,7 +104,7 @@
                 <div class="section">
                     <!-- BEGINING OF FACTORY CARD -->
                     <div class="row factory-card">
-                        <div class="col s3">
+                        <div class="col s4 offset-s1 buyFactorySection">
                             <div id="buyFactory${factory.getType().getId()}" class="buyFactoryBtn card-image factory-icon">
                                 <img src="/resources/${factory.getImage()}" alt="factory_icon"/>
                             </div>
@@ -117,7 +117,7 @@
                                 </c:forEach>
                             </div>
                         </div>
-                        <div class="col s4">
+                        <div class="col offset-s1 s4">
                             <c:set var="factoryRecipe" value="${factory.type.baseRecipe}"/>
                             <c:forEach items="${factoryRecipe.resources}" var="res">
                                 <c:set var="inputMap" value="${factoryRecipe.formattedInputs}"/>
@@ -135,14 +135,14 @@
                                 </c:if>
                             </c:forEach>
                         </div>
-                        <div class="col s4">
-                            <button type="button" class="waves-effect waves-light upgradeButton btn">
-                                <div class="card-image">
-                                    <img src="/resources/upgrade_icon.png" alt="upgrade_icon"/>
-                                </div>
-                                <p>UPGRADE</p>
-                            </button>
-                        </div>
+                        <%--<div class="col s4">--%>
+                            <%--<button type="button" class="waves-effect waves-light upgradeButton btn">--%>
+                                <%--<div class="card-image">--%>
+                                    <%--<img src="/resources/upgrade_icon.png" alt="upgrade_icon"/>--%>
+                                <%--</div>--%>
+                                <%--<p>UPGRADE</p>--%>
+                            <%--</button>--%>
+                        <%--</div>--%>
                     </div>
                     <!-- END OF FACTORY CARD -->
                     </c:forEach>
