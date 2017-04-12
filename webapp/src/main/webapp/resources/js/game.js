@@ -57,7 +57,7 @@ var buyFactoryButtons = document.getElementsByClassName("buyFactoryBtn");
 for (var i = 0; i < buyFactoryButtons.length; i++) {
     buyFactoryButtons[i].addEventListener("click", function () {
         console.log("buying...");
-        $.post("../buyFactory",
+        $.post(contextPath + "/" + userId + "/buyFactory",
             {
                 factoryId: getNumberInString(this.id)
             });
