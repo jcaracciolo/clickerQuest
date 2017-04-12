@@ -11,7 +11,7 @@ document.getElementById("play").addEventListener("mouseup", function () {
     var username = document.getElementById("usernameInput").value;
     console.log("user: " + username);
     this.src = "/resources/play_button.png"
-    window.location = "/startGame?username=" + username
+    window.location = contextPath + "/startGame?username=" + username
     // $.get("/startGame",
     //     {
     //         username: username
@@ -27,5 +27,5 @@ document.getElementById("register").addEventListener("mouseout", function() {
    this.classList.remove("mouseOver")
 });
 document.getElementById("register").addEventListener("click", function() {
-    window.location = "/create"
+    window.location = contextPath + "/create"
 });
