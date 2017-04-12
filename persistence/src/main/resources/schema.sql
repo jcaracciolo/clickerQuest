@@ -1,3 +1,5 @@
+
+
 CREATE TABLE IF NOT EXISTS users (
   userid BIGSERIAL PRIMARY KEY,
   username varchar(100) UNIQUE ,

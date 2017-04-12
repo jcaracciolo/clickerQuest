@@ -137,12 +137,12 @@ public class UserJdbcDao implements UserDao {
         final Number userId = jdbcInsertUsers.executeAndReturnKey(USER_REVERSE_ROW_MAPPER.toArgs(us));
 
         for (FactoryType type: FactoryType.values()){
-            final Factory f = new Factory(userId.longValue(),type,type.equals(FactoryType.NOTHINGFORWOOD)?1:0,1,1,1,Upgrade.getUpgrade(type,0));
+            final Factory f = new Factory(userId.longValue(),type,type.equals(FactoryType.PEOPLE_RECRUITING_BASE)?1:0,1,1,1,Upgrade.getUpgrade(type,0));
             jdbcInsertFactories.execute(FACTORY_REVERSE_ROW_MAPPER.toArgs(f));
         }
 
         for (ResourceType rt: ResourceType.values()) {
-            final RowWealth rw = new RowWealth(userId.longValue(),rt,rt.equals(ResourceType.WOOD)?3:0,
+            final RowWealth rw = new RowWealth(userId.longValue(),rt,rt.equals(ResourceType.POWER)?3:0,
                     rt.equals(ResourceType.MONEY)?10000:0,Calendar.getInstance().getTimeInMillis());
                     Map<String,Object> m = WEALTH_REVERSE_ROW_MAPPER.toArgs(rw);
             jdbcInsertWealths.execute(m);
