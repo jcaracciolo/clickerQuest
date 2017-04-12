@@ -71,6 +71,7 @@
                 <div class="col s3 factory-main">
                     <div class="card">
                         <div class="card-content">
+                            <h8 class="centered-text"><spring:message code="${factory.type.nameCode}"/></h8>
                             <p><spring:message code="game.consuming"/></p>
                             <c:set var="factoryRecipe" value="${factory.singleProduction}"/>
                             <c:set var="inputMap" value="${factoryRecipe.formattedInputs}"/>
@@ -115,6 +116,7 @@
                     <div class="row factory-card">
                         <div class="col s4 offset-s1 buyFactorySection">
                             <div id="buyFactory${factory.getType().getId()}" class="buyFactoryBtn card-image factory-icon">
+                                <p class="center-align"><spring:message code="${factory.type.nameCode}"/></p>
                                 <img src="/resources/factory_images/${factory.getImage()}" alt="factory_icon"/>
                             </div>
                             <div>

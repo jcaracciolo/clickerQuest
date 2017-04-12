@@ -133,8 +133,14 @@ public class UserJdbcDao implements UserDao {
     //region Update
     public User create(String username, String password,String img) {
         final User us = new User(0,username,password,img);
+        final Number userId;
 
-        final Number userId = jdbcInsertUsers.executeAndReturnKey(USER_REVERSE_ROW_MAPPER.toArgs(us));
+        try {
+             userId = jdbcInsertUsers.executeAndReturnKey(USER_REVERSE_ROW_MAPPER.toArgs(us));
+        }catch (Exception e){
+            return null;
+        }
+
 
         for (FactoryType type: FactoryType.values()){
             final Factory f = new Factory(userId.longValue(),type,type.equals(FactoryType.PEOPLE_RECRUITING_BASE)?1:0,1,1,1,Upgrade.getUpgrade(type,0));

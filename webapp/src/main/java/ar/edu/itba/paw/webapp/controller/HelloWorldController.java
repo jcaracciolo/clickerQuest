@@ -70,7 +70,12 @@ public class HelloWorldController {
 
         int imageID = Math.abs(new Random().nextInt() % 11);
         final User u = userService.create(form.getUsername(), form.getPassword(),imageID + ".jpg");
-        return new ModelAndView("redirect:/" + u.getId() + "/game");
+        if(u==null){
+            //TODO Correct error handling
+            return new ModelAndView("redirect:/create");
+        } else {
+            return new ModelAndView("redirect:/" + u.getId() + "/game");
+        }
     }
 
 
