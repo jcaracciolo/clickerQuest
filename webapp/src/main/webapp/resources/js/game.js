@@ -7,6 +7,8 @@ var userId =window.location.href.split("/")[3];
 var storage = document.getElementById("storage");
 var production = document.getElementById("production");
 var storages = [];
+var productions = [];
+var resources = [];
 
 if (storage.childElementCount != production.childElementCount) {
     console.log("Not same size of production and storage!!");
@@ -18,25 +20,35 @@ var productionChild = production.firstElementChild;
 var storagesIdx = 0;
 while (storageChild != undefined) {
     storages[storagesIdx] = getNumberInString(storageChild.innerHTML);
-    storageChild.innerHTML = storageChild.innerHTML.split(" ")[0] + ' ' + abbreviateNumber(getNumberInString(storageChild.innerHTML));
+    productions[storagesIdx] = getNumberFromProduction(productionChild.innerHTML);
+    resources[storagesIdx] = storageChild.innerHTML.split(/\d/)[0].trim();
     storageChild = storageChild.nextElementSibling;
+    productionChild = productionChild.nextElementSibling;
     storagesIdx++;
 }
 
+refreshView(false);
 
-// Refresh storage
-setInterval(function () {
+function refreshView(update){
     storageChild = storage.firstElementChild;
     productionChild = production.firstElementChild;
     var i = 0;
     while (storageChild != undefined) {
-        var rate = getNumberFromProduction(productionChild.innerHTML);
-        storages[i] += rate;
-        storageChild.innerHTML = storageChild.innerHTML.split(" ")[0] + ' ' + abbreviateNumber(storages[i++]);
+        if(update){
+            // var num = productions[i];
+            storages[i] += productions[i];
+        }
+
+        storageChild.innerHTML = resources[i] + ' ' + abbreviateNumber(storages[i],false);
+        productionChild.innerHTML = resources[i] + ' ' + abbreviateNumber(productions[i],true)+"/s";
         storageChild = storageChild.nextElementSibling;
         productionChild = productionChild.nextElementSibling;
+        i++
     }
-}, 1000);
+}
+// Refresh storage
+setInterval(function(){
+    refreshView(true)}, 1000);
 
 
 // Buy listener
@@ -78,14 +90,17 @@ function getNumberFromProduction(str) {
     var split = str.split("/");
     return parseFloat(split[0]);
 }
-function abbreviateNumber(value) {
-    var newValue = truncate(value);
-    if (value >= 10000) {
+function abbreviateNumber(value,decimals) {
+    var newValue = value;
+    if(! decimals || value>=10000) {
+        newValue = truncate(value);
+    }
+    if (newValue >= 10000) {
         var suffixes = ["", "k", "m", "b","t"];
-        var suffixNum = Math.floor( (""+value).length/3 );
+        var suffixNum = Math.floor( (""+newValue).length/3 );
         var shortValue = '';
         for (var precision = 2; precision >= 1; precision--) {
-            shortValue = parseFloat( (suffixNum != 0 ? (value / Math.pow(1000,suffixNum) ) : value).toPrecision(precision));
+            shortValue = parseFloat( (suffixNum != 0 ? (newValue / Math.pow(1000,suffixNum) ) : newValue).toPrecision(precision));
             var dotLessShortValue = (shortValue + '').replace(/[^a-zA-Z 0-9]+/g,'');
             if (dotLessShortValue.length <= 2) { break; }
         }

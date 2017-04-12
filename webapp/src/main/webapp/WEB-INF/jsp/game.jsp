@@ -83,7 +83,8 @@
                             <div class="card-image">
                                 <img class="factory-image" src="/resources/factory_images/${factory.getImage()}" alt="factory_icon"/>
                             </div>
-                            <p id="factoryCant${factory.getType().getId()}" class="centered-text">${factory.amount}</p>
+                            <p id="factoryCant${factory.getType().getId()}" class="centered-text">
+                                <spring:message code="game.amount"/> <fmt:formatNumber value="${factory.amount}" pattern="#" minFractionDigits="0" maxFractionDigits="0"/></p>
                             <p><spring:message code="game.producing"/></p>
                             <c:set var="outputMap" value="${factoryRecipe.formattedOutputs}"/>
                             <c:forEach items="${factoryRecipe.resources}" var="res">
