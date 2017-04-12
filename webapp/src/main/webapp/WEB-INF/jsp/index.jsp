@@ -8,14 +8,15 @@
 </head>
 
 <body>
-<img id="logo" class="profile" src="/resources/clickerQuest_logo.png" alt="factory_img"/>
+
+<img id="logo" class="profile" src="<c:url value="/resources/clickerQuest_logo.png"/>" alt="logo"/>
 <input id="usernameInput" type="text" name="username" placeholder="username">
-<img id="play" class="profile" src="/resources/play_button.png" alt="factory_img"/>
+<img id="play" class="profile" src="<c:url value="/resources/play_button.png"/>" alt="factory_img"/>
 <p id="register"><spring:message code="index.register"/></p>
 </body>
 
 <!--Import jQuery before materialize.js-->
-<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-<script type="text/javascript" src="/resources/js/materialize.min.js"></script>
-<script type="text/javascript" src="/resources/js/index.js"></script>
+<script type="text/javascript" src="<c:url value="https://code.jquery.com/jquery-2.1.1.min.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/resources/js/materialize.min.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/resources/js/index.js"/>"></script>
 </html>

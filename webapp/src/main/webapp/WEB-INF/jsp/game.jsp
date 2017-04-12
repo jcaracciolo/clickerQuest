@@ -36,7 +36,7 @@
                 <span class="card-title"><spring:message code="game.profile"/></span>
                 <div class="section">
                     <div class="card-image profile-picture">
-                        <img class="profile" src="/resources/profile_images/${user.profileImage}" alt="factory_img"/>
+                        <img class="profile" src="<c:url value="/resources/profile_images/${user.profileImage}"/>"/>
                     </div>
                     <p class="username"><c:out value="${user.username}"/></p>
                 </div>
@@ -82,7 +82,7 @@
                                 </c:if>
                             </c:forEach>
                             <div class="card-image">
-                                <img class="factory-image" src="/resources/factory_images/${factory.getImage()}" alt="factory_icon"/>
+                                <img class="factory-image" src="<c:url value="/resources/factory_images/${factory.getImage()}"/>"/>
                             </div>
                             <p id="factoryCant${factory.getType().getId()}" class="centered-text">
                                 <spring:message code="game.amount"/> <fmt:formatNumber value="${factory.amount}" pattern="#" minFractionDigits="0" maxFractionDigits="0"/></p>
@@ -117,7 +117,7 @@
                         <div class="col s4 offset-s1 buyFactorySection">
                             <div id="buyFactory${factory.getType().getId()}" class="buyFactoryBtn card-image factory-icon">
                                 <p class="center-align"><spring:message code="${factory.type.nameCode}"/></p>
-                                <img src="/resources/factory_images/${factory.getImage()}" alt="factory_icon"/>
+                                <img src="<c:url value="/resources/factory_images/${factory.getImage()}"/>" alt="factory_icon"/>
                             </div>
                             <div>
                                 <p>Cost:</p>
@@ -137,7 +137,7 @@
                                 </c:if>
                             </c:forEach>
                             <div class="card-image col s12">
-                                <img src="/resources/arrow_ingredients.png" t alt="embudo"/>
+                                <img src="<c:url value="/resources/arrow_ingredients.png"/>" alt="embudo"/>
                             </div>
                             <c:forEach items="${factoryRecipe.resources}" var="res">
                                 <c:set var="outputMap" value="${factoryRecipe.formattedOutputs}"/>
@@ -169,9 +169,9 @@
 
 
 <!--Import jQuery before materialize.js-->
-<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-<script type="text/javascript" src="/resources/js/materialize.min.js"></script>
-<script type="text/javascript" src="/resources/js/clickspark.min.js"></script>
-<script type="text/javascript" src="/resources/js/game.js"></script>
+<script type="text/javascript" src="<c:url value="https://code.jquery.com/jquery-2.1.1.min.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/resources/js/materialize.min.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/resources/js/clickspark.min.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/resources/js/game.js"/>"></script>
 
 </html>

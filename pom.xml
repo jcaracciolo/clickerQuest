@@ -54,7 +54,7 @@
         <groupId>jstl</groupId>
         <artifactId>jstl</artifactId>
         <version>${jstlVersion}</version>
-        <scope>provided</scope>
+
       </dependency>
 
       <dependency>

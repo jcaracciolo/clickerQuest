@@ -148,7 +148,8 @@ public class UserJdbcDao implements UserDao {
         }
 
         for (ResourceType rt: ResourceType.values()) {
-            final RowWealth rw = new RowWealth(userId.longValue(),rt,rt.equals(ResourceType.PEOPLE)?0.3D:0,
+            final RowWealth rw = new RowWealth(userId.longValue(),rt,
+                    rt.equals(ResourceType.PEOPLE)?0.3D:0,
                     rt.equals(ResourceType.MONEY)?10000:0,Calendar.getInstance().getTimeInMillis());
                     Map<String,Object> m = WEALTH_REVERSE_ROW_MAPPER.toArgs(rw);
             jdbcInsertWealths.execute(m);
