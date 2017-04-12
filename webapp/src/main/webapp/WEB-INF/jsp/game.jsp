@@ -74,7 +74,10 @@
                             <c:set var="factoryRecipe" value="${factory.singleProduction}"/>
                             <c:set var="inputMap" value="${factoryRecipe.formattedInputs}"/>
                             <c:forEach items="${factoryRecipe.resources}" var="res">
-                                <p class="centered-text"><c:out value="${inputMap.get(res)} ${res}"/></p>
+                                <%-- TODO: arreglar esto que es asqueroso:--%>
+                                <c:if test="${inputMap.get(res).toString().split('/')[0] > 0}">
+                                    <p class="centered-text"><c:out value="${inputMap.get(res)} ${res}"/></p>
+                                </c:if>
                             </c:forEach>
                             <div class="card-image">
                                 <img class="factory-image" src="/resources/${factory.getImage()}" alt="factory_icon"/>

@@ -1,0 +1,25 @@
+
+body {
+    background-color: #4eace2;
+    text-align: center;
+}
+
+.inputBox {
+    width: 20em;
+    height: 2em;
+    margin: 0.2em;
+    font-size: 1em;
+}
+
+@font-face {
+    font-family: Fixedsys;
+    src: url('/resources/fonts/FSEX300.ttf') format("truetype");;
+}
+
+h2 {
+    font-family: Fixedsys;
+    color: white;
+    font-size: 5em;
+    text-shadow: -1px 0 black, 0 1px black, 8px 0 black, 0 -6px black;
+    margin-top: 1em;
+}
