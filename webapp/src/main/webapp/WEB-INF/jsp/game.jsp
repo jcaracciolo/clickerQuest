@@ -80,7 +80,7 @@
                                 </c:if>
                             </c:forEach>
                             <div class="card-image">
-                                <img class="factory-image" src="/resources/${factory.getImage()}" alt="factory_icon"/>
+                                <img class="factory-image" src="/resources/factory_images/${factory.getImage()}" alt="factory_icon"/>
                             </div>
                             <p id="factoryCant${factory.getType().getId()}" class="centered-text">${factory.amount}</p>
                             <p>Producing:</p>
@@ -109,7 +109,7 @@
                     <div class="row factory-card">
                         <div class="col s4 offset-s1 buyFactorySection">
                             <div id="buyFactory${factory.getType().getId()}" class="buyFactoryBtn card-image factory-icon">
-                                <img src="/resources/${factory.getImage()}" alt="factory_icon"/>
+                                <img src="/resources/factory_images/${factory.getImage()}" alt="factory_icon"/>
                             </div>
                             <div>
                                 <p>Cost:</p>

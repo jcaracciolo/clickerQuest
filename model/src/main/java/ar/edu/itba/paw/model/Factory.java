@@ -69,7 +69,7 @@ public class Factory {
     }
 
     public String getImage(){
-        return "factory_icon.png";
+        return getType().getId() + ".jpg";
     }
 
     public Factory purchaseResult() {

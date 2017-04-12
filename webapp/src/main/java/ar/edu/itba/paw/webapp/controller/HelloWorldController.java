@@ -68,7 +68,8 @@ public class HelloWorldController {
             return index(form);
         }
 
-        final User u = userService.create(form.getUsername(), form.getPassword(),"1.jpg");
+        int imageID = Math.abs(new Random().nextInt() % 11);
+        final User u = userService.create(form.getUsername(), form.getPassword(),imageID + ".jpg");
         return new ModelAndView("redirect:/" + u.getId() + "/game");
     }
 

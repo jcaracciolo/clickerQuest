@@ -32,7 +32,7 @@ public class UserServiceImpl implements UserService {
     }
 
     public User create(String username, String password, String img) {
-        return userDao.create(username,password,"1.jpg");
+        return userDao.create(username,password,img);
     }
 
     @Override
