@@ -2,7 +2,8 @@
  * Created by epord on 05/04/17.
  */
 
-var userId =window.location.href.split("/")[3];
+var url=window.location.href.split("/")
+var userId =url[url.length - 2];
 
 var storage = document.getElementById("storage");
 var production = document.getElementById("production");
@@ -56,9 +57,8 @@ var buyFactoryButtons = document.getElementsByClassName("buyFactoryBtn");
 for (var i = 0; i < buyFactoryButtons.length; i++) {
     buyFactoryButtons[i].addEventListener("click", function () {
         console.log("buying...");
-        $.post(contextPath + "/" + userId +"/buyFactory",
+        $.post("../buyFactory",
             {
-                userId: userId,
                 factoryId: getNumberInString(this.id)
             });
     })
@@ -71,7 +71,7 @@ for (var i = 0; i < buyFactoryButtons.length; i++) {
         particleRotationSpeed: 20,
         animationType:'explosion',
         callback: function() { location.reload() }
-    }); ;
+    });
 }
 
 
