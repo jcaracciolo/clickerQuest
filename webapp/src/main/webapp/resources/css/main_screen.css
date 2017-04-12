@@ -5,7 +5,7 @@
 }
 
 .complete-height.card {
-	height: 100vh;
+	/*height: 100vh;  --> this makes the non-scrollable (in the future...)*/
 	margin: 0;
 }
 

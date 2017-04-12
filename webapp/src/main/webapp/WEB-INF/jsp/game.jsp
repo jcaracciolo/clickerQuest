@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
 <%--<jsp:useBean id="user" type="ar.edu.itba.paw.model.User"/>--%>
 <%--<jsp:useBean id="storage" type="ar.edu.itba.paw.model.packagesntations.SingleProduction"/>--%>
@@ -101,7 +102,7 @@
     <div class="col no-padding s3">
         <div class="complete-height card indigo darken-1">
             <div class="card-content white-text">
-                <span class="card-title">Factories</span>
+                <span class="card-title"><spring:message code="game.factories"/></span>
                 <c:forEach items="${factories}" var="factory" varStatus="loop">
                 <div class="divider"></div>
                 <div class="section">

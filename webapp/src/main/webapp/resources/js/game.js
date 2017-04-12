@@ -30,8 +30,8 @@ setInterval(function () {
     productionChild = production.firstElementChild;
     var i = 0;
     while (storageChild != undefined) {
-        var rate = getNumberInString(productionChild.innerHTML);
-        storages[i] += parseInt(rate);
+        var rate = getNumberFromProduction(productionChild.innerHTML);
+        storages[i] += rate;
         storageChild.innerHTML = storageChild.innerHTML.split(" ")[0] + ' ' + abbreviateNumber(storages[i++]);
         storageChild = storageChild.nextElementSibling;
         productionChild = productionChild.nextElementSibling;
@@ -70,8 +70,16 @@ function getNumberInString(str) {
     return parseInt(str.match(/\d/g).join(""))
 }
 
+function getNumberFromStorage(str) {
+    var split = str.split(" ");
+    return parseFloat(split[split.length-1]);
+}
+function getNumberFromProduction(str) {
+    var split = str.split("/");
+    return parseFloat(split[0]);
+}
 function abbreviateNumber(value) {
-    var newValue = value;
+    var newValue = truncate(value);
     if (value >= 10000) {
         var suffixes = ["", "k", "m", "b","t"];
         var suffixNum = Math.floor( (""+value).length/3 );
@@ -85,4 +93,11 @@ function abbreviateNumber(value) {
         newValue = shortValue+suffixes[suffixNum];
     }
     return newValue;
+}
+
+function truncate(number)
+{
+    return number > 0
+        ? Math.floor(number)
+        : Math.ceil(number);
 }
