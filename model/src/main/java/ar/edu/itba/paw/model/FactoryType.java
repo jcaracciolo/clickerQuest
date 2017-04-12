@@ -9,36 +9,7 @@ import ar.edu.itba.paw.model.packages.PackageType;
  * Created by juanfra on 31/03/17.
  */
 public enum FactoryType {
-    BOILER_BASE(0){
-        public BaseCost getBaseCost(){
-            PackageBuilder<BaseCost> costBuilder = PackageType.BaseCostType.packageBuilder();
-            costBuilder.putItem(ResourceType.PEOPLE,20D);
-            costBuilder.putItem(ResourceType.IRON,500D);
-            costBuilder.putItem(ResourceType.COPPER_CABLE,200D);
-            return costBuilder.buildPackage();
-        }
-        public BaseRecipe getBaseRecipe() {
-            PackageBuilder<BaseRecipe> recipeBuilder = PackageType.BaseRecipeType.packageBuilder();
-            recipeBuilder.putItem(ResourceType.CARDBOARD,-10D);
-            recipeBuilder.putItem(ResourceType.POWER,1D);
-            return recipeBuilder.buildPackage();
-        }},
-
-    METAL_SEPARATOR_BASE(1){
-        public BaseCost getBaseCost(){
-            PackageBuilder<BaseCost> costBuilder = PackageType.BaseCostType.packageBuilder();
-            costBuilder.putItem(ResourceType.PEOPLE,2D);
-            return costBuilder.buildPackage();
-        }
-        public BaseRecipe getBaseRecipe() {
-            PackageBuilder<BaseRecipe> recipeBuilder = PackageType.BaseRecipeType.packageBuilder();
-            recipeBuilder.putItem(ResourceType.METAL_SCRAP,-3D);
-            recipeBuilder.putItem(ResourceType.IRON,0.6D);
-            recipeBuilder.putItem(ResourceType.COPPER,0.4D);
-            return recipeBuilder.buildPackage();
-        }},
-
-    STOCK_INVESTMENT_BASE(2){
+    STOCK_INVESTMENT_BASE(0){
         public BaseCost getBaseCost(){
             PackageBuilder<BaseCost> costBuilder = PackageType.BaseCostType.packageBuilder();
             costBuilder.putItem(ResourceType.MONEY,1000D);
@@ -50,7 +21,19 @@ public enum FactoryType {
             return recipeBuilder.buildPackage();
         }},
 
-    JUNK_COLLECTOR_BASE(3){
+    PEOPLE_RECRUITING_BASE(1){
+        public BaseCost getBaseCost(){
+            PackageBuilder<BaseCost> costBuilder = PackageType.BaseCostType.packageBuilder();
+            costBuilder.putItem(ResourceType.MONEY,200D);
+            return costBuilder.buildPackage();
+        }
+        public BaseRecipe getBaseRecipe() {
+            PackageBuilder<BaseRecipe> recipeBuilder = PackageType.BaseRecipeType.packageBuilder();
+            recipeBuilder.putItem(ResourceType.PEOPLE,0.3D);
+            return recipeBuilder.buildPackage();
+        }},
+
+    JUNK_COLLECTOR_BASE(2){
         public BaseCost getBaseCost(){
             PackageBuilder<BaseCost> costBuilder = PackageType.BaseCostType.packageBuilder();
             costBuilder.putItem(ResourceType.PEOPLE,5D);
@@ -64,19 +47,21 @@ public enum FactoryType {
             return recipeBuilder.buildPackage();
         }},
 
-    PEOPLE_RECRUITING_BASE(4){
+    METAL_SEPARATOR_BASE(3){
         public BaseCost getBaseCost(){
             PackageBuilder<BaseCost> costBuilder = PackageType.BaseCostType.packageBuilder();
-            costBuilder.putItem(ResourceType.MONEY,200D);
+            costBuilder.putItem(ResourceType.PEOPLE,2D);
             return costBuilder.buildPackage();
         }
         public BaseRecipe getBaseRecipe() {
             PackageBuilder<BaseRecipe> recipeBuilder = PackageType.BaseRecipeType.packageBuilder();
-            recipeBuilder.putItem(ResourceType.PEOPLE,0.3D);
+            recipeBuilder.putItem(ResourceType.METAL_SCRAP,-3D);
+            recipeBuilder.putItem(ResourceType.IRON,0.6D);
+            recipeBuilder.putItem(ResourceType.COPPER,0.4D);
             return recipeBuilder.buildPackage();
         }},
 
-    RUBBER_SHREDDER_BASE(5){
+    RUBBER_SHREDDER_BASE(4){
         public BaseCost getBaseCost(){
             PackageBuilder<BaseCost> costBuilder = PackageType.BaseCostType.packageBuilder();
             costBuilder.putItem(ResourceType.PEOPLE,2D);
@@ -90,7 +75,7 @@ public enum FactoryType {
             return recipeBuilder.buildPackage();
         }},
 
-    CABLE_MAKER_BASE(6){
+    CABLE_MAKER_BASE(5){
         public BaseCost getBaseCost(){
             PackageBuilder<BaseCost> costBuilder = PackageType.BaseCostType.packageBuilder();
             costBuilder.putItem(ResourceType.PEOPLE,5D);
@@ -102,6 +87,21 @@ public enum FactoryType {
             recipeBuilder.putItem(ResourceType.COPPER,-3D);
             recipeBuilder.putItem(ResourceType.RUBBER,-5D);
             recipeBuilder.putItem(ResourceType.COPPER_CABLE,0.8D);
+            return recipeBuilder.buildPackage();
+        }},
+
+    BOILER_BASE(6){
+        public BaseCost getBaseCost(){
+            PackageBuilder<BaseCost> costBuilder = PackageType.BaseCostType.packageBuilder();
+            costBuilder.putItem(ResourceType.PEOPLE,20D);
+            costBuilder.putItem(ResourceType.IRON,500D);
+            costBuilder.putItem(ResourceType.COPPER_CABLE,200D);
+            return costBuilder.buildPackage();
+        }
+        public BaseRecipe getBaseRecipe() {
+            PackageBuilder<BaseRecipe> recipeBuilder = PackageType.BaseRecipeType.packageBuilder();
+            recipeBuilder.putItem(ResourceType.CARDBOARD,-10D);
+            recipeBuilder.putItem(ResourceType.POWER,1D);
             return recipeBuilder.buildPackage();
         }},
     ;
