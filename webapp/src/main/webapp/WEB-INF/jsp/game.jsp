@@ -32,7 +32,7 @@
     <div class="col no-padding s2">
         <div class="complete-height card indigo darken-1">
             <div class="card-content white-text">
-                <span class="card-title">Profile</span>
+                <span class="card-title"><spring:message code="game.profile"/></span>
                 <div class="section">
                     <div class="card-image profile-picture">
                         <img class="profile" src="/resources/profile_images/${user.profileImage}" alt="factory_img"/>
@@ -42,7 +42,7 @@
             </div>
             <div class="divider"></div>
             <div class="card-content white-text">
-                <span class="card-title">Storage</span>
+                <span class="card-title"><spring:message code="game.storage"/></span>
                 <div id="storage">
                     <c:set var="storageMap" value="${storage.getUpdatedStorage(productions)}"/>
                     <c:forEach items="${storageMap.resources}" var="resource">
@@ -51,7 +51,7 @@
                         <%--<c:out value="${storageMap.get(resource)}"/></p>--%>
                     </c:forEach>
                 </div>
-                <span class="card-title">Production</span>
+                <span class="card-title"><spring:message code="game.production"/></span>
                     <div id="production">
                         <c:set var="rateMap" value="${productions.formatted()}"/>
                         <c:forEach items="${productions.resources}" var="resource">
@@ -70,7 +70,7 @@
                 <div class="col s4 factory-main">
                     <div class="card">
                         <div class="card-content">
-                            <p>Consuming:</p>
+                            <p><spring:message code="game.consuming"/></p>
                             <c:set var="factoryRecipe" value="${factory.singleProduction}"/>
                             <c:set var="inputMap" value="${factoryRecipe.formattedInputs}"/>
                             <c:forEach items="${factoryRecipe.resources}" var="res">
@@ -83,7 +83,7 @@
                                 <img class="factory-image" src="/resources/factory_images/${factory.getImage()}" alt="factory_icon"/>
                             </div>
                             <p id="factoryCant${factory.getType().getId()}" class="centered-text">${factory.amount}</p>
-                            <p>Producing:</p>
+                            <p><spring:message code="game.producing"/></p>
                             <c:set var="outputMap" value="${factoryRecipe.formattedOutputs}"/>
                             <c:forEach items="${factoryRecipe.resources}" var="res">
                                 <c:if test="${outputMap.get(res) != null}">

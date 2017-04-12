@@ -72,7 +72,7 @@ function getNumberInString(str) {
 
 function abbreviateNumber(value) {
     var newValue = value;
-    if (value >= 1000) {
+    if (value >= 10000) {
         var suffixes = ["", "k", "m", "b","t"];
         var suffixNum = Math.floor( (""+value).length/3 );
         var shortValue = '';
