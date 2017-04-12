@@ -68,7 +68,7 @@
         <div class="row factory-row">
             <c:forEach items="${factories}" var="factory" varStatus="loop">
                 <c:if test="${factory.amount != 0}">
-                <div class="col s4 factory-main">
+                <div class="col s3 factory-main">
                     <div class="card">
                         <div class="card-content">
                             <p><spring:message code="game.consuming"/></p>
@@ -94,6 +94,10 @@
                         </div>
                     </div>
                 </div>
+                </c:if>
+                <c:if test="${loop.index % 4 == 0 && loop.index != 0}">
+                    </div>
+                    <div class="row factory-row">
                 </c:if>
             </c:forEach>
         </div>

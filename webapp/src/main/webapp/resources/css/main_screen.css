@@ -54,10 +54,6 @@ div.no-padding {
 	max-width: 12rem;
 }
 
-.row.factory-row {
-	display: flex;
-}
-
 .factory-main {
 	max-width: 17rem;
 }
