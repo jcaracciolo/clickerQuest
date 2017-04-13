@@ -17,15 +17,19 @@ public class BaseRecipe extends ResourcePackage {
         formatter = (d) -> formatValue(d,false) + "/s";
     }
 
+    public static PackageBuilder<BaseRecipe> packageBuilder() {
+        return new PackageBuilder<>(VALIDATOR,CREATOR);
+    }
+
     public Recipe calculateRecipe(double inputReduction, double ouputMultiplier, long level){
         Transformer<Double,Double> toRecipe = (d) -> d<0 ? d*ouputMultiplier : d*inputReduction;
-        PackageBuilder<Recipe> builder = PackageType.RecipeType.packageBuilder();
+        PackageBuilder<Recipe> builder = Recipe.packageBuilder();
         return super.map(builder,toRecipe);
     }
 
     public SingleProduction calculateProduction(double amount,double inputReduction, double ouputMultiplier, long level){
         Transformer<Double,Double> toRecipe = (d) -> d<0 ? d*ouputMultiplier*amount : d*inputReduction*amount;
-        PackageBuilder<SingleProduction> builder = PackageType.SingleProductionType.packageBuilder();
+        PackageBuilder<SingleProduction> builder = SingleProduction.packageBuilder();
         return super.map(builder,toRecipe);
     }
 

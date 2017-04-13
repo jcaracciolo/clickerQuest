@@ -2,7 +2,6 @@ package ar.edu.itba.paw.model;
 
 import ar.edu.itba.paw.model.packages.Implementations.*;
 import ar.edu.itba.paw.model.packages.PackageBuilder;
-import ar.edu.itba.paw.model.packages.PackageType;
 
 import java.util.Map;
 
@@ -50,8 +49,8 @@ public class Wealth {
         Storage calculatedStorage = storage.getUpdatedStorage(productions);
         Recipe recipe = f.getRecipe();
         FactoryCost cost = f.getCost();
-        PackageBuilder<Storage> storageBuilder = PackageType.StorageType.packageBuilder();
-        PackageBuilder<Productions> productionsBuilder = PackageType.ProductionType.packageBuilder();
+        PackageBuilder<Storage> storageBuilder = Storage.packageBuilder();
+        PackageBuilder<Productions> productionsBuilder = Productions.packageBuilder();
 
 
         for (ResourceType r: ResourceType.values() ) {

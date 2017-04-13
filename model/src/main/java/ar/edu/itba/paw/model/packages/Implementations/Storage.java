@@ -20,6 +20,10 @@ public class Storage extends ResourcePackage {
 
     private Map<ResourceType,Calendar> lastUpdated;
 
+    public static PackageBuilder<Storage> packageBuilder() {
+        return new PackageBuilder<>(VALIDATOR,CREATOR);
+    }
+
     Storage(Map<ResourceType, Double> map,Map<ResourceType,Calendar> lastUpdated) {
         resources = super.generate(map,VALIDATOR);
         formatter = (d) -> formatValue(d,true);
@@ -43,7 +47,7 @@ public class Storage extends ResourcePackage {
     }
 
     public Storage getUpdatedStorage(Productions productions, Calendar now){
-        PackageBuilder<Storage> resourcePackageBuilder = PackageType.StorageType.packageBuilder();
+        PackageBuilder<Storage> resourcePackageBuilder = Storage.packageBuilder();
 
         for (ResourceType resourceType: resources.keySet()){
             resourcePackageBuilder.putItem(resourceType,resources.get(resourceType));

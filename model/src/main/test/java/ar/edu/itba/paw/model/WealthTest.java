@@ -1,15 +1,11 @@
 package ar.edu.itba.paw.model;
 
-import ar.edu.itba.paw.model.packages.Implementations.FactoryCost;
 import ar.edu.itba.paw.model.packages.Implementations.Productions;
-import ar.edu.itba.paw.model.packages.Implementations.Recipe;
 import ar.edu.itba.paw.model.packages.Implementations.Storage;
 import ar.edu.itba.paw.model.packages.PackageBuilder;
-import ar.edu.itba.paw.model.packages.PackageType;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.experimental.theories.DataPoint;
 
 import java.util.Calendar;
 
@@ -28,8 +24,8 @@ public class WealthTest {
 
     @Before
     public void setUp() {
-        productionsBuilder = PackageType.ProductionType.packageBuilder();
-        storageBuilder = PackageType.StorageType.packageBuilder();
+        productionsBuilder = Productions.packageBuilder();
+        storageBuilder = Storage.packageBuilder();
     }
 
     @Test

@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.model.packages.Implementations;
 import ar.edu.itba.paw.model.ResourceType;
 import ar.edu.itba.paw.model.packages.Creator;
+import ar.edu.itba.paw.model.packages.PackageBuilder;
 import ar.edu.itba.paw.model.packages.ResourcePackage;
 import ar.edu.itba.paw.model.packages.Validator;
 
@@ -16,5 +17,9 @@ public class Productions extends ResourcePackage {
     Productions(Map<ResourceType, Double> map) {
         resources = super.generate(map,VALIDATOR);
         formatter = (d) -> formatValue(d,false) + "/s";
+    }
+
+    public static PackageBuilder<Productions> packageBuilder() {
+        return new PackageBuilder<>(VALIDATOR,CREATOR);
     }
 }

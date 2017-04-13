@@ -17,8 +17,12 @@ public class BaseCost extends ResourcePackage {
         formatter = (d) -> formatValue(d,true);
     }
 
+    public static PackageBuilder<BaseCost> packageBuilder() {
+        return new PackageBuilder<>(VALIDATOR,CREATOR);
+    }
+
     public FactoryCost calculateCost(double amount, double costReduction) {
-        PackageBuilder<FactoryCost> builder = PackageType.FactoryCostType.packageBuilder();
+        PackageBuilder<FactoryCost> builder = FactoryCost.packageBuilder();
         Transformer<Double,Double> toFactoryCost = (d) -> d*(amount+1)*costReduction;
         return super.map(builder,toFactoryCost);
     }

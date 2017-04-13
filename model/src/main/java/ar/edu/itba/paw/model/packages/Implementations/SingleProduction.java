@@ -18,6 +18,10 @@ public class SingleProduction extends ResourcePackage {
         formatter = (d) -> formatValue(d,false) + "/s";
     }
 
+    public static PackageBuilder<SingleProduction> packageBuilder() {
+        return new PackageBuilder<>(VALIDATOR,CREATOR);
+    }
+
     public Map<ResourceType,String> getFormattedInputs(){
         return super.getFormattedInputs();
     }

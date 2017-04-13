@@ -17,4 +17,8 @@ public class FactoryCost extends ResourcePackage {
         resources = super.generate(map,VALIDATOR);
         formatter = (d) -> formatValue(d,true);
     }
+
+    public static PackageBuilder<FactoryCost> packageBuilder() {
+        return new PackageBuilder<>(VALIDATOR,CREATOR);
+    }
 }

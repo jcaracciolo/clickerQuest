@@ -5,7 +5,6 @@ import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.model.packages.Implementations.Productions;
 import ar.edu.itba.paw.model.packages.Implementations.Storage;
 import ar.edu.itba.paw.model.packages.PackageBuilder;
-import ar.edu.itba.paw.model.packages.PackageType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -276,8 +275,8 @@ public class UserJdbcDao implements UserDao {
     @Override
     public Wealth getUserWealth(long userid) {
         final List<RowWealth> list = jdbcTemplate.query("SELECT * FROM wealths WHERE userid = ?", WEALTH_ROW_MAPPER, userid);
-        PackageBuilder<Storage> storage = PackageType.StorageType.packageBuilder();
-        PackageBuilder<Productions> productions = PackageType.ProductionType.packageBuilder();
+        PackageBuilder<Storage> storage = Storage.packageBuilder();
+        PackageBuilder<Productions> productions = Productions.packageBuilder();
 
         for (RowWealth rw: list) {
             storage.putItemWithDate(rw.resourceType,rw.storage,toCalendar(rw.lastUpdated));

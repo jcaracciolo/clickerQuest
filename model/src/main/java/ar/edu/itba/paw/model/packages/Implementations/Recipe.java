@@ -18,6 +18,10 @@ public class Recipe extends ResourcePackage{
         formatter = (d) -> formatValue(d,false) + "/s";
     }
 
+    public static PackageBuilder<Recipe> packageBuilder() {
+        return new PackageBuilder<>(VALIDATOR,CREATOR);
+    }
+
     public Map<ResourceType,Double> getInputs() {
         return super.getInputs();
     }
