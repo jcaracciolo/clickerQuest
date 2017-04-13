@@ -48,7 +48,6 @@ public class PackageBuilderTest {
         assertEquals(pb.getResources().size(),0);
     }
 
-
     @Test
     public void testValidatorAdd(){
         pb.putItem(people,5D);
@@ -110,7 +109,5 @@ public class PackageBuilderTest {
         assertEquals(testPackage.getValue(people),7.5,delta);
         assertEquals(testPackage.getValue(cardboard),9.6,delta);
     }
-
-
 
 }
