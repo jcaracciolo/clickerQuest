@@ -66,9 +66,6 @@ public class Wealth {
             }
         }
 
-
-
-        Productions p = productionsBuilder.buildPackage();
         return new Wealth(userid,storageBuilder.buildPackage(),productionsBuilder.buildPackage());
     }
 }

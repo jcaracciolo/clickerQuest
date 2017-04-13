@@ -17,7 +17,7 @@ import static org.junit.Assert.assertTrue;
  *
  * This test validates that the database ID are being maintained through the releases
  * If a Resource is added there should be established here as RESOURCENAME with the given ID
- * If a Resource Name is change there should be changed in the static variables as well
+ * If a Resource Name is changed there should be changed in the static variables as well
  * It is the only way to check that the correlation with the DB is intact
  */
 public class ResourceTypeTest {
