@@ -54,6 +54,9 @@ public class PackageBuilderTest {
         assertThrows(RuntimeException.class,
                 () -> pb.addItem(people,10D)
         );
+        assertThrows(RuntimeException.class,
+                () -> pb.addItem(people,-10D)
+        );
         pb.addItem(people,3D);
     }
 
