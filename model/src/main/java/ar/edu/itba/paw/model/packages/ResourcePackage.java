@@ -60,12 +60,13 @@ public abstract class ResourcePackage {
     }
 
     public static String formatValue(Double value, Boolean integers){
+
         if(value<=1000) {
             DecimalFormat df = new DecimalFormat(integers?"#":"#.##");
             df.setRoundingMode(RoundingMode.FLOOR);
             return df.format(value);
         }
-        return value.toString(); //coolFormat(value,0);
+        return coolFormat(Math.ceil(value));
     }
 
     protected Map<ResourceType,String> getFormattedInputs(){
