@@ -108,6 +108,10 @@ public abstract class ResourcePackage {
         return map;
     }
 
+    public Map<ResourceType,Double> rawMap(){
+        return generate(resources,(r)-> true);
+    }
+
     private static String coolFormat(double n){
         return coolFormat(n,0);
     }

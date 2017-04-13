@@ -9,7 +9,7 @@ public class Upgrade {
     private String description;
     private double cost;
 
-    public Upgrade(FactoryType factoryType, long level, String description, double cost) {
+    private Upgrade(FactoryType factoryType, long level, String description, double cost) {
         this.level = level;
         this.description = description;
         this.factoryType = factoryType;
