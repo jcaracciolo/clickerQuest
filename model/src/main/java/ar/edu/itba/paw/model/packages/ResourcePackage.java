@@ -4,9 +4,9 @@ import ar.edu.itba.paw.model.ResourceType;
 
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 /**
  * Created by juanfra on 08/04/17.
@@ -16,7 +16,7 @@ public abstract class ResourcePackage {
     protected Formatter formatter;
 
     public Map<ResourceType,String> formatted(){
-        Map<ResourceType,String> output = new HashMap<>();
+        Map<ResourceType,String> output = new TreeMap<>();
         for(ResourceType r: resources.keySet()){
             output.put(r,formatter.format(resources.get(r)));
         }
@@ -33,13 +33,13 @@ public abstract class ResourcePackage {
     }
 
     protected Map<ResourceType,Double> generate(Map<ResourceType,Double> m, Validator<Double> v){
-        Map<ResourceType,Double> newMap = new HashMap<>();
+        Map<ResourceType,Double> newMap = new TreeMap<>();
         for(ResourceType r: m.keySet()) {
             double value = m.get(r);
             if(v.validates(value)) {
                 newMap.put(r,m.get(r));
             } else {
-                throw new RuntimeException("Storage values must be positive doubles without decimal part");
+                throw new RuntimeException("Validator invalid");
             }
         }
 
@@ -69,7 +69,7 @@ public abstract class ResourcePackage {
     }
 
     protected Map<ResourceType,String> getFormattedInputs(){
-        Map<ResourceType,String> map = new HashMap<>();
+        Map<ResourceType,String> map = new TreeMap<>();
 
         for (ResourceType res: getResources()){
             Double value = resources.get(res);
@@ -79,7 +79,7 @@ public abstract class ResourcePackage {
     }
 
     protected Map<ResourceType,Double> getInputs(){
-        Map<ResourceType,Double> map = new HashMap<>();
+        Map<ResourceType,Double> map = new TreeMap<>();
 
         for (ResourceType res: getResources()){
             Double value = resources.get(res);
@@ -89,7 +89,7 @@ public abstract class ResourcePackage {
     }
 
     protected Map<ResourceType,String> getFormattedOutputs(){
-        Map<ResourceType,String> map = new HashMap<>();
+        Map<ResourceType,String> map = new TreeMap<>();
 
         for (ResourceType res: getResources()){
             Double value = resources.get(res);
@@ -99,7 +99,7 @@ public abstract class ResourcePackage {
     }
 
     protected Map<ResourceType,Double> getOutputs(){
-        Map<ResourceType,Double> map = new HashMap<>();
+        Map<ResourceType,Double> map = new TreeMap<>();
 
         for (ResourceType res: getResources()){
             Double value = resources.get(res);

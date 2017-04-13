@@ -85,8 +85,7 @@ public class HelloWorldController {
     public ModelAndView mainGameView(@PathVariable long userId){
         ModelAndView mav = new ModelAndView("game");
 
-        List<Factory> factories = new ArrayList<>(userService.getUserFactories(userId));
-        Collections.sort(factories, (f1,f2) -> f1.getType().getId() - f2.getType().getId());
+        Set<Factory> factories = new TreeSet(userService.getUserFactories(userId));
 
         mav.addObject("user", userService.findById(userId));
         mav.addObject("storage",userService.getUserStorage(userId));

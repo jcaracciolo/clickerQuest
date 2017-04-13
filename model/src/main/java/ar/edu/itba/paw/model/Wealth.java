@@ -35,12 +35,12 @@ public class Wealth {
         return productions;
     }
 
-    public Map<ResourceType,String> getStoredResources(){
-        return storage.formatted();
+    public Map<ResourceType,String> getFormattedStorage(){
+        return getStorage().formatted();
     }
 
-    public Map<ResourceType,String> getProduction(){
-        return productions.formatted();
+    public Map<ResourceType,String> getFormattedProductions(){
+        return getProductions().formatted();
     }
 
     public Wealth purchaseResult(Factory f) {

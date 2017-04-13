@@ -7,7 +7,7 @@ import java.util.Map;
 /**
  * Created by juanfra on 31/03/17.
  */
-public class Factory {
+public class Factory implements Comparable<Factory> {
 
     private long userid;
     private FactoryType type;
@@ -98,5 +98,9 @@ public class Factory {
         }
 
         return true;
+    }
+
+    public int compareTo(Factory f) {
+        return this.getType().getId() - f.getType().getId();
     }
 }

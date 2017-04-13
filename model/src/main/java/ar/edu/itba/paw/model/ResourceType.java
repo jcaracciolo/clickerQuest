@@ -7,10 +7,19 @@ import java.util.HashMap;
  * Created by juanfra on 31/03/17.
  */
 public enum ResourceType {
-    POWER(0,"power"), PLASTIC(1,"plastic"), GOLD(2,"gold"),
-    MONEY(3,"money"), PEOPLE(4,"people"), IRON(5,"iron"),
-    TIRES(6,"tires"), RUBBER(7,"rubber"),METAL_SCRAP(8,"metal scrap"),
-    COPPER(9,"copper"), COPPER_CABLE(10,"cable"), CARDBOARD(11,"cardboard");
+    CARDBOARD(11,"cardboard"),
+    COPPER_CABLE(10,"cable"),
+    COPPER(9,"copper"),
+    METAL_SCRAP(8,"metal scrap"),
+    RUBBER(7,"rubber"),
+    TIRES(6,"tires"),
+    IRON(5,"iron"),
+    PEOPLE(4,"people"),
+    MONEY(3,"money"),
+    GOLD(2,"gold"),
+    PLASTIC(1,"plastic"),
+    POWER(0,"power");
+
     private int id;
     private String name;
 
@@ -28,6 +37,6 @@ public enum ResourceType {
     }
 
     public static ResourceType fromId(int id){
-        return Arrays.asList(ResourceType.values()).stream().filter((r) -> r.getId() ==id).findAny().get();
+        return Arrays.stream(ResourceType.values()).filter((r) -> r.getId() ==id).findAny().get();
     }
 }
