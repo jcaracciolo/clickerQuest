@@ -20,8 +20,28 @@ public class Upgrade {
         return new Upgrade(type, level,"Upgrade n°" + level, 300*level);
     }
 
-    public static Double getInputReduction(long level){
-        return 1+ 0.1 *level;
+    public Double getInputReduction(){
+        if(level%3 == 0){
+            return 1+ 0.1 *level;
+        }
+
+        return 1D;
+    }
+
+    public Double getOutputReduction(){
+        if(level%3 == 1){
+            return 1 - 0.1 * level;
+        }
+
+        return 1D;
+    }
+
+    public Double getCostReduction(){
+        if(level%3 == 2) {
+            return 1 - 0.1 *level;
+        }
+
+        return 1D;
     }
 
     public String toString() {
@@ -42,6 +62,10 @@ public class Upgrade {
 
     public FactoryType getFactoryId() {
         return factoryType;
+    }
+
+    public boolean isBuyable(Wealth w) {
+        return cost <= w.getStorage().getValue(ResourceType.MONEY);
     }
 
 }

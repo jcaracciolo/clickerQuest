@@ -77,6 +77,14 @@ public class Factory implements Comparable<Factory> {
                 amount +1,
                 inputReduction,outputMultiplier,costReduction,upgrade);
     }
+    public Factory purchaseResult(Upgrade newUpgrade){
+        return new Factory(userid,type,amount,
+                            inputReduction * newUpgrade.getInputReduction(),
+                            outputMultiplier * newUpgrade.getOutputReduction(),
+                            costReduction * newUpgrade.getCostReduction(),
+                            newUpgrade
+        );
+    }
 
     public boolean isBuyable(Wealth w) {
         FactoryCost cost = getCost();
@@ -98,6 +106,10 @@ public class Factory implements Comparable<Factory> {
         }
 
         return true;
+    }
+
+    public Upgrade getNextUpgrade() {
+        return Upgrade.getUpgrade(type,upgrade.getLevel() + 1);
     }
 
     public int compareTo(Factory f) {

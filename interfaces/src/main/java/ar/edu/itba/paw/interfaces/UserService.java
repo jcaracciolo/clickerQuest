@@ -24,7 +24,8 @@ public interface UserService {
     Productions getUserProductions(long id);
     Storage getUserStorage(long id);
 
-    boolean purchaseFactory(long userid, FactoryType f);
+    boolean purchaseFactory(long userid, FactoryType type);
+    boolean purchaseUpgrade(long userid, FactoryType type);
 
     Collection<Factory> getUserFactories(long id);
 

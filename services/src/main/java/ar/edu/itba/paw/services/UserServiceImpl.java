@@ -2,16 +2,17 @@ package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.interfaces.UserDao;
 import ar.edu.itba.paw.interfaces.UserService;
-import ar.edu.itba.paw.model.Factory;
-import ar.edu.itba.paw.model.FactoryType;
-import ar.edu.itba.paw.model.User;
-import ar.edu.itba.paw.model.Wealth;
+import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.model.packages.Implementations.Productions;
+import ar.edu.itba.paw.model.packages.Implementations.SingleProduction;
 import ar.edu.itba.paw.model.packages.Implementations.Storage;
+import ar.edu.itba.paw.model.packages.PackageBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by juanfra on 23/03/17.
@@ -77,4 +78,36 @@ public class UserServiceImpl implements UserService {
         return userDao.getProfileImage(userid);
     }
 
+    @Override
+    public boolean purchaseUpgrade(long userid, FactoryType type) {
+        Collection<Factory> factories = getUserFactories(userid);
+        Factory factory = factories.stream()
+                .filter(
+                        (f) -> f.getType().getId() == type.getId()
+                ).findAny().get();
+
+        Upgrade toBuy = factory.getNextUpgrade();
+
+        Wealth w = getUserWealth(userid);
+
+        if(toBuy.isBuyable(w)) {
+            Factory newFactory = factory.purchaseResult(toBuy);
+
+            factories.remove(factory);
+            factories.add(newFactory);
+            Collection<SingleProduction> singleProductions =
+                    factories.stream().map(Factory::getSingleProduction).collect(Collectors.toList());
+
+            Wealth newWealth = w.purchaseResult(toBuy,singleProductions);
+
+            userDao.update(newFactory);
+            userDao.update(newWealth);
+            return true;
+        } else {
+            return false;
+        }
+
+
+
+    }
 }
