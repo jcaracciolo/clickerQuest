@@ -27,7 +27,7 @@ public class PackageBuilder<T extends ResourcePackage> {
         if(!validator.validates(amount)) {
             throw new RuntimeException("Validator invalid");
         }else if(resources.containsKey(resource)) {
-            throw new RuntimeException("Key alredy put");
+            throw new RuntimeException("Key already put");
         } else {
             resources.put(resource,amount);
             return this;
@@ -64,12 +64,6 @@ public class PackageBuilder<T extends ResourcePackage> {
         return this;
     }
 
-    /**
-     * Accepts lastUpdated time for a given, already put resource
-     * @param resource
-     * @param time
-     * @return
-     */
     public PackageBuilder<T> setLastUpdated(ResourceType resource, Calendar time){
         if(!lastUpdated.containsKey(resource) && resources.containsKey(resource)) {
             lastUpdated.put(resource,time);

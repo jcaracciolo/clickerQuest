@@ -1,10 +1,5 @@
 package ar.edu.itba.paw.model;
 
-import javax.annotation.Resource;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-
 /**
  * Created by juanfra on 23/03/17.
  */

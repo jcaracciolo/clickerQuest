@@ -1,7 +1,6 @@
 package ar.edu.itba.paw.model;
 
 import java.util.Arrays;
-import java.util.HashMap;
 
 /**
  * Created by juanfra on 31/03/17.
@@ -36,6 +35,7 @@ public enum ResourceType {
         return id;
     }
 
+    @SuppressWarnings("OptionalGetWithoutIsPresent")
     public static ResourceType fromId(int id){
         return Arrays.stream(ResourceType.values()).filter((r) -> r.getId() ==id).findAny().get();
     }

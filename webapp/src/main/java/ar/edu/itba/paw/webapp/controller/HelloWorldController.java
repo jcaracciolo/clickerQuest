@@ -1,10 +1,5 @@
 package ar.edu.itba.paw.webapp.controller;
 
-/**
- * Created by juanfra on 22/03/17.
- */
-
-import ar.edu.itba.paw.interfaces.UserDao;
 import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.model.Factory;
 import ar.edu.itba.paw.model.FactoryType;
@@ -12,15 +7,19 @@ import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.webapp.form.UserForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
-import java.util.*;
+import java.util.Random;
+import java.util.Set;
+import java.util.TreeSet;
 
+/**
+ * Created by juanfra on 22/03/17.
+ */
 @Controller
 public class HelloWorldController {
 

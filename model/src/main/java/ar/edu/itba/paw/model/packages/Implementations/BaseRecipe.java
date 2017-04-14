@@ -1,7 +1,10 @@
 package ar.edu.itba.paw.model.packages.Implementations;
 
 import ar.edu.itba.paw.model.ResourceType;
-import ar.edu.itba.paw.model.packages.*;
+import ar.edu.itba.paw.model.packages.Creator;
+import ar.edu.itba.paw.model.packages.PackageBuilder;
+import ar.edu.itba.paw.model.packages.ResourcePackage;
+import ar.edu.itba.paw.model.packages.Validator;
 
 import java.util.Map;
 
@@ -21,18 +24,18 @@ public class BaseRecipe extends ResourcePackage {
         return new PackageBuilder<>(VALIDATOR,CREATOR);
     }
 
-    public Recipe calculateRecipe(double inputReduction, double ouputMultiplier, long level){
+    public Recipe calculateRecipe(double inputReduction, double outputMultiplier, long level){
         PackageBuilder<Recipe> builder = Recipe.packageBuilder();
         resources.forEach(
-                (r,d) -> builder.putItem(r,d<0 ? d*ouputMultiplier : d*inputReduction)
+                (r,d) -> builder.putItem(r,d<0 ? d*outputMultiplier : d*inputReduction)
         );
         return builder.buildPackage();
     }
 
-    public SingleProduction calculateProduction(double amount,double inputReduction, double ouputMultiplier, long level){
+    public SingleProduction calculateProduction(double amount,double inputReduction, double outputMultiplier, long level){
         PackageBuilder<SingleProduction> builder = SingleProduction.packageBuilder();
         resources.forEach(
-                (r,d) -> builder.putItem(r,d<0 ? d*ouputMultiplier*amount : d*inputReduction*amount)
+                (r,d) -> builder.putItem(r,d<0 ? d*outputMultiplier*amount : d*inputReduction*amount)
         );
         return builder.buildPackage();
     }

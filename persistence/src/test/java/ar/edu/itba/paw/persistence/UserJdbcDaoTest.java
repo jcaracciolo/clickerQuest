@@ -11,6 +11,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.jdbc.JdbcTestUtils;
+
 import javax.sql.DataSource;
 
 import static junit.framework.TestCase.assertNotNull;
@@ -52,11 +53,10 @@ public class UserJdbcDaoTest {
 
     @Test
     public void testId() {
-        final String username1 = USERNAME;
         final String username2 = USERNAME + "2";
         final String username3 = USERNAME + "3";
 
-        final User user1 = userDao.create(username1, PASSWORD,IMAGE);
+        final User user1 = userDao.create(USERNAME, PASSWORD,IMAGE);
         final User user2 = userDao.create(username2, PASSWORD,IMAGE);
         final User user3 = userDao.create(username3, PASSWORD,IMAGE);
 
