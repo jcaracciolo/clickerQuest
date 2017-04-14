@@ -24,7 +24,7 @@ public class Storage extends ResourcePackage {
         return new PackageBuilder<>(VALIDATOR,CREATOR);
     }
 
-    Storage(Map<ResourceType, Double> map,Map<ResourceType,Calendar> lastUpdated) {
+    private Storage(Map<ResourceType, Double> map,Map<ResourceType,Calendar> lastUpdated) {
         resources = super.generate(map,VALIDATOR);
         formatter = (d) -> formatValue(d,true);
 

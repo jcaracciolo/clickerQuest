@@ -1,4 +1,4 @@
-package ar.edu.itba.paw.services.MockData;
+package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.interfaces.FactoryService;
 import ar.edu.itba.paw.model.FactoryType;

@@ -13,7 +13,7 @@ public class SingleProduction extends ResourcePackage {
     public static Validator<Double> VALIDATOR = (d) -> d!=0;
     public static Creator<SingleProduction> CREATOR = (pb) -> new SingleProduction(pb.getResources());
 
-    SingleProduction(Map<ResourceType, Double> map) {
+    private SingleProduction(Map<ResourceType, Double> map) {
         resources = super.generate(map,VALIDATOR);
         formatter = (d) -> formatValue(d,false) + "/s";
     }

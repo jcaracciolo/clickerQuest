@@ -13,7 +13,7 @@ public class Recipe extends ResourcePackage{
     public static Validator<Double> VALIDATOR = (d) -> d!=0;
     public static Creator<Recipe> CREATOR = (pb) -> new Recipe(pb.getResources());
 
-    Recipe(Map<ResourceType, Double> map) {
+    private Recipe(Map<ResourceType, Double> map) {
         resources = super.generate(map,VALIDATOR);
         formatter = (d) -> formatValue(d,false) + "/s";
     }

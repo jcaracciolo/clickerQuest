@@ -1,4 +1,4 @@
-package ar.edu.itba.paw.services.MockData;
+package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.interfaces.UserDao;
 import ar.edu.itba.paw.interfaces.UserService;
@@ -61,11 +61,7 @@ public class UserServiceImpl implements UserService {
             wealth = userDao.update(wealth);
             factory = userDao.update(factory);
 
-            if(factory != null && wealth != null) {
-                return true;
-            } else {
-                return false;
-            }
+            return factory != null && wealth != null;
         }
         return false;
     }

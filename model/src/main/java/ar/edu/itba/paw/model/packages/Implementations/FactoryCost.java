@@ -13,7 +13,7 @@ public class FactoryCost extends ResourcePackage {
     public static Validator<Double> VALIDATOR = (d) -> d>=0 && d==Math.floor(d);
     public static Creator<FactoryCost> CREATOR = (pb) -> new FactoryCost(pb.getResources());
 
-    FactoryCost(Map<ResourceType, Double> map) {
+    private FactoryCost(Map<ResourceType, Double> map) {
         resources = super.generate(map,VALIDATOR);
         formatter = (d) -> formatValue(d,true);
     }

@@ -14,7 +14,7 @@ public class Productions extends ResourcePackage {
     public static Validator<Double> VALIDATOR = (d) -> d>=0;
     public static Creator<Productions> CREATOR = (pb) -> new Productions(pb.getResources());
 
-    Productions(Map<ResourceType, Double> map) {
+    private Productions(Map<ResourceType, Double> map) {
         resources = super.generate(map,VALIDATOR);
         formatter = (d) -> formatValue(d,false) + "/s";
     }

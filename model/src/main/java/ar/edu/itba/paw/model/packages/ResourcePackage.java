@@ -135,11 +135,4 @@ public abstract class ResourcePackage {
 
     }
 
-    protected <R extends ResourcePackage,P extends ResourcePackage> R map(PackageBuilder<R> builder, Transformer<Double,Double> t) {
-        for (ResourceType res : resources.keySet()){
-            builder.putItem(res,t.transform(resources.get(res)));
-        }
-
-        return builder.buildPackage();
-    }
 }
