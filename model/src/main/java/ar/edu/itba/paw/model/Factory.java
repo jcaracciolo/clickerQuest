@@ -25,6 +25,7 @@ public class Factory implements Comparable<Factory> {
         this.outputMultiplier = outputMultiplier;
         this.costReduction = costReduction;
         this.level = level;
+
     }
 
     public long getUserid() {
@@ -113,5 +114,9 @@ public class Factory implements Comparable<Factory> {
 
     public int compareTo(Factory f) {
         return this.getType().getId() - f.getType().getId();
+    }
+
+    public long getLevel() {
+        return level;
     }
 }

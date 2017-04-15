@@ -88,7 +88,7 @@ public class UserJdbcDao implements UserDao {
         args.put("inputReduction", f.getInputReduction());
         args.put("outputMultiplier", f.getOutputMultiplier());
         args.put("costReduction", f.getCostReduction());
-        args.put("level", f.getUpgrade().getLevel());
+        args.put("level", f.getLevel());
         return args;
 
     };
@@ -173,7 +173,7 @@ public class UserJdbcDao implements UserDao {
                     f.getInputReduction(),
                     f.getOutputMultiplier(),
                     f.getCostReduction(),
-                    f.getUpgrade().getLevel(),
+                    f.getLevel(),
                     f.getUserid(),
                     f.getType().getId());
 
