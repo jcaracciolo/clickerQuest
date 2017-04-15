@@ -80,7 +80,7 @@ public class Factory implements Comparable<Factory> {
 
         return new Factory(userid,type,amount,
                             inputReduction * newUpgrade.getInputReduction(),
-                            outputMultiplier * newUpgrade.getOutputReduction(),
+                            outputMultiplier * newUpgrade.getOutputMultiplier(),
                             costReduction * newUpgrade.getCostReduction(),
                             level + 1
         );

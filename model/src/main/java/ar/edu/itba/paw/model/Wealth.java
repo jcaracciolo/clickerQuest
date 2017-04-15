@@ -3,11 +3,7 @@ package ar.edu.itba.paw.model;
 import ar.edu.itba.paw.model.packages.Implementations.*;
 import ar.edu.itba.paw.model.packages.PackageBuilder;
 
-import java.util.Collection;
-import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * Created by juanfra on 03/04/17.
@@ -98,9 +94,9 @@ public class Wealth {
                 );
         }
 
-            if (u.getOutputReduction() != 1) {
+            if (u.getOutputMultiplier() != 1) {
                 singleProduction.getOutputs().forEach(
-                        (r, d) -> productionsBuilder.addItem(r, -(d * (1 - u.getOutputReduction())))
+                        (r, d) -> productionsBuilder.addItem(r, -(d * (1 - u.getOutputMultiplier())))
                 );
             }
 

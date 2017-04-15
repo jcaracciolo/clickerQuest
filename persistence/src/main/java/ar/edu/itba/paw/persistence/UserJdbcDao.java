@@ -63,9 +63,9 @@ public class UserJdbcDao implements UserDao {
     private final static ReverseRowMapper<User> USER_REVERSE_ROW_MAPPER = (us) ->
     {
         final Map<String, Object> args = new HashMap();
-        args.put("username", us.getUsername());
-        args.put("password", us.getPassword());
-        args.put("profileImage", us.getProfileImage());
+        args.put("username",        us.getUsername());
+        args.put("password",        us.getPassword());
+        args.put("profileImage",    us.getProfileImage());
         return args;
     };
 
@@ -82,13 +82,13 @@ public class UserJdbcDao implements UserDao {
     private final static ReverseRowMapper<Factory> FACTORY_REVERSE_ROW_MAPPER = (f) ->
     {
         final Map<String, Object> args = new HashMap();
-        args.put("userid", f.getUserid());
-        args.put("type", f.getType().getId());
-        args.put("amount", f.getAmount());
-        args.put("inputReduction", f.getInputReduction());
-        args.put("outputMultiplier", f.getOutputMultiplier());
-        args.put("costReduction", f.getCostReduction());
-        args.put("level", f.getLevel());
+        args.put("userid",              f.getUserid());
+        args.put("type",                f.getType().getId());
+        args.put("amount",              f.getAmount());
+        args.put("inputReduction",      f.getInputReduction());
+        args.put("outputMultiplier",    f.getOutputMultiplier());
+        args.put("costReduction",       f.getCostReduction());
+        args.put("level",               f.getLevel());
         return args;
 
     };
@@ -103,11 +103,11 @@ public class UserJdbcDao implements UserDao {
     private final static ReverseRowMapper<RowWealth> WEALTH_REVERSE_ROW_MAPPER = (rw) ->
     {
         final Map<String, Object> args = new HashMap();
-        args.put("userid", rw.userid);
-        args.put("resourceType", rw.resourceType.getId());
-        args.put("production",rw.production);
-        args.put("storage", rw.storage);
-        args.put("lastUpdated", rw.lastUpdated);
+        args.put("userid",          rw.userid);
+        args.put("resourceType",    rw.resourceType.getId());
+        args.put("production",      rw.production);
+        args.put("storage",         rw.storage);
+        args.put("lastUpdated",     rw.lastUpdated);
         return args;
 
     };

@@ -29,7 +29,7 @@ public class Upgrade {
         return 1D;
     }
 
-    public Double getOutputReduction(){
+    public Double getOutputMultiplier(){
         if(level%3 == 1){
             return 1 - 0.1 * level;
         }

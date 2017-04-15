@@ -1,16 +1,13 @@
 package ar.edu.itba.paw.model;
 
 import ar.edu.itba.paw.model.packages.Implementations.Productions;
-import ar.edu.itba.paw.model.packages.Implementations.SingleProduction;
 import ar.edu.itba.paw.model.packages.Implementations.Storage;
 import ar.edu.itba.paw.model.packages.PackageBuilder;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Arrays;
 import java.util.Calendar;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Map;
 
 import static junit.framework.TestCase.assertNotNull;
 import static org.junit.Assert.*;
@@ -147,6 +144,45 @@ public class WealthTest {
         afterPurchase.getStorage().rawMap().forEach(
                 (r,d) -> assertEquals(d,0,0)
         );
+    }
+
+    @Test
+    public void testUpgradeResult() {
+
+        Calendar now = Calendar.getInstance();
+        for(ResourceType res: ResourceType.values()) {
+            productionsBuilder.putItem(res,0D);
+            storageBuilder.putItemWithDate(res,0D,now);
+        }
+
+        Factory factory = new Factory(userId,FactoryType.PEOPLE_RECRUITING_BASE,1,1,1,1,0);
+        Upgrade nextUpgrade = factory.getNextUpgrade();
+        storageBuilder.addItem(ResourceType.MONEY,nextUpgrade.getCost());
+
+        Map<ResourceType,Double> outputs = factory.getSingleProduction().getOutputs();
+        outputs.forEach(
+                (r,d) -> productionsBuilder.addItem(r,d)
+        );
+
+        Wealth newWealth = new Wealth(userId,storageBuilder.buildPackage(),productionsBuilder.buildPackage());
+        Wealth afterPurchase = newWealth.upgradeResult(factory);
+        assertNotNull(afterPurchase);
+
+        afterPurchase.getProductions().rawMap().entrySet()
+                .stream().filter(m -> outputs.containsKey(m.getKey()))
+                .forEach(
+                        (m) -> {
+                            assertTrue(m.getValue()>0);
+                            assertEquals(m.getValue(),
+                                    outputs.get(m.getKey()) * nextUpgrade.getOutputMultiplier(),
+                                    0D);
+                        }
+                );
+
+        afterPurchase.getProductions().rawMap().entrySet()
+                .stream().filter(m-> !outputs.containsKey(m.getKey()))
+                .forEach((m) -> assertEquals(m.getValue(),0,0));
+
     }
 
 
