@@ -15,16 +15,16 @@ public class Factory implements Comparable<Factory> {
     private double inputReduction;
     private double outputMultiplier;
     private double costReduction;
-    private Upgrade upgrade;
+    private long level;
 
-    public Factory(long userid, FactoryType type, double amount, double inputReduction, double outputMultiplier, double costReduction, Upgrade upgrade) {
+    public Factory(long userid, FactoryType type, double amount, double inputReduction, double outputMultiplier, double costReduction, long level) {
         this.userid = userid;
         this.type = type;
         this.amount = amount;
         this.inputReduction = inputReduction;
         this.outputMultiplier = outputMultiplier;
         this.costReduction = costReduction;
-        this.upgrade = upgrade;
+        this.level = level;
     }
 
     public long getUserid() {
@@ -53,11 +53,7 @@ public class Factory implements Comparable<Factory> {
 
     public Recipe getRecipe() {
         return  type.getBaseRecipe()
-                .calculateRecipe(inputReduction,outputMultiplier,upgrade.getLevel());
-    }
-
-    public Upgrade getUpgrade() {
-        return upgrade;
+                .calculateRecipe(inputReduction,outputMultiplier,level);
     }
 
     public FactoryCost getCost() {
@@ -75,14 +71,17 @@ public class Factory implements Comparable<Factory> {
     public Factory purchaseResult() {
         return new Factory(userid,type,
                 amount +1,
-                inputReduction,outputMultiplier,costReduction,upgrade);
+                inputReduction,outputMultiplier,costReduction,level);
     }
-    public Factory purchaseResult(Upgrade newUpgrade){
+
+    public Factory upgradeResult(){
+        Upgrade newUpgrade = getNextUpgrade();
+
         return new Factory(userid,type,amount,
                             inputReduction * newUpgrade.getInputReduction(),
                             outputMultiplier * newUpgrade.getOutputReduction(),
                             costReduction * newUpgrade.getCostReduction(),
-                            newUpgrade
+                            level + 1
         );
     }
 
@@ -109,7 +108,7 @@ public class Factory implements Comparable<Factory> {
     }
 
     public Upgrade getNextUpgrade() {
-        return Upgrade.getUpgrade(type,upgrade.getLevel() + 1);
+        return Upgrade.getUpgrade(type,level + 1);
     }
 
     public int compareTo(Factory f) {

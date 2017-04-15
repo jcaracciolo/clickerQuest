@@ -76,7 +76,7 @@ public class UserJdbcDao implements UserDao {
                     rs.getDouble("inputReduction"),
                     rs.getDouble("outputMultiplier"),
                     rs.getDouble("costReduction"),
-                    Upgrade.getUpgrade(FactoryType.fromId(rs.getInt("type")),rs.getInt("level"))
+                    rs.getInt("level")
                     );
 
     private final static ReverseRowMapper<Factory> FACTORY_REVERSE_ROW_MAPPER = (f) ->
@@ -145,7 +145,7 @@ public class UserJdbcDao implements UserDao {
             final Factory f = new Factory(userId.longValue(),type,
                     type.equals(FactoryType.PEOPLE_RECRUITING_BASE)?1:0,
                     1,1,1,
-                    Upgrade.getUpgrade(type,0));
+                    0);
             jdbcInsertFactories.execute(FACTORY_REVERSE_ROW_MAPPER.toArgs(f));
         }
 

@@ -17,6 +17,7 @@ public class Upgrade {
     }
 
     public static Upgrade getUpgrade(FactoryType type, long level) {
+        if(level<=0) return null;
         return new Upgrade(type, level,"Upgrade n°" + level, 300*level);
     }
 
