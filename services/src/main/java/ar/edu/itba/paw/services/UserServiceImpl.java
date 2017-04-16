@@ -87,18 +87,11 @@ public class UserServiceImpl implements UserService {
                 ).findAny().get();
 
         Upgrade toBuy = factory.getNextUpgrade();
-
         Wealth w = getUserWealth(userid);
 
         if(toBuy.isBuyable(w)) {
-            Factory newFactory = factory.purchaseResult(toBuy);
-
-            factories.remove(factory);
-            factories.add(newFactory);
-            Collection<SingleProduction> singleProductions =
-                    factories.stream().map(Factory::getSingleProduction).collect(Collectors.toList());
-
-            Wealth newWealth = w.purchaseResult(toBuy,singleProductions);
+            Factory newFactory = factory.upgradeResult();
+            Wealth newWealth = w.upgradeResult(factory);
 
             userDao.update(newFactory);
             userDao.update(newWealth);

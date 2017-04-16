@@ -84,7 +84,7 @@ class MockUserDao implements UserDao {
         Wealth w = new Wealth(u.getId(),sBuilder.buildPackage(),pBuilder.buildPackage());
 
         List<Factory> factories = Arrays.stream(FactoryType.values()).map(
-                (f) -> new Factory(u.getId(),f,0,1,1,1,Upgrade.getUpgrade(f,0))
+                (f) -> new Factory(u.getId(),f,0,1,1,1,0)
         ).collect(Collectors.toList());
 
         tables.add(new MockUserDaoData(u,w,factories));
@@ -171,7 +171,7 @@ class MockUserDao implements UserDao {
                 f.getInputReduction(),
                 f.getOutputMultiplier(),
                 f.getCostReduction(),
-                Upgrade.getUpgrade(f.getType(),f.getUpgrade().getLevel())
+                f.getLevel()
         );
     }
 

@@ -3,7 +3,6 @@ package ar.edu.itba.paw.model;
 import ar.edu.itba.paw.model.packages.Implementations.*;
 import ar.edu.itba.paw.model.packages.PackageBuilder;
 
-import java.util.Collection;
 import java.util.Map;
 
 /**
@@ -43,7 +42,7 @@ public class Wealth {
     }
 
     public Wealth purchaseResult(Factory f) {
-        if (! f.isBuyable(this)) {
+        if (f == null || !f.isBuyable(this)) {
             return null;
         }
         Storage calculatedStorage = getStorage();
@@ -69,10 +68,17 @@ public class Wealth {
         return new Wealth(userid,storageBuilder.buildPackage(),productionsBuilder.buildPackage());
     }
 
-    public Wealth purchaseResult(Upgrade u, Collection<SingleProduction> singleProductions) {
-        if (! u.isBuyable(this)) {
+    public Wealth upgradeResult(Factory f) {
+        if(f == null ){
             return null;
         }
+
+        Upgrade u = f.getNextUpgrade();
+        if(!u.isBuyable(this)) {
+            return null;
+        }
+
+        SingleProduction singleProduction = f.getSingleProduction();
 
         Storage calculatedStorage = getStorage();
         PackageBuilder<Storage> storageBuilder = Storage.packageBuilder();
@@ -82,21 +88,17 @@ public class Wealth {
         calculatedStorage.getLastUpdated().forEach(storageBuilder::setLastUpdated);
         storageBuilder.addItem(ResourceType.MONEY,-u.getCost());
 
-        singleProductions.forEach(
-                    (s) -> {
-                        if (u.getInputReduction() != 1) {
-                            s.getInputs().forEach(
-                                    (r, d) -> productionsBuilder.addItem(r, (d * (1 - u.getInputReduction())))
-                            );
-                        }
+        if (u.getInputReduction() != 1) {
+            singleProduction.getInputs().forEach(
+                        (r, d) -> productionsBuilder.addItem(r, (d * (1 - u.getInputReduction())))
+                );
+        }
 
-                        if (u.getOutputReduction() != 1) {
-                            s.getOutputs().forEach(
-                                    (r, d) -> productionsBuilder.addItem(r, -(d * (1 - u.getOutputReduction())))
-                            );
-                        }
-                    }
-            );
+            if (u.getOutputMultiplier() != 1) {
+                singleProduction.getOutputs().forEach(
+                        (r, d) -> productionsBuilder.addItem(r, -(d * (1 - u.getOutputMultiplier())))
+                );
+            }
 
         return new Wealth(userid,storageBuilder.buildPackage(),productionsBuilder.buildPackage());
     }

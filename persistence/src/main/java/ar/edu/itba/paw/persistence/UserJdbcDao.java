@@ -63,9 +63,9 @@ public class UserJdbcDao implements UserDao {
     private final static ReverseRowMapper<User> USER_REVERSE_ROW_MAPPER = (us) ->
     {
         final Map<String, Object> args = new HashMap();
-        args.put("username", us.getUsername());
-        args.put("password", us.getPassword());
-        args.put("profileImage", us.getProfileImage());
+        args.put("username",        us.getUsername());
+        args.put("password",        us.getPassword());
+        args.put("profileImage",    us.getProfileImage());
         return args;
     };
 
@@ -76,19 +76,19 @@ public class UserJdbcDao implements UserDao {
                     rs.getDouble("inputReduction"),
                     rs.getDouble("outputMultiplier"),
                     rs.getDouble("costReduction"),
-                    Upgrade.getUpgrade(FactoryType.fromId(rs.getInt("type")),rs.getInt("level"))
+                    rs.getInt("level")
                     );
 
     private final static ReverseRowMapper<Factory> FACTORY_REVERSE_ROW_MAPPER = (f) ->
     {
         final Map<String, Object> args = new HashMap();
-        args.put("userid", f.getUserid());
-        args.put("type", f.getType().getId());
-        args.put("amount", f.getAmount());
-        args.put("inputReduction", f.getInputReduction());
-        args.put("outputMultiplier", f.getOutputMultiplier());
-        args.put("costReduction", f.getCostReduction());
-        args.put("level", f.getUpgrade().getLevel());
+        args.put("userid",              f.getUserid());
+        args.put("type",                f.getType().getId());
+        args.put("amount",              f.getAmount());
+        args.put("inputReduction",      f.getInputReduction());
+        args.put("outputMultiplier",    f.getOutputMultiplier());
+        args.put("costReduction",       f.getCostReduction());
+        args.put("level",               f.getLevel());
         return args;
 
     };
@@ -103,11 +103,11 @@ public class UserJdbcDao implements UserDao {
     private final static ReverseRowMapper<RowWealth> WEALTH_REVERSE_ROW_MAPPER = (rw) ->
     {
         final Map<String, Object> args = new HashMap();
-        args.put("userid", rw.userid);
-        args.put("resourceType", rw.resourceType.getId());
-        args.put("production",rw.production);
-        args.put("storage", rw.storage);
-        args.put("lastUpdated", rw.lastUpdated);
+        args.put("userid",          rw.userid);
+        args.put("resourceType",    rw.resourceType.getId());
+        args.put("production",      rw.production);
+        args.put("storage",         rw.storage);
+        args.put("lastUpdated",     rw.lastUpdated);
         return args;
 
     };
@@ -145,7 +145,7 @@ public class UserJdbcDao implements UserDao {
             final Factory f = new Factory(userId.longValue(),type,
                     type.equals(FactoryType.PEOPLE_RECRUITING_BASE)?1:0,
                     1,1,1,
-                    Upgrade.getUpgrade(type,0));
+                    0);
             jdbcInsertFactories.execute(FACTORY_REVERSE_ROW_MAPPER.toArgs(f));
         }
 
@@ -173,7 +173,7 @@ public class UserJdbcDao implements UserDao {
                     f.getInputReduction(),
                     f.getOutputMultiplier(),
                     f.getCostReduction(),
-                    f.getUpgrade().getLevel(),
+                    f.getLevel(),
                     f.getUserid(),
                     f.getType().getId());
 
