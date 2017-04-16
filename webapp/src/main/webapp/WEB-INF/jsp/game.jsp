@@ -28,8 +28,10 @@
 </head>
 
 <script type="text/javascript">
-    storages2 = {};
-    productions2 = {};
+    storagesMap = {}; // resource -> cant
+    productionsMap = {}; // resource -> rate
+    factoriesCost = {}; // factoryId -> (resource -> cant)
+    factoriesRequirement = {} // factoryId -> (resource -> rate)
 </script>
 
 <body>
@@ -55,7 +57,7 @@
                         <p><c:out value="${resource}"/>
                             <fmt:formatNumber value="${storageMap.getValue(resource)}" pattern="#" minFractionDigits="0" maxFractionDigits="0"/></p>
                         <script type="text/javascript">
-                            storages2['<c:out value="${resource}"/>']=${storageMap.getValue(resource)}
+                            storagesMap['<c:out value="${resource}"/>'] = parseInt(${storageMap.getValue(resource)})
                         </script>
                     </c:forEach>
                 </div>
@@ -65,7 +67,7 @@
                     <c:forEach items="${productions.resources}" var="resource">
                         <p><c:out value="${rateMap.get(resource)} ${resource}"/></p>
                         <script type="text/javascript">
-                            productions2['<c:out value="${resource}"/>']='<c:out value="${rateMap.get(resource)}"/>'
+                            productionsMap['<c:out value="${resource}"/>']=parseInt('<c:out value="${rateMap.get(resource)}"/>')
                         </script>
                     </c:forEach>
                 </div>
@@ -124,28 +126,42 @@
                     <div class="section">
                         <!-- BEGINING OF FACTORY CARD -->
                         <div class="factory-card-container">
-                            <div class="box black disabled"></div>
+                            <div id="factoryDisabler${factory.getType().getId()}" class="box black canBuy"></div>
                             <div class="row factory-card">
-                                <div class="col s4 offset-s1 buyFactorySection">
-                                    <div id="buyFactory${factory.getType().getId()}" class="buyFactoryBtn card-image factory-icon">
+                                <div id="buyFactory${factory.getType().getId()}" class="col s4 offset-s1 buyFactorySection">
+                                    <div class="card-image factory-icon">
                                         <p class="center-align"><spring:message code="${factory.type.nameCode}"/></p>
                                         <img src="<c:url value="/resources/factory_images/${factory.getImage()}"/>" alt="factory_icon"/>
                                     </div>
                                     <p>Cost:</p>
-                                    <c:set var="factoryCost" value="${factory.cost}"/>
+                                    <c:set var="factoryCost" value="${factory.getCost()}"/>
                                     <div>
+                                        <script type="text/javascript">
+                                            factoriesCost[parseInt('<c:out value="${factory.getType().getId()}"/>')] = {}
+                                        </script>
                                         <c:forEach items="${factoryCost.resources}" var="res">
-                                            <c:set var="costMap" value="${factoryCost.formatted()}"/>
+                                            <c:set var="costMap" value="${factoryCost.getCost()}"/>
                                             <p class="centered-text"><c:out value="${costMap.get(res)} ${res}"/></p>
+                                            <script type="text/javascript">
+                                                factoriesCost[parseInt('<c:out value="${factory.getType().getId()}"/>')]
+                                                        ['<c:out value="${res}"/>'] = parseInt('<c:out value="${costMap.get(res)}"/>')
+                                            </script>
                                         </c:forEach>
                                     </div>
                                 </div>
                                 <div class="col offset-s1 s4">
+                                    <script type="text/javascript">
+                                        factoriesRequirement[parseInt('<c:out value="${factory.getType().getId()}"/>')] = {}
+                                    </script>
                                     <c:set var="factoryRecipe" value="${factory.type.baseRecipe}"/>
                                     <c:forEach items="${factoryRecipe.resources}" var="res">
-                                        <c:set var="inputMap" value="${factoryRecipe.formattedInputs}"/>
+                                        <c:set var="inputMap" value="${factoryRecipe.getInputs()}"/>
                                         <c:if test="${inputMap.get(res) != null}">
                                             <p class="centered-text"><c:out value="${inputMap.get(res)} ${res}"/></p>
+                                            <script type="text/javascript">
+                                                factoriesRequirement[parseInt('<c:out value="${factory.getType().getId()}"/>')]
+                                                    ['<c:out value="${res}"/>'] = parseInt('<c:out value="${inputMap.get(res)}"/>')
+                                            </script>
                                         </c:if>
                                     </c:forEach>
                                     <div class="card-image col s12">

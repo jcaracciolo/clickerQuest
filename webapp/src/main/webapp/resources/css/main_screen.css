@@ -17,6 +17,10 @@ div.box.black {
 	z-index: 2;
 }
 
+div.box.black.canBuy {
+	display: none;
+}
+
 .complete-height.card {
 	/*height: 100vh;  --> this makes the non-scrollable (in the future...)*/
 	min-height: 100vh;

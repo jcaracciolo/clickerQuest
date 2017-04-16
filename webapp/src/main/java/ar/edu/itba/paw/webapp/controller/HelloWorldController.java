@@ -95,6 +95,7 @@ public class HelloWorldController {
 
     @RequestMapping(value = "/{userId}/buyFactory")
     public ModelAndView purchaseDemo(@PathVariable long userId, @RequestParam("factoryId") final int factoryId){
+        System.out.println(userId + " is buying " + factoryId);
         userService.purchaseFactory(userId, FactoryType.fromId(factoryId));
         return new ModelAndView("redirect:/" + userId + "/game");
     }

@@ -28,7 +28,7 @@ while (storageChild != undefined) {
     storagesIdx++;
 }
 
-refreshView(false);
+refreshValues(false);
 
 function refreshValues(update){
     storageChild = storage.firstElementChild;
@@ -46,17 +46,47 @@ function refreshValues(update){
         productionChild = productionChild.nextElementSibling;
         i++
     }
+
+    for (var val in storagesMap) {
+        storagesMap[val] += productionsMap[val];
+    }
+    refreshFactoriesBuyability();
 }
 
+function refreshFactoriesBuyability() {
+    var notBuyable = []
+    for (var factId in factoriesCost) {
+        for (var res in factoriesCost[factId]) {
+            if (factoriesCost[factId][res] > storagesMap[res]) {
+                notBuyable.push(factId)
+                break;
+            }
+        }
+        for (var res in factoriesRequirement[factId]) {
+            if (factoriesRequirement[factId][res] > productionsMap[res]) {
+                notBuyable.push(factId)
+                break;
+            }
+        }
+    }
+    for (var i = 0; i < Object.keys(factoriesCost).length; i++) {
+        if (notBuyable.includes(i.toString())) {
+            document.getElementById("factoryDisabler" + i).classList.remove("canBuy");
+        }
+        else {
+            document.getElementById("factoryDisabler" + i).classList.remove("canBuy");
+            document.getElementById("factoryDisabler" + i).classList.add("canBuy");
+        }
+    }
+}
 
 setInterval(function(){
     refreshValues(true);
-    // refreshFactoryBuyability();
 }, 1000);
 
 
 // Buy listener
-var buyFactoryButtons = document.getElementsByClassName("buyFactoryBtn");
+var buyFactoryButtons = document.getElementsByClassName("buyFactorySection");
 for (var i = 0; i < buyFactoryButtons.length; i++) {
     buyFactoryButtons[i].addEventListener("click", function () {
         console.log("buying...");

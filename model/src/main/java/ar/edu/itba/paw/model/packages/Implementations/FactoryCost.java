@@ -24,4 +24,8 @@ public class FactoryCost extends ResourcePackage {
     public static PackageBuilder<FactoryCost> packageBuilder() {
         return new PackageBuilder<>(VALIDATOR,CREATOR);
     }
+
+    public Map<ResourceType,Double> getCost() {
+        return resources;
+    }
 }
