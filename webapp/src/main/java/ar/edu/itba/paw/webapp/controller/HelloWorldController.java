@@ -98,5 +98,4 @@ public class HelloWorldController {
         userService.purchaseFactory(userId, FactoryType.fromId(factoryId));
         return new ModelAndView("redirect:/" + userId + "/game");
     }
-
 }

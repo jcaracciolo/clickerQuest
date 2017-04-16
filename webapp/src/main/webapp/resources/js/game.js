@@ -30,7 +30,7 @@ while (storageChild != undefined) {
 
 refreshView(false);
 
-function refreshView(update){
+function refreshValues(update){
     storageChild = storage.firstElementChild;
     productionChild = production.firstElementChild;
     var i = 0;
@@ -47,9 +47,12 @@ function refreshView(update){
         i++
     }
 }
-// Refresh storage
+
+
 setInterval(function(){
-    refreshView(true)}, 1000);
+    refreshValues(true);
+    // refreshFactoryBuyability();
+}, 1000);
 
 
 // Buy listener

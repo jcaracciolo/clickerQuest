@@ -53,9 +53,9 @@
                     </c:forEach>
                 </div>
                 <span class="card-title"><spring:message code="game.production"/></span>
-                    <div id="production">
-                        <c:set var="rateMap" value="${productions.formatted()}"/>
-                        <c:forEach items="${productions.resources}" var="resource">
+                <div id="production">
+                    <c:set var="rateMap" value="${productions.formatted()}"/>
+                    <c:forEach items="${productions.resources}" var="resource">
                         <p><c:out value="${rateMap.get(resource)} ${resource}"/></p>
                     </c:forEach>
                 </div>
@@ -67,7 +67,7 @@
         <!-- FIRST ROW -->
         <div class="row factory-row">
             <c:forEach items="${factories}" var="factory" varStatus="loop">
-                <c:if test="${factory.amount != 0}">
+            <c:if test="${factory.amount != 0}">
                 <div class="col s3 factory-main">
                     <div class="card">
                         <div class="card-content">
@@ -96,11 +96,11 @@
                         </div>
                     </div>
                 </div>
-                </c:if>
-                <c:if test="${loop.index % 4 == 0 && loop.index != 0}">
-                    </div>
-                    <div class="row factory-row">
-                </c:if>
+            </c:if>
+            <c:if test="${loop.index % 4 == 0 && loop.index != 0}">
+        </div>
+        <div class="row factory-row">
+            </c:if>
             </c:forEach>
         </div>
     </div>
@@ -110,54 +110,57 @@
             <div class="card-content white-text">
                 <span class="card-title"><spring:message code="game.factories"/></span>
                 <c:forEach items="${factories}" var="factory" varStatus="loop">
-                <div class="divider"></div>
-                <div class="section">
-                    <!-- BEGINING OF FACTORY CARD -->
-                    <div class="row factory-card">
-                        <div class="col s4 offset-s1 buyFactorySection">
-                            <div id="buyFactory${factory.getType().getId()}" class="buyFactoryBtn card-image factory-icon">
-                                <p class="center-align"><spring:message code="${factory.type.nameCode}"/></p>
-                                <img src="<c:url value="/resources/factory_images/${factory.getImage()}"/>" alt="factory_icon"/>
-                            </div>
-                            <div>
-                                <p>Cost:</p>
-                                <c:set var="factoryCost" value="${factory.cost}"/>
-                                <c:forEach items="${factoryCost.resources}" var="res">
-                                    <c:set var="costMap" value="${factoryCost.formatted()}"/>
-                                    <p class="centered-text"><c:out value="${costMap.get(res)} ${res}"/></p>
-                                </c:forEach>
-                            </div>
-                        </div>
-                        <div class="col offset-s1 s4">
-                            <c:set var="factoryRecipe" value="${factory.type.baseRecipe}"/>
-                            <c:forEach items="${factoryRecipe.resources}" var="res">
-                                <c:set var="inputMap" value="${factoryRecipe.formattedInputs}"/>
-                                <c:if test="${inputMap.get(res) != null}">
-                                    <p class="centered-text"><c:out value="${inputMap.get(res)} ${res}"/></p>
-                                </c:if>
-                            </c:forEach>
-                            <div class="card-image col s12">
-                                <img src="<c:url value="/resources/arrow_ingredients.png"/>" alt="embudo"/>
-                            </div>
-                            <c:forEach items="${factoryRecipe.resources}" var="res">
-                                <c:set var="outputMap" value="${factoryRecipe.formattedOutputs}"/>
-                                <c:if test="${outputMap.get(res) != null}">
-                                    <p class="centered-text"><c:out value="${outputMap.get(res)} ${res}"/></p>
-                                </c:if>
-                            </c:forEach>
-                        </div>
-                        <%--<div class="col s4">--%>
-                            <%--<button type="button" class="waves-effect waves-light upgradeButton btn">--%>
-                                <%--<div class="card-image">--%>
+                    <div class="divider"></div>
+                    <div class="section">
+                        <!-- BEGINING OF FACTORY CARD -->
+                        <div class="factory-card-container">
+                            <div class="box black disabled"></div>
+                            <div class="row factory-card">
+                                <div class="col s4 offset-s1 buyFactorySection">
+                                    <div id="buyFactory${factory.getType().getId()}" class="buyFactoryBtn card-image factory-icon">
+                                        <p class="center-align"><spring:message code="${factory.type.nameCode}"/></p>
+                                        <img src="<c:url value="/resources/factory_images/${factory.getImage()}"/>" alt="factory_icon"/>
+                                    </div>
+                                    <p>Cost:</p>
+                                    <c:set var="factoryCost" value="${factory.cost}"/>
+                                    <div>
+                                        <c:forEach items="${factoryCost.resources}" var="res">
+                                            <c:set var="costMap" value="${factoryCost.formatted()}"/>
+                                            <p class="centered-text"><c:out value="${costMap.get(res)} ${res}"/></p>
+                                        </c:forEach>
+                                    </div>
+                                </div>
+                                <div class="col offset-s1 s4">
+                                    <c:set var="factoryRecipe" value="${factory.type.baseRecipe}"/>
+                                    <c:forEach items="${factoryRecipe.resources}" var="res">
+                                        <c:set var="inputMap" value="${factoryRecipe.formattedInputs}"/>
+                                        <c:if test="${inputMap.get(res) != null}">
+                                            <p class="centered-text"><c:out value="${inputMap.get(res)} ${res}"/></p>
+                                        </c:if>
+                                    </c:forEach>
+                                    <div class="card-image col s12">
+                                        <img src="<c:url value="/resources/arrow_ingredients.png"/>" alt="embudo"/>
+                                    </div>
+                                    <c:forEach items="${factoryRecipe.resources}" var="res">
+                                        <c:set var="outputMap" value="${factoryRecipe.formattedOutputs}"/>
+                                        <c:if test="${outputMap.get(res) != null}">
+                                            <p class="centered-text"><c:out value="${outputMap.get(res)} ${res}"/></p>
+                                        </c:if>
+                                    </c:forEach>
+                                </div>
+                                    <%--<div class="col s4">--%>
+                                    <%--<button type="button" class="waves-effect waves-light upgradeButton btn">--%>
+                                    <%--<div class="card-image">--%>
                                     <%--<img src="/resources/upgrade_icon.png" alt="upgrade_icon"/>--%>
-                                <%--</div>--%>
-                                <%--<p>UPGRADE</p>--%>
-                            <%--</button>--%>
-                        <%--</div>--%>
+                                    <%--</div>--%>
+                                    <%--<p>UPGRADE</p>--%>
+                                    <%--</button>--%>
+                                    <%--</div>--%>
+                            </div>
+                        </div>
+                        <!-- END OF FACTORY CARD -->
                     </div>
-                    <!-- END OF FACTORY CARD -->
-                    </c:forEach>
-                </div>
+                </c:forEach>
                 <div class="divider"></div>
             </div>
         </div>
@@ -170,7 +173,8 @@
 
 <!--Import jQuery before materialize.js-->
 <script type="text/javascript">
-contextPath = '<%=request.getContextPath()%>';
+    contextPath = '<%=request.getContextPath()%>';
+    contextPath = '<%=request.getContextPath()%>';
 </script>
 <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
 <script type="text/javascript" src="<c:url value="/resources/js/materialize.min.js"/>"></script>
