@@ -27,6 +27,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 </head>
 
+<script type="text/javascript">
+    storages2 = {};
+    productions2 = {};
+</script>
+
 <body>
 <div class="row main-frame">
     <!-- LEFT PANEL -->
@@ -49,14 +54,19 @@
                     <c:forEach items="${storageMap.resources}" var="resource">
                         <p><c:out value="${resource}"/>
                             <fmt:formatNumber value="${storageMap.getValue(resource)}" pattern="#" minFractionDigits="0" maxFractionDigits="0"/></p>
-                        <%--<c:out value="${storageMap.get(resource)}"/></p>--%>
+                        <script type="text/javascript">
+                            storages2['<c:out value="${resource}"/>']=${storageMap.getValue(resource)}
+                        </script>
                     </c:forEach>
                 </div>
                 <span class="card-title"><spring:message code="game.production"/></span>
                 <div id="production">
-                    <c:set var="rateMap" value="${productions.formatted()}"/>
+                    <c:set var="rateMap" value="${productions.getProductions()}"/>
                     <c:forEach items="${productions.resources}" var="resource">
                         <p><c:out value="${rateMap.get(resource)} ${resource}"/></p>
+                        <script type="text/javascript">
+                            productions2['<c:out value="${resource}"/>']='<c:out value="${rateMap.get(resource)}"/>'
+                        </script>
                     </c:forEach>
                 </div>
             </div>
@@ -173,7 +183,6 @@
 
 <!--Import jQuery before materialize.js-->
 <script type="text/javascript">
-    contextPath = '<%=request.getContextPath()%>';
     contextPath = '<%=request.getContextPath()%>';
 </script>
 <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
