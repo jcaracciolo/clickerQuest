@@ -61,7 +61,7 @@ public class Factory implements Comparable<Factory> {
         return type.getBaseCost().calculateCost(amount,costReduction);
     }
 
-    public SingleProduction getSingleProduction() {
+    public FactoriesProduction getFactoriesProduction() {
         return type.getBaseRecipe().calculateProduction(amount,inputReduction,outputMultiplier,1);
     }
 

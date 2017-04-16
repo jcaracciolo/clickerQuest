@@ -4,7 +4,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
 <%--<jsp:useBean id="user" type="ar.edu.itba.paw.model.User"/>--%>
-<%--<jsp:useBean id="storage" type="ar.edu.itba.paw.model.packagesntations.SingleProduction"/>--%>
+<%--<jsp:useBean id="storage" type="ar.edu.itba.paw.model.packagesntations.FactoriesProduction"/>--%>
 <%--<jsp:useBean id="storage" type="ar.edu.itba.paw.model.packagesntations.FactoryCost"/>--%>
 <%--<jsp:useBean id="storage" type="ar.edu.itba.paw.model.packagesntations.Productions"/>--%>
 <%--<jsp:useBean id="storage" type="ar.edu.itba.paw.model.packagesntations.BaseRecipe"/>--%>
@@ -85,7 +85,7 @@
                         <div class="card-content">
                             <h8 class="centered-text"><spring:message code="${factory.type.nameCode}"/></h8>
                             <p><spring:message code="game.consuming"/></p>
-                            <c:set var="factoryRecipe" value="${factory.singleProduction}"/>
+                            <c:set var="factoryRecipe" value="${factory.factoriesProduction}"/>
                             <c:set var="inputMap" value="${factoryRecipe.formattedInputs}"/>
                             <c:forEach items="${factoryRecipe.resources}" var="res">
                                 <%-- TODO: arreglar esto que es asqueroso:--%>

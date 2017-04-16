@@ -72,40 +72,40 @@ public abstract class ResourcePackage {
     protected Map<ResourceType,String> getFormattedInputs(){
         Map<ResourceType,String> map = new TreeMap<>();
 
-        for (ResourceType res: getResources()){
-            Double value = resources.get(res);
-            if(value < 0) map.put(res,formatter.format(-value));
-        }
+        getInputs().forEach(
+                (r,d) -> map.put(r,formatter.format(d))
+        );
+
         return map;
     }
 
     protected Map<ResourceType,Double> getInputs(){
         Map<ResourceType,Double> map = new TreeMap<>();
 
-        for (ResourceType res: getResources()){
-            Double value = resources.get(res);
-            if(value < 0) map.put(res,-value);
-        }
+        resources.entrySet().stream()
+                .filter(m -> m.getValue() < 0)
+                .forEach(m -> map.put(m.getKey(),-m.getValue()));
+
         return map;
     }
 
     protected Map<ResourceType,String> getFormattedOutputs(){
         Map<ResourceType,String> map = new TreeMap<>();
 
-        for (ResourceType res: getResources()){
-            Double value = resources.get(res);
-            if(value > 0) map.put(res,formatter.format(value));
-        }
+        getOutputs().forEach(
+                (r,d) -> map.put(r,formatter.format(d))
+        );
+
         return map;
     }
 
     protected Map<ResourceType,Double> getOutputs(){
         Map<ResourceType,Double> map = new TreeMap<>();
 
-        for (ResourceType res: getResources()){
-            Double value = resources.get(res);
-            if(value < 0) map.put(res,value);
-        }
+        resources.entrySet().stream()
+                .filter(m -> m.getValue() > 0)
+                .forEach(m -> map.put(m.getKey(),m.getValue()));
+
         return map;
     }
 

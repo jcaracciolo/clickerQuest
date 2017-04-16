@@ -78,7 +78,7 @@ public class Wealth {
             return null;
         }
 
-        SingleProduction singleProduction = f.getSingleProduction();
+        FactoriesProduction factoriesProduction = f.getFactoriesProduction();
 
         Storage calculatedStorage = getStorage();
         PackageBuilder<Storage> storageBuilder = Storage.packageBuilder();
@@ -87,18 +87,19 @@ public class Wealth {
         calculatedStorage.rawMap().forEach(storageBuilder::putItem);
         calculatedStorage.getLastUpdated().forEach(storageBuilder::setLastUpdated);
         storageBuilder.addItem(ResourceType.MONEY,-u.getCost());
+        productions.rawMap().forEach(productionsBuilder::putItem);
 
         if (u.getInputReduction() != 1) {
-            singleProduction.getInputs().forEach(
-                        (r, d) -> productionsBuilder.addItem(r, (d * (1 - u.getInputReduction())))
-                );
+            factoriesProduction.getInputs().forEach(
+                    (r, d) -> productionsBuilder.addItem(r, (d * (1 - u.getInputReduction())))
+            );
         }
 
-            if (u.getOutputMultiplier() != 1) {
-                singleProduction.getOutputs().forEach(
-                        (r, d) -> productionsBuilder.addItem(r, -(d * (1 - u.getOutputMultiplier())))
-                );
-            }
+        if (u.getOutputMultiplier() != 1) {
+            factoriesProduction.getOutputs().forEach(
+                    (r, d) -> productionsBuilder.addItem(r, -(d * (1 - u.getOutputMultiplier())))
+            );
+        }
 
         return new Wealth(userid,storageBuilder.buildPackage(),productionsBuilder.buildPackage());
     }

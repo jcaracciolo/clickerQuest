@@ -8,6 +8,9 @@ import org.junit.Test;
 
 import java.util.Calendar;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static junit.framework.TestCase.assertNotNull;
 import static org.junit.Assert.*;
@@ -45,12 +48,14 @@ public class WealthTest {
 
         Storage updatedS = wealth.getStorage();
         assertEquals(updatedS.getResources(),s.getResources());
+        assertTrue(updatedS.rawMap().size()>0);
         updatedS.rawMap().forEach(
                 (r,d) -> assertEquals(d,0,delta)
         );
 
         Productions updatedP = wealth.getProductions();
         assertEquals(updatedP.getResources(),p.getResources());
+        assertTrue(updatedP.rawMap().size()>0);
         updatedP.rawMap().forEach(
                 (r,d) -> assertEquals(d,0D,delta)
         );
@@ -76,6 +81,7 @@ public class WealthTest {
         assertEquals(updated.getResources(),storage.getResources());
         Double delta = 0D;
 
+        assertTrue(updated.rawMap().size()>0);
         updated.rawMap().forEach(
                 (r,d) -> assertEquals(d,1D,delta)
         );
@@ -110,6 +116,7 @@ public class WealthTest {
         assertNotNull(afterPurchase);
 
         Double delta = 0D;
+        assertTrue(afterPurchase.getStorage().rawMap().size()>0);
         afterPurchase.getStorage().rawMap().forEach(
                 (r,d) -> assertEquals(d,0D,delta)
         );
@@ -124,6 +131,8 @@ public class WealthTest {
         }
 
         Factory factory = new Factory(userId,FactoryType.BOILER_BASE,1,1,1,1,0);
+        factory.getFactoriesProduction().getOutputs().forEach(productionsBuilder::addItem);
+
         Upgrade nextUpgrade = factory.getNextUpgrade();
         assertTrue(nextUpgrade.getCost() > 0);
 
@@ -141,6 +150,7 @@ public class WealthTest {
         Wealth afterPurchase = newWealth.upgradeResult(factory);
         assertNotNull(afterPurchase);
 
+        assertTrue(afterPurchase.getStorage().rawMap().size()>0);
         afterPurchase.getStorage().rawMap().forEach(
                 (r,d) -> assertEquals(d,0,0)
         );
@@ -155,34 +165,44 @@ public class WealthTest {
             storageBuilder.putItemWithDate(res,0D,now);
         }
 
-        Factory factory = new Factory(userId,FactoryType.PEOPLE_RECRUITING_BASE,1,1,1,1,0);
+        Double amountOfFactories = 5D;
+        Factory factory = new Factory(userId,FactoryType.PEOPLE_RECRUITING_BASE,amountOfFactories,1,1,1,0);
+        factory.getFactoriesProduction().getOutputs().forEach(productionsBuilder::addItem);
+
         Upgrade nextUpgrade = factory.getNextUpgrade();
         storageBuilder.addItem(ResourceType.MONEY,nextUpgrade.getCost());
-
-        Map<ResourceType,Double> outputs = factory.getSingleProduction().getOutputs();
-        outputs.forEach(
-                (r,d) -> productionsBuilder.addItem(r,d)
-        );
 
         Wealth newWealth = new Wealth(userId,storageBuilder.buildPackage(),productionsBuilder.buildPackage());
         Wealth afterPurchase = newWealth.upgradeResult(factory);
         assertNotNull(afterPurchase);
 
-        afterPurchase.getProductions().rawMap().entrySet()
-                .stream().filter(m -> outputs.containsKey(m.getKey()))
-                .forEach(
-                        (m) -> {
-                            assertTrue(m.getValue()>0);
-                            assertEquals(m.getValue(),
-                                    outputs.get(m.getKey()) * nextUpgrade.getOutputMultiplier(),
+        Map<ResourceType,Double> baseRecipeOutputs = factory.getType().getBaseRecipe().getOutputs();
+
+        Map<ResourceType,Double> outputsMultiplied =
+                afterPurchase.getProductions().rawMap().entrySet()
+                            .stream().filter(
+                                    m -> baseRecipeOutputs.containsKey(m.getKey())
+                ).collect(Collectors.toMap(m->m.getKey(), m-> m.getValue()));
+
+        assertFalse(outputsMultiplied.isEmpty());
+        outputsMultiplied.forEach(
+                (r,d) -> {
+                            assertTrue(d>0);
+                            assertEquals(
+                                    d,
+                                    baseRecipeOutputs.get(r) * amountOfFactories * nextUpgrade.getOutputMultiplier(),
                                     0D);
                         }
                 );
 
+        Map<ResourceType,Double> outputsIntact =
         afterPurchase.getProductions().rawMap().entrySet()
-                .stream().filter(m-> !outputs.containsKey(m.getKey()))
-                .forEach((m) -> assertEquals(m.getValue(),0,0));
+                .stream().filter(m-> !baseRecipeOutputs.containsKey(m.getKey()))
+                .collect(Collectors.toMap(m->m.getKey(), m-> m.getValue()));
+        ;
 
+        assertFalse(outputsIntact.isEmpty());
+        outputsIntact.forEach((r,d) -> assertEquals(0,d,0D));
     }
 
 
