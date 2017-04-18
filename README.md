@@ -59,8 +59,11 @@ IMPORTANT: DO NOT UPDATE THE JETTY PLUGIN OR IT WILL NOT WORK
 - ```ssh user@pampero.itba.edu.ar```
 - Inside of ssh: ```sftp paw-2017a-4@10.16.1.110```
 - Pass: *ooc4Choo*
-- Inside sftp: ```cd web/
-put path/to/app.wr/in/pampero```
+- Inside sftp:
+```
+cd web/
+put path/to/app.wr/in/pampero
+```
 
 
 
