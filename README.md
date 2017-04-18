@@ -49,6 +49,21 @@ IMPORTANT: DO NOT UPDATE THE JETTY PLUGIN OR IT WILL NOT WORK
 - Profit!!
 
 
+### Deploy
+- Set run as "Deploy"
+- ```mvn clean package```
+- Look for .war in "webapp/target" and rename it to 'app.war'
+- ```sftp user@pampero.itba.edu.ar```
+- Inside of sftp: ```put path/to/app.war```
+- Close session of sftp
+- ```ssh user@pampero.itba.edu.ar```
+- Inside of ssh: ```sftp paw-2017a-4@10.16.1.110```
+- Pass: *ooc4Choo*
+- Inside sftp: ```cd web/
+put path/to/app.wr/in/pampero```
+
+
+
 ### Models
 
 #### Amount
