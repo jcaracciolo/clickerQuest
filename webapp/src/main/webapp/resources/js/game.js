@@ -74,33 +74,29 @@ setInterval(function(){
 
 
 // Buy listener
-var buyFactoryButtons = document.getElementsByClassName("buyFactorySection");
-for (var i = 0; i < buyFactoryButtons.length; i++) {
-    buyFactoryButtons[i].addEventListener("click", function () {
-        console.log("buying...");
-        $.post(contextPath + "/" + userId + "/buyFactory",
-            {
-                factoryId: getNumberInString(this.id)
-            });
-    })
-
-    $("#buyFactory" + i).clickSpark({
-        particleImagePath: '/resources/star_icon.png',
-        particleCount: 55,
-        particleSpeed: 10,
-        particleSize: 12,
-        particleRotationSpeed: 20,
-        animationType:'explosion',
-        callback: function() { location.reload() }
+        $.each($(".buyFactory"),function (i,element){
+            $("#" + element.id).clickSpark({
+                particleImagePath: '/resources/star_icon.png',
+                particleCount: 55,
+                particleSpeed: 10,
+                particleSize: 12,
+                particleRotationSpeed: 20,
+                animationType:'explosion',
+                callback: function() {
+                    buyFactory($("#"+element.id).data("factoryid"))
+                }
+        })
     });
-}
 
 
-
-// Gets all numbers of a string consecutively in an int
-// QW3RT4 -> 34
-function getNumberInString(str) {
-    return parseInt(str.match(/\d/g).join(""))
+function buyFactory(id){
+    $.post(contextPath + "/" + userId + "/buyFactory",
+        {
+            factoryId: id
+        }, function(data) {
+            console.log(data)
+            window.location.reload()
+        });
 }
 
 function abbreviateNumber(value,decimals) {

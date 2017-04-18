@@ -119,7 +119,7 @@
                         <div class="factory-card-container">
                             <div id="factoryDisabler${factory.getType()}" class="box black canBuy"></div>
                             <div class="row factory-card">
-                                <div id="buyFactory${factory.getType().getId()}" class="col s4 offset-s1 buyFactorySection">
+                                <div id="buy${factory.getType()}" data-factoryid="${factory.getType().getId()}" class="buyFactory col s4 offset-s1 buyFactorySection">
                                     <div class="card-image factory-icon">
                                         <p class="center-align"><spring:message code="${factory.type.nameCode}"/></p>
                                         <img src="<c:url value="/resources/factory_images/${factory.getImage()}"/>" alt="factory_icon"/>
