@@ -7,50 +7,35 @@ var userId =url[url.length - 2];
 
 var storage = document.getElementById("storage");
 var production = document.getElementById("production");
-var storages = [];
-var productions = [];
-var resources = [];
-
-if (storage.childElementCount != production.childElementCount) {
-    console.log("Not same size of production and storage!!");
-}
-
-// Init storages[] and abbreviate format of storage
-var storageChild = storage.firstElementChild;
-var productionChild = production.firstElementChild;
-var storagesIdx = 0;
-while (storageChild != undefined) {
-    storages[storagesIdx] = getNumberInString(storageChild.innerHTML);
-    productions[storagesIdx] = getNumberFromProduction(productionChild.innerHTML);
-    resources[storagesIdx] = storageChild.innerHTML.split(/\d/)[0].trim();
-    storageChild = storageChild.nextElementSibling;
-    productionChild = productionChild.nextElementSibling;
-    storagesIdx++;
-}
 
 refreshValues(false);
+refreshView();
+refreshFactoriesBuyability();
 
 function refreshValues(update){
+    Object.keys(storagesMap).forEach(function (key,value) {
+        storagesMap[key] = storagesMap[key] + productionsMap[key]
+    });
+}
+
+function refreshView() {
+    unitPerSec= "/s"
     storageChild = storage.firstElementChild;
     productionChild = production.firstElementChild;
-    var i = 0;
-    while (storageChild != undefined) {
-        if(update){
-            // var num = productions[i];
-            storages[i] += productions[i];
-        }
 
-        storageChild.innerHTML = resources[i] + ' ' + abbreviateNumber(storages[i],false);
-        productionChild.innerHTML = resources[i] + ' ' + abbreviateNumber(productions[i],true)+"/s";
-        storageChild = storageChild.nextElementSibling;
-        productionChild = productionChild.nextElementSibling;
-        i++
+    storageValues = $(".storageValue");
+    for (var i = 0; i<storageValues.size() ; i++) {
+        element = storageValues.eq(i);
+        res = element.data("resource");
+        element.text(localizeRes(res)  + " " + String(abbreviateNumber(storagesMap[res], false)))
     }
 
-    for (var val in storagesMap) {
-        storagesMap[val] += productionsMap[val];
+    productionValues = $(".productionValue");
+    for (var i = 0; i<productionValues.size() ; i++) {
+        element = productionValues.eq(i);
+        res = element.data("resource");
+        element.text(localizeRes(res)  + " " + String(abbreviateNumber(productionsMap[res], true)) + unitPerSec)
     }
-    refreshFactoriesBuyability();
 }
 
 function refreshFactoriesBuyability() {
@@ -62,67 +47,58 @@ function refreshFactoriesBuyability() {
                 break;
             }
         }
-        for (var res in factoriesRequirement[factId]) {
-            if (factoriesRequirement[factId][res] > productionsMap[res]) {
+        for (var res in factoriesRecipe[factId]) {
+            if (factoriesRecipe[factId][res] < 0
+                && Math.abs(factoriesRecipe[factId][res]) > productionsMap[res]) {
                 notBuyable.push(factId)
                 break;
             }
         }
-    }
-    for (var i = 0; i < Object.keys(factoriesCost).length; i++) {
-        if (notBuyable.includes(i.toString())) {
-            document.getElementById("factoryDisabler" + i).classList.remove("canBuy");
+        if (notBuyable.includes(factId)) {
+            document.getElementById("factoryDisabler" + factId).classList.remove("canBuy");
         }
         else {
-            document.getElementById("factoryDisabler" + i).classList.remove("canBuy");
-            document.getElementById("factoryDisabler" + i).classList.add("canBuy");
+            document.getElementById("factoryDisabler" + factId).classList.remove("canBuy");
+            document.getElementById("factoryDisabler" + factId).classList.add("canBuy");
         }
+    }
+    for (var i = 0; i < Object.keys(factoriesCost).length; i++) {
     }
 }
 
 setInterval(function(){
     refreshValues(true);
+    refreshView();
+    refreshFactoriesBuyability();
 }, 1000);
 
 
 // Buy listener
-var buyFactoryButtons = document.getElementsByClassName("buyFactorySection");
-for (var i = 0; i < buyFactoryButtons.length; i++) {
-    buyFactoryButtons[i].addEventListener("click", function () {
-        console.log("buying...");
-        $.post(contextPath + "/" + userId + "/buyFactory",
-            {
-                factoryId: getNumberInString(this.id)
-            });
-    })
-
-    $("#buyFactory" + i).clickSpark({
-        particleImagePath: '/resources/star_icon.png',
-        particleCount: 55,
-        particleSpeed: 10,
-        particleSize: 12,
-        particleRotationSpeed: 20,
-        animationType:'explosion',
-        callback: function() { location.reload() }
+        $.each($(".buyFactory"),function (i,element){
+            $("#" + element.id).clickSpark({
+                particleImagePath: '/resources/star_icon.png',
+                particleCount: 55,
+                particleSpeed: 10,
+                particleSize: 12,
+                particleRotationSpeed: 20,
+                animationType:'explosion',
+                callback: function() {
+                    buyFactory($("#"+element.id).data("factoryid"))
+                }
+        })
     });
-}
 
 
-
-// Gets all numbers of a string consecutively in an int
-// QW3RT4 -> 34
-function getNumberInString(str) {
-    return parseInt(str.match(/\d/g).join(""))
+function buyFactory(id){
+    $.post(contextPath + "/" + userId + "/buyFactory",
+        {
+            factoryId: id
+        }, function(data) {
+            console.log(data)
+            window.location.reload()
+        });
 }
 
-function getNumberFromStorage(str) {
-    var split = str.split(" ");
-    return parseFloat(split[split.length-1]);
-}
-function getNumberFromProduction(str) {
-    var split = str.split("/");
-    return parseFloat(split[0]);
-}
 function abbreviateNumber(value,decimals) {
     var newValue = value;
     if(! decimals || value>=10000) {
@@ -140,7 +116,7 @@ function abbreviateNumber(value,decimals) {
         if (shortValue % 1 != 0)  shortNum = shortValue.toFixed(1);
         newValue = shortValue+suffixes[suffixNum];
     }
-    return newValue;
+    return decimals ? Math.round(100* newValue)/100 : newValue;
 }
 
 function truncate(number)

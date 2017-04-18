@@ -6,29 +6,29 @@ import java.util.Arrays;
  * Created by juanfra on 31/03/17.
  */
 public enum ResourceType {
-    CARDBOARD(11,"cardboard"),
-    COPPER_CABLE(10,"cable"),
-    COPPER(9,"copper"),
-    METAL_SCRAP(8,"metal scrap"),
-    RUBBER(7,"rubber"),
-    TIRES(6,"tires"),
-    IRON(5,"iron"),
-    PEOPLE(4,"people"),
-    MONEY(3,"money"),
-    GOLD(2,"gold"),
-    PLASTIC(1,"plastic"),
-    POWER(0,"power");
+    CARDBOARD(11,"cardboard-type"),
+    COPPER_CABLE(10,"copper-cable-type"),
+    COPPER(9,"copper-type"),
+    METAL_SCRAP(8,"metal-scrap-type"),
+    RUBBER(7,"rubber-type"),
+    TIRES(6,"tires-type"),
+    IRON(5,"iron-type"),
+    PEOPLE(4,"people-type"),
+    MONEY(3,"money-type"),
+    GOLD(2,"gold-type"),
+    PLASTIC(1,"plastic-type"),
+    POWER(0,"power-type");
 
     private int id;
-    private String name;
+    private String nameCode;
 
     ResourceType(int id,String name) {
         this.id = id;
-        this.name = name;
+        this.nameCode = name;
     }
 
-    public String toString() {
-        return name;
+    public String getNameCode() {
+        return nameCode;
     }
 
     public int getId() {

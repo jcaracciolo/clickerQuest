@@ -25,6 +25,12 @@
         <param-value>default</param-value>
     </context-param>
 
+    <jsp-config>
+        <jsp-property-group>
+            <url-pattern>*.jsp</url-pattern>
+            <trim-directive-whitespaces>true</trim-directive-whitespaces>
+        </jsp-property-group>
+    </jsp-config>
 
     <servlet>
         <servlet-name>dispatcher</servlet-name>

@@ -26,14 +26,6 @@
     <!--Let browser know website is optimized for mobile-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 </head>
-
-<script type="text/javascript">
-    storagesMap = {}; // resource -> cant
-    productionsMap = {}; // resource -> rate
-    factoriesCost = {}; // factoryId -> (resource -> cant)
-    factoriesRequirement = {} // factoryId -> (resource -> rate)
-</script>
-
 <body>
 <div class="row main-frame">
     <!-- LEFT PANEL -->
@@ -45,7 +37,7 @@
                     <div class="card-image profile-picture">
                         <img class="profile" src="<c:url value="/resources/profile_images/${user.profileImage}"/>"/>
                     </div>
-                    <p class="username"><c:out value="${user.username}"/></p>
+                    <p class="username" data-userid="${user.id}"><c:out value="${user.username}"/></p>
                 </div>
             </div>
             <div class="divider"></div>
@@ -54,21 +46,20 @@
                 <div id="storage">
                     <c:set var="storageMap" value="${storage.getUpdatedStorage(productions)}"/>
                     <c:forEach items="${storageMap.resources}" var="resource">
-                        <p><c:out value="${resource}"/>
-                            <fmt:formatNumber value="${storageMap.getValue(resource)}" pattern="#" minFractionDigits="0" maxFractionDigits="0"/></p>
-                        <script type="text/javascript">
-                            storagesMap['<c:out value="${resource}"/>'] = parseInt(${storageMap.getValue(resource)})
-                        </script>
+                        <p class="storageValue" data-resource="${resource}">
+                            <fmt:formatNumber value="${storageMap.getValue(resource)}" pattern="#" minFractionDigits="0" maxFractionDigits="0"/>
+                            <spring:message code="${resource.nameCode}"/>
+                        </p>
                     </c:forEach>
                 </div>
                 <span class="card-title"><spring:message code="game.production"/></span>
                 <div id="production">
                     <c:set var="rateMap" value="${productions.getProductions()}"/>
                     <c:forEach items="${productions.resources}" var="resource">
-                        <p><c:out value="${rateMap.get(resource)} ${resource}"/></p>
-                        <script type="text/javascript">
-                            productionsMap['<c:out value="${resource}"/>']=parseInt('<c:out value="${rateMap.get(resource)}"/>')
-                        </script>
+                        <p class="productionValue" data-resource="${resource}">
+                            <c:out value="${rateMap.get(resource)} "/>
+                            <spring:message code="${resource.nameCode}"/>
+                        </p>
                     </c:forEach>
                 </div>
             </div>
@@ -85,9 +76,9 @@
                         <div class="card-content">
                             <h8 class="centered-text"><spring:message code="${factory.type.nameCode}"/></h8>
                             <p><spring:message code="game.consuming"/></p>
-                            <c:set var="factoryRecipe" value="${factory.factoriesProduction}"/>
-                            <c:set var="inputMap" value="${factoryRecipe.formattedInputs}"/>
-                            <c:forEach items="${factoryRecipe.resources}" var="res">
+                            <c:set var="factoriesProduction" value="${factory.factoriesProduction}"/>
+                            <c:set var="inputMap" value="${factoriesProduction.formattedInputs}"/>
+                            <c:forEach items="${factoriesProduction.resources}" var="res">
                                 <%-- TODO: arreglar esto que es asqueroso:--%>
                                 <c:if test="${inputMap.get(res).toString().split('/')[0] > 0}">
                                     <p class="centered-text"><c:out value="${inputMap.get(res)} ${res}"/></p>
@@ -99,8 +90,8 @@
                             <p id="factoryCant${factory.getType().getId()}" class="centered-text">
                                 <spring:message code="game.amount"/> <fmt:formatNumber value="${factory.amount}" pattern="#" minFractionDigits="0" maxFractionDigits="0"/></p>
                             <p><spring:message code="game.producing"/></p>
-                            <c:set var="outputMap" value="${factoryRecipe.formattedOutputs}"/>
-                            <c:forEach items="${factoryRecipe.resources}" var="res">
+                            <c:set var="outputMap" value="${factoriesProduction.formattedOutputs}"/>
+                            <c:forEach items="${factoriesProduction.resources}" var="res">
                                 <c:if test="${outputMap.get(res) != null}">
                                     <p class="centered-text"><c:out value="${outputMap.get(res)} ${res}"/></p>
                                 </c:if>
@@ -126,9 +117,9 @@
                     <div class="section">
                         <!-- BEGINING OF FACTORY CARD -->
                         <div class="factory-card-container">
-                            <div id="factoryDisabler${factory.getType().getId()}" class="box black canBuy"></div>
+                            <div id="factoryDisabler${factory.getType()}" class="box black canBuy"></div>
                             <div class="row factory-card">
-                                <div id="buyFactory${factory.getType().getId()}" class="col s4 offset-s1 buyFactorySection">
+                                <div id="buy${factory.getType()}" data-factoryid="${factory.getType().getId()}" class="buyFactory col s4 offset-s1 buyFactorySection">
                                     <div class="card-image factory-icon">
                                         <p class="center-align"><spring:message code="${factory.type.nameCode}"/></p>
                                         <img src="<c:url value="/resources/factory_images/${factory.getImage()}"/>" alt="factory_icon"/>
@@ -136,39 +127,25 @@
                                     <p>Cost:</p>
                                     <c:set var="factoryCost" value="${factory.getCost()}"/>
                                     <div>
-                                        <script type="text/javascript">
-                                            factoriesCost[parseInt('<c:out value="${factory.getType().getId()}"/>')] = {}
-                                        </script>
                                         <c:forEach items="${factoryCost.resources}" var="res">
                                             <c:set var="costMap" value="${factoryCost.getCost()}"/>
                                             <p class="centered-text"><c:out value="${costMap.get(res)} ${res}"/></p>
-                                            <script type="text/javascript">
-                                                factoriesCost[parseInt('<c:out value="${factory.getType().getId()}"/>')]
-                                                        ['<c:out value="${res}"/>'] = parseInt('<c:out value="${costMap.get(res)}"/>')
-                                            </script>
                                         </c:forEach>
                                     </div>
                                 </div>
                                 <div class="col offset-s1 s4">
-                                    <script type="text/javascript">
-                                        factoriesRequirement[parseInt('<c:out value="${factory.getType().getId()}"/>')] = {}
-                                    </script>
-                                    <c:set var="factoryRecipe" value="${factory.type.baseRecipe}"/>
-                                    <c:forEach items="${factoryRecipe.resources}" var="res">
-                                        <c:set var="inputMap" value="${factoryRecipe.getInputs()}"/>
+                                    <c:set var="factoriesProduction" value="${factory.type.baseRecipe}"/>
+                                    <c:forEach items="${factoriesProduction.resources}" var="res">
+                                        <c:set var="inputMap" value="${factoriesProduction.getInputs()}"/>
                                         <c:if test="${inputMap.get(res) != null}">
                                             <p class="centered-text"><c:out value="${inputMap.get(res)} ${res}"/></p>
-                                            <script type="text/javascript">
-                                                factoriesRequirement[parseInt('<c:out value="${factory.getType().getId()}"/>')]
-                                                    ['<c:out value="${res}"/>'] = parseInt('<c:out value="${inputMap.get(res)}"/>')
-                                            </script>
                                         </c:if>
                                     </c:forEach>
                                     <div class="card-image col s12">
                                         <img src="<c:url value="/resources/arrow_ingredients.png"/>" alt="embudo"/>
                                     </div>
-                                    <c:forEach items="${factoryRecipe.resources}" var="res">
-                                        <c:set var="outputMap" value="${factoryRecipe.formattedOutputs}"/>
+                                    <c:forEach items="${factoriesProduction.resources}" var="res">
+                                        <c:set var="outputMap" value="${factoriesProduction.formattedOutputs}"/>
                                         <c:if test="${outputMap.get(res) != null}">
                                             <p class="centered-text"><c:out value="${outputMap.get(res)} ${res}"/></p>
                                         </c:if>
@@ -200,6 +177,43 @@
 <!--Import jQuery before materialize.js-->
 <script type="text/javascript">
     contextPath = '<%=request.getContextPath()%>';
+    storagesMap = { // resource -> cant
+        <c:forEach items="${storage.resources}" var="resource">
+        "${resource}" : ${storage.getValue(resource)},
+        </c:forEach> };
+
+    productionsMap = { // resource -> rate
+        <c:forEach items="${productions.resources}" var="resource">
+        "${resource}" : ${productions.getValue(resource)},
+        </c:forEach>};
+
+    factoriesCost = { // factoryId -> (resource -> cant)
+    <c:forEach items="${factories}" var="factory"> ${factory.type} : {
+        <c:set var="cost" value="${factory.cost}"/>
+        <c:forEach items="${cost.resources}" var="resource">
+        "${resource}" : ${cost.getValue(resource)},
+        </c:forEach>
+    },</c:forEach>
+
+    };
+    factoriesRecipe = { // factoryId -> (resource -> rate)
+    <c:forEach items="${factories}" var="factory">
+    ${factory.type} : {
+        <c:set var="recipe" value="${factory.recipe}"/>
+        <c:forEach items="${recipe.resources}" var="resource">
+        "${resource}" : ${recipe.getValue(resource)},
+        </c:forEach> },
+    </c:forEach>
+    };
+
+    function localizeRes(resNameCode) {
+        switch (resNameCode) {
+                <c:forEach items="${storage.resources}" var="res">
+                    case '${res}': return "<spring:message code="${res.nameCode}"/>"
+                </c:forEach>
+        }
+        return undefined
+    }
 </script>
 <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
 <script type="text/javascript" src="<c:url value="/resources/js/materialize.min.js"/>"></script>
