@@ -32,25 +32,39 @@ refreshValues(false);
 
 function refreshValues(update){
     storageChild = storage.firstElementChild;
+    // productionChild = production.firstElementChild;
+    // var i = 0;
+    // while (storageChild != undefined) {
+    //     if(update){
+    //         // var num = productions[i];
+    //         storages[i] += productions[i];
+    //     }
+    //
+    //     storageChild.innerHTML = resources[i] + ' ' + abbreviateNumber(storages[i],false);
+    //     productionChild.innerHTML = resources[i] + ' ' + abbreviateNumber(productions[i],true)+"/s";
+    //     storageChild = storageChild.nextElementSibling;
+    //     productionChild = productionChild.nextElementSibling;
+    //     i++
+    // }
+
+
+    Object.keys(storagesMap).forEach(function (key,value) {
+        storagesMap[key] = storagesMap[key] + productionsMap[key]
+    });
+}
+
+function refreshView() {
+    storageChild = storage.firstElementChild;
     productionChild = production.firstElementChild;
-    var i = 0;
-    while (storageChild != undefined) {
-        if(update){
-            // var num = productions[i];
-            storages[i] += productions[i];
-        }
 
-        storageChild.innerHTML = resources[i] + ' ' + abbreviateNumber(storages[i],false);
-        productionChild.innerHTML = resources[i] + ' ' + abbreviateNumber(productions[i],true)+"/s";
-        storageChild = storageChild.nextElementSibling;
-        productionChild = productionChild.nextElementSibling;
-        i++
+    storageValues = $(".storageValue");
+
+    for (var i = 0; i<storageValues.size() ; i++) {
+        element = storageValues.eq(i);
+        res = element.data("resource");
+        element.text(localizeRes(res)  + " " + String(storagesMap[res]))
     }
 
-    for (var val in storagesMap) {
-        storagesMap[val] += productionsMap[val];
-    }
-    refreshFactoriesBuyability();
 }
 
 function refreshFactoriesBuyability() {
@@ -82,6 +96,8 @@ function refreshFactoriesBuyability() {
 
 setInterval(function(){
     refreshValues(true);
+    refreshView();
+    refreshFactoriesBuyability();
 }, 1000);
 
 
