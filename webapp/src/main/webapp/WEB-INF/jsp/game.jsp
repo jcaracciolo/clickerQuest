@@ -117,7 +117,7 @@
                     <div class="section">
                         <!-- BEGINING OF FACTORY CARD -->
                         <div class="factory-card-container">
-                            <div id="factoryDisabler${factory.getType().getId()}" class="box black canBuy"></div>
+                            <div id="factoryDisabler${factory.getType()}" class="box black canBuy"></div>
                             <div class="row factory-card">
                                 <div id="buyFactory${factory.getType().getId()}" class="col s4 offset-s1 buyFactorySection">
                                     <div class="card-image factory-icon">
@@ -177,17 +177,17 @@
 <!--Import jQuery before materialize.js-->
 <script type="text/javascript">
     contextPath = '<%=request.getContextPath()%>';
-    storagesMap = {
+    storagesMap = { // resource -> cant
         <c:forEach items="${storage.resources}" var="resource">
         "${resource}" : ${storage.getValue(resource)},
-        </c:forEach> }; // resource -> cant
+        </c:forEach> };
 
-    productionsMap = {
+    productionsMap = { // resource -> rate
         <c:forEach items="${productions.resources}" var="resource">
         "${resource}" : ${productions.getValue(resource)},
-        </c:forEach>}; // resource -> rate
+        </c:forEach>};
 
-    factoriesCost = {
+    factoriesCost = { // factoryId -> (resource -> cant)
     <c:forEach items="${factories}" var="factory"> ${factory.type} : {
         <c:set var="cost" value="${factory.cost}"/>
         <c:forEach items="${cost.resources}" var="resource">
@@ -195,8 +195,8 @@
         </c:forEach>
     },</c:forEach>
 
-    }; // factoryId -> (resource -> cant)
-    factoriesRequirement = {
+    };
+    factoriesRecipe = { // factoryId -> (resource -> rate)
     <c:forEach items="${factories}" var="factory">
     ${factory.type} : {
         <c:set var="recipe" value="${factory.recipe}"/>
@@ -204,7 +204,7 @@
         "${resource}" : ${recipe.getValue(resource)},
         </c:forEach> },
     </c:forEach>
-    }; // factoryId -> (resource -> rate)
+    };
 
     function localizeRes(resNameCode) {
         switch (resNameCode) {
