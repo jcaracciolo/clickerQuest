@@ -40,7 +40,6 @@ public class HelloWorldController {
     public ModelAndView startGamePOST(@RequestParam("username") final String username){
         User u = userService.findByUsername(username);
         if(u!= null){
-            System.out.println("username: " + username);
             return new ModelAndView("redirect:/" + u.getId() + "/game");
         }
         return new ModelAndView("index");
@@ -48,7 +47,6 @@ public class HelloWorldController {
 
     @RequestMapping(value = "/register")
     public ModelAndView registerPOST(){
-        System.out.println("redirecting to /register...");
         return new ModelAndView("redirect:/create");
     }
 
@@ -95,7 +93,6 @@ public class HelloWorldController {
 
     @RequestMapping(value = "/{userId}/buyFactory")
     public ModelAndView purchaseDemo(@PathVariable long userId, @RequestParam("factoryId") final int factoryId){
-        System.out.println(userId + " is buying " + factoryId);
         userService.purchaseFactory(userId, FactoryType.fromId(factoryId));
         return new ModelAndView("redirect:/" + userId + "/game");
     }
