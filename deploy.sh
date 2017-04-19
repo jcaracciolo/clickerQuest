@@ -1,6 +1,6 @@
 #!/bin/bash
 rm app.war
-mv -b ./webapp/target/webapp.war app.war
+mv ./webapp/target/webapp.war app.war
 echo "Enter username"
 read username
 echo "Enter password"
