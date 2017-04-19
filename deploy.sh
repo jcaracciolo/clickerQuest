@@ -1,9 +1,24 @@
 #!/bin/bash
+#   PAW Deploying script by Julian Benitez and Juan Franco Caracciolo
+#   Configure your variables on the following lines
+#   All rights reserved - PawGroup4
+
+USERNAME="paw-2017a-4"
+PASSWORD="ooc4Choo"
+PAWSERVER="10.16.1.110"
+WEBXML="webapp/src/main/webapp/WEB-INF/web.xml"
+
+# This script will automatically change your spring profile on the web.xml file
+# Make Sure you have set the spring.profiles.active param to either default or production in your web.xml
+
+#
+# END OF CONFIGURATION
+
 LOCALF=0
 PKGF=1
 DEPLOYF=1
+WARNF=1
 ERRORF=0
-WEBXML="webapp/src/main/webapp/WEB-INF/web.xml"
 LINENUMBER=$(cat ${WEBXML} | grep -n 'spring.profiles.active' | cut -d : -f 1)
 LINENUMBER=$((LINENUMBER + 1))
 
@@ -13,7 +28,7 @@ function readFile {
     F_READ_RET=$(cat ${WEBXML} | sed -n ${LINENUMBER},${LINENUMBER}p | egrep -o "default|production")
       if [ ${F_READ_RET} == "" ]
       then
-           echo "Error reading ${WEBXML}"
+           echo "Error reading ${WEBXML} , Make Sure you have set the spring.profiles.active param to either default or production in your web.xml"
            exit 0
       fi
 }
@@ -36,6 +51,8 @@ while test $# -gt 0; do
                         echo "-no-deploy                avoid deploying the webapp"
                         echo " "
                         echo "-h, --help                show brief help"
+                        echo " "
+                        echo "-no-warning               wont check for warnings when packaging"
                         exit 0
                         ;;
                 -local)
@@ -47,6 +64,9 @@ while test $# -gt 0; do
                         ;;
                 -no-deploy)
                         DEPLOYF=0
+                        ;;
+                -no-warning)
+                        WARNF=0
                         ;;
         esac
         shift
@@ -62,6 +82,7 @@ then
     if [ ${DEPLOYF} -eq 0 ]
     then
     echo "Nothing was done"
+    replace ${LASTCONF}
     exit 0
     fi
 fi
@@ -76,12 +97,18 @@ then
     fi
 
     echo "Building package......"
-    mvn clean package | egrep "WARNING|ERROR" && ERRORF=1
+    MATCH="ERROR"
+    if [ ${WARNF} -eq 1 ]
+    then
+        MATCH="WARNING|ERROR"
+    fi
+    mvn clean package | egrep ${MATCH} && ERRORF=1
 
    if [ ${ERRORF} -eq 1 ]
    then
         echo "Error building the package"
-        exit 0
+        replace ${LASTCONF}
+        exit -1
    fi
 
    echo "Package Built Successfully"
@@ -99,7 +126,7 @@ then
     echo "Enter password"
     read -s pass
     filename=app.war
-    cmd="echo -ne \"cd web/ \n put $filename \n \" | sshpass -p ooc4Choo sftp -oStrictHostKeyChecking=no paw-2017a-4@10.16.1.110"
+    cmd="echo -ne \"cd web/ \n put $filename \n \" | sshpass -p ${PASSWORD} sftp -oStrictHostKeyChecking=no ${USERNAME}@${PAWSERVER}"
     #cmd="ls"
     echo $cmd
     echo -ne "pwd\n put $filename\n" | sshpass -p $pass sftp $username@pampero.itba.edu.ar &&
