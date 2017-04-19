@@ -6,14 +6,17 @@
 USERNAME="paw-2017a-4"
 PASSWORD="ooc4Choo"
 PAWSERVER="10.16.1.110"
-WEBXML="webapp/src/main/webapp/WEB-INF/web.xml"
+WEBAPP=webapp
 
 # This script will automatically change your spring profile on the web.xml file
 # Make Sure you have set the spring.profiles.active param to either default or production in your web.xml
-
+# If all you want is to deploy as if, the run the -no-pck flag
+# This script must be placed on the root of your project
 #
 # END OF CONFIGURATION
 
+
+WEBXML="${WEBAPP}/src/main/webapp/WEB-INF/web.xml"
 LOCALF=0
 PKGF=1
 DEPLOYF=1
@@ -120,14 +123,13 @@ if [ ${DEPLOYF} -eq 1 ]
 then
     echo "Deploying..."
     rm app.war
-    mv ./webapp/target/webapp.war app.war
+    mv ${WEBAPP}/target/webapp.war app.war
     echo "Enter username"
     read username
     echo "Enter password"
     read -s pass
     filename=app.war
     cmd="echo -ne \"cd web/ \n put $filename \n \" | sshpass -p ${PASSWORD} sftp -oStrictHostKeyChecking=no ${USERNAME}@${PAWSERVER}"
-    #cmd="ls"
     echo $cmd
     echo -ne "pwd\n put $filename\n" | sshpass -p $pass sftp $username@pampero.itba.edu.ar &&
     echo -ne $cmd | sshpass -p $pass ssh $username@pampero.itba.edu.ar
