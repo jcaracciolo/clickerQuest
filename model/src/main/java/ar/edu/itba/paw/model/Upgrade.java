@@ -23,7 +23,7 @@ public class Upgrade {
 
     public Double getInputReduction(){
         if(level%3 == 0){
-            return 1+ 0.1 *level;
+            return 4D*(1-1/(level+1))/(level+1);
         }
 
         return 1D;
@@ -31,7 +31,7 @@ public class Upgrade {
 
     public Double getOutputMultiplier(){
         if(level%3 == 1){
-            return 1 - 0.1 * level;
+            return 3.5 - 50D*(5-5/(level+100))/(level+100);
         }
 
         return 1D;
@@ -39,7 +39,7 @@ public class Upgrade {
 
     public Double getCostReduction(){
         if(level%3 == 2) {
-            return 1 - 0.1 *level;
+            return 4D*(1-1/(level+1))/(level+1);
         }
 
         return 1D;
@@ -68,5 +68,7 @@ public class Upgrade {
     public boolean isBuyable(Wealth w) {
         return cost <= w.getStorage().getValue(ResourceType.MONEY);
     }
+
+
 
 }

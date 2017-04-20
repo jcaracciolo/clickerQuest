@@ -5,13 +5,13 @@ console.log("version 1.1");
 
 // play click listener
 document.getElementById("play").addEventListener("mousedown", function () {
-    this.src = "/resources/play_button_pressed.png"
+    this.src = contextPath + "/resources/play_button_pressed.png"
 
 });
 document.getElementById("play").addEventListener("mouseup", function () {
     var username = document.getElementById("usernameInput").value;
     console.log("user: " + username);
-    this.src = "/resources/play_button.png"
+    this.src = contextPath + "/resources/play_button.png"
     window.location = contextPath + "/startGame?username=" + username
     // $.get("/startGame",
     //     {

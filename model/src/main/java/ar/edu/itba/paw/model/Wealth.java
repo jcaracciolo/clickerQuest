@@ -72,12 +72,11 @@ public class Wealth {
         if(f == null ){
             return null;
         }
-
-        Upgrade u = f.getNextUpgrade();
-        if(!u.isBuyable(this)) {
+        if(!f.isUpgreadable(this)) {
             return null;
         }
 
+        Upgrade u = f.getNextUpgrade();
         FactoriesProduction factoriesProduction = f.getFactoriesProduction();
 
         Storage calculatedStorage = getStorage();

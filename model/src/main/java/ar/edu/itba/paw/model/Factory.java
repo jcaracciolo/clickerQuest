@@ -62,7 +62,7 @@ public class Factory implements Comparable<Factory> {
     }
 
     public FactoriesProduction getFactoriesProduction() {
-        return type.getBaseRecipe().calculateProduction(amount,inputReduction,outputMultiplier,1);
+        return type.getBaseRecipe().calculateProduction(amount,inputReduction,outputMultiplier,level);
     }
 
     public String getImage(){
@@ -119,4 +119,13 @@ public class Factory implements Comparable<Factory> {
     public long getLevel() {
         return level;
     }
+
+    public boolean isUpgreadable(Wealth w) {
+        if(amount>0) {
+            return getNextUpgrade().isBuyable(w);
+        }
+
+        return false;
+    }
+
 }

@@ -96,4 +96,10 @@ public class HelloWorldController {
         userService.purchaseFactory(userId, FactoryType.fromId(factoryId));
         return new ModelAndView("redirect:/" + userId + "/game");
     }
+
+    @RequestMapping(value = "/{userId}/upgradeFactory")
+    public ModelAndView upgradeFactory(@PathVariable long userId, @RequestParam("factoryId") final int factoryId){
+        userService.purchaseUpgrade(userId, FactoryType.fromId(factoryId));
+        return new ModelAndView("redirect:/" + userId + "/game");
+    }
 }

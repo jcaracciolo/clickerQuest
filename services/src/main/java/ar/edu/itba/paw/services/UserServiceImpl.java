@@ -82,10 +82,9 @@ public class UserServiceImpl implements UserService {
                         (f) -> f.getType().getId() == type.getId()
                 ).findAny().get();
 
-        Upgrade toBuy = factory.getNextUpgrade();
         Wealth w = getUserWealth(userid);
 
-        if(toBuy.isBuyable(w)) {
+        if(factory.isUpgreadable(w)) {
             Factory newFactory = factory.upgradeResult();
             Wealth newWealth = w.upgradeResult(factory);
 

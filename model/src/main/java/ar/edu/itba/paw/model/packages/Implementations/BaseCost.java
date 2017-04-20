@@ -27,7 +27,7 @@ public class BaseCost extends ResourcePackage {
     public FactoryCost calculateCost(double amount, double costReduction) {
         PackageBuilder<FactoryCost> builder = FactoryCost.packageBuilder();
         resources.forEach(
-                (r,d) -> builder.putItem(r,d*(amount+1)*costReduction)
+                (r,d) -> builder.putItem(r,Math.floor(d*(amount+1)*costReduction))
         );
         return builder.buildPackage();
     }
