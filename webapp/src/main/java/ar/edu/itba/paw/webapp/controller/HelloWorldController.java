@@ -55,7 +55,9 @@ public class HelloWorldController {
     // CREATE
     @RequestMapping(value = "/create", method = { RequestMethod.GET })
     public ModelAndView createGET(@Valid @ModelAttribute("registerForm") final UserForm form, final BindingResult errors) {
-        return new ModelAndView("registerForm");
+        ModelAndView mav = new ModelAndView("registerForm");
+        mav.addObject("userform",new UserForm());
+        return mav;
 
     }
 

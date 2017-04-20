@@ -7,6 +7,7 @@ var userId =url[url.length - 2];
 
 var storage = document.getElementById("storage");
 var production = document.getElementById("production");
+sessionStorage.removeItem("user");
 
 refreshValues(false);
 refreshView();
