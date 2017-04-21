@@ -12,6 +12,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+
+import org.apache.log4j.Logger;
+
 import javax.validation.Valid;
 import java.util.Random;
 import java.util.Set;
@@ -22,6 +25,8 @@ import java.util.TreeSet;
  */
 @Controller
 public class HelloWorldController {
+
+    private static final Logger logger = Logger.getLogger(HelloWorldController.class);
 
     @Qualifier("userServiceImpl")
     @Autowired
@@ -39,9 +44,7 @@ public class HelloWorldController {
     @RequestMapping(value = "/startGame", method = { RequestMethod.GET })
     public ModelAndView startGamePOST(@RequestParam("username") final String username){
         User u = userService.findByUsername(username);
-        if(u!= null){
-            return new ModelAndView("redirect:/" + u.getId() + "/game");
-        }
+        if(u != null) return new ModelAndView("redirect:/" + u.getId() + "/game");
         return new ModelAndView("index");
     }
 
@@ -64,15 +67,20 @@ public class HelloWorldController {
     @RequestMapping(value = "/create", method = { RequestMethod.POST })
     public ModelAndView createPOST(@Valid @ModelAttribute("registerForm") final UserForm form, final BindingResult errors) {
         if (errors.hasErrors()) {
+            logger.error("Error at POST /create", new Exception("LOGGER found an error!"));
             return index(form);
         }
 
         int imageID = Math.abs(new Random().nextInt() % 11);
         final User u = userService.create(form.getUsername(), form.getPassword(),imageID + ".jpg");
-        if(u==null){
+
+        if(u == null) {
             //TODO Correct error handling
+            // First approach on error handling:
+            logger.error("User is null", new Exception("LOGGER found an error!"));
             return new ModelAndView("redirect:/create");
         } else {
+            if(logger.isDebugEnabled()) logger.debug("LOGGER: POST /create is successful");
             return new ModelAndView("redirect:/" + u.getId() + "/game");
         }
     }
