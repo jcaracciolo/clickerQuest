@@ -27,7 +27,7 @@ public class BaseRecipe extends ResourcePackage {
     public Recipe calculateRecipe(double inputReduction, double outputMultiplier, long level){
         PackageBuilder<Recipe> builder = Recipe.packageBuilder();
         resources.forEach(
-                (r,d) -> builder.putItem(r,d<0 ? d*outputMultiplier : d*inputReduction)
+                (r,d) -> builder.putItem(r,d>0 ? d*outputMultiplier : d*inputReduction)
         );
         return builder.buildPackage();
     }
@@ -35,7 +35,7 @@ public class BaseRecipe extends ResourcePackage {
     public FactoriesProduction calculateProduction(double amount, double inputReduction, double outputMultiplier, long level){
         PackageBuilder<FactoriesProduction> builder = FactoriesProduction.packageBuilder();
         resources.forEach(
-                (r,d) -> builder.putItem(r,d<0 ? d*outputMultiplier*amount : d*inputReduction*amount)
+                (r,d) -> builder.putItem(r,d>0 ? d*outputMultiplier*amount : d*inputReduction*amount)
         );
         return builder.buildPackage();
     }

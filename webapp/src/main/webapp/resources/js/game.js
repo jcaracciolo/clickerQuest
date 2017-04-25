@@ -94,11 +94,18 @@ function buyFactory(id){
     $.post(contextPath + "/" + userId + "/buyFactory",
         {
             factoryId: id
-        }, function(data) {
-            console.log(data)
-            window.location.reload()
-        });
+        }, function(data) { window.location.reload() });
 }
+
+// Upgrade listener
+$.each($(".upgradeButton"),function (i,element) {
+    element.addEventListener("click", function () {
+        $.post(contextPath + "/" + userId + "/upgradeFactory",
+            {
+                factoryId: $("#"+element.id).data("factoryid")
+            }, function(data) { window.location.reload() });
+    })
+});
 
 function abbreviateNumber(value,decimals) {
     var newValue = value;

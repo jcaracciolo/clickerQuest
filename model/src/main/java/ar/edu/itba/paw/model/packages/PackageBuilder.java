@@ -25,9 +25,9 @@ public class PackageBuilder<T extends ResourcePackage> {
 
     public PackageBuilder<T> putItem(ResourceType resource, Double amount){
         if(!validator.validates(amount)) {
-            throw new RuntimeException("Validator invalid");
+            throw new RuntimeException("Validator invalid " + amount);
         }else if(resources.containsKey(resource)) {
-            throw new RuntimeException("Key already put");
+            throw new RuntimeException("Key already put " + resource);
         } else {
             resources.put(resource,amount);
             return this;

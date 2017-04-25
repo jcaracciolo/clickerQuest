@@ -4,11 +4,11 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
 <%--<jsp:useBean id="user" type="ar.edu.itba.paw.model.User"/>--%>
-<%--<jsp:useBean id="storage" type="ar.edu.itba.paw.model.packagesntations.FactoriesProduction"/>--%>
-<%--<jsp:useBean id="storage" type="ar.edu.itba.paw.model.packagesntations.FactoryCost"/>--%>
-<%--<jsp:useBean id="storage" type="ar.edu.itba.paw.model.packagesntations.Productions"/>--%>
-<%--<jsp:useBean id="storage" type="ar.edu.itba.paw.model.packagesntations.BaseRecipe"/>--%>
-<%--<jsp:useBean id="storage" type="ar.edu.itba.paw.model.packagesntations.Storage"/>--%>
+<%--<jsp:useBean id="storage" type="ar.edu.itba.paw.model.packages.Implementations.FactoriesProduction"/>--%>
+<%--<jsp:useBean id="storage" type="ar.edu.itba.paw.model.packages.Implementations.FactoryCost"/>--%>
+<%--<jsp:useBean id="storage" type="ar.edu.itba.paw.model.packages.Implementations.Productions"/>--%>
+<%--<jsp:useBean id="storage" type="ar.edu.itba.paw.model.packages.Implementations.BaseRecipe"/>--%>
+<%--<jsp:useBean id="storage" type="ar.edu.itba.paw.model.packages.Implementations.Storage"/>--%>
 <%--<jsp:useBean id="factory" type="ar.edu.itba.paw.model.Factory"/>--%>
 
 <!DOCTYPE html>
@@ -77,12 +77,9 @@
                             <h8 class="centered-text"><spring:message code="${factory.type.nameCode}"/></h8>
                             <p><spring:message code="game.consuming"/></p>
                             <c:set var="factoriesProduction" value="${factory.factoriesProduction}"/>
-                            <c:set var="inputMap" value="${factoriesProduction.formattedInputs}"/>
-                            <c:forEach items="${factoriesProduction.resources}" var="res">
-                                <%-- TODO: arreglar esto que es asqueroso:--%>
-                                <c:if test="${inputMap.get(res).toString().split('/')[0] > 0}">
-                                    <p class="centered-text"><c:out value="${inputMap.get(res)} ${res}"/></p>
-                                </c:if>
+                            <c:set var="inputMap" value="${factoriesProduction.inputs}"/>
+                            <c:forEach items="${inputMap.keySet()}" var="res">
+                                <p class="centered-text"><fmt:formatNumber pattern="#.##/s " value="${inputMap.get(res)}"/><spring:message code="${res.nameCode}"/></p>
                             </c:forEach>
                             <div class="card-image">
                                 <img class="factory-image" src="<c:url value="/resources/factory_images/${factory.getImage()}"/>"/>
@@ -90,19 +87,17 @@
                             <p id="factoryCant${factory.getType().getId()}" class="centered-text">
                                 <spring:message code="game.amount"/> <fmt:formatNumber value="${factory.amount}" pattern="#" minFractionDigits="0" maxFractionDigits="0"/></p>
                             <p><spring:message code="game.producing"/></p>
-                            <c:set var="outputMap" value="${factoriesProduction.formattedOutputs}"/>
-                            <c:forEach items="${factoriesProduction.resources}" var="res">
-                                <c:if test="${outputMap.get(res) != null}">
-                                    <p class="centered-text"><c:out value="${outputMap.get(res)} ${res}"/></p>
-                                </c:if>
+                            <c:set var="outputMap" value="${factoriesProduction.getOutputs()}"/>
+                            <c:forEach items="${outputMap.keySet()}" var="res">
+                                <p class="centered-text"><fmt:formatNumber pattern="#.##/s " value="${outputMap.get(res)}"/><spring:message code="${res.nameCode}"/></p>
                             </c:forEach>
                         </div>
                     </div>
                 </div>
             </c:if>
             <c:if test="${loop.index % 4 == 0 && loop.index != 0}">
-        </div>
-        <div class="row factory-row">
+                </div>
+                <div class="row factory-row">
             </c:if>
             </c:forEach>
         </div>
@@ -119,7 +114,7 @@
                         <div class="factory-card-container">
                             <div id="factoryDisabler${factory.getType()}" class="box black canBuy"></div>
                             <div class="row factory-card">
-                                <div id="buy${factory.getType()}" data-factoryid="${factory.getType().getId()}" class="buyFactory col s4 offset-s1 buyFactorySection">
+                                <div id="buy${factory.getType()}" data-factoryid="${factory.getType().getId()}" class="buyFactory col s4 buyFactorySection">
                                     <div class="card-image factory-icon">
                                         <p class="center-align"><spring:message code="${factory.type.nameCode}"/></p>
                                         <img src="<c:url value="/resources/factory_images/${factory.getImage()}"/>" alt="factory_icon"/>
@@ -129,36 +124,35 @@
                                     <div>
                                         <c:forEach items="${factoryCost.resources}" var="res">
                                             <c:set var="costMap" value="${factoryCost.getCost()}"/>
-                                            <p class="centered-text"><c:out value="${costMap.get(res)} ${res}"/></p>
+                                            <p class="centered-text"><fmt:formatNumber pattern="# " value="${costMap.get(res)}"/><spring:message code="${res.nameCode}"/></p>
                                         </c:forEach>
                                     </div>
                                 </div>
-                                <div class="col offset-s1 s4">
-                                    <c:set var="factoriesProduction" value="${factory.type.baseRecipe}"/>
-                                    <c:forEach items="${factoriesProduction.resources}" var="res">
-                                        <c:set var="inputMap" value="${factoriesProduction.getInputs()}"/>
-                                        <c:if test="${inputMap.get(res) != null}">
-                                            <p class="centered-text"><c:out value="${inputMap.get(res)} ${res}"/></p>
-                                        </c:if>
+                                <div class="col s4">
+                                    <c:set var="factoriesProduction" value="${factory.recipe}"/>
+                                    <c:set var="inputMap" value="${factoriesProduction.getInputs()}"/>
+                                    <c:forEach items="${inputMap.keySet()}" var="res">
+                                            <p class="centered-text"><fmt:formatNumber pattern="#.##/s " value="${inputMap.get(res)}"/><spring:message code="${res.nameCode}"/></p>
                                     </c:forEach>
                                     <div class="card-image col s12">
                                         <img src="<c:url value="/resources/arrow_ingredients.png"/>" alt="embudo"/>
                                     </div>
-                                    <c:forEach items="${factoriesProduction.resources}" var="res">
-                                        <c:set var="outputMap" value="${factoriesProduction.formattedOutputs}"/>
-                                        <c:if test="${outputMap.get(res) != null}">
-                                            <p class="centered-text"><c:out value="${outputMap.get(res)} ${res}"/></p>
-                                        </c:if>
+                                    <c:set var="outputMap" value="${factoriesProduction.getOutputs()}"/>
+                                    <c:forEach items="${outputMap.keySet()}" var="res">
+                                        <p class="centered-text"><fmt:formatNumber pattern="#.##/s " value="${outputMap.get(res)}"/><spring:message code="${res.nameCode}"/></p>
                                     </c:forEach>
                                 </div>
-                                    <%--<div class="col s4">--%>
-                                    <%--<button type="button" class="waves-effect waves-light upgradeButton btn">--%>
-                                    <%--<div class="card-image">--%>
-                                    <%--<img src="/resources/upgrade_icon.png" alt="upgrade_icon"/>--%>
-                                    <%--</div>--%>
-                                    <%--<p>UPGRADE</p>--%>
-                                    <%--</button>--%>
-                                    <%--</div>--%>
+                                <div class="col s4">
+                                    <c:if test="${factory.amount != 0}">
+                                        <button type="button" id="upgrade${factory.getType().getId()}" data-factoryid="${factory.getType().getId()}" class="waves-effect waves-light upgradeButton btn">
+                                            <div class="card-image">
+                                                <img src="/resources/upgrade_icon.png" alt="upgrade_icon"/>
+                                            </div>
+                                            <p class="no-margins">UPGRADE</p>
+                                            <p class="no-margins"><c:out value="${factory.getNextUpgrade().cost}"/></p>
+                                        </button>
+                                    </c:if>
+                                </div>
                             </div>
                         </div>
                         <!-- END OF FACTORY CARD -->
@@ -208,9 +202,9 @@
 
     function localizeRes(resNameCode) {
         switch (resNameCode) {
-                <c:forEach items="${storage.resources}" var="res">
-                    case '${res}': return "<spring:message code="${res.nameCode}"/>"
-                </c:forEach>
+            <c:forEach items="${storage.resources}" var="res">
+            case '${res}': return "<spring:message code="${res.nameCode}"/>"
+            </c:forEach>
         }
         return undefined
     }
