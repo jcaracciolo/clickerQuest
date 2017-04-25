@@ -8,6 +8,7 @@ public class Upgrade {
     private long level;
     private String description;
     private double cost;
+    private static final long MAX_UPGRADE_LEVEL = 10;
 
     private Upgrade(FactoryType factoryType, long level, String description, double cost) {
         this.level = level;
@@ -23,20 +24,28 @@ public class Upgrade {
 
     public Double getInputReduction(){
         long localLevel = (level+2)/3;
+        localLevel = Math.min(localLevel, MAX_UPGRADE_LEVEL);
         if(factoryType.getBaseRecipe().getInputs().isEmpty()){
             return 1D;
         }
-        return Math.max(Math.exp(-0.07*localLevel), 0.5D);
+        return Math.exp(-0.07*localLevel);
     }
 
     public Double getOutputMultiplier(){
-        long localLevel = factoryType.getBaseRecipe().getInputs().isEmpty()? (level+1)/2 : (level+1)/3;
+        long localLevel;
+        if (level > MAX_UPGRADE_LEVEL*3) {
+            localLevel = level - MAX_UPGRADE_LEVEL * 2;
+        } else {
+            localLevel = factoryType.getBaseRecipe().getInputs().isEmpty()? (level+1)/2 : (level+1)/3;
+        }
         return 1+localLevel/20D;
     }
 
     public Double getCostReduction(){
+
         long localLevel = factoryType.getBaseRecipe().getInputs().isEmpty() ? level/2 : level/3;
-        return Math.max(Math.exp(-0.07 * localLevel), 0.5D);
+        localLevel = Math.min(localLevel, MAX_UPGRADE_LEVEL);
+        return Math.exp(-0.07 * localLevel);
     }
 
     public String toString() {
