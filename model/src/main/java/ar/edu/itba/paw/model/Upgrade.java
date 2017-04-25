@@ -22,27 +22,21 @@ public class Upgrade {
     }
 
     public Double getInputReduction(){
-        if(level%3 == 0){
-            return 4D*(1-1/(level+1))/(level+1);
+        long localLevel = (level+2)/3;
+        if(factoryType.getBaseRecipe().getInputs().isEmpty()){
+            return 1D;
         }
-
-        return 1D;
+        return Math.max(Math.exp(-0.07*localLevel), 0.5D);
     }
 
     public Double getOutputMultiplier(){
-        if(level%3 == 1){
-            return 3.5 - 50D*(5-5/(level+100))/(level+100);
-        }
-
-        return 1D;
+        long localLevel = factoryType.getBaseRecipe().getInputs().isEmpty()? (level+1)/2 : (level+1)/3;
+        return 1+localLevel/20D;
     }
 
     public Double getCostReduction(){
-        if(level%3 == 2) {
-            return 4D*(1-1/(level+1))/(level+1);
-        }
-
-        return 1D;
+        long localLevel = factoryType.getBaseRecipe().getInputs().isEmpty() ? level/2 : level/3;
+        return Math.max(Math.exp(-0.07 * localLevel), 0.5D);
     }
 
     public String toString() {

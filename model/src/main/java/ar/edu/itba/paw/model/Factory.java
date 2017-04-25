@@ -79,9 +79,9 @@ public class Factory implements Comparable<Factory> {
         Upgrade newUpgrade = getNextUpgrade();
 
         return new Factory(userid,type,amount,
-                            inputReduction * newUpgrade.getInputReduction(),
-                            outputMultiplier * newUpgrade.getOutputMultiplier(),
-                            costReduction * newUpgrade.getCostReduction(),
+                            newUpgrade.getInputReduction(),
+                            newUpgrade.getOutputMultiplier(),
+                            newUpgrade.getCostReduction(),
                             level + 1
         );
     }
