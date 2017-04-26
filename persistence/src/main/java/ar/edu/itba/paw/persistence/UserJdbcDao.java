@@ -14,6 +14,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Repository
@@ -257,7 +258,11 @@ public class UserJdbcDao implements UserDao {
 
     @Override
     public Collection<Factory> getUserFactories(long userid) {
-        return jdbcTemplate.query("SELECT * FROM factories WHERE userid = ?", FACTORY_ROW_MAPPER, userid);
+        Collection<Factory> factories = jdbcTemplate.query("SELECT * FROM factories WHERE userid = ?", FACTORY_ROW_MAPPER, userid);
+        if(factories.size() < FactoryType.values().length){
+            factories = Stream.of(FactoryType.values()).map(factoryType -> getUserFactory(userid,factoryType)).collect(Collectors.toSet());
+        }
+        return factories;
     }
 
     @Override
@@ -270,7 +275,6 @@ public class UserJdbcDao implements UserDao {
             createMissingFactory(f,userid);
             list = jdbcTemplate.query("SELECT * FROM factories WHERE userid = ? AND type = ?", FACTORY_ROW_MAPPER, userid,f.getId());
             if(list.isEmpty() || list.size() > 1) {
-                assert false;
                 return null;
             } else return list.get(0);
         } else {
@@ -307,21 +311,29 @@ public class UserJdbcDao implements UserDao {
         return cal;
     }
 
-    private void createMissingFactory(FactoryType factoryType, long userId){
+    private boolean createMissingFactory(FactoryType factoryType, long userId){
+        if (findById(userId) == null) {
+            return false;
+        }
         final Factory f = new Factory(userId,factoryType, 0,
                 1,1,1,
                 0);
         jdbcInsertFactories.execute(FACTORY_REVERSE_ROW_MAPPER.toArgs(f));
         System.out.println("adding missing " + factoryType+ " for us:" + userId);
+        return true;
     }
 
-    private void createMissingResource(ResourceType resourceType, long userId){
+    private boolean createMissingResource(ResourceType resourceType, long userId){
+        if (findById(userId) == null) {
+            return false;
+        }
         final RowWealth rw = new RowWealth(userId,resourceType,
                 0,
                 resourceType.equals(ResourceType.MONEY)?13000:0,
                 Calendar.getInstance().getTimeInMillis());
         jdbcInsertWealths.execute(WEALTH_REVERSE_ROW_MAPPER.toArgs(rw));
         System.out.println("adding missing " + resourceType + " for us:" + userId);
+        return true;
     }
     //endregion
 

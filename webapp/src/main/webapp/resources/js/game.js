@@ -92,7 +92,7 @@ setInterval(function(){
 // Buy listener
 $.each($(".buyFactory"),function (i,element){
     $("#" + element.id).clickSpark({
-        particleImagePath: '/resources/star_icon.png',
+        particleImagePath: contextPath + '/resources/star_icon.png',
         particleCount: 55,
         particleSpeed: 10,
         particleSize: 12,
@@ -115,7 +115,7 @@ function buyFactory(id){
 // Upgrade listener
 $.each($(".upgradeButton"),function (i,element){
     $("#" + element.id).clickSpark({
-        particleImagePath: '/resources/star_icon.png',
+        particleImagePath: contextPath + '/resources/star_icon.png',
         particleCount: 55,
         particleSpeed: 10,
         particleSize: 12,

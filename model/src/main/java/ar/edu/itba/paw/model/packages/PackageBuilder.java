@@ -43,7 +43,7 @@ public class PackageBuilder<T extends ResourcePackage> {
         }
 
         if(!validator.validates(toAdd)) {
-            throw new RuntimeException("Validator invalid");
+            throw new RuntimeException("Validator invalid " + amount);
         }else {
             resources.put(resource, toAdd);
             return this;

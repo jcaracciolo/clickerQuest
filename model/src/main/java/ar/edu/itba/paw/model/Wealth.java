@@ -3,6 +3,8 @@ package ar.edu.itba.paw.model;
 import ar.edu.itba.paw.model.packages.Implementations.*;
 import ar.edu.itba.paw.model.packages.PackageBuilder;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Map;
 
 /**
@@ -90,7 +92,10 @@ public class Wealth {
 
         if (u.getInputReduction() != 1) {
             factoriesProduction.getInputs().forEach(
-                    (r, d) -> productionsBuilder.addItem(r, (d * (1 - u.getInputReduction())))
+                    (r, d) -> {
+                        productionsBuilder.addItem(r, - u.getInputReduction());
+                        productionsBuilder.addItem(r, (d * (1 - u.getInputReduction())));
+                    }
             );
         }
 
@@ -103,4 +108,33 @@ public class Wealth {
         return new Wealth(userid,storageBuilder.buildPackage(),productionsBuilder.buildPackage());
     }
 
+    public Wealth calculateProductions(Collection<Factory> factories) {
+        if(factories == null ){
+            return null;
+        }
+        PackageBuilder<Productions> productionsBuilder = Productions.packageBuilder();
+        Arrays.stream(ResourceType.values()).forEach((r) -> productionsBuilder.putItem(r,0D));
+        factories.stream()
+                .filter(f -> f.getAmount()>0)
+                .map(factory -> factory.getFactoriesProduction()).
+                forEach(factoriesProduction -> {
+                            factoriesProduction.getOutputs().keySet().stream().
+                                    forEach(res -> productionsBuilder.addItem(res, factoriesProduction.getOutputs().get(res)));
+                            factoriesProduction.getInputs().keySet().stream().
+                                    forEach(res -> productionsBuilder.addItem(res, -factoriesProduction.getInputs().get(res)));
+                        }
+                );
+
+        return new Wealth(userid,storage,productionsBuilder.buildPackage());
+    }
+
+    public Wealth addResource(ResourceType resource, double amount) {
+        Storage calculatedStorage = getStorage();
+        PackageBuilder<Storage> storageBuilder = Storage.packageBuilder();
+
+        calculatedStorage.rawMap().forEach(storageBuilder::putItem);
+        calculatedStorage.getLastUpdated().forEach(storageBuilder::setLastUpdated);
+        storageBuilder.addItem(resource,amount);
+        return new Wealth(userid,storageBuilder.buildPackage(),productions);
+    }
 }

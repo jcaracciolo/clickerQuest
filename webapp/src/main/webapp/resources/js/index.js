@@ -2,6 +2,7 @@
  * Created by epord on 4/11/17.
  */
 console.log("version 1.1");
+sessionStorage.removeItem("usernameReg");
 
 // play click listener
 document.getElementById("play").addEventListener("mousedown", function () {

@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.logging.Logger;
 import java.util.stream.Stream;
 
 @Service
@@ -93,8 +92,10 @@ public class UserServiceImpl implements UserService {
 
         if(factory.isUpgreadable(w)) {
             Factory newFactory = factory.upgradeResult();
-            Wealth newWealth = w.upgradeResult(factory);
-
+            factories.remove(factory);
+            factories.add(newFactory);
+            Wealth newWealth = w.calculateProductions(factories);
+            newWealth = newWealth.addResource(ResourceType.MONEY,-factory.getNextUpgrade().getCost());
             userDao.update(newFactory);
             userDao.update(newWealth);
             return true;

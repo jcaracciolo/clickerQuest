@@ -148,7 +148,7 @@
                                         <div class="upgrade-button-container">
                                             <button type="button" id="upgrade${factory.getType()}" data-factoryid="${factory.getType().getId()}" class="waves-effect waves-light upgradeButton btn">
                                                 <div class="card-image">
-                                                    <img src="/resources/upgrade_icon.png" alt="upgrade_icon"/>
+                                                    <img src="<c:url value="/resources/upgrade_icon.png"/>" alt="upgrade_icon"/>
                                                 </div>
                                                 <%--<p class="no-margins"><spring:message code="game.upgrade"/></p>--%>
                                                 <p class="no-margins"><spring:message code="game.upgrade.money"/><fmt:formatNumber pattern="#" value="${factory.getNextUpgrade().cost}"/></p>

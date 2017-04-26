@@ -92,7 +92,11 @@ public class HelloWorldController {
     @RequestMapping(value = "/{userId}/game")
     public ModelAndView mainGameView(@PathVariable long userId){
         ModelAndView mav = new ModelAndView("game");
-
+        if(userService.findById(userId) == null){
+            mav = new ModelAndView("errorPage");
+            mav.addObject("errorMsg", "404");
+            return mav;
+        }
         Set<Factory> factories = new TreeSet(userService.getUserFactories(userId));
 
         mav.addObject("user", userService.findById(userId));
@@ -115,7 +119,7 @@ public class HelloWorldController {
     }
 
     // ERRORS
-    @RequestMapping(value = "errors", method = RequestMethod.GET)
+    @RequestMapping(value = "/errors")
     public ModelAndView renderErrorPage(HttpServletRequest httpRequest) {
 
         ModelAndView errorPage = new ModelAndView("errorPage");
