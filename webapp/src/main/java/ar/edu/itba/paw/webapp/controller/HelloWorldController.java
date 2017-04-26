@@ -5,6 +5,8 @@ import ar.edu.itba.paw.model.Factory;
 import ar.edu.itba.paw.model.FactoryType;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.webapp.form.UserForm;
+import com.sun.javafx.sg.prism.NGShape;
+import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -68,7 +70,7 @@ public class HelloWorldController {
     public ModelAndView createPOST(@Valid @ModelAttribute("registerForm") final UserForm form, final BindingResult errors) {
         if (errors.hasErrors()) {
             logger.error("Error at POST /create", new Exception("LOGGER found an error!"));
-            return index(form);
+            return new ModelAndView("redirect:/create");
         }
 
         int imageID = Math.abs(new Random().nextInt() % 11);
@@ -78,7 +80,9 @@ public class HelloWorldController {
             //TODO Correct error handling
             // First approach on error handling:
             logger.error("User is null", new Exception("LOGGER found an error!"));
-            return new ModelAndView("redirect:/create");
+            ModelAndView modelAndView = new ModelAndView("redirect:/create");
+            modelAndView.addObject("error","userAlreadyInUse");
+            return modelAndView;
         } else {
             if(logger.isDebugEnabled()) logger.debug("LOGGER: POST /create is successful");
             return new ModelAndView("redirect:/" + u.getId() + "/game");

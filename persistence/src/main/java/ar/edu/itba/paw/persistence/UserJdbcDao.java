@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.util.*;
+import java.util.logging.Logger;
 
 /**
  * Created by juanfra on 23/03/17.
@@ -141,18 +142,18 @@ public class UserJdbcDao implements UserDao {
         }
 
 
-        for (FactoryType type: FactoryType.values()){
-            final Factory f = new Factory(userId.longValue(),type,
-                    type.equals(FactoryType.PEOPLE_RECRUITING_BASE)?1:0,
-                    1,1,1,
-                    0);
-            jdbcInsertFactories.execute(FACTORY_REVERSE_ROW_MAPPER.toArgs(f));
-        }
+//        for (FactoryType type: FactoryType.values()){
+//            final Factory f = new Factory(userId.longValue(),type,
+//                    type.equals(FactoryType.PEOPLE_RECRUITING_BASE)?1:0,
+//                    1,1,1,
+//                    0);
+//            jdbcInsertFactories.execute(FACTORY_REVERSE_ROW_MAPPER.toArgs(f));
+//        }
 
         for (ResourceType rt: ResourceType.values()) {
             final RowWealth rw = new RowWealth(userId.longValue(),rt,
-                    rt.equals(ResourceType.PEOPLE)?0.3D:0,
-                    rt.equals(ResourceType.MONEY)?10000:0,
+                    0,
+                    rt.equals(ResourceType.MONEY)?12000:0,
                     Calendar.getInstance().getTimeInMillis());
             jdbcInsertWealths.execute(WEALTH_REVERSE_ROW_MAPPER.toArgs(rw));
         }
@@ -266,9 +267,14 @@ public class UserJdbcDao implements UserDao {
         List<Factory> list =
                 jdbcTemplate.query("SELECT * FROM factories WHERE userid = ? AND type = ?", FACTORY_ROW_MAPPER, userid,f.getId());
 
-        if(list.isEmpty() || list.size() > 1) {
+        if(list.isEmpty()) {
             // TODO log this
-            return null;
+            createMissingFactory(f,userid);
+            list = jdbcTemplate.query("SELECT * FROM factories WHERE userid = ? AND type = ?", FACTORY_ROW_MAPPER, userid,f.getId());
+            if(list.isEmpty() || list.size() > 1) {
+                assert false;
+                return null;
+            } else return list.get(0);
         } else {
             return list.get(0);
         }
@@ -293,6 +299,13 @@ public class UserJdbcDao implements UserDao {
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(milis);
         return cal;
+    }
+
+    private void createMissingFactory(FactoryType factoryType, long userId){
+            final Factory f = new Factory(userId,factoryType, 0,
+                    1,1,1,
+                    0);
+            jdbcInsertFactories.execute(FACTORY_REVERSE_ROW_MAPPER.toArgs(f));
     }
     //endregion
 }
