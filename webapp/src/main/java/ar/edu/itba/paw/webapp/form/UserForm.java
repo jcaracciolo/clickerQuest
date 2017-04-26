@@ -36,8 +36,8 @@ public class UserForm {
     private final static int  minPassLenght = 4;
     private final static int  maxPassLenght = 30;
 
-    private final static String  usernameRegex = "[a-zA-Z0-9]+";
-    private final static String  passRegex = "[a-zA-Z0-9]+";
+    private final static String  usernameRegex = "^[a-zA-Z0-9]+$";
+    private final static String  passRegex = "^[a-zA-Z0-9]+$";
 
 
     @Size(min = minUsernameLenght , max = maxUsernameLenght)

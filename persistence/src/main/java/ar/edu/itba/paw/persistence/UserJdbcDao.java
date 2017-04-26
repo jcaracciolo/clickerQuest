@@ -5,6 +5,7 @@ import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.model.packages.Implementations.Productions;
 import ar.edu.itba.paw.model.packages.Implementations.Storage;
 import ar.edu.itba.paw.model.packages.PackageBuilder;
+import org.omg.CORBA.INTERNAL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -13,10 +14,8 @@ import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.util.*;
+import java.util.stream.Stream;
 
-/**
- * Created by juanfra on 23/03/17.
- */
 @Repository
 public class UserJdbcDao implements UserDao {
 
@@ -141,21 +140,21 @@ public class UserJdbcDao implements UserDao {
         }
 
 
-        for (FactoryType type: FactoryType.values()){
-            final Factory f = new Factory(userId.longValue(),type,
-                    type.equals(FactoryType.PEOPLE_RECRUITING_BASE)?1:0,
-                    1,1,1,
-                    0);
-            jdbcInsertFactories.execute(FACTORY_REVERSE_ROW_MAPPER.toArgs(f));
-        }
+//        for (FactoryType type: FactoryType.values()){
+//            final Factory f = new Factory(userId.longValue(),type,
+//                    type.equals(FactoryType.PEOPLE_RECRUITING_BASE)?1:0,
+//                    1,1,1,
+//                    0);
+//            jdbcInsertFactories.execute(FACTORY_REVERSE_ROW_MAPPER.toArgs(f));
+//        }
 
-        for (ResourceType rt: ResourceType.values()) {
-            final RowWealth rw = new RowWealth(userId.longValue(),rt,
-                    rt.equals(ResourceType.PEOPLE)?0.3D:0,
-                    rt.equals(ResourceType.MONEY)?10000:0,
-                    Calendar.getInstance().getTimeInMillis());
-            jdbcInsertWealths.execute(WEALTH_REVERSE_ROW_MAPPER.toArgs(rw));
-        }
+//        for (ResourceType rt: ResourceType.values()) {
+//            final RowWealth rw = new RowWealth(userId.longValue(),rt,
+//                    0,
+//                    rt.equals(ResourceType.MONEY)?12000:0,
+//                    Calendar.getInstance().getTimeInMillis());
+//            jdbcInsertWealths.execute(WEALTH_REVERSE_ROW_MAPPER.toArgs(rw));
+//        }
 
         return new User(userId.longValue(), username,password,img);
     }
@@ -266,21 +265,23 @@ public class UserJdbcDao implements UserDao {
         List<Factory> list =
                 jdbcTemplate.query("SELECT * FROM factories WHERE userid = ? AND type = ?", FACTORY_ROW_MAPPER, userid,f.getId());
 
-        if(list.isEmpty() || list.size() > 1) {
+        if(list.isEmpty()) {
             // TODO log this
-            return null;
+            createMissingFactory(f,userid);
+            list = jdbcTemplate.query("SELECT * FROM factories WHERE userid = ? AND type = ?", FACTORY_ROW_MAPPER, userid,f.getId());
+            if(list.isEmpty() || list.size() > 1) {
+                assert false;
+                return null;
+            } else return list.get(0);
         } else {
             return list.get(0);
         }
     }
 
-
-    @Override
-    public Wealth getUserWealth(long userid) {
+    private Wealth getFinalUserWealth(long userid) {
         final List<RowWealth> list = jdbcTemplate.query("SELECT * FROM wealths WHERE userid = ?", WEALTH_ROW_MAPPER, userid);
         PackageBuilder<Storage> storage = Storage.packageBuilder();
         PackageBuilder<Productions> productions = Productions.packageBuilder();
-
         for (RowWealth rw: list) {
             storage.putItemWithDate(rw.resourceType,rw.storage,toCalendar(rw.lastUpdated));
             productions.putItem(rw.resourceType,rw.production);
@@ -289,10 +290,39 @@ public class UserJdbcDao implements UserDao {
         return new Wealth(userid,storage.buildPackage(),productions.buildPackage());
     }
 
+    @Override
+    public Wealth getUserWealth(long userid) {
+        final List<RowWealth> list = jdbcTemplate.query("SELECT * FROM wealths WHERE userid = ?", WEALTH_ROW_MAPPER, userid);
+        if(list.size()< ResourceType.values().length){
+            Stream.of(ResourceType.values()).filter(
+                    resType -> list.stream().noneMatch(rw -> rw.resourceType == resType))
+                    .forEach(resType -> createMissingResource(resType,userid));
+        }
+        return getFinalUserWealth(userid);
+    }
+
     private static Calendar toCalendar(long milis){
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(milis);
         return cal;
     }
+
+    private void createMissingFactory(FactoryType factoryType, long userId){
+        final Factory f = new Factory(userId,factoryType, 0,
+                1,1,1,
+                0);
+        jdbcInsertFactories.execute(FACTORY_REVERSE_ROW_MAPPER.toArgs(f));
+        System.out.println("adding missing " + factoryType+ " for us:" + userId);
+    }
+
+    private void createMissingResource(ResourceType resourceType, long userId){
+        final RowWealth rw = new RowWealth(userId,resourceType,
+                0,
+                resourceType.equals(ResourceType.MONEY)?13000:0,
+                Calendar.getInstance().getTimeInMillis());
+        jdbcInsertWealths.execute(WEALTH_REVERSE_ROW_MAPPER.toArgs(rw));
+        System.out.println("adding missing " + resourceType + " for us:" + userId);
+    }
     //endregion
+
 }

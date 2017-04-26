@@ -8,20 +8,14 @@ document.getElementById("play").addEventListener("mousedown", function () {
     this.src = contextPath + "/resources/play_button_pressed.png"
 
 });
-document.getElementById("play").addEventListener("mouseup", function () {
-    var username = document.getElementById("usernameInput").value;
-    console.log("user: " + username);
-    this.src = contextPath + "/resources/play_button.png"
-    this.src = "/resources/play_button.png"
-    sessionStorage.user = username;
+document.getElementById("play").addEventListener("mouseup", tryLogIn);
 
-    window.location = contextPath + "/startGame?username=" + username
-    // $.get("/startGame",
-    //     {
-    //         username: username
-    //     }, function(data, status) { this.src = "/resources/play_button.png" });
+$('#usernameInput').on('keydown', function(e) {
+    if (e.which == 13) {
+        e.preventDefault();
+        tryLogIn();
+    }
 });
-
 // register listeners
 document.getElementById("register").addEventListener("mouseover", function() {
    this.classList.add("mouseOver")
@@ -33,6 +27,20 @@ document.getElementById("register").addEventListener("mouseout", function() {
 document.getElementById("register").addEventListener("click", function() {
     window.location = contextPath + "/create"
 });
+
+function tryLogIn(){
+    var username = document.getElementById("usernameInput").value;
+    console.log("user: " + username);
+    this.src = contextPath + "/resources/play_button.png"
+    this.src = "/resources/play_button.png"
+    sessionStorage.user = username;
+
+    window.location = contextPath + "/startGame?username=" + username
+    // $.get("/startGame",
+    //     {
+    //         username: username
+    //     }, function(data, status) { this.src = "/resources/play_button.png" });
+}
 
 function appendError(elem, msg) {
     var volatileId = "error" + Math.floor(Math.random() * 1000000);
