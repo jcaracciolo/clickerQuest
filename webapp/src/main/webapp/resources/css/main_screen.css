@@ -16,12 +16,30 @@ p.no-padding {
 	padding: 0;
 }
 
-div.box.black {
+div.col.button-container {
+	position: relative;
+	padding: 0;
+}
+
+div.upgrade-button-container{
+	padding: 0.8rem;
+}
+
+div.box.black.upgradeDisability {
 	position: absolute;
 	width: 100%;
 	height: 100%;
 	color: black;
-	opacity: 0.2;
+	opacity: 0.25;
+	z-index: 2;
+}
+
+div.box.black.buyDisability {
+	position: absolute;
+	width: 33%;
+	height: 100%;
+	color: black;
+	opacity: 0.25;
 	z-index: 2;
 }
 

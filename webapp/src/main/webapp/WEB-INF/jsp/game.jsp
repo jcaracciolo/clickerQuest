@@ -112,7 +112,7 @@
                     <div class="section">
                         <!-- BEGINING OF FACTORY CARD -->
                         <div class="factory-card-container">
-                            <div id="factoryDisabler${factory.getType()}" class="box black canBuy"></div>
+                            <div id="factoryDisabler${factory.getType()}" class="box black buyDisability canBuy"></div>
                             <div class="row factory-card">
                                 <div id="buy${factory.getType()}" data-factoryid="${factory.getType().getId()}" class="buyFactory col s4 buyFactorySection">
                                     <div class="card-image factory-icon">
@@ -142,15 +142,18 @@
                                         <p class="centered-text"><fmt:formatNumber pattern="#.##/s " value="${outputMap.get(res)}"/><spring:message code="${res.nameCode}"/></p>
                                     </c:forEach>
                                 </div>
-                                <div class="col s4">
+                                <div class="col s4 button-container">
+                                    <div id="upgradeDisabler${factory.getType()}" class="box black upgradeDisability canBuy"></div>
                                     <c:if test="${factory.amount != 0}">
-                                        <button type="button" id="upgrade${factory.getType().getId()}" data-factoryid="${factory.getType().getId()}" class="waves-effect waves-light upgradeButton btn">
-                                            <div class="card-image">
-                                                <img src="/resources/upgrade_icon.png" alt="upgrade_icon"/>
-                                            </div>
-                                            <p class="no-margins">UPGRADE</p>
-                                            <p class="no-margins"><c:out value="${factory.getNextUpgrade().cost}"/></p>
-                                        </button>
+                                        <div class="upgrade-button-container">
+                                            <button type="button" id="upgrade${factory.getType()}" data-factoryid="${factory.getType().getId()}" class="waves-effect waves-light upgradeButton btn">
+                                                <div class="card-image">
+                                                    <img src="/resources/upgrade_icon.png" alt="upgrade_icon"/>
+                                                </div>
+                                                <%--<p class="no-margins"><spring:message code="game.upgrade"/></p>--%>
+                                                <p class="no-margins"><spring:message code="game.upgrade.money"/><fmt:formatNumber pattern="#" value="${factory.getNextUpgrade().cost}"/></p>
+                                            </button>
+                                        </div>
                                     </c:if>
                                 </div>
                             </div>
@@ -188,8 +191,14 @@
         "${resource}" : ${cost.getValue(resource)},
         </c:forEach>
     },</c:forEach>
-
     };
+
+    upgradesCost = { // factoryId -> cost
+    <c:forEach items="${factories}" var="factory">
+        "${factory.type}" : ${factory.getNextUpgrade().cost},
+    </c:forEach>
+    };
+
     factoriesRecipe = { // factoryId -> (resource -> rate)
     <c:forEach items="${factories}" var="factory">
     ${factory.type} : {

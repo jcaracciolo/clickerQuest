@@ -12,6 +12,7 @@ sessionStorage.removeItem("user");
 refreshValues(false);
 refreshView();
 refreshFactoriesBuyability();
+refreshUpgradesBuyability();
 
 function refreshValues(update){
     Object.keys(storagesMap).forEach(function (key,value) {
@@ -36,6 +37,19 @@ function refreshView() {
         element = productionValues.eq(i);
         res = element.data("resource");
         element.text(localizeRes(res)  + " " + String(abbreviateNumber(productionsMap[res], true)) + unitPerSec)
+    }
+}
+
+function refreshUpgradesBuyability() {
+    var notBuyable= []
+    var availableMoney = storagesMap["MONEY"]
+    for (factId in upgradesCost) {
+        if (upgradesCost[factId] > availableMoney) {
+            document.getElementById("upgradeDisabler" + factId).classList.remove("canBuy");
+        } else {
+            document.getElementById("upgradeDisabler" + factId).classList.remove("canBuy");
+            document.getElementById("upgradeDisabler" + factId).classList.add("canBuy");
+        }
     }
 }
 
@@ -71,23 +85,24 @@ setInterval(function(){
     refreshValues(true);
     refreshView();
     refreshFactoriesBuyability();
+    refreshUpgradesBuyability();
 }, 1000);
 
 
 // Buy listener
-        $.each($(".buyFactory"),function (i,element){
-            $("#" + element.id).clickSpark({
-                particleImagePath: '/resources/star_icon.png',
-                particleCount: 55,
-                particleSpeed: 10,
-                particleSize: 12,
-                particleRotationSpeed: 20,
-                animationType:'explosion',
-                callback: function() {
-                    buyFactory($("#"+element.id).data("factoryid"))
-                }
-        })
-    });
+$.each($(".buyFactory"),function (i,element){
+    $("#" + element.id).clickSpark({
+        particleImagePath: '/resources/star_icon.png',
+        particleCount: 55,
+        particleSpeed: 10,
+        particleSize: 12,
+        particleRotationSpeed: 20,
+        animationType:'explosion',
+        callback: function() {
+            buyFactory($("#"+element.id).data("factoryid"))
+        }
+    })
+});
 
 
 function buyFactory(id){
@@ -98,14 +113,26 @@ function buyFactory(id){
 }
 
 // Upgrade listener
-$.each($(".upgradeButton"),function (i,element) {
-    element.addEventListener("click", function () {
-        $.post(contextPath + "/" + userId + "/upgradeFactory",
-            {
-                factoryId: $("#"+element.id).data("factoryid")
-            }, function(data) { window.location.reload() });
+$.each($(".upgradeButton"),function (i,element){
+    $("#" + element.id).clickSpark({
+        particleImagePath: '/resources/star_icon.png',
+        particleCount: 55,
+        particleSpeed: 10,
+        particleSize: 12,
+        particleRotationSpeed: 20,
+        animationType:'explosion',
+        callback: function() {
+            upgradeFactory($("#"+element.id).data("factoryid"))
+        }
     })
 });
+
+function upgradeFactory(factId) {
+    $.post(contextPath + "/" + userId + "/upgradeFactory",
+        {
+            factoryId: factId //$("#"+element.id).data("factoryid")
+        }, function(data) { window.location.reload() });
+}
 
 function abbreviateNumber(value,decimals) {
     var newValue = value;
