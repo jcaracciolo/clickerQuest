@@ -5,6 +5,7 @@ import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.model.packages.Implementations.Productions;
 import ar.edu.itba.paw.model.packages.Implementations.Storage;
 import ar.edu.itba.paw.model.packages.PackageBuilder;
+import org.omg.CORBA.INTERNAL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -13,11 +14,8 @@ import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.util.*;
-import java.util.logging.Logger;
+import java.util.stream.Stream;
 
-/**
- * Created by juanfra on 23/03/17.
- */
 @Repository
 public class UserJdbcDao implements UserDao {
 
@@ -150,13 +148,13 @@ public class UserJdbcDao implements UserDao {
 //            jdbcInsertFactories.execute(FACTORY_REVERSE_ROW_MAPPER.toArgs(f));
 //        }
 
-        for (ResourceType rt: ResourceType.values()) {
-            final RowWealth rw = new RowWealth(userId.longValue(),rt,
-                    0,
-                    rt.equals(ResourceType.MONEY)?12000:0,
-                    Calendar.getInstance().getTimeInMillis());
-            jdbcInsertWealths.execute(WEALTH_REVERSE_ROW_MAPPER.toArgs(rw));
-        }
+//        for (ResourceType rt: ResourceType.values()) {
+//            final RowWealth rw = new RowWealth(userId.longValue(),rt,
+//                    0,
+//                    rt.equals(ResourceType.MONEY)?12000:0,
+//                    Calendar.getInstance().getTimeInMillis());
+//            jdbcInsertWealths.execute(WEALTH_REVERSE_ROW_MAPPER.toArgs(rw));
+//        }
 
         return new User(userId.longValue(), username,password,img);
     }
@@ -280,19 +278,27 @@ public class UserJdbcDao implements UserDao {
         }
     }
 
-
-    @Override
-    public Wealth getUserWealth(long userid) {
+    private Wealth getFinalUserWealth(long userid) {
         final List<RowWealth> list = jdbcTemplate.query("SELECT * FROM wealths WHERE userid = ?", WEALTH_ROW_MAPPER, userid);
         PackageBuilder<Storage> storage = Storage.packageBuilder();
         PackageBuilder<Productions> productions = Productions.packageBuilder();
-
         for (RowWealth rw: list) {
             storage.putItemWithDate(rw.resourceType,rw.storage,toCalendar(rw.lastUpdated));
             productions.putItem(rw.resourceType,rw.production);
         }
 
         return new Wealth(userid,storage.buildPackage(),productions.buildPackage());
+    }
+
+    @Override
+    public Wealth getUserWealth(long userid) {
+        final List<RowWealth> list = jdbcTemplate.query("SELECT * FROM wealths WHERE userid = ?", WEALTH_ROW_MAPPER, userid);
+        if(list.size()< ResourceType.values().length){
+            Stream.of(ResourceType.values()).filter(
+                    resType -> list.stream().noneMatch(rw -> rw.resourceType == resType))
+                    .forEach(resType -> createMissingResource(resType,userid));
+        }
+        return getFinalUserWealth(userid);
     }
 
     private static Calendar toCalendar(long milis){
@@ -302,10 +308,21 @@ public class UserJdbcDao implements UserDao {
     }
 
     private void createMissingFactory(FactoryType factoryType, long userId){
-            final Factory f = new Factory(userId,factoryType, 0,
-                    1,1,1,
-                    0);
-            jdbcInsertFactories.execute(FACTORY_REVERSE_ROW_MAPPER.toArgs(f));
+        final Factory f = new Factory(userId,factoryType, 0,
+                1,1,1,
+                0);
+        jdbcInsertFactories.execute(FACTORY_REVERSE_ROW_MAPPER.toArgs(f));
+        System.out.println("adding missing " + factoryType+ " for us:" + userId);
+    }
+
+    private void createMissingResource(ResourceType resourceType, long userId){
+        final RowWealth rw = new RowWealth(userId,resourceType,
+                0,
+                resourceType.equals(ResourceType.MONEY)?13000:0,
+                Calendar.getInstance().getTimeInMillis());
+        jdbcInsertWealths.execute(WEALTH_REVERSE_ROW_MAPPER.toArgs(rw));
+        System.out.println("adding missing " + resourceType + " for us:" + userId);
     }
     //endregion
+
 }

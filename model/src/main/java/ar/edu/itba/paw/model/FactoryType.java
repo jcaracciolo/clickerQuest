@@ -103,6 +103,22 @@ public enum FactoryType {
             recipeBuilder.putItem(ResourceType.POWER,1D);
             return recipeBuilder.buildPackage();
         }},
+
+    CIRCUIT_MAKER_BASE(7,"circuit-maker-base"){
+        public BaseCost getBaseCost(){
+            PackageBuilder<BaseCost> costBuilder = BaseCost.packageBuilder();
+            costBuilder.putItem(ResourceType.PEOPLE,250D);
+            costBuilder.putItem(ResourceType.IRON,1000D);
+            costBuilder.putItem(ResourceType.COPPER_CABLE,500D);
+            return costBuilder.buildPackage();
+        }
+        public BaseRecipe getBaseRecipe() {
+            PackageBuilder<BaseRecipe> recipeBuilder = BaseRecipe.packageBuilder();
+            recipeBuilder.putItem(ResourceType.POWER,-100D);
+            recipeBuilder.putItem(ResourceType.COPPER_CABLE,-5D);
+            recipeBuilder.putItem(ResourceType.CIRCUITS,2D);
+            return recipeBuilder.buildPackage();
+        }},
     ;
 
     private int id;

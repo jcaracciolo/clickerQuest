@@ -6,6 +6,7 @@ import java.util.Arrays;
  * Created by juanfra on 31/03/17.
  */
 public enum ResourceType {
+    CIRCUITS(12,"circuit-type"),
     CARDBOARD(11,"cardboard-type"),
     COPPER_CABLE(10,"copper-cable-type"),
     COPPER(9,"copper-type"),
