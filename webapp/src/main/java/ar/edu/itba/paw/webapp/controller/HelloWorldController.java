@@ -5,8 +5,6 @@ import ar.edu.itba.paw.model.Factory;
 import ar.edu.itba.paw.model.FactoryType;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.webapp.form.UserForm;
-import com.sun.javafx.sg.prism.NGShape;
-import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -17,6 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import org.apache.log4j.Logger;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.Random;
 import java.util.Set;
@@ -89,8 +88,6 @@ public class HelloWorldController {
         }
     }
 
-
-
     // GAME
     @RequestMapping(value = "/{userId}/game")
     public ModelAndView mainGameView(@PathVariable long userId){
@@ -115,5 +112,40 @@ public class HelloWorldController {
     public ModelAndView upgradeFactory(@PathVariable long userId, @RequestParam("factoryId") final int factoryId){
         userService.purchaseUpgrade(userId, FactoryType.fromId(factoryId));
         return new ModelAndView("redirect:/" + userId + "/game");
+    }
+
+    // ERRORS
+    @RequestMapping(value = "errors", method = RequestMethod.GET)
+    public ModelAndView renderErrorPage(HttpServletRequest httpRequest) {
+
+        ModelAndView errorPage = new ModelAndView("errorPage");
+        String errorMsg = "";
+        int httpErrorCode = getErrorCode(httpRequest);
+
+        switch (httpErrorCode) {
+            case 400: {
+                errorMsg = "400"; // Bad Request
+                break;
+            }
+            case 401: {
+                errorMsg = "401"; // Unauthorized
+                break;
+            }
+            case 404: {
+                errorMsg = "404"; // Not Found
+                break;
+            }
+            case 500: {
+                errorMsg = "500";   // Server Error
+                break;
+            }
+        }
+        errorPage.addObject("errorMsg", errorMsg);
+        return errorPage;
+    }
+
+    private int getErrorCode(HttpServletRequest httpRequest) {
+        return (Integer) httpRequest
+                .getAttribute("javax.servlet.error.status_code");
     }
 }
