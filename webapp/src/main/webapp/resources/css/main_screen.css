@@ -4,6 +4,10 @@
 	padding: 0;
 }
 
+body {
+	overflow: hidden;
+}
+
 div.factory-card-container {
 	position: relative;
 }
@@ -47,9 +51,9 @@ div.box.black.canBuy {
 	display: none;
 }
 
-.complete-height.card {
-	/*height: 100vh;  --> this makes the non-scrollable (in the future...)*/
-	min-height: 100vh;
+.scrollable-y {
+	overflow-y: auto;
+	height: 100vh;
 	margin: 0;
 }
 

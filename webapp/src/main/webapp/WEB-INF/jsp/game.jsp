@@ -30,7 +30,7 @@
 <div class="row main-frame">
     <!-- LEFT PANEL -->
     <div class="col no-padding s2">
-        <div class="complete-height card indigo darken-1">
+        <div class="scrollable-y card indigo darken-1">
             <div class="card-content white-text">
                 <span class="card-title"><spring:message code="game.profile"/></span>
                 <div class="section">
@@ -66,7 +66,7 @@
         </div>
     </div>
     <!-- CENTER PANEL -->
-    <div class="col no-padding s7">
+    <div class="scrollable-y col no-padding s7">
         <!-- FIRST ROW -->
         <div class="row factory-row">
             <c:forEach items="${factories}" var="factory" varStatus="loop">
@@ -104,7 +104,7 @@
     </div>
     <!-- RIGHT PANEL -->
     <div class="col no-padding s3">
-        <div class="complete-height card indigo darken-1">
+        <div class="scrollable-y card indigo darken-1">
             <div class="card-content white-text">
                 <span class="card-title"><spring:message code="game.factories"/></span>
                 <c:forEach items="${factories}" var="factory" varStatus="loop">
