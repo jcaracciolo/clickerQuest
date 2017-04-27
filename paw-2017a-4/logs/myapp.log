@@ -692,3 +692,93 @@ java.lang.Exception: LOGGER found an error!
 2017-04-26 19:35:40 INFO  DispatcherServlet:507 - FrameworkServlet 'dispatcher': initialization completed in 20 ms
 2017-04-26 19:35:50 WARN  PageNotFound:1136 - No mapping found for HTTP request with URI [/favicon.ico] in DispatcherServlet with name 'dispatcher'
 2017-04-26 19:35:50 WARN  PageNotFound:1136 - No mapping found for HTTP request with URI [/favicon.ico] in DispatcherServlet with name 'dispatcher'
+2017-04-26 23:19:22 INFO  ContextLoader:305 - Root WebApplicationContext: initialization started
+2017-04-26 23:19:22 INFO  AnnotationConfigWebApplicationContext:578 - Refreshing Root WebApplicationContext: startup date [Wed Apr 26 23:19:22 ART 2017]; root of context hierarchy
+2017-04-26 23:19:22 INFO  AnnotationConfigWebApplicationContext:227 - Successfully resolved class for [ar.edu.itba.paw.webapp.config.WebConfig]
+2017-04-26 23:19:22 INFO  AnnotationConfigWebApplicationContext:227 - Successfully resolved class for [ar.edu.itba.paw.webapp.config.ResourceHandler]
+2017-04-26 23:19:23 INFO  RequestMappingHandlerMapping:534 - Mapped "{[/startGame],methods=[GET]}" onto public org.springframework.web.servlet.ModelAndView ar.edu.itba.paw.webapp.controller.HelloWorldController.startGamePOST(java.lang.String)
+2017-04-26 23:19:23 INFO  RequestMappingHandlerMapping:534 - Mapped "{[/register]}" onto public org.springframework.web.servlet.ModelAndView ar.edu.itba.paw.webapp.controller.HelloWorldController.registerPOST()
+2017-04-26 23:19:23 INFO  RequestMappingHandlerMapping:534 - Mapped "{[/create],methods=[GET]}" onto public org.springframework.web.servlet.ModelAndView ar.edu.itba.paw.webapp.controller.HelloWorldController.createGET(ar.edu.itba.paw.webapp.form.UserForm,org.springframework.validation.BindingResult)
+2017-04-26 23:19:23 INFO  RequestMappingHandlerMapping:534 - Mapped "{[/create],methods=[POST]}" onto public org.springframework.web.servlet.ModelAndView ar.edu.itba.paw.webapp.controller.HelloWorldController.createPOST(ar.edu.itba.paw.webapp.form.UserForm,org.springframework.validation.BindingResult)
+2017-04-26 23:19:23 INFO  RequestMappingHandlerMapping:534 - Mapped "{[/{userId}/game]}" onto public org.springframework.web.servlet.ModelAndView ar.edu.itba.paw.webapp.controller.HelloWorldController.mainGameView(long)
+2017-04-26 23:19:23 INFO  RequestMappingHandlerMapping:534 - Mapped "{[/{userId}/buyFactory]}" onto public org.springframework.web.servlet.ModelAndView ar.edu.itba.paw.webapp.controller.HelloWorldController.purchaseDemo(long,int)
+2017-04-26 23:19:23 INFO  RequestMappingHandlerMapping:534 - Mapped "{[/{userId}/upgradeFactory]}" onto public org.springframework.web.servlet.ModelAndView ar.edu.itba.paw.webapp.controller.HelloWorldController.upgradeFactory(long,int)
+2017-04-26 23:19:23 INFO  RequestMappingHandlerMapping:534 - Mapped "{[/errors]}" onto public org.springframework.web.servlet.ModelAndView ar.edu.itba.paw.webapp.controller.HelloWorldController.renderErrorPage(javax.servlet.http.HttpServletRequest)
+2017-04-26 23:19:23 INFO  RequestMappingHandlerMapping:534 - Mapped "{[/]}" onto public org.springframework.web.servlet.ModelAndView ar.edu.itba.paw.webapp.controller.HelloWorldController.index(ar.edu.itba.paw.webapp.form.UserForm)
+2017-04-26 23:19:23 INFO  SimpleUrlHandlerMapping:341 - Mapped URL path [/resources/**] onto handler of type [class org.springframework.web.servlet.resource.ResourceHttpRequestHandler]
+2017-04-26 23:19:23 INFO  Version:27 - HV000001: Hibernate Validator 4.3.1.Final
+2017-04-26 23:19:23 INFO  RequestMappingHandlerAdapter:532 - Looking for @ControllerAdvice: Root WebApplicationContext: startup date [Wed Apr 26 23:19:22 ART 2017]; root of context hierarchy
+2017-04-26 23:19:24 INFO  ScriptUtils:444 - Executing SQL script from class path resource [schema.sql]
+2017-04-26 23:19:24 INFO  ScriptUtils:510 - Executed SQL script from class path resource [schema.sql] in 30 ms.
+2017-04-26 23:19:24 INFO  ContextLoader:345 - Root WebApplicationContext: initialization completed in 1724 ms
+2017-04-26 23:19:24 INFO  DispatcherServlet:488 - FrameworkServlet 'dispatcher': initialization started
+2017-04-26 23:19:24 INFO  AnnotationConfigWebApplicationContext:578 - Refreshing WebApplicationContext for namespace 'dispatcher-servlet': startup date [Wed Apr 26 23:19:24 ART 2017]; parent: Root WebApplicationContext
+2017-04-26 23:19:24 INFO  DispatcherServlet:507 - FrameworkServlet 'dispatcher': initialization completed in 19 ms
+2017-04-26 23:19:33 WARN  PageNotFound:1136 - No mapping found for HTTP request with URI [/favicon.ico] in DispatcherServlet with name 'dispatcher'
+2017-04-26 23:19:34 WARN  PageNotFound:1136 - No mapping found for HTTP request with URI [/favicon.ico] in DispatcherServlet with name 'dispatcher'
+2017-04-26 23:23:38 INFO  ContextLoader:305 - Root WebApplicationContext: initialization started
+2017-04-26 23:23:38 INFO  AnnotationConfigWebApplicationContext:578 - Refreshing Root WebApplicationContext: startup date [Wed Apr 26 23:23:38 ART 2017]; root of context hierarchy
+2017-04-26 23:23:38 INFO  AnnotationConfigWebApplicationContext:227 - Successfully resolved class for [ar.edu.itba.paw.webapp.config.WebConfig]
+2017-04-26 23:23:38 INFO  AnnotationConfigWebApplicationContext:227 - Successfully resolved class for [ar.edu.itba.paw.webapp.config.ResourceHandler]
+2017-04-26 23:23:39 INFO  RequestMappingHandlerMapping:534 - Mapped "{[/startGame],methods=[GET]}" onto public org.springframework.web.servlet.ModelAndView ar.edu.itba.paw.webapp.controller.HelloWorldController.startGamePOST(java.lang.String)
+2017-04-26 23:23:39 INFO  RequestMappingHandlerMapping:534 - Mapped "{[/register]}" onto public org.springframework.web.servlet.ModelAndView ar.edu.itba.paw.webapp.controller.HelloWorldController.registerPOST()
+2017-04-26 23:23:39 INFO  RequestMappingHandlerMapping:534 - Mapped "{[/create],methods=[GET]}" onto public org.springframework.web.servlet.ModelAndView ar.edu.itba.paw.webapp.controller.HelloWorldController.createGET(ar.edu.itba.paw.webapp.form.UserForm,org.springframework.validation.BindingResult)
+2017-04-26 23:23:39 INFO  RequestMappingHandlerMapping:534 - Mapped "{[/create],methods=[POST]}" onto public org.springframework.web.servlet.ModelAndView ar.edu.itba.paw.webapp.controller.HelloWorldController.createPOST(ar.edu.itba.paw.webapp.form.UserForm,org.springframework.validation.BindingResult)
+2017-04-26 23:23:39 INFO  RequestMappingHandlerMapping:534 - Mapped "{[/{userId}/game]}" onto public org.springframework.web.servlet.ModelAndView ar.edu.itba.paw.webapp.controller.HelloWorldController.mainGameView(long)
+2017-04-26 23:23:39 INFO  RequestMappingHandlerMapping:534 - Mapped "{[/{userId}/buyFactory]}" onto public org.springframework.web.servlet.ModelAndView ar.edu.itba.paw.webapp.controller.HelloWorldController.purchaseDemo(long,int)
+2017-04-26 23:23:39 INFO  RequestMappingHandlerMapping:534 - Mapped "{[/{userId}/upgradeFactory]}" onto public org.springframework.web.servlet.ModelAndView ar.edu.itba.paw.webapp.controller.HelloWorldController.upgradeFactory(long,int)
+2017-04-26 23:23:39 INFO  RequestMappingHandlerMapping:534 - Mapped "{[/errors]}" onto public org.springframework.web.servlet.ModelAndView ar.edu.itba.paw.webapp.controller.HelloWorldController.renderErrorPage(javax.servlet.http.HttpServletRequest)
+2017-04-26 23:23:39 INFO  RequestMappingHandlerMapping:534 - Mapped "{[/]}" onto public org.springframework.web.servlet.ModelAndView ar.edu.itba.paw.webapp.controller.HelloWorldController.index(ar.edu.itba.paw.webapp.form.UserForm)
+2017-04-26 23:23:39 INFO  SimpleUrlHandlerMapping:341 - Mapped URL path [/resources/**] onto handler of type [class org.springframework.web.servlet.resource.ResourceHttpRequestHandler]
+2017-04-26 23:23:39 INFO  Version:27 - HV000001: Hibernate Validator 4.3.1.Final
+2017-04-26 23:23:39 INFO  RequestMappingHandlerAdapter:532 - Looking for @ControllerAdvice: Root WebApplicationContext: startup date [Wed Apr 26 23:23:38 ART 2017]; root of context hierarchy
+2017-04-26 23:23:39 INFO  ScriptUtils:444 - Executing SQL script from class path resource [schema.sql]
+2017-04-26 23:23:39 INFO  ScriptUtils:510 - Executed SQL script from class path resource [schema.sql] in 22 ms.
+2017-04-26 23:23:39 INFO  ContextLoader:345 - Root WebApplicationContext: initialization completed in 1098 ms
+2017-04-26 23:23:39 INFO  DispatcherServlet:488 - FrameworkServlet 'dispatcher': initialization started
+2017-04-26 23:23:39 INFO  AnnotationConfigWebApplicationContext:578 - Refreshing WebApplicationContext for namespace 'dispatcher-servlet': startup date [Wed Apr 26 23:23:39 ART 2017]; parent: Root WebApplicationContext
+2017-04-26 23:23:39 INFO  DispatcherServlet:507 - FrameworkServlet 'dispatcher': initialization completed in 19 ms
+2017-04-26 23:28:16 INFO  ContextLoader:305 - Root WebApplicationContext: initialization started
+2017-04-26 23:28:16 INFO  AnnotationConfigWebApplicationContext:578 - Refreshing Root WebApplicationContext: startup date [Wed Apr 26 23:28:16 ART 2017]; root of context hierarchy
+2017-04-26 23:28:16 INFO  AnnotationConfigWebApplicationContext:227 - Successfully resolved class for [ar.edu.itba.paw.webapp.config.WebConfig]
+2017-04-26 23:28:16 INFO  AnnotationConfigWebApplicationContext:227 - Successfully resolved class for [ar.edu.itba.paw.webapp.config.ResourceHandler]
+2017-04-26 23:28:17 INFO  RequestMappingHandlerMapping:534 - Mapped "{[/startGame],methods=[GET]}" onto public org.springframework.web.servlet.ModelAndView ar.edu.itba.paw.webapp.controller.HelloWorldController.startGamePOST(java.lang.String)
+2017-04-26 23:28:17 INFO  RequestMappingHandlerMapping:534 - Mapped "{[/register]}" onto public org.springframework.web.servlet.ModelAndView ar.edu.itba.paw.webapp.controller.HelloWorldController.registerPOST()
+2017-04-26 23:28:17 INFO  RequestMappingHandlerMapping:534 - Mapped "{[/create],methods=[GET]}" onto public org.springframework.web.servlet.ModelAndView ar.edu.itba.paw.webapp.controller.HelloWorldController.createGET(ar.edu.itba.paw.webapp.form.UserForm,org.springframework.validation.BindingResult)
+2017-04-26 23:28:17 INFO  RequestMappingHandlerMapping:534 - Mapped "{[/create],methods=[POST]}" onto public org.springframework.web.servlet.ModelAndView ar.edu.itba.paw.webapp.controller.HelloWorldController.createPOST(ar.edu.itba.paw.webapp.form.UserForm,org.springframework.validation.BindingResult)
+2017-04-26 23:28:17 INFO  RequestMappingHandlerMapping:534 - Mapped "{[/{userId}/game]}" onto public org.springframework.web.servlet.ModelAndView ar.edu.itba.paw.webapp.controller.HelloWorldController.mainGameView(long)
+2017-04-26 23:28:17 INFO  RequestMappingHandlerMapping:534 - Mapped "{[/{userId}/buyFactory]}" onto public org.springframework.web.servlet.ModelAndView ar.edu.itba.paw.webapp.controller.HelloWorldController.purchaseDemo(long,int)
+2017-04-26 23:28:17 INFO  RequestMappingHandlerMapping:534 - Mapped "{[/{userId}/upgradeFactory]}" onto public org.springframework.web.servlet.ModelAndView ar.edu.itba.paw.webapp.controller.HelloWorldController.upgradeFactory(long,int)
+2017-04-26 23:28:17 INFO  RequestMappingHandlerMapping:534 - Mapped "{[/errors]}" onto public org.springframework.web.servlet.ModelAndView ar.edu.itba.paw.webapp.controller.HelloWorldController.renderErrorPage(javax.servlet.http.HttpServletRequest)
+2017-04-26 23:28:17 INFO  RequestMappingHandlerMapping:534 - Mapped "{[/]}" onto public org.springframework.web.servlet.ModelAndView ar.edu.itba.paw.webapp.controller.HelloWorldController.index(ar.edu.itba.paw.webapp.form.UserForm)
+2017-04-26 23:28:17 INFO  SimpleUrlHandlerMapping:341 - Mapped URL path [/resources/**] onto handler of type [class org.springframework.web.servlet.resource.ResourceHttpRequestHandler]
+2017-04-26 23:28:17 INFO  Version:27 - HV000001: Hibernate Validator 4.3.1.Final
+2017-04-26 23:28:17 INFO  RequestMappingHandlerAdapter:532 - Looking for @ControllerAdvice: Root WebApplicationContext: startup date [Wed Apr 26 23:28:16 ART 2017]; root of context hierarchy
+2017-04-26 23:28:17 INFO  ScriptUtils:444 - Executing SQL script from class path resource [schema.sql]
+2017-04-26 23:28:17 INFO  ScriptUtils:510 - Executed SQL script from class path resource [schema.sql] in 12 ms.
+2017-04-26 23:28:17 INFO  ContextLoader:345 - Root WebApplicationContext: initialization completed in 1134 ms
+2017-04-26 23:28:17 INFO  DispatcherServlet:488 - FrameworkServlet 'dispatcher': initialization started
+2017-04-26 23:28:17 INFO  AnnotationConfigWebApplicationContext:578 - Refreshing WebApplicationContext for namespace 'dispatcher-servlet': startup date [Wed Apr 26 23:28:17 ART 2017]; parent: Root WebApplicationContext
+2017-04-26 23:28:17 INFO  DispatcherServlet:507 - FrameworkServlet 'dispatcher': initialization completed in 32 ms
+2017-04-26 23:30:44 INFO  ContextLoader:305 - Root WebApplicationContext: initialization started
+2017-04-26 23:30:44 INFO  AnnotationConfigWebApplicationContext:578 - Refreshing Root WebApplicationContext: startup date [Wed Apr 26 23:30:44 ART 2017]; root of context hierarchy
+2017-04-26 23:30:44 INFO  AnnotationConfigWebApplicationContext:227 - Successfully resolved class for [ar.edu.itba.paw.webapp.config.WebConfig]
+2017-04-26 23:30:44 INFO  AnnotationConfigWebApplicationContext:227 - Successfully resolved class for [ar.edu.itba.paw.webapp.config.ResourceHandler]
+2017-04-26 23:30:45 INFO  RequestMappingHandlerMapping:534 - Mapped "{[/startGame],methods=[GET]}" onto public org.springframework.web.servlet.ModelAndView ar.edu.itba.paw.webapp.controller.HelloWorldController.startGamePOST(java.lang.String)
+2017-04-26 23:30:45 INFO  RequestMappingHandlerMapping:534 - Mapped "{[/register]}" onto public org.springframework.web.servlet.ModelAndView ar.edu.itba.paw.webapp.controller.HelloWorldController.registerPOST()
+2017-04-26 23:30:45 INFO  RequestMappingHandlerMapping:534 - Mapped "{[/create],methods=[GET]}" onto public org.springframework.web.servlet.ModelAndView ar.edu.itba.paw.webapp.controller.HelloWorldController.createGET(ar.edu.itba.paw.webapp.form.UserForm,org.springframework.validation.BindingResult)
+2017-04-26 23:30:45 INFO  RequestMappingHandlerMapping:534 - Mapped "{[/create],methods=[POST]}" onto public org.springframework.web.servlet.ModelAndView ar.edu.itba.paw.webapp.controller.HelloWorldController.createPOST(ar.edu.itba.paw.webapp.form.UserForm,org.springframework.validation.BindingResult)
+2017-04-26 23:30:45 INFO  RequestMappingHandlerMapping:534 - Mapped "{[/{userId}/game]}" onto public org.springframework.web.servlet.ModelAndView ar.edu.itba.paw.webapp.controller.HelloWorldController.mainGameView(long)
+2017-04-26 23:30:45 INFO  RequestMappingHandlerMapping:534 - Mapped "{[/{userId}/buyFactory]}" onto public org.springframework.web.servlet.ModelAndView ar.edu.itba.paw.webapp.controller.HelloWorldController.purchaseDemo(long,int)
+2017-04-26 23:30:45 INFO  RequestMappingHandlerMapping:534 - Mapped "{[/{userId}/upgradeFactory]}" onto public org.springframework.web.servlet.ModelAndView ar.edu.itba.paw.webapp.controller.HelloWorldController.upgradeFactory(long,int)
+2017-04-26 23:30:45 INFO  RequestMappingHandlerMapping:534 - Mapped "{[/errors]}" onto public org.springframework.web.servlet.ModelAndView ar.edu.itba.paw.webapp.controller.HelloWorldController.renderErrorPage(javax.servlet.http.HttpServletRequest)
+2017-04-26 23:30:45 INFO  RequestMappingHandlerMapping:534 - Mapped "{[/]}" onto public org.springframework.web.servlet.ModelAndView ar.edu.itba.paw.webapp.controller.HelloWorldController.index(ar.edu.itba.paw.webapp.form.UserForm)
+2017-04-26 23:30:45 INFO  SimpleUrlHandlerMapping:341 - Mapped URL path [/resources/**] onto handler of type [class org.springframework.web.servlet.resource.ResourceHttpRequestHandler]
+2017-04-26 23:30:45 INFO  Version:27 - HV000001: Hibernate Validator 4.3.1.Final
+2017-04-26 23:30:45 INFO  RequestMappingHandlerAdapter:532 - Looking for @ControllerAdvice: Root WebApplicationContext: startup date [Wed Apr 26 23:30:44 ART 2017]; root of context hierarchy
+2017-04-26 23:30:45 INFO  ScriptUtils:444 - Executing SQL script from class path resource [schema.sql]
+2017-04-26 23:30:45 INFO  ScriptUtils:510 - Executed SQL script from class path resource [schema.sql] in 23 ms.
+2017-04-26 23:30:45 INFO  ContextLoader:345 - Root WebApplicationContext: initialization completed in 1045 ms
+2017-04-26 23:30:45 INFO  DispatcherServlet:488 - FrameworkServlet 'dispatcher': initialization started
+2017-04-26 23:30:45 INFO  AnnotationConfigWebApplicationContext:578 - Refreshing WebApplicationContext for namespace 'dispatcher-servlet': startup date [Wed Apr 26 23:30:45 ART 2017]; parent: Root WebApplicationContext
+2017-04-26 23:30:45 INFO  DispatcherServlet:507 - FrameworkServlet 'dispatcher': initialization completed in 20 ms

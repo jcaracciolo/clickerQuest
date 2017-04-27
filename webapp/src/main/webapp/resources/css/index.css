@@ -32,6 +32,11 @@ body {
     color: #121212;
     text-decoration: underline;
 }
-#register.mouseOver {
-     color: #dddddd;
+#register:hover {
+    color: #dddddd;
+    cursor: pointer;
  }
+
+#play:hover{
+    cursor: pointer;
+}
