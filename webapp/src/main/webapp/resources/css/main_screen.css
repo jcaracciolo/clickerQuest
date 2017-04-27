@@ -5,7 +5,9 @@
 }
 
 body {
-	overflow: hidden;
+	overflow-y: hidden;
+	height: 100vh;
+	min-width: 1200px;
 }
 
 div.factory-card-container {
@@ -51,7 +53,7 @@ div.box.black.canBuy {
 	display: none;
 }
 
-.scrollable-y {
+div.scrollable-y {
 	overflow-y: auto;
 	height: 100vh;
 	margin: 0;
