@@ -5,6 +5,8 @@ import ar.edu.itba.paw.model.Factory;
 import ar.edu.itba.paw.model.FactoryType;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.webapp.form.UserForm;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -13,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 
-import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -26,8 +27,7 @@ import java.util.TreeSet;
  */
 @Controller
 public class HelloWorldController {
-
-    private static final Logger logger = Logger.getLogger(HelloWorldController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(HelloWorldController.class);
 
     @Qualifier("userServiceImpl")
     @Autowired
@@ -68,7 +68,6 @@ public class HelloWorldController {
     @RequestMapping(value = "/create", method = { RequestMethod.POST })
     public ModelAndView createPOST(@Valid @ModelAttribute("registerForm") final UserForm form, final BindingResult errors) {
         if (errors.hasErrors()) {
-            logger.error("Error at POST /create", new Exception("LOGGER found an error!"));
             return new ModelAndView("redirect:/create");
         }
 
@@ -78,12 +77,10 @@ public class HelloWorldController {
         if(u == null) {
             //TODO Correct error handling
             // First approach on error handling:
-            logger.error("User is null", new Exception("LOGGER found an error!"));
             ModelAndView modelAndView = new ModelAndView("redirect:/create");
             modelAndView.addObject("error","userAlreadyInUse");
             return modelAndView;
         } else {
-            if(logger.isDebugEnabled()) logger.debug("LOGGER: POST /create is successful");
             return new ModelAndView("redirect:/" + u.getId() + "/game");
         }
     }
@@ -95,6 +92,7 @@ public class HelloWorldController {
         if(userService.findById(userId) == null){
             mav = new ModelAndView("errorPage");
             mav.addObject("errorMsg", "404");
+            LOGGER.error("{} tried to skip login",userId);
             return mav;
         }
         Set<Factory> factories = new TreeSet(userService.getUserFactories(userId));

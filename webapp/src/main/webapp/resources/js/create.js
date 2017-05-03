@@ -35,8 +35,7 @@ function getQueryParams(qs) {
 
 if( sessionStorage.usernameReg != null){
      document.getElementById("username").value = sessionStorage.usernameReg;
-     if(getQueryParams("error"))  appendError($("#username"),"Nombre de usuario ya existente!");
-     validateUsername();
+     if(getQueryParams("error") && validateUsername())  appendError($("#username"),"Nombre de usuario ya existente!");
 }
 function validateData(){
     var allValid = true;
