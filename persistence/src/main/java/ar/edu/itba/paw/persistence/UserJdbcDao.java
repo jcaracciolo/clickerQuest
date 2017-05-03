@@ -140,22 +140,14 @@ public class UserJdbcDao implements UserDao {
             return null;
         }
 
+        for (FactoryType type: FactoryType.values()){
+            Factory factory = type.defaultFactory(userId.longValue());
+            create(factory,userId.longValue());
+        }
 
-//        for (FactoryType type: FactoryType.values()){
-//            final Factory f = new Factory(userId.longValue(),type,
-//                    type.equals(FactoryType.PEOPLE_RECRUITING_BASE)?1:0,
-//                    1,1,1,
-//                    0);
-//            jdbcInsertFactories.execute(FACTORY_REVERSE_ROW_MAPPER.toArgs(f));
-//        }
-
-//        for (ResourceType rt: ResourceType.values()) {
-//            final RowWealth rw = new RowWealth(userId.longValue(),rt,
-//                    0,
-//                    rt.equals(ResourceType.MONEY)?12000:0,
-//                    Calendar.getInstance().getTimeInMillis());
-//            jdbcInsertWealths.execute(WEALTH_REVERSE_ROW_MAPPER.toArgs(rw));
-//        }
+        for (ResourceType rt: ResourceType.values()) {
+            create(rt,userId.longValue());
+        }
 
         return new User(userId.longValue(), username,password,img);
     }
@@ -258,31 +250,10 @@ public class UserJdbcDao implements UserDao {
 
     @Override
     public Collection<Factory> getUserFactories(long userid) {
-        Collection<Factory> factories = jdbcTemplate.query("SELECT * FROM factories WHERE userid = ?", FACTORY_ROW_MAPPER, userid);
-        if(factories.size() < FactoryType.values().length){
-            factories = Stream.of(FactoryType.values()).map(factoryType -> getUserFactory(userid,factoryType)).collect(Collectors.toSet());
-        }
-        return factories;
+        return jdbcTemplate.query("SELECT * FROM factories WHERE userid = ?", FACTORY_ROW_MAPPER, userid);
     }
 
-    @Override
-    public Factory getUserFactory(long userid,FactoryType f) {
-        List<Factory> list =
-                jdbcTemplate.query("SELECT * FROM factories WHERE userid = ? AND type = ?", FACTORY_ROW_MAPPER, userid,f.getId());
-
-        if(list.isEmpty()) {
-            // TODO log this
-            createMissingFactory(f,userid);
-            list = jdbcTemplate.query("SELECT * FROM factories WHERE userid = ? AND type = ?", FACTORY_ROW_MAPPER, userid,f.getId());
-            if(list.isEmpty() || list.size() > 1) {
-                return null;
-            } else return list.get(0);
-        } else {
-            return list.get(0);
-        }
-    }
-
-    private Wealth getFinalUserWealth(long userid) {
+    public Wealth getUserWealth(long userid) {
         final List<RowWealth> list = jdbcTemplate.query("SELECT * FROM wealths WHERE userid = ?", WEALTH_ROW_MAPPER, userid);
         PackageBuilder<Storage> storage = Storage.packageBuilder();
         PackageBuilder<Productions> productions = Productions.packageBuilder();
@@ -294,47 +265,37 @@ public class UserJdbcDao implements UserDao {
         return new Wealth(userid,storage.buildPackage(),productions.buildPackage());
     }
 
-    @Override
-    public Wealth getUserWealth(long userid) {
-        final List<RowWealth> list = jdbcTemplate.query("SELECT * FROM wealths WHERE userid = ?", WEALTH_ROW_MAPPER, userid);
-        if(list.size()< ResourceType.values().length){
-            Stream.of(ResourceType.values()).filter(
-                    resType -> list.stream().noneMatch(rw -> rw.resourceType == resType))
-                    .forEach(resType -> createMissingResource(resType,userid));
-        }
-        return getFinalUserWealth(userid);
-    }
-
     private static Calendar toCalendar(long milis){
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(milis);
         return cal;
     }
 
-    private boolean createMissingFactory(FactoryType factoryType, long userId){
-        if (findById(userId) == null) {
-            return false;
+    public Factory create(Factory factory, long userId){
+        try {
+            jdbcInsertFactories.execute(FACTORY_REVERSE_ROW_MAPPER.toArgs(factory));
+        }catch (Exception e){
+            return null;
         }
-        final Factory f = new Factory(userId,factoryType, 0,
-                1,1,1,
-                0);
-        jdbcInsertFactories.execute(FACTORY_REVERSE_ROW_MAPPER.toArgs(f));
-        System.out.println("adding missing " + factoryType+ " for us:" + userId);
-        return true;
+
+        return factory;
     }
 
-    private boolean createMissingResource(ResourceType resourceType, long userId){
-        if (findById(userId) == null) {
-            return false;
-        }
-        final RowWealth rw = new RowWealth(userId,resourceType,
+    public ResourceType create(ResourceType type, long userId) {
+        final RowWealth rw = new RowWealth(userId,type,
                 0,
-                resourceType.equals(ResourceType.MONEY)?13000:0,
+                type.equals(ResourceType.MONEY)?13000:0,
                 Calendar.getInstance().getTimeInMillis());
-        jdbcInsertWealths.execute(WEALTH_REVERSE_ROW_MAPPER.toArgs(rw));
-        System.out.println("adding missing " + resourceType + " for us:" + userId);
-        return true;
+        try {
+            jdbcInsertWealths.execute(WEALTH_REVERSE_ROW_MAPPER.toArgs(rw));
+        }catch (Exception e) {
+            return null;
+        }
+
+        return type;
     }
+
+
     //endregion
 
 }

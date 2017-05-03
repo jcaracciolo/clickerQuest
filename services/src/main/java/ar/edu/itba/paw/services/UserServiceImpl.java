@@ -8,8 +8,8 @@ import ar.edu.itba.paw.model.packages.Implementations.Storage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
@@ -19,6 +19,7 @@ public class UserServiceImpl implements UserService {
     @Autowired
     UserDao userDao;
 
+    //region Retrieval
     public User findById(long id) {
         return userDao.findById(id);
     }
@@ -28,6 +29,30 @@ public class UserServiceImpl implements UserService {
         return userDao.findByUsername(username);
     }
 
+    @Override
+    public Wealth getUserWealth(long userid) {
+        Wealth w = userDao.getUserWealth(userid);
+        Map<ResourceType,Double> storageRaw = w.getStorage().rawMap();
+
+        if(storageRaw.size() != w.getStorage().rawMap().size() ) {
+            //TODO ta todo mal log here
+            return null;
+        }
+
+        if(storageRaw.size() < ResourceType.values().length) {
+            Stream.of(ResourceType.values()).filter(
+                    resType -> storageRaw.keySet().stream().noneMatch(r -> r == resType))
+                    .forEach(   resType -> create(resType,userid));
+
+            return userDao.getUserWealth(userid);
+        }
+
+        return w;
+    }
+
+    //endregion
+
+    //region creation
     public User create(String username, String password, String img) {
         User user = userDao.create(username,password,img);
 
@@ -36,10 +61,8 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
-    @Override
-    public Wealth getUserWealth(long id) {
-        return userDao.getUserWealth(id);
-    }
+    //endregion
+
 
     @Override
     public Productions getUserProductions(long id) {
@@ -54,7 +77,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean purchaseFactory(long userid, FactoryType type) {
         Wealth w = getUserWealth(userid);
-        Factory f = userDao.getUserFactory(userid,type);
+        Optional<Factory> maybeFactory = userDao.getUserFactories(userid).stream()
+                .filter( (f) -> f.getType() == type).findAny();
+
+        Factory f;
+        if(maybeFactory.isPresent()) {
+            f = maybeFactory.get();
+        } else {
+            return false;
+        }
+
         if( f.isBuyable(w)) {
             Wealth wealth = w.purchaseResult(f);
             Factory factory = f.purchaseResult();
@@ -68,11 +100,30 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Collection<Factory> getUserFactories(long id) {
-//        Collection<Factory> factories = userDao.getUserFactories(id);
-        Collection<Factory> factories = new ArrayList<>();
-        Stream.of(FactoryType.values()).forEach(type -> factories.add(userDao.getUserFactory(id,type)));
+    public Collection<Factory> getUserFactories(long userid) {
+        final Collection<Factory> factories = userDao.getUserFactories(userid);
+        if(factories.size() < FactoryType.values().length){
+            List<Factory> lostFactories = Stream.of(FactoryType.values())
+                    .filter((t) -> factories.stream().noneMatch((f) -> f.getType() == t))
+                    .map(
+                            (t) -> create(t,userid)
+                    )
+                    .collect(Collectors.toList());
+
+            lostFactories.addAll(factories);
+            return lostFactories;
+        }
         return factories;
+    }
+
+    public Factory create(FactoryType factoryType, long userId){
+        final Factory f = factoryType.defaultFactory(userId);
+        userDao.create(f,userId);
+        return f;
+    }
+
+    private ResourceType create(ResourceType resourceType, long userId){
+        return userDao.create(resourceType,userId);
     }
 
     @Override

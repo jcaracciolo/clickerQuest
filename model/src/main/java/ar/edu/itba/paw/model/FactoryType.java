@@ -130,6 +130,14 @@ public enum FactoryType {
 
     public abstract BaseCost getBaseCost();
     public abstract BaseRecipe getBaseRecipe();
+
+    public Factory defaultFactory(long userId) {
+        return new Factory(userId,this,
+                0,
+                1,1,1,
+                0);
+    }
+
     public String getNameCode(){
         return nameCode;
     }
