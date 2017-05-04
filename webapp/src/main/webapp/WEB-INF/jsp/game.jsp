@@ -15,7 +15,7 @@
 <html>
 <head>
     <!--Import css-->
-    <link type="text/css" rel="stylesheet" href="<c:url value="/resources/css/main_screen.css"/>"
+    <link type="text/css" rel="stylesheet" href="<c:url value="/resources/css/game.css"/>"
           media="screen,projection"/>
     <link type="text/css" rel="stylesheet" href="<c:url value="/resources/css/materialize.min.css"/>"
           media="screen,projection"/>
@@ -42,24 +42,21 @@
             </div>
             <div class="divider"></div>
             <div class="card-content white-text">
-                <span class="card-title"><spring:message code="game.storage"/></span>
+                <span class="card-title"><spring:message code="game.resources"/></span>
                 <div id="storage">
                     <c:set var="storageMap" value="${storage.getUpdatedStorage(productions)}"/>
                     <c:forEach items="${storageMap.resources}" var="resource">
-                        <p class="storageValue" data-resource="${resource}">
-                            <fmt:formatNumber value="${storageMap.getValue(resource)}" pattern="#" minFractionDigits="0" maxFractionDigits="0"/>
-                            <spring:message code="${resource.nameCode}"/>
-                        </p>
-                    </c:forEach>
-                </div>
-                <span class="card-title"><spring:message code="game.production"/></span>
-                <div id="production">
-                    <c:set var="rateMap" value="${productions.getProductions()}"/>
-                    <c:forEach items="${productions.resources}" var="resource">
-                        <p class="productionValue" data-resource="${resource}">
-                            <c:out value="${rateMap.get(resource)} "/>
-                            <spring:message code="${resource.nameCode}"/>
-                        </p>
+                        <div class="row no-margins">
+                            <div class="col">
+                                <img class="resource-icon tooltipped" data-position="top" data-delay="50"
+                                data-tooltip='<spring:message code="${resource.nameCode}"/>' src="<c:url value="/resources/resources_icon/${resource.id}.png"/>"/>
+                            </div>
+                            <div class="col">
+                                <p class="resourcesValue" data-resource="${resource}">
+                                    <fmt:formatNumber value="${storageMap.getValue(resource)}" pattern="#" minFractionDigits="0" maxFractionDigits="0"/>
+                                </p>
+                            </div>
+                        </div>
                     </c:forEach>
                 </div>
             </div>
@@ -72,25 +69,51 @@
             <c:forEach items="${factories}" var="factory" varStatus="loop">
             <c:if test="${factory.amount != 0}">
                 <div class="col s3 factory-main">
-                    <div class="card">
+                    <div class="card factory-central-card">
                         <div class="card-content">
                             <h8 class="centered-text"><spring:message code="${factory.type.nameCode}"/></h8>
-                            <p><spring:message code="game.consuming"/></p>
                             <c:set var="factoriesProduction" value="${factory.factoriesProduction}"/>
                             <c:set var="inputMap" value="${factoriesProduction.inputs}"/>
-                            <c:forEach items="${inputMap.keySet()}" var="res">
-                                <p class="centered-text"><fmt:formatNumber pattern="#.##/s " value="${inputMap.get(res)}"/><spring:message code="${res.nameCode}"/></p>
-                            </c:forEach>
+                            <div class="factory-consuming">
+                                <c:if test="${inputMap.size() > 0}">
+                                    <p><spring:message code="game.consuming"/></p>
+                                    <c:forEach items="${inputMap.keySet()}" var="res">
+                                        <div class="row no-margins">
+                                            <div class="col no-padding">
+                                                <img class="resource-icon tooltipped" data-position="top" data-delay="50"
+                                                data-tooltip='<spring:message code="${res.nameCode}"/>' src="<c:url value="/resources/resources_icon/${res.id}.png"/>"/>
+                                            </div>
+                                            <div class="col">
+                                                <p>
+                                                    <fmt:formatNumber pattern="#.##/s " value="${inputMap.get(res)}"/>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </c:forEach>
+                                </c:if>
+                            </div>
                             <div class="card-image">
                                 <img class="factory-image" src="<c:url value="/resources/factory_images/${factory.getImage()}"/>"/>
                             </div>
                             <p id="factoryCant${factory.getType().getId()}" class="centered-text">
                                 <spring:message code="game.amount"/> <fmt:formatNumber value="${factory.amount}" pattern="#" minFractionDigits="0" maxFractionDigits="0"/></p>
-                            <p><spring:message code="game.producing"/></p>
-                            <c:set var="outputMap" value="${factoriesProduction.getOutputs()}"/>
-                            <c:forEach items="${outputMap.keySet()}" var="res">
-                                <p class="centered-text"><fmt:formatNumber pattern="#.##/s " value="${outputMap.get(res)}"/><spring:message code="${res.nameCode}"/></p>
-                            </c:forEach>
+                            <div class="factory-producing">
+                                <p><spring:message code="game.producing"/></p>
+                                <c:set var="outputMap" value="${factoriesProduction.getOutputs()}"/>
+                                <c:forEach items="${outputMap.keySet()}" var="res">
+                                    <div class="row no-margins">
+                                        <div class="col no-padding">
+                                            <img class="resource-icon tooltipped" data-position="top" data-delay="50"
+                                            data-tooltip='<spring:message code="${res.nameCode}"/>' src="<c:url value="/resources/resources_icon/${res.id}.png"/>"/>
+                                        </div>
+                                        <div class="col">
+                                            <p>
+                                                <fmt:formatNumber pattern="#.##/s " value="${outputMap.get(res)}"/>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </c:forEach>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -119,12 +142,22 @@
                                         <p class="center-align"><spring:message code="${factory.type.nameCode}"/></p>
                                         <img src="<c:url value="/resources/factory_images/${factory.getImage()}"/>" alt="factory_icon"/>
                                     </div>
-                                    <p>Cost:</p>
+                                    <p><spring:message code="game.cost"/></p>
                                     <c:set var="factoryCost" value="${factory.getCost()}"/>
                                     <div>
                                         <c:forEach items="${factoryCost.resources}" var="res">
                                             <c:set var="costMap" value="${factoryCost.getCost()}"/>
-                                            <p class="centered-text"><fmt:formatNumber pattern="# " value="${costMap.get(res)}"/><spring:message code="${res.nameCode}"/></p>
+                                            <div class="row no-margins">
+                                                <div class="col no-padding">
+                                                    <img class="resource-icon tooltipped" data-position="top" data-delay="50"
+                                                    data-tooltip='<spring:message code="${res.nameCode}"/>' src="<c:url value="/resources/resources_icon/${res.id}.png"/>"/>
+                                                </div>
+                                                <div class="col">
+                                                    <p>
+                                                        <fmt:formatNumber pattern="#.##" value="${costMap.get(res)}"/>
+                                                    </p>
+                                                </div>
+                                            </div>
                                         </c:forEach>
                                     </div>
                                 </div>
@@ -132,14 +165,34 @@
                                     <c:set var="factoriesProduction" value="${factory.recipe}"/>
                                     <c:set var="inputMap" value="${factoriesProduction.getInputs()}"/>
                                     <c:forEach items="${inputMap.keySet()}" var="res">
-                                            <p class="centered-text"><fmt:formatNumber pattern="#.##/s " value="${inputMap.get(res)}"/><spring:message code="${res.nameCode}"/></p>
-                                    </c:forEach>
+                                        <div class="row no-margins">
+                                             <div class="col no-padding">
+                                                 <img class="resource-icon tooltipped" data-position="top" data-delay="50"
+                                                 data-tooltip='<spring:message code="${res.nameCode}"/>' src="<c:url value="/resources/resources_icon/${res.id}.png"/>"/>
+                                             </div>
+                                             <div class="col">
+                                                 <p>
+                                                     <fmt:formatNumber pattern="#.##/s " value="${inputMap.get(res)}"/>
+                                                 </p>
+                                             </div>
+                                         </div>
+                                     </c:forEach>
                                     <div class="card-image col s12">
                                         <img src="<c:url value="/resources/arrow_ingredients.png"/>" alt="embudo"/>
                                     </div>
                                     <c:set var="outputMap" value="${factoriesProduction.getOutputs()}"/>
                                     <c:forEach items="${outputMap.keySet()}" var="res">
-                                        <p class="centered-text"><fmt:formatNumber pattern="#.##/s " value="${outputMap.get(res)}"/><spring:message code="${res.nameCode}"/></p>
+                                        <div class="row no-margins">
+                                            <div class="col no-padding">
+                                                <img class="resource-icon tooltipped" data-position="top" data-delay="50"
+                                                data-tooltip='<spring:message code="${res.nameCode}"/>' src="<c:url value="/resources/resources_icon/${res.id}.png"/>"/>
+                                            </div>
+                                            <div class="col">
+                                                <p>
+                                                    <fmt:formatNumber pattern="#.##/s " value="${outputMap.get(res)}"/>
+                                                </p>
+                                            </div>
+                                        </div>
                                     </c:forEach>
                                 </div>
                                 <div class="col s4 button-container">
@@ -150,8 +203,17 @@
                                                 <div class="card-image">
                                                     <img src="<c:url value="/resources/upgrade_icon.png"/>" alt="upgrade_icon"/>
                                                 </div>
-                                                <%--<p class="no-margins"><spring:message code="game.upgrade"/></p>--%>
-                                                <p class="no-margins"><spring:message code="game.upgrade.money"/><fmt:formatNumber pattern="#" value="${factory.getNextUpgrade().cost}"/></p>
+                                                <div class="row no-margins">
+                                                    <div class="col">
+                                                        <img class="resource-icon tooltipped" data-position="top" data-delay="50"
+                                                            src="<c:url value="/resources/resources_icon/3.png"/>"/>
+                                                    </div>
+                                                    <div class="col">
+                                                        <p class="no-margins">
+                                                            <fmt:formatNumber pattern="#" value="${factory.getNextUpgrade().cost}"/>
+                                                        </p>
+                                                    </div>
+                                                </div>
                                             </button>
                                         </div>
                                     </c:if>

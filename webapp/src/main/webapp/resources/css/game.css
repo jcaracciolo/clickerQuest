@@ -4,27 +4,41 @@
 	padding: 0;
 }
 
+img.resource-icon {
+    height: 1.2rem;
+    width: auto;
+}
+
 body {
 	overflow-y: hidden;
 	height: 100vh;
 	min-width: 1200px;
+	background-color: #DEDEDE;
 }
 
 div.factory-card-container {
 	position: relative;
 }
 
-p.no-margins {
-	margin: 0;
+.no-margins {
+	margin: 0 !important;
 }
 
-p.no-padding {
-	padding: 0;
+.no-padding {
+	padding: 0 !important;
+}
+
+.factory-consuming, .factory-producing{
+    min-height: 6rem;
 }
 
 div.col.button-container {
 	position: relative;
 	padding: 0;
+}
+
+.card.factory-central-card {
+    min-height: 24em;
 }
 
 div.upgrade-button-container{

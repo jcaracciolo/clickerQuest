@@ -22,21 +22,12 @@ function refreshValues(update){
 
 function refreshView() {
     unitPerSec= "/s"
-    storageChild = storage.firstElementChild;
-    productionChild = production.firstElementChild;
 
-    storageValues = $(".storageValue");
+    storageValues = $(".resourcesValue");
     for (var i = 0; i<storageValues.size() ; i++) {
         element = storageValues.eq(i);
         res = element.data("resource");
-        element.text(localizeRes(res)  + " " + String(abbreviateNumber(storagesMap[res], false)))
-    }
-
-    productionValues = $(".productionValue");
-    for (var i = 0; i<productionValues.size() ; i++) {
-        element = productionValues.eq(i);
-        res = element.data("resource");
-        element.text(localizeRes(res)  + " " + String(abbreviateNumber(productionsMap[res], true)) + unitPerSec)
+        element.text(String(abbreviateNumber(storagesMap[res], false)) + " + " + String(abbreviateNumber(productionsMap[res], true)) + unitPerSec)
     }
 }
 
