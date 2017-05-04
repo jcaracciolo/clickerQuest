@@ -58,7 +58,7 @@ public class WebConfig {
 
         final SimpleDriverDataSource ds = new SimpleDriverDataSource();
         ds.setDriverClass(org.postgresql.Driver.class);
-        ds.setUrl("jdbc:postgresql://localhost/clickerQuest");
+        ds.setUrl("jdbc:postgresql://10.1.34.164/clickerQuest");
         ds.setUsername("root");
         ds.setPassword("root");
         return ds;
