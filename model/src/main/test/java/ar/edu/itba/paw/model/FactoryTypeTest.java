@@ -21,7 +21,7 @@ import static org.junit.Assert.assertTrue;
  * It is the only way to check that the correlation with the DB is intact
  */
 public class FactoryTypeTest {
-
+    public static int CIRCUIT_MAKER_BASE        = 7;    //in DB
     public static int BOILER_BASE               = 6;    //in DB
     public static int CABLE_MAKER_BASE          = 5;    //in DB
     public static int RUBBER_SHREDDER_BASE      = 4;    //in DB
