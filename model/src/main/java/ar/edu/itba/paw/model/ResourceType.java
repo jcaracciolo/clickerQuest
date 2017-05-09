@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.model;
 
 import java.util.Arrays;
+import java.util.Optional;
 
 /**
  * Created by juanfra on 31/03/17.
@@ -45,5 +46,8 @@ public enum ResourceType {
     @SuppressWarnings("OptionalGetWithoutIsPresent")
     public static ResourceType fromId(int id){
         return Arrays.stream(ResourceType.values()).filter((r) -> r.getId() ==id).findAny().get();
+    }
+    public static Optional<ResourceType> fromName(String nameCode){
+        return Arrays.stream(ResourceType.values()).filter((r) -> r.nameCode.equals(nameCode)).findAny();
     }
 }

@@ -3,6 +3,7 @@ package ar.edu.itba.paw.webapp.controller;
 import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.model.Factory;
 import ar.edu.itba.paw.model.FactoryType;
+import ar.edu.itba.paw.model.ResourceType;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.webapp.form.UserForm;
 import org.slf4j.Logger;
@@ -117,18 +118,24 @@ public class HelloWorldController {
     }
 
     @RequestMapping(value = "/{userId}/buyFromMarket", method = { RequestMethod.POST })
-    public ModelAndView buyFromMarket(@PathVariable long userId, @RequestParam("resourceId") final String resourceName,
+    public ModelAndView buyFromMarket(@PathVariable long userId, @RequestParam("resourceId") final int resourceId,
                                       @RequestParam("quantity")final double quantity) {
-        // DO STUFF
-        System.out.println("Buying: " + userId + " " + resourceName + " " + quantity);
+        ResourceType resource =  ResourceType.fromId(resourceId);
+        if (resource != null) {
+            userService.purchaseResourceType(userId, resource, quantity);
+            System.out.println("Buying: " + userId + " " + resourceId + " " + quantity);
+        }
         return null;
     }
 
     @RequestMapping(value = "/{userId}/sellToMarket", method = { RequestMethod.POST })
-    public ModelAndView sellToMarket(@PathVariable long userId, @RequestParam("resourceId") final String resourceName,
+    public ModelAndView sellToMarket(@PathVariable long userId, @RequestParam("resourceId") final int resourceId,
                                       @RequestParam("quantity")final double quantity) {
-        // DO STUFF
-        System.out.println("Selling: " + userId + " " + resourceName + " " + quantity);
+        ResourceType resource =  ResourceType.fromId(resourceId);
+        if (resource != null) {
+            userService.sellResourceType(userId, resource, quantity);
+            System.out.println("Selling: " + userId + " " + resourceId + " " + quantity);
+        }
         return null;
     }
 

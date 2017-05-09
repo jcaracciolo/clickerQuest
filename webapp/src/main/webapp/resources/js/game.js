@@ -36,7 +36,7 @@ function refreshView() {
 
 function refreshUpgradesBuyability() {
     var notBuyable= []
-    var availableMoney = storagesMap["MONEY"]
+    var availableMoney = storagesMap[3] // 3: money
     for (factId in upgradesCost) {
         if (upgradesCost[factId] > availableMoney) {
             document.getElementById("upgradeDisabler" + factId).classList.remove("canBuy");
@@ -210,7 +210,7 @@ $(function() {
 
 
     function validateBuy(resourceId, quantity) {
-        if (storagesMap["MONEY"] > quantity * costBuyResources[resourceId]) {
+        if (storagesMap[3] >= quantity * costBuyResources[resourceId]) { //3: MONEY
             return true;
         }
         return false
@@ -252,10 +252,10 @@ $(function() {
                 case "none":
                 default: multiplier = 1; break
             }
-            var resourceId = document.getElementById("market.buy.resources").value;
-            var quantity = parseFloat(document.getElementById("market.buy.quantity").value)*multiplier;
+            var resourceId = document.getElementById("market.sell.resources").value;
+            var quantity = parseFloat(document.getElementById("market.sell.quantity").value)*multiplier;
 
-            if (validateSell(resourceId, quantity)) {
+            if (validateSell(parseInt(resourceId), quantity)) {
                 $.post(contextPath + "/" + userId + "/sellToMarket",
                     {
                         resourceId: resourceId,
@@ -268,7 +268,7 @@ $(function() {
 
 
     function validateSell(resourceId, quantity) {
-        if (storagesMap[resourceId] > quantity) {
+        if (storagesMap[resourceId] >= quantity) {
             return true;
         }
         return false

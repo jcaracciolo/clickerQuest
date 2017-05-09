@@ -40,7 +40,7 @@
                         <option value="" disabled selected><spring:message code="game.market.selectResource"/> </option>
                         <c:forEach items="${storage.resources}" var="resource">
                             <c:if test="${resource != 'MONEY'}">
-                                <option value="<c:out value='${resource}'/>"><spring:message code="${resource.nameCode}"/></option>
+                                <option value="<c:out value='${resource.id}'/>"><spring:message code="${resource.nameCode}"/></option>
                             </c:if>
                         </c:forEach>
                     </select>
@@ -71,7 +71,7 @@
                         <option value="" disabled selected><spring:message code="game.market.selectResource"/> </option>
                         <c:forEach items="${storage.resources}" var="resource">
                             <c:if test="${resource != 'MONEY'}">
-                                <option value="${resource}"><spring:message code="${resource.nameCode}"/></option>
+                                <option value="${resource.id}"><spring:message code="${resource.nameCode}"/></option>
                             </c:if>
                         </c:forEach>
                     </select>
@@ -122,7 +122,7 @@
                                      data-tooltip='<spring:message code="${resource.nameCode}"/>' src="<c:url value="/resources/resources_icon/${resource.id}.png"/>"/>
                             </div>
                             <div class="col">
-                                <p class="resourcesValue" data-resource="${resource}">
+                                <p class="resourcesValue" data-resource="${resource.id}">
                                     <fmt:formatNumber value="${storageMap.getValue(resource)}" pattern="#" minFractionDigits="0" maxFractionDigits="0"/>
                                 </p>
                             </div>
@@ -308,17 +308,17 @@
     contextPath = '<%=request.getContextPath()%>';
     storagesMap = { // resource -> cant
         <c:forEach items="${storage.resources}" var="resource">
-        "${resource}" : ${storage.getValue(resource)},
+        "${resource.id}" : ${storage.getValue(resource)},
         </c:forEach> };
 
     productionsMap = { // resource -> rate
         <c:forEach items="${productions.resources}" var="resource">
-        "${resource}" : ${productions.getValue(resource)},
+        "${resource.id}" : ${productions.getValue(resource)},
         </c:forEach>};
 
-    costBuyResources = { // resource ->costInMarket
+    costBuyResources = { // resourceId ->costInMarket
         <c:forEach items="${productions.resources}" var="resource">
-        "${resource}" : 3,
+        "${resource.id}" : ${resource.price},
         </c:forEach>};
 
     factoriesCost = { // factoryId -> (resource -> cant)
