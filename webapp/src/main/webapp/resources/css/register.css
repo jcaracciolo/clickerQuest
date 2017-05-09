@@ -5,10 +5,14 @@ body {
 }
 
 .inputBox {
-    width: 20em;
+    margin: auto;
+    width: 80%;
     height: 2em;
     margin: 0.2em;
-    font-size: 1em;
+    margin-top: 1em;
+    margin-bottom:  1em;
+    font-size: 1.4em;
+    max-width: 25em;
 }
 
 @font-face {
@@ -22,4 +26,22 @@ h2 {
     font-size: 5em;
     text-shadow: -1px 0 black, 0 1px black, 8px 0 black, 0 -6px black;
     margin-top: 1em;
+}
+.formError{
+    width: 80%;
+    margin:auto;
+    color: white;
+    margin-top: -1em;
+    max-width: 30em;
+
+}
+
+#registerForm{
+    background-color: darkblue;
+    margin: auto;
+    width: 70%;
+    padding-bottom:  1em;
+    max-width: 50em;
+
+
 }

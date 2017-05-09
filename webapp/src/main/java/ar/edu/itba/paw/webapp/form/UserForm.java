@@ -1,5 +1,9 @@
 package ar.edu.itba.paw.webapp.form;
 
+import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
+
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
@@ -39,7 +43,6 @@ public class UserForm {
     private final static String  usernameRegex = "^[a-zA-Z0-9]+$";
     private final static String  passRegex = "^[a-zA-Z0-9]+$";
 
-
     @Size(min = minUsernameLenght , max = maxUsernameLenght)
     @Pattern(regexp = usernameRegex)
     private String username;
@@ -48,8 +51,8 @@ public class UserForm {
     @Pattern(regexp = passRegex)
     private String password;
 
-    @Size(min = minPassLenght, max = maxPassLenght)
-    @Pattern(regexp = passRegex)
+//    @Size(min = minPassLenght, max = maxPassLenght)
+//    @Pattern(regexp = passRegex)
     private String repeatPassword;
 
     public String getUsername() {
@@ -74,5 +77,15 @@ public class UserForm {
 
     public void setRepeatPassword(String repeatPassword) {
         this.repeatPassword = repeatPassword;
+    }
+
+    public FieldError getUsedUsernameError(){
+        String[] codes = {"registerForm.usedUsernameError"};
+        return new FieldError("registerForm","username",username,false,codes,null,"Username already taken!");
+    }
+
+    public FieldError getMismatchedPasswordsError() {
+        return new FieldError("registerForm","repeatPassword",getRepeatPassword(),
+                false, new String[]{"registerForm.passwordMismatch"},null,"Passwords do not match");
     }
 }

@@ -55,9 +55,10 @@ public class UserServiceImpl implements UserService {
     //region creation
     public User create(String username, String password, String img) {
         User user = userDao.create(username,password,img);
-
-        purchaseFactory(user.getId(),FactoryType.PEOPLE_RECRUITING_BASE);
-        purchaseFactory(user.getId(),FactoryType.STOCK_INVESTMENT_BASE);
+        if(user != null){
+            purchaseFactory(user.getId(),FactoryType.PEOPLE_RECRUITING_BASE);
+            purchaseFactory(user.getId(),FactoryType.STOCK_INVESTMENT_BASE);
+        }
         return user;
     }
 

@@ -10,7 +10,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
+import org.springframework.validation.*;
+import org.springframework.validation.beanvalidation.CustomValidatorBean;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -18,9 +19,11 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.Arrays;
 import java.util.Random;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.stream.Stream;
 
 /**
  * Created by juanfra on 22/03/17.
@@ -38,7 +41,7 @@ public class HelloWorldController {
     @RequestMapping("/")
     public ModelAndView index(@ModelAttribute("registerForm") final UserForm form) {
         ModelAndView mav = new ModelAndView("index");
-        mav.addObject("message","Congratulations, you successfully setup the project (quite an achievement)");
+//        mav.addObject("message","Congratulations, you successfully setup the project (quite an achievement)");
         return mav;
     }
 
@@ -58,7 +61,7 @@ public class HelloWorldController {
 
     // CREATE
     @RequestMapping(value = "/create", method = { RequestMethod.GET })
-    public ModelAndView createGET(@Valid @ModelAttribute("registerForm") final UserForm form, final BindingResult errors) {
+    public ModelAndView createGET( @ModelAttribute("registerForm") final UserForm form, final BindingResult errors) {
         ModelAndView mav = new ModelAndView("registerForm");
         mav.addObject("userform",new UserForm());
         return mav;
@@ -66,23 +69,14 @@ public class HelloWorldController {
     }
 
     @RequestMapping(value = "/create", method = { RequestMethod.POST })
-    public ModelAndView createPOST(@Valid @ModelAttribute("registerForm") final UserForm form, final BindingResult errors) {
+    public ModelAndView createPOST(@Valid @ModelAttribute("registerForm") final UserForm form, final BindingResult rawErrors) {
+        BindingResult errors = prioritizeErrors(form,rawErrors);
         if (errors.hasErrors()) {
-            return new ModelAndView("redirect:/create");
+            return createGET(form,errors);
         }
-
         int imageID = Math.abs(new Random().nextInt() % 11);
         final User u = userService.create(form.getUsername(), form.getPassword(),imageID + ".jpg");
-
-        if(u == null) {
-            //TODO Correct error handling
-            // First approach on error handling:
-            ModelAndView modelAndView = new ModelAndView("redirect:/create");
-            modelAndView.addObject("error","userAlreadyInUse");
-            return modelAndView;
-        } else {
-            return new ModelAndView("redirect:/" + u.getId() + "/game");
-        }
+        return new ModelAndView("redirect:/" + u.getId() + "/game");
     }
 
     // GAME
@@ -149,5 +143,24 @@ public class HelloWorldController {
     private int getErrorCode(HttpServletRequest httpRequest) {
         return (Integer) httpRequest
                 .getAttribute("javax.servlet.error.status_code");
+    }
+
+    private BindingResult prioritizeErrors(UserForm form, BindingResult errors){
+        BindingResult prioritizedErrors = errors;
+//        BindingResult prioritizedErrors = new BeanPropertyBindingResult(errors.getTarget(),errors.getObjectName());
+//        errors.getFieldErrors("username").stream().filter(objectError -> !form.getUsername().isEmpty() ||
+//                Stream.of(objectError.getCodes()).anyMatch(x -> x.equals("NotBlank")))
+//                .forEach(objectError -> prioritizedErrors.addError(objectError));
+//        errors.getFieldErrors("password").stream().filter(objectError -> !form.getPassword().isEmpty() ||
+//                Stream.of(objectError.getCodes()).anyMatch(x -> x.equals("NotBlank")))
+//                .forEach(objectError -> prioritizedErrors.addError(objectError));
+        if(!form.getPassword().equals(form.getRepeatPassword())){
+            prioritizedErrors.addError(form.getMismatchedPasswordsError());
+        }
+        if(errors.getFieldErrorCount("username")==0 && userService.findByUsername(form.getUsername()) != null){
+            prioritizedErrors.addError(form.getUsedUsernameError());
+        }
+
+        return prioritizedErrors;
     }
 }
