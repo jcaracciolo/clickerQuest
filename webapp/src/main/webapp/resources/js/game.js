@@ -194,9 +194,24 @@ $(function() {
             }
         },
         submitHandler: function(form) {
-            form.submit();
+            var unit = document.getElementById("market.buy.unit").value
+            var multiplier
+            switch (unit){
+                case "K": multiplier = 1000; break;
+                case "M": multiplier = 1000000; break;
+                case "B": multiplier = 1000000000; break;
+                case "T": multiplier = 1000000000000; break;
+                case "none":
+                default: multiplier = 1; break
+            }
+            $.post(contextPath + "/" + userId + "/buyToMarket",
+                {
+                    resourceId: document.getElementById("market.buy.resources").value,
+                    quantity: parseFloat(document.getElementById("market.buy.quantity").value)*multiplier
+                }, function(data) { print("buy post sent!") });
         }
     });
+
     $("form[name='market.sell']").validate({
         resources:{
             required: {
@@ -231,7 +246,21 @@ $(function() {
             }
         },
         submitHandler: function(form) {
-            form.submit();
+            var unit = document.getElementById("market.sell.unit").value
+            var multiplier
+            switch (unit){
+                case "K": multiplier = 1000; break;
+                case "M": multiplier = 1000000; break;
+                case "B": multiplier = 1000000000; break;
+                case "T": multiplier = 1000000000000; break;
+                case "none":
+                default: multiplier = 1; break
+            }
+            $.post(contextPath + "/" + userId + "/sellToMarket",
+                {
+                    resourceId: document.getElementById("market.sell.resources").value,
+                    quantity: parseFloat(document.getElementById("market.sell.quantity").value)*multiplier
+                }, function(data) { print("sell post sent!") });
         }
     });
 });

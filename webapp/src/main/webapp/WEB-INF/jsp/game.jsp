@@ -40,7 +40,7 @@
                         <option value="" disabled selected><spring:message code="game.market.selectResource"/> </option>
                         <c:forEach items="${storage.resources}" var="resource">
                             <c:if test="${resource != 'MONEY'}">
-                                <option value="${resource.id}"><spring:message code="${resource.nameCode}"/></option>
+                                <option value="<c:out value='${resource}'/>"><spring:message code="${resource.nameCode}"/></option>
                             </c:if>
                         </c:forEach>
                     </select>
@@ -188,7 +188,7 @@
                     </div>
                 </div>
             </c:if>
-            <c:if test="${loop.index % 4 == 0 && loop.index != 0}">
+            <c:if test="${loop.index % 4 == 3 && loop.index != 0}">
         </div>
         <div class="row factory-row">
             </c:if>
@@ -350,7 +350,7 @@
         return undefined
     }
 </script>
-<script type="text/javascript" src="<c:url value="https://code.jquery.com/jquery-1.11.2.min.js"/>"></script>
+<script type="text/javascript" src="<c:url value="https://code.jquery.com/jquery-2.1.1.min.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/resources/js/materialize.min.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/resources/js/clickspark.min.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/resources/js/game.js"/>"></script>
