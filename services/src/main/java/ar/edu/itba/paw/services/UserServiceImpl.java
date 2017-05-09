@@ -161,11 +161,41 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean purchaseResourceType(long userid, ResourceType resourceType, double amount) {
+    public Wealth sellResourceType(long userid, ResourceType resourceType, double amount) {
+        if(resourceType == ResourceType.MONEY) {
+            return null;
+        }
+
+        Wealth wealth = getUserWealth(userid);
+        double cost = (resourceType.getPrice()) * amount;
+        if( wealth.getStorage().getValue(resourceType) <  amount ) {
+            return null;
+        }
+
+        PackageBuilder<Storage> wbuilder = Storage.packageBuilder();
+        wealth.getStorage().rawMap().forEach(
+                (r,d) -> wbuilder.putItem(r,d)
+        );
+        wealth.getStorage().getLastUpdated().forEach(
+                (r,d) -> wbuilder.setLastUpdated(r,d)
+        );
+
+        wbuilder.addItem(resourceType,-amount);
+        wbuilder.addItem(ResourceType.MONEY,cost);
+
+        Wealth newWealth = new Wealth(userid,wbuilder.buildPackage(),wealth.getProductions());
+        userDao.update(newWealth);
+        marketDao.registerPurchase(new StockMarketEntry(userid,resourceType,-amount));
+
+        return newWealth;
+    }
+
+    @Override
+    public Wealth purchaseResourceType(long userid, ResourceType resourceType, double amount) {
         Wealth wealth = getUserWealth(userid);
         double cost = (resourceType.getPrice()) * amount;
         if( wealth.getStorage().getValue(ResourceType.MONEY) <  cost ) {
-            return false;
+            return null;
         }
 
         PackageBuilder<Storage> wbuilder = Storage.packageBuilder();
@@ -179,9 +209,10 @@ public class UserServiceImpl implements UserService {
         wbuilder.addItem(ResourceType.MONEY,-cost);
         wbuilder.addItem(resourceType,amount);
 
-        userDao.update(new Wealth(userid,wbuilder.buildPackage(),wealth.getProductions()));
+        Wealth newWealth = new Wealth(userid,wbuilder.buildPackage(),wealth.getProductions());
+        userDao.update(newWealth);
         marketDao.registerPurchase(new StockMarketEntry(userid,resourceType,amount));
 
-        return true;
+        return newWealth;
     }
 }

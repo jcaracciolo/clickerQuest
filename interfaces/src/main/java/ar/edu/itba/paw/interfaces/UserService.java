@@ -23,7 +23,8 @@ public interface UserService {
 
     boolean purchaseFactory(long userid, FactoryType type);
     boolean purchaseUpgrade(long userid, FactoryType type);
-    boolean purchaseResourceType(long userid, ResourceType resourceType, double amount);
+    Wealth purchaseResourceType(long userid, ResourceType resourceType, double amount);
+    Wealth sellResourceType(long userid, ResourceType resourceType, double amount);
 
     Collection<Factory> getUserFactories(long id);
 
