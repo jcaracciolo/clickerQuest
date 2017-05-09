@@ -93,7 +93,7 @@ public class Wealth {
         if (u.getInputReduction() != 1) {
             factoriesProduction.getInputs().forEach(
                     (r, d) -> {
-                        productionsBuilder.addItem(r, - u.getInputReduction());
+//                        productionsBuilder.addItem(r, - u.getInputReduction());
                         productionsBuilder.addItem(r, (d * (1 - u.getInputReduction())));
                     }
             );

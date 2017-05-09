@@ -21,6 +21,7 @@ import static org.junit.Assert.assertTrue;
  */
 public class ResourceTypeTest {
 
+    public static int CIRCUITS        = 12;   //in DB
     public static int CARDBOARD        = 11;   //in DB
     public static int COPPER_CABLE     = 10;   //in DB
     public static int COPPER           = 9;    //in DB
