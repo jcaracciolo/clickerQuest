@@ -1,10 +1,12 @@
 package ar.edu.itba.paw.services;
 
+import ar.edu.itba.paw.interfaces.MarketDao;
 import ar.edu.itba.paw.interfaces.UserDao;
 import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.model.packages.Implementations.Productions;
 import ar.edu.itba.paw.model.packages.Implementations.Storage;
+import ar.edu.itba.paw.model.packages.PackageBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +20,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     UserDao userDao;
+
+    @Autowired
+    MarketDao marketDao;
 
     //region Retrieval
     public User findById(long id) {
@@ -153,5 +158,30 @@ public class UserServiceImpl implements UserService {
         } else {
             return false;
         }
+    }
+
+    @Override
+    public boolean purchaseResourceType(long userid, ResourceType resourceType, double amount) {
+        Wealth wealth = getUserWealth(userid);
+        double cost = (resourceType.getPrice()) * amount;
+        if( wealth.getStorage().getValue(ResourceType.MONEY) <  cost ) {
+            return false;
+        }
+
+        PackageBuilder<Storage> wbuilder = Storage.packageBuilder();
+        wealth.getStorage().rawMap().forEach(
+                (r,d) -> wbuilder.putItem(r,d)
+        );
+        wealth.getStorage().getLastUpdated().forEach(
+                (r,d) -> wbuilder.setLastUpdated(r,d)
+        );
+
+        wbuilder.addItem(ResourceType.MONEY,-cost);
+        wbuilder.addItem(resourceType,amount);
+
+        userDao.update(new Wealth(userid,wbuilder.buildPackage(),wealth.getProductions()));
+        marketDao.registerPurchase(new StockMarketEntry(userid,resourceType,amount));
+
+        return true;
     }
 }
