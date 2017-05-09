@@ -22,10 +22,16 @@ public enum ResourceType {
 
     private int id;
     private String nameCode;
+    private double price;
 
     ResourceType(int id,String name) {
         this.id = id;
         this.nameCode = name;
+        price = 100;
+    }
+
+    public double getPrice() {
+        return price;
     }
 
     public String getNameCode() {

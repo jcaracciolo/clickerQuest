@@ -53,22 +53,6 @@ public class UserJdbcDao implements UserDao {
     private final SimpleJdbcInsert jdbcInsertWealths;
 
     //region ROWMAPPER
-    private final static RowMapper<User> USER_ROW_MAPPER = (rs, rowNum) ->
-            new User(rs.getLong("userid"),
-                    rs.getString("username"),
-                    rs.getString("password"),
-                    rs.getString("profileImage"));
-
-
-    private final static ReverseRowMapper<User> USER_REVERSE_ROW_MAPPER = (us) ->
-    {
-        final Map<String, Object> args = new HashMap();
-        args.put("username",        us.getUsername());
-        args.put("password",        us.getPassword());
-        args.put("profileImage",    us.getProfileImage());
-        return args;
-    };
-
     private final static RowMapper<Factory> FACTORY_ROW_MAPPER = (rs, rowNum) ->
             new Factory(rs.getLong("userid"),
                     FactoryType.fromId(rs.getInt("type")),
@@ -110,6 +94,22 @@ public class UserJdbcDao implements UserDao {
         args.put("lastUpdated",     rw.lastUpdated);
         return args;
 
+    };
+
+    private final static RowMapper<User> USER_ROW_MAPPER = (rs, rowNum) ->
+            new User(rs.getLong("userid"),
+                    rs.getString("username"),
+                    rs.getString("password"),
+                    rs.getString("profileImage"));
+
+
+    private final static ReverseRowMapper<User> USER_REVERSE_ROW_MAPPER = (us) ->
+    {
+        final Map<String, Object> args = new HashMap();
+        args.put("username",        us.getUsername());
+        args.put("password",        us.getPassword());
+        args.put("profileImage",    us.getProfileImage());
+        return args;
     };
     //endregion
 

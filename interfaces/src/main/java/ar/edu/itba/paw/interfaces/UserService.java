@@ -1,9 +1,6 @@
 package ar.edu.itba.paw.interfaces;
 
-import ar.edu.itba.paw.model.Factory;
-import ar.edu.itba.paw.model.FactoryType;
-import ar.edu.itba.paw.model.User;
-import ar.edu.itba.paw.model.Wealth;
+import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.model.packages.Implementations.Productions;
 import ar.edu.itba.paw.model.packages.Implementations.Storage;
 
@@ -26,6 +23,8 @@ public interface UserService {
 
     boolean purchaseFactory(long userid, FactoryType type);
     boolean purchaseUpgrade(long userid, FactoryType type);
+    Wealth purchaseResourceType(long userid, ResourceType resourceType, double amount);
+    Wealth sellResourceType(long userid, ResourceType resourceType, double amount);
 
     Collection<Factory> getUserFactories(long id);
 
