@@ -46,7 +46,7 @@ public class HelloWorldController {
     }
 
     @RequestMapping(value = "/startGame", method = { RequestMethod.GET })
-    public ModelAndView startGamePOST(@RequestParam("username") final String username){
+    public ModelAndView startGame(@RequestParam("username") final String username){
         User u = userService.findByUsername(username);
         if(u != null) return new ModelAndView("redirect:/" + u.getId() + "/game");
         return new ModelAndView("index");
@@ -99,7 +99,7 @@ public class HelloWorldController {
     }
 
     @RequestMapping(value = "/{userId}/buyFactory")
-    public ModelAndView purchaseDemo(@PathVariable long userId, @RequestParam("factoryId") final int factoryId){
+    public ModelAndView purchaseFactory(@PathVariable long userId, @RequestParam("factoryId") final int factoryId){
         userService.purchaseFactory(userId, FactoryType.fromId(factoryId));
         return new ModelAndView("redirect:/" + userId + "/game");
     }
@@ -108,6 +108,22 @@ public class HelloWorldController {
     public ModelAndView upgradeFactory(@PathVariable long userId, @RequestParam("factoryId") final int factoryId){
         userService.purchaseUpgrade(userId, FactoryType.fromId(factoryId));
         return new ModelAndView("redirect:/" + userId + "/game");
+    }
+
+    @RequestMapping(value = "/{userId}/buyFromMarket", method = { RequestMethod.POST })
+    public ModelAndView buyFromMarket(@PathVariable long userId, @RequestParam("resourceId") final String resourceName,
+                                      @RequestParam("quantity")final double quantity) {
+        // DO STUFF
+        System.out.println("Buying: " + userId + " " + resourceName + " " + quantity);
+        return null;
+    }
+
+    @RequestMapping(value = "/{userId}/sellToMarket", method = { RequestMethod.POST })
+    public ModelAndView sellToMarket(@PathVariable long userId, @RequestParam("resourceId") final String resourceName,
+                                      @RequestParam("quantity")final double quantity) {
+        // DO STUFF
+        System.out.println("Selling: " + userId + " " + resourceName + " " + quantity);
+        return null;
     }
 
     // ERRORS

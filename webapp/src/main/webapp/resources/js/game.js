@@ -9,6 +9,11 @@ var storage = document.getElementById("storage");
 var production = document.getElementById("production");
 sessionStorage.removeItem("user");
 
+$(document).ready(function(){
+    $('.modal').modal();
+    $('select').material_select();
+});
+
 refreshValues(false);
 refreshView();
 refreshFactoriesBuyability();
@@ -131,7 +136,7 @@ function abbreviateNumber(value,decimals) {
         newValue = truncate(value);
     }
     if (newValue >= 10000) {
-        var suffixes = ["", "k", "m", "b","t"];
+        var suffixes = ["", "K", "M", "B","T"];
         var suffixNum = Math.floor( (""+newValue).length/3 );
         var shortValue = '';
         for (var precision = 2; precision >= 1; precision--) {
@@ -151,3 +156,111 @@ function truncate(number)
         ? Math.floor(number)
         : Math.ceil(number);
 }
+
+
+// // Wait for the DOM to be ready
+$(function() {
+    $("form[name='market.buy']").validate({
+        resources:{
+            required: {
+                depends: function (element) {
+                    return document.getElementById("market.sell.resources").value != "";
+                }
+            }
+        },
+        rules: {
+            quantity: {
+                required: true,
+                digits: true
+            },
+            unit:{
+                required: {
+                    depends: function (element) {
+                        return document.getElementById("market.sell.unit").value != "";
+                    }
+                }
+            }
+        },
+        messages: {
+            resources:{
+                required: "Please, select a resource"
+            },
+            quantity: {
+                required: "Please, enter a quantity",
+                digits: "Only digits are allowed"
+            },
+            unit:{
+                required: "Please, select an unit"
+            }
+        },
+        submitHandler: function(form) {
+            var unit = document.getElementById("market.buy.unit").value
+            var multiplier
+            switch (unit){
+                case "K": multiplier = 1000; break;
+                case "M": multiplier = 1000000; break;
+                case "B": multiplier = 1000000000; break;
+                case "T": multiplier = 1000000000000; break;
+                case "none":
+                default: multiplier = 1; break
+            }
+            $.post(contextPath + "/" + userId + "/buyToMarket",
+                {
+                    resourceId: document.getElementById("market.buy.resources").value,
+                    quantity: parseFloat(document.getElementById("market.buy.quantity").value)*multiplier
+                }, function(data) { print("buy post sent!") });
+        }
+    });
+
+    $("form[name='market.sell']").validate({
+        resources:{
+            required: {
+                depends: function (element) {
+                    return document.getElementById("market.sell.resources").value != "";
+                }
+            }
+        },
+        rules: {
+            quantity: {
+                required: true,
+                digits: true
+            },
+            unit:{
+                required: {
+                    depends: function (element) {
+                        return document.getElementById("market.sell.unit").value != "";
+                    }
+                }
+            }
+        },
+        messages: {
+            resources:{
+                required: "Please, select a resource"
+            },
+            quantity: {
+                required: "Please, enter a quantity",
+                digits: "Only digits are allowed"
+            },
+            unit:{
+                required: "Please, select an unit"
+            }
+        },
+        submitHandler: function(form) {
+            var unit = document.getElementById("market.sell.unit").value
+            var multiplier
+            switch (unit){
+                case "K": multiplier = 1000; break;
+                case "M": multiplier = 1000000; break;
+                case "B": multiplier = 1000000000; break;
+                case "T": multiplier = 1000000000000; break;
+                case "none":
+                default: multiplier = 1; break
+            }
+            $.post(contextPath + "/" + userId + "/sellToMarket",
+                {
+                    resourceId: document.getElementById("market.sell.resources").value,
+                    quantity: parseFloat(document.getElementById("market.sell.quantity").value)*multiplier
+                }, function(data) { print("sell post sent!") });
+        }
+    });
+});
