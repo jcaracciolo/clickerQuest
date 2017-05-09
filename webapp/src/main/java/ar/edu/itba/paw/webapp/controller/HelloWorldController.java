@@ -105,7 +105,7 @@ public class HelloWorldController {
     }
 
     @RequestMapping(value = "/{userId}/buyFactory")
-    public ModelAndView purchaseDemo(@PathVariable long userId, @RequestParam("factoryId") final int factoryId){
+    public ModelAndView purchaseFactory(@PathVariable long userId, @RequestParam("factoryId") final int factoryId){
         userService.purchaseFactory(userId, FactoryType.fromId(factoryId));
         return new ModelAndView("redirect:/" + userId + "/game");
     }
@@ -114,6 +114,20 @@ public class HelloWorldController {
     public ModelAndView upgradeFactory(@PathVariable long userId, @RequestParam("factoryId") final int factoryId){
         userService.purchaseUpgrade(userId, FactoryType.fromId(factoryId));
         return new ModelAndView("redirect:/" + userId + "/game");
+    }
+
+    @RequestMapping(value = "/{userId}/buyFromMarket", method = { RequestMethod.POST })
+    public ModelAndView buyFromMarket(@PathVariable long userId, @RequestParam("resourceId") final int resourceId,
+                                      @RequestParam("quantity")final double quantity) {
+        // DO STUFF
+        return null;
+    }
+
+    @RequestMapping(value = "/{userId}/sellToMarket", method = { RequestMethod.POST })
+    public ModelAndView sellToMarket(@PathVariable long userId, @RequestParam("resourceId") final int resourceId,
+                                      @RequestParam("quantity")final double quantity) {
+        // DO STUFF
+        return null;
     }
 
     // ERRORS

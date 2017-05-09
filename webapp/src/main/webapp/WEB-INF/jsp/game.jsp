@@ -27,6 +27,75 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 </head>
 <body>
+<!-- Market Modal -->
+<div id="marketModal" class="modal">
+    <div class="modal-content">
+        <h4><spring:message code="game.market"/></h4>
+        <p><spring:message code="game.market.welcome"/></p>
+
+        <form action="" name="market.buy">
+            <div class="row">
+                <div class="col s4">
+                    <select name="resources" id="market.buy.resources" required>
+                        <option value="" disabled selected><spring:message code="game.market.selectResource"/> </option>
+                        <c:forEach items="${storage.resources}" var="resource">
+                            <c:if test="${resource != 'MONEY'}">
+                                <option value="${resource.id}"><spring:message code="${resource.nameCode}"/></option>
+                            </c:if>
+                        </c:forEach>
+                    </select>
+                </div>
+                <div class="col s2">
+                    <input type="text" name="quantity" id="market.buy.quantity" placeholder="Quantity">
+                </div>
+                <div class="col s3">
+                    <select name="unit" id="market.buy.unit">
+                        <option value="" disabled selected><spring:message code="game.market.selectUnit"/></option>
+                        <option value="none"><i>No unit</i></option>
+                        <option value="K">K</option>
+                        <option value="M">M</option>
+                        <option value="B">B</option>
+                        <option value="T">T</option>
+                    </select>
+                </div>
+                <div class="col s3">
+                    <button type="submit"><spring:message code="game.market.buy"/></button>
+                </div>
+            </div>
+        </form>
+
+        <form action="" name="market.sell">
+            <div class="row">
+                <div class="col s4">
+                    <select name="resources" id="market.sell.resources" required>
+                        <option value="" disabled selected><spring:message code="game.market.selectResource"/> </option>
+                        <c:forEach items="${storage.resources}" var="resource">
+                            <c:if test="${resource != 'MONEY'}">
+                                <option value="${resource}"><spring:message code="${resource.nameCode}"/></option>
+                            </c:if>
+                        </c:forEach>
+                    </select>
+                </div>
+                <div class="col s2">
+                    <input type="text" name="quantity" id="market.sell.quantity" placeholder="Quantity">
+                </div>
+                <div class="col s3">
+                    <select name="unit" id="market.sell.unit">
+                        <option value="" disabled selected><spring:message code="game.market.selectUnit"/> </option>
+                        <option value="none"><i>No unit</i></option>
+                        <option value="K">K</option>
+                        <option value="M">M</option>
+                        <option value="B">B</option>
+                        <option value="T">T</option>
+                    </select>
+                </div>
+                <div class="col s3">
+                    <button type="submit"><spring:message code="game.market.sell"/></button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
 <div class="row main-frame">
     <!-- LEFT PANEL -->
     <div class="col no-padding s2">
@@ -41,6 +110,7 @@
                 </div>
             </div>
             <div class="divider"></div>
+            <a class="waves-effect waves-light btn marketButton" href="#marketModal"><spring:message code="game.market"/></a>
             <div class="card-content white-text">
                 <span class="card-title"><spring:message code="game.resources"/></span>
                 <div id="storage">
@@ -49,10 +119,10 @@
                         <div class="row no-margins">
                             <div class="col">
                                 <img class="resource-icon tooltipped" data-position="top" data-delay="50"
-                                data-tooltip='<spring:message code="${resource.nameCode}"/>' src="<c:url value="/resources/resources_icon/${resource.id}.png"/>"/>
+                                     data-tooltip='<spring:message code="${resource.nameCode}"/>' src="<c:url value="/resources/resources_icon/${resource.id}.png"/>"/>
                             </div>
                             <div class="col">
-                                <p class="resourcesValue" data-resource="${resource}">
+                                <p class="resourcesValue" data-resource="${resource.id}">
                                     <fmt:formatNumber value="${storageMap.getValue(resource)}" pattern="#" minFractionDigits="0" maxFractionDigits="0"/>
                                 </p>
                             </div>
@@ -81,7 +151,7 @@
                                         <div class="row no-margins">
                                             <div class="col no-padding">
                                                 <img class="resource-icon tooltipped" data-position="top" data-delay="50"
-                                                data-tooltip='<spring:message code="${res.nameCode}"/>' src="<c:url value="/resources/resources_icon/${res.id}.png"/>"/>
+                                                     data-tooltip='<spring:message code="${res.nameCode}"/>' src="<c:url value="/resources/resources_icon/${res.id}.png"/>"/>
                                             </div>
                                             <div class="col">
                                                 <p>
@@ -104,7 +174,7 @@
                                     <div class="row no-margins">
                                         <div class="col no-padding">
                                             <img class="resource-icon tooltipped" data-position="top" data-delay="50"
-                                            data-tooltip='<spring:message code="${res.nameCode}"/>' src="<c:url value="/resources/resources_icon/${res.id}.png"/>"/>
+                                                 data-tooltip='<spring:message code="${res.nameCode}"/>' src="<c:url value="/resources/resources_icon/${res.id}.png"/>"/>
                                         </div>
                                         <div class="col">
                                             <p>
@@ -119,8 +189,8 @@
                 </div>
             </c:if>
             <c:if test="${loop.index % 4 == 0 && loop.index != 0}">
-                </div>
-                <div class="row factory-row">
+        </div>
+        <div class="row factory-row">
             </c:if>
             </c:forEach>
         </div>
@@ -150,7 +220,7 @@
                                             <div class="row no-margins">
                                                 <div class="col no-padding">
                                                     <img class="resource-icon tooltipped" data-position="top" data-delay="50"
-                                                    data-tooltip='<spring:message code="${res.nameCode}"/>' src="<c:url value="/resources/resources_icon/${res.id}.png"/>"/>
+                                                         data-tooltip='<spring:message code="${res.nameCode}"/>' src="<c:url value="/resources/resources_icon/${res.id}.png"/>"/>
                                                 </div>
                                                 <div class="col">
                                                     <p>
@@ -166,17 +236,17 @@
                                     <c:set var="inputMap" value="${factoriesProduction.getInputs()}"/>
                                     <c:forEach items="${inputMap.keySet()}" var="res">
                                         <div class="row no-margins">
-                                             <div class="col no-padding">
-                                                 <img class="resource-icon tooltipped" data-position="top" data-delay="50"
-                                                 data-tooltip='<spring:message code="${res.nameCode}"/>' src="<c:url value="/resources/resources_icon/${res.id}.png"/>"/>
-                                             </div>
-                                             <div class="col">
-                                                 <p>
-                                                     <fmt:formatNumber pattern="#.##/s " value="${inputMap.get(res)}"/>
-                                                 </p>
-                                             </div>
-                                         </div>
-                                     </c:forEach>
+                                            <div class="col no-padding">
+                                                <img class="resource-icon tooltipped" data-position="top" data-delay="50"
+                                                     data-tooltip='<spring:message code="${res.nameCode}"/>' src="<c:url value="/resources/resources_icon/${res.id}.png"/>"/>
+                                            </div>
+                                            <div class="col">
+                                                <p>
+                                                    <fmt:formatNumber pattern="#.##/s " value="${inputMap.get(res)}"/>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </c:forEach>
                                     <div class="card-image col s12">
                                         <img src="<c:url value="/resources/arrow_ingredients.png"/>" alt="embudo"/>
                                     </div>
@@ -185,7 +255,7 @@
                                         <div class="row no-margins">
                                             <div class="col no-padding">
                                                 <img class="resource-icon tooltipped" data-position="top" data-delay="50"
-                                                data-tooltip='<spring:message code="${res.nameCode}"/>' src="<c:url value="/resources/resources_icon/${res.id}.png"/>"/>
+                                                     data-tooltip='<spring:message code="${res.nameCode}"/>' src="<c:url value="/resources/resources_icon/${res.id}.png"/>"/>
                                             </div>
                                             <div class="col">
                                                 <p>
@@ -206,7 +276,7 @@
                                                 <div class="row no-margins">
                                                     <div class="col">
                                                         <img class="resource-icon tooltipped" data-position="top" data-delay="50"
-                                                            src="<c:url value="/resources/resources_icon/3.png"/>"/>
+                                                             src="<c:url value="/resources/resources_icon/3.png"/>"/>
                                                     </div>
                                                     <div class="col">
                                                         <p class="no-margins">
@@ -238,27 +308,27 @@
     contextPath = '<%=request.getContextPath()%>';
     storagesMap = { // resource -> cant
         <c:forEach items="${storage.resources}" var="resource">
-        "${resource}" : ${storage.getValue(resource)},
+        "${resource.id}" : ${storage.getValue(resource)},
         </c:forEach> };
 
     productionsMap = { // resource -> rate
         <c:forEach items="${productions.resources}" var="resource">
-        "${resource}" : ${productions.getValue(resource)},
+        "${resource.id}" : ${productions.getValue(resource)},
         </c:forEach>};
 
     factoriesCost = { // factoryId -> (resource -> cant)
     <c:forEach items="${factories}" var="factory"> ${factory.type} : {
         <c:set var="cost" value="${factory.cost}"/>
         <c:forEach items="${cost.resources}" var="resource">
-        "${resource}" : ${cost.getValue(resource)},
+        "${resource.id}" : ${cost.getValue(resource)},
         </c:forEach>
     },</c:forEach>
     };
 
     upgradesCost = { // factoryId -> cost
-    <c:forEach items="${factories}" var="factory">
+        <c:forEach items="${factories}" var="factory">
         "${factory.type}" : ${factory.getNextUpgrade().cost},
-    </c:forEach>
+        </c:forEach>
     };
 
     factoriesRecipe = { // factoryId -> (resource -> rate)
@@ -266,7 +336,7 @@
     ${factory.type} : {
         <c:set var="recipe" value="${factory.recipe}"/>
         <c:forEach items="${recipe.resources}" var="resource">
-        "${resource}" : ${recipe.getValue(resource)},
+        "${resource.id}" : ${recipe.getValue(resource)},
         </c:forEach> },
     </c:forEach>
     };
@@ -280,9 +350,10 @@
         return undefined
     }
 </script>
-<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+<script type="text/javascript" src="<c:url value="https://code.jquery.com/jquery-1.11.2.min.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/resources/js/materialize.min.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/resources/js/clickspark.min.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/resources/js/game.js"/>"></script>
-
+<script type="text/javascript" src="<c:url value="/resources/js/jquery-validator-framework/jquery.validate.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/resources/js/jquery-validator-framework/additional-methods.js"/>"></script>
 </html>
