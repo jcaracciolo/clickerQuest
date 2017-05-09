@@ -5,8 +5,6 @@
 var url=window.location.href.split("/")
 var userId =url[url.length - 2];
 
-var storage = document.getElementById("storage");
-var production = document.getElementById("production");
 sessionStorage.removeItem("user");
 
 $(document).ready(function(){
@@ -162,11 +160,7 @@ function truncate(number)
 $(function() {
     $("form[name='market.buy']").validate({
         resources:{
-            required: {
-                depends: function (element) {
-                    return document.getElementById("market.sell.resources").value != "";
-                }
-            }
+            required: true
         },
         rules: {
             quantity: {
@@ -174,11 +168,7 @@ $(function() {
                 digits: true
             },
             unit:{
-                required: {
-                    depends: function (element) {
-                        return document.getElementById("market.sell.unit").value != "";
-                    }
-                }
+                required: true
             }
         },
         messages: {
@@ -204,21 +194,31 @@ $(function() {
                 case "none":
                 default: multiplier = 1; break
             }
-            $.post(contextPath + "/" + userId + "/buyToMarket",
-                {
-                    resourceId: document.getElementById("market.buy.resources").value,
-                    quantity: parseFloat(document.getElementById("market.buy.quantity").value)*multiplier
-                }, function(data) { print("buy post sent!") });
+            var resourceId = document.getElementById("market.buy.resources").value;
+            var quantity = parseFloat(document.getElementById("market.buy.quantity").value)*multiplier;
+
+            if (validateBuy(resourceId, quantity)) {
+                $.post(contextPath + "/" + userId + "/buyFromMarket",
+                    {
+                        resourceId: resourceId,
+                        quantity: quantity
+                    }, function (data) {
+                });
+            }
         }
     });
 
+
+    function validateBuy(resourceId, quantity) {
+        if (storagesMap["MONEY"] > quantity * costBuyResources[resourceId]) {
+            return true;
+        }
+        return false
+    }
+
     $("form[name='market.sell']").validate({
         resources:{
-            required: {
-                depends: function (element) {
-                    return document.getElementById("market.sell.resources").value != "";
-                }
-            }
+            required: true
         },
         rules: {
             quantity: {
@@ -226,11 +226,7 @@ $(function() {
                 digits: true
             },
             unit:{
-                required: {
-                    depends: function (element) {
-                        return document.getElementById("market.sell.unit").value != "";
-                    }
-                }
+                required: true
             }
         },
         messages: {
@@ -256,11 +252,25 @@ $(function() {
                 case "none":
                 default: multiplier = 1; break
             }
-            $.post(contextPath + "/" + userId + "/sellToMarket",
-                {
-                    resourceId: document.getElementById("market.sell.resources").value,
-                    quantity: parseFloat(document.getElementById("market.sell.quantity").value)*multiplier
-                }, function(data) { print("sell post sent!") });
+            var resourceId = document.getElementById("market.buy.resources").value;
+            var quantity = parseFloat(document.getElementById("market.buy.quantity").value)*multiplier;
+
+            if (validateSell(resourceId, quantity)) {
+                $.post(contextPath + "/" + userId + "/sellToMarket",
+                    {
+                        resourceId: resourceId,
+                        quantity: quantity
+                    }, function (data) {
+                    });
+            }
         }
     });
+
+
+    function validateSell(resourceId, quantity) {
+        if (storagesMap[resourceId] > quantity) {
+            return true;
+        }
+        return false
+    }
 });

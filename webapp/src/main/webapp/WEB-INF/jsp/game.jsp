@@ -122,7 +122,7 @@
                                      data-tooltip='<spring:message code="${resource.nameCode}"/>' src="<c:url value="/resources/resources_icon/${resource.id}.png"/>"/>
                             </div>
                             <div class="col">
-                                <p class="resourcesValue" data-resource="${resource.id}">
+                                <p class="resourcesValue" data-resource="${resource}">
                                     <fmt:formatNumber value="${storageMap.getValue(resource)}" pattern="#" minFractionDigits="0" maxFractionDigits="0"/>
                                 </p>
                             </div>
@@ -308,19 +308,24 @@
     contextPath = '<%=request.getContextPath()%>';
     storagesMap = { // resource -> cant
         <c:forEach items="${storage.resources}" var="resource">
-        "${resource.id}" : ${storage.getValue(resource)},
+        "${resource}" : ${storage.getValue(resource)},
         </c:forEach> };
 
     productionsMap = { // resource -> rate
         <c:forEach items="${productions.resources}" var="resource">
-        "${resource.id}" : ${productions.getValue(resource)},
+        "${resource}" : ${productions.getValue(resource)},
+        </c:forEach>};
+
+    costBuyResources = { // resource ->costInMarket
+        <c:forEach items="${productions.resources}" var="resource">
+        "${resource}" : 3,
         </c:forEach>};
 
     factoriesCost = { // factoryId -> (resource -> cant)
     <c:forEach items="${factories}" var="factory"> ${factory.type} : {
         <c:set var="cost" value="${factory.cost}"/>
         <c:forEach items="${cost.resources}" var="resource">
-        "${resource.id}" : ${cost.getValue(resource)},
+        "${resource}" : ${cost.getValue(resource)},
         </c:forEach>
     },</c:forEach>
     };
@@ -336,7 +341,7 @@
     ${factory.type} : {
         <c:set var="recipe" value="${factory.recipe}"/>
         <c:forEach items="${recipe.resources}" var="resource">
-        "${resource.id}" : ${recipe.getValue(resource)},
+        "${resource}" : ${recipe.getValue(resource)},
         </c:forEach> },
     </c:forEach>
     };
