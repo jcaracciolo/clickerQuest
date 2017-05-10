@@ -23,4 +23,12 @@ CREATE TABLE IF NOT EXISTS wealths (
   storage DOUBLE,
   lastUpdated BIGINT,
   PRIMARY KEY(userid, resourceType)
+);
+
+CREATE TABLE IF NOT EXISTS stockMarket (
+  time BIGINT,
+  userid BIGINT,
+  resourceType INTEGER,
+  amount DOUBLE,
+PRIMARY KEY(time,userid,resourceType)
 )

@@ -12,6 +12,24 @@ $(document).ready(function(){
     $('select').material_select();
 });
 
+var URLevent = window.location.href.split("#").pop()
+if (URLevent != "") {
+    switch (URLevent) {
+        case "sucSellMarket":
+            Materialize.toast('Resource successfully sold', 4000);
+            break;
+        case "sucBuyMarket":
+            Materialize.toast('Resource successfully bought', 4000);
+            break;
+        case "sucBuyFact":
+            Materialize.toast('Factory successfully bought', 4000);
+            break;
+        case "sucUpgFac":
+            Materialize.toast('Factory successfully upgraded', 4000);
+            break;
+    }
+    window.location.hash = ""
+}
 refreshValues(false);
 refreshView();
 refreshFactoriesBuyability();
@@ -32,11 +50,51 @@ function refreshView() {
         res = element.data("resource");
         element.text(String(abbreviateNumber(storagesMap[res], false)) + " + " + String(abbreviateNumber(productionsMap[res], true)) + unitPerSec)
     }
+
+
+    // TODO: make it different... but TIME IS NOT ENOUGH TO MAKE IT WELL
+    // update sell price
+    var unit = document.getElementById("market.sell.unit").value
+    var multiplier
+    switch (unit){
+        case "K": multiplier = 1000; break;
+        case "M": multiplier = 1000000; break;
+        case "B": multiplier = 1000000000; break;
+        case "T": multiplier = 1000000000000; break;
+        case "none":
+        default: multiplier = 1; break
+    }
+    var resourceId = document.getElementById("market.sell.resources").value;
+    var quantity = document.getElementById("market.sell.quantity").value;
+    if(resourceId != "" && quantity != "" && unit != "") {
+        document.getElementById("market.sell.price").innerHTML = "Gain: $" +abbreviateNumber(parseInt(quantity) * multiplier * costBuyResources[resourceId])
+    } else {
+        document.getElementById("market.sell.price").innerHTML = ""
+    }
+
+    // update buy price
+    var unit = document.getElementById("market.buy.unit").value
+    var multiplier
+    switch (unit){
+        case "K": multiplier = 1000; break;
+        case "M": multiplier = 1000000; break;
+        case "B": multiplier = 1000000000; break;
+        case "T": multiplier = 1000000000000; break;
+        case "none":
+        default: multiplier = 1; break
+    }
+    resourceId = document.getElementById("market.buy.resources").value;
+    quantity = document.getElementById("market.buy.quantity").value;
+    if(resourceId != "" && quantity != "" && unit != "") {
+        document.getElementById("market.buy.price").innerHTML = "Cost: $" + abbreviateNumber(parseInt(quantity) * multiplier * costBuyResources[resourceId])
+    } else {
+        document.getElementById("market.buy.price").innerHTML = ""
+    }
 }
 
 function refreshUpgradesBuyability() {
     var notBuyable= []
-    var availableMoney = storagesMap["MONEY"]
+    var availableMoney = storagesMap[3] // 3: money
     for (factId in upgradesCost) {
         if (upgradesCost[factId] > availableMoney) {
             document.getElementById("upgradeDisabler" + factId).classList.remove("canBuy");
@@ -85,6 +143,8 @@ setInterval(function(){
 
 // Buy listener
 $.each($(".buyFactory"),function (i,element){
+    document.getElementById("loading").classList.add("hidden");
+    document.getElementById("loading-disabler").classList.add("hidden");
     $("#" + element.id).clickSpark({
         particleImagePath: contextPath + '/resources/star_icon.png',
         particleCount: 55,
@@ -103,11 +163,18 @@ function buyFactory(id){
     $.post(contextPath + "/" + userId + "/buyFactory",
         {
             factoryId: id
-        }, function(data) { window.location.reload() });
+        }, function(data) {
+            document.getElementById("loading").classList.remove("hidden");
+            document.getElementById("loading-disabler").classList.remove("hidden");
+            window.location = contextPath + "#sucBuyFact"
+            window.location.reload()
+    });
 }
 
 // Upgrade listener
 $.each($(".upgradeButton"),function (i,element){
+    document.getElementById("loading").classList.add("hidden");
+    document.getElementById("loading-disabler").classList.add("hidden");
     $("#" + element.id).clickSpark({
         particleImagePath: contextPath + '/resources/star_icon.png',
         particleCount: 55,
@@ -125,7 +192,12 @@ function upgradeFactory(factId) {
     $.post(contextPath + "/" + userId + "/upgradeFactory",
         {
             factoryId: factId //$("#"+element.id).data("factoryid")
-        }, function(data) { window.location.reload() });
+        }, function(data) {
+            document.getElementById("loading").classList.remove("hidden");
+            document.getElementById("loading-disabler").classList.remove("hidden");
+            window.location = contextPath + "#sucUpgFac"
+            window.location.reload()
+    });
 }
 
 function abbreviateNumber(value,decimals) {
@@ -145,7 +217,7 @@ function abbreviateNumber(value,decimals) {
         if (shortValue % 1 != 0)  shortNum = shortValue.toFixed(1);
         newValue = shortValue+suffixes[suffixNum];
     }
-    return decimals ? Math.round(100* newValue)/100 : newValue;
+    return decimals ? Math.floor(100* newValue)/100 : newValue;
 }
 
 function truncate(number)
@@ -195,7 +267,16 @@ $(function() {
                 default: multiplier = 1; break
             }
             var resourceId = document.getElementById("market.buy.resources").value;
-            var quantity = parseFloat(document.getElementById("market.buy.quantity").value)*multiplier;
+            var quantity = document.getElementById("market.buy.quantity").value;
+
+            if (resourceId == "") {
+                document.getElementById("market-buy-resource-wrapper").classList.add("error")
+            } else {document.getElementById("market-buy-resource-wrapper").classList.remove("error")}
+            if (unit == "") {
+                document.getElementById("market-buy-unit-wrapper").classList.add("error")
+            } else {document.getElementById("market-buy-unit-wrapper").classList.remove("error")}
+
+            var quantity = parseFloat(quantity)*multiplier;
 
             if (validateBuy(resourceId, quantity)) {
                 $.post(contextPath + "/" + userId + "/buyFromMarket",
@@ -203,6 +284,8 @@ $(function() {
                         resourceId: resourceId,
                         quantity: quantity
                     }, function (data) {
+                        window.location = contextPath + "#sucBuyMarket"
+                        window.location.reload()
                 });
             }
         }
@@ -210,9 +293,10 @@ $(function() {
 
 
     function validateBuy(resourceId, quantity) {
-        if (storagesMap["MONEY"] > quantity * costBuyResources[resourceId]) {
+        if (storagesMap[resourceId] >= quantity * costBuyResources[resourceId]) { //3: MONEY
             return true;
         }
+        Materialize.toast('Not enough money to buy', 3000);
         return false
     }
 
@@ -252,15 +336,26 @@ $(function() {
                 case "none":
                 default: multiplier = 1; break
             }
-            var resourceId = document.getElementById("market.buy.resources").value;
-            var quantity = parseFloat(document.getElementById("market.buy.quantity").value)*multiplier;
+            var resourceId = document.getElementById("market.sell.resources").value;
+            var quantity = document.getElementById("market.sell.quantity").value;
 
-            if (validateSell(resourceId, quantity)) {
+            if (resourceId == "") {
+                document.getElementById("market-sell-resources-wrapper").classList.add("error")
+            } else {document.getElementById("market-sell-resources-wrapper").classList.remove("error")}
+            if (unit == "") {
+                document.getElementById("market-sell-unit-wrapper").classList.add("error")
+            } else {document.getElementById("market-sell-unit-wrapper").classList.remove("error")}
+
+            var quantity = parseFloat(quantity)*multiplier;
+
+            if (validateSell(parseInt(resourceId), quantity)) {
                 $.post(contextPath + "/" + userId + "/sellToMarket",
                     {
                         resourceId: resourceId,
                         quantity: quantity
                     }, function (data) {
+                        window.location = contextPath + "#sucSellMarket"
+                        window.location.reload()
                     });
             }
         }
@@ -268,9 +363,10 @@ $(function() {
 
 
     function validateSell(resourceId, quantity) {
-        if (storagesMap[resourceId] > quantity) {
+        if (storagesMap[resourceId] >= quantity) {
             return true;
         }
+        Materialize.toast('Not enough storage to sell', 3000);
         return false
     }
 });

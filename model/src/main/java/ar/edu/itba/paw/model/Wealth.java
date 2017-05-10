@@ -88,20 +88,27 @@ public class Wealth {
         calculatedStorage.rawMap().forEach(storageBuilder::putItem);
         calculatedStorage.getLastUpdated().forEach(storageBuilder::setLastUpdated);
         storageBuilder.addItem(ResourceType.MONEY,-u.getCost());
+
         productions.rawMap().forEach(productionsBuilder::putItem);
+        Map<ResourceType,Double> factoryInputs = f.getRecipe().getInputs();
+        Map<ResourceType,Double> factoryOutputs = f.getRecipe().getOutputs();
+
 
         if (u.getInputReduction() != 1) {
             factoriesProduction.getInputs().forEach(
                     (r, d) -> {
-//                        productionsBuilder.addItem(r, - u.getInputReduction());
-                        productionsBuilder.addItem(r, (d * (1 - u.getInputReduction())));
+                        productionsBuilder.addItem(r,d);
+                        productionsBuilder.addItem(r, - ( factoryInputs.get(r) * u.getInputReduction()));
                     }
             );
         }
 
         if (u.getOutputMultiplier() != 1) {
             factoriesProduction.getOutputs().forEach(
-                    (r, d) -> productionsBuilder.addItem(r, -(d * (1 - u.getOutputMultiplier())))
+                    (r, d) -> {
+                        productionsBuilder.addItem(r, -d);
+                        productionsBuilder.addItem(r,  factoryOutputs.get(r) * u.getOutputMultiplier());
+                    }
             );
         }
 

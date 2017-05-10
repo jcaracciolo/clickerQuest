@@ -5,6 +5,12 @@
 }
 .modal {
 	overflow: visible !important;
+	min-height: 20em;
+}
+
+.center-card-title {
+	font-weight: 800;
+	min-height: 3em;
 }
 
 ul {
@@ -23,7 +29,6 @@ form input {
 	height: 25px;
 	line-height: 25px;
 	background: #fff;
-	color: #000;
 	padding: 0 6px;
 	-moz-box-sizing: border-box;
 	-webkit-box-sizing: border-box;
@@ -38,7 +43,14 @@ form button {
 	cursor: pointer;
 }
 form .error {
-	color: #ff0000;
+	color: #ff0000 !important;
+}
+
+#toast-container {
+	top: auto !important;
+	right: auto !important;
+	bottom: 5%;
+	width: 50%;
 }
 
 .upgradeButton.btn.waves-light {
@@ -49,7 +61,7 @@ form .error {
 
 img.resource-icon {
     height: 1.2rem;
-    width: auto;
+    width: 1.2rem;
 }
 
 .marketButton {
@@ -62,10 +74,43 @@ body {
 	height: 100vh;
 	min-width: 1200px;
 	background-color: #DEDEDE;
+	position: relative;
 }
 
 div.factory-card-container {
 	position: relative;
+}
+.preloader-wrapper{
+	position: absolute!important;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	margin: auto;
+	height: 10em !important;
+	width: 10em !important;
+	z-index: 5;
+}
+
+.preloader-wrapper.hidden {
+	display: none !important;
+}
+
+#loading-disabler {
+	position: absolute;
+	height: 100%;
+	width: 100%;
+	background-color: #000000;
+	opacity: 0.4;
+	z-index: 2;
+}
+
+#loading-disabler.hidden {
+	display: none !important;
+}
+
+.dropdown-wrapper.error {
+	color: red;
 }
 
 .no-margins {
@@ -77,7 +122,7 @@ div.factory-card-container {
 }
 
 .factory-consuming, .factory-producing{
-    min-height: 6rem;
+    min-height: 6.4rem;
 }
 
 div.col.button-container {
