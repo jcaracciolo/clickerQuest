@@ -49,7 +49,7 @@
 
         <form action="" name="market.buy">
             <div class="row">
-                <div class="col s3">
+                <div id="market-buy-resource-wrapper" class="col s3 dropdown-wrapper">
                     <select name="resources" id="market.buy.resources" required>
                         <option value="" disabled selected><spring:message code="game.market.selectResource"/></option>
                         <c:forEach items="${storage.resources}" var="resource">
@@ -62,7 +62,7 @@
                 <div class="col s2">
                     <input type="text" name="quantity" id="market.buy.quantity" placeholder="Quantity">
                 </div>
-                <div class="col s3">
+                <div id="market-buy-unit-wrapper" class="col s3 dropdown-wrapper">
                     <select name="unit" id="market.buy.unit">
                         <option value="" disabled selected><spring:message code="game.market.selectUnit"/></option>
                         <option value="none"><i>No unit</i></option>
@@ -83,7 +83,7 @@
 
         <form action="" name="market.sell">
             <div class="row">
-                <div class="col s3">
+                <div id="market-sell-resources-wrapper" class="col s3 dropdown-wrapper">
                     <select name="resources" id="market.sell.resources" required>
                         <option value="" disabled selected><spring:message code="game.market.selectResource"/> </option>
                         <c:forEach items="${storage.resources}" var="resource">
@@ -96,7 +96,7 @@
                 <div class="col s2">
                     <input type="text" name="quantity" id="market.sell.quantity" placeholder="Quantity">
                 </div>
-                <div class="col s3">
+                <div id="market-sell-unit-wrapper" class="col s3 dropdown-wrapper">
                     <select name="unit" id="market.sell.unit">
                         <option value="" disabled selected><spring:message code="game.market.selectUnit"/> </option>
                         <option value="none"><i>No unit</i></option>

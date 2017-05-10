@@ -29,7 +29,6 @@ form input {
 	height: 25px;
 	line-height: 25px;
 	background: #fff;
-	color: #000;
 	padding: 0 6px;
 	-moz-box-sizing: border-box;
 	-webkit-box-sizing: border-box;
@@ -93,7 +92,6 @@ div.factory-card-container {
 	z-index: 5;
 }
 
-
 .preloader-wrapper.hidden {
 	display: none !important;
 }
@@ -109,6 +107,10 @@ div.factory-card-container {
 
 #loading-disabler.hidden {
 	display: none !important;
+}
+
+.dropdown-wrapper.error {
+	color: red;
 }
 
 .no-margins {
