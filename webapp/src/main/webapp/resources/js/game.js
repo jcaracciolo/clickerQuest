@@ -269,12 +269,16 @@ $(function() {
             var resourceId = document.getElementById("market.buy.resources").value;
             var quantity = document.getElementById("market.buy.quantity").value;
 
+            var ret = false;
             if (resourceId == "") {
+                ret = true;
                 document.getElementById("market-buy-resource-wrapper").classList.add("error")
             } else {document.getElementById("market-buy-resource-wrapper").classList.remove("error")}
             if (unit == "") {
+                ret = true;
                 document.getElementById("market-buy-unit-wrapper").classList.add("error")
             } else {document.getElementById("market-buy-unit-wrapper").classList.remove("error")}
+            if (ret) {return;}
 
             var quantity = parseFloat(quantity)*multiplier;
 
@@ -339,17 +343,21 @@ $(function() {
             var resourceId = document.getElementById("market.sell.resources").value;
             var quantity = document.getElementById("market.sell.quantity").value;
 
+            var ret = false;
             if (resourceId == "") {
+                ret = true;
                 document.getElementById("market-sell-resources-wrapper").classList.add("error")
             } else {document.getElementById("market-sell-resources-wrapper").classList.remove("error")}
             if (unit == "") {
+                ret = true;
                 document.getElementById("market-sell-unit-wrapper").classList.add("error")
             } else {document.getElementById("market-sell-unit-wrapper").classList.remove("error")}
+            if (ret) {return;}
 
             var quantity = parseFloat(quantity)*multiplier;
 
             if (validateSell(parseInt(resourceId), quantity)) {
-                $.post(contextPath + "/" + userId + "/sellToMarket",
+                $.post(contextPath + "/" + userId + "/sellTqoMarket",
                     {
                         resourceId: resourceId,
                         quantity: quantity

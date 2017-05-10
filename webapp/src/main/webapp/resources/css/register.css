@@ -30,14 +30,15 @@ h2 {
 .formError{
     width: 80%;
     margin:auto;
-    color: white;
+    font-weight: 600;
+    color: #ff2222;
     margin-top: -1em;
     max-width: 30em;
 
 }
 
 #registerForm{
-    background-color: darkblue;
+    /*background-color: darkblue;*/
     margin: auto;
     width: 70%;
     padding-bottom:  1em;
