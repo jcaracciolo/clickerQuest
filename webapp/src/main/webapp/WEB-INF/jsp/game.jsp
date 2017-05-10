@@ -27,6 +27,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 </head>
 <body>
+
+<%-- LOADING --%>
+<div id="loading-disabler" class="hidden"></div>
+<div id="loading" class="preloader-wrapper big active hidden">
+    <div class="spinner-layer spinner-blue-only">
+        <div class="circle-clipper left">
+            <div class="circle"></div>
+        </div><div class="gap-patch">
+        <div class="circle"></div>
+    </div><div class="circle-clipper right">
+        <div class="circle"></div>
+    </div>
+    </div>
+</div>
 <!-- Market Modal -->
 <div id="marketModal" class="modal">
     <div class="modal-content">
@@ -35,12 +49,12 @@
 
         <form action="" name="market.buy">
             <div class="row">
-                <div class="col s4">
+                <div class="col s3">
                     <select name="resources" id="market.buy.resources" required>
-                        <option value="" disabled selected><spring:message code="game.market.selectResource"/> </option>
+                        <option value="" disabled selected><spring:message code="game.market.selectResource"/></option>
                         <c:forEach items="${storage.resources}" var="resource">
                             <c:if test="${resource != 'MONEY'}">
-                                <option value="<c:out value='${resource.id}'/>"><spring:message code="${resource.nameCode}"/></option>
+                                <option value="<c:out value='${resource.id}'/>"><spring:message code="${resource.nameCode}"/><fmt:formatNumber pattern=" ($#)">${resource.price}</fmt:formatNumber></option>
                             </c:if>
                         </c:forEach>
                     </select>
@@ -58,7 +72,10 @@
                         <option value="T">T</option>
                     </select>
                 </div>
-                <div class="col s3">
+                <div class="col s2">
+                    <p id="market.buy.price"></p>
+                </div>
+                <div class="col s2">
                     <button type="submit"><spring:message code="game.market.buy"/></button>
                 </div>
             </div>
@@ -66,16 +83,15 @@
 
         <form action="" name="market.sell">
             <div class="row">
-                <div class="col s4">
+                <div class="col s3">
                     <select name="resources" id="market.sell.resources" required>
                         <option value="" disabled selected><spring:message code="game.market.selectResource"/> </option>
                         <c:forEach items="${storage.resources}" var="resource">
                             <c:if test="${resource != 'MONEY'}">
-                                <option value="${resource.id}"><spring:message code="${resource.nameCode}"/></option>
+                                <option value="<c:out value='${resource.id}'/>"><spring:message code="${resource.nameCode}"/><fmt:formatNumber pattern=" ($#)">${resource.price}</fmt:formatNumber></option>
                             </c:if>
                         </c:forEach>
                     </select>
-                    <label for="market.sell.resources">asdasd</label>
                 </div>
                 <div class="col s2">
                     <input type="text" name="quantity" id="market.sell.quantity" placeholder="Quantity">
@@ -90,7 +106,10 @@
                         <option value="T">T</option>
                     </select>
                 </div>
-                <div class="col s3">
+                <div class="col s2">
+                    <p id="market.sell.price"></p>
+                </div>
+                <div class="col s2">
                     <button type="submit"><spring:message code="game.market.sell"/></button>
                 </div>
             </div>
@@ -124,7 +143,7 @@
                             </div>
                             <div class="col">
                                 <p class="resourcesValue" data-resource="${resource.id}">
-                                    <fmt:formatNumber value="${storageMap.getValue(resource)}" pattern="#" minFractionDigits="0" maxFractionDigits="0"/>
+                                    <%--<fmt:formatNumber value="${storageMap.getValue(resource)}" pattern="#" minFractionDigits="0" maxFractionDigits="0"/>--%>
                                 </p>
                             </div>
                         </div>
@@ -142,7 +161,9 @@
                 <div class="col s3 factory-main">
                     <div class="card factory-central-card">
                         <div class="card-content">
-                            <h8 class="centered-text"><spring:message code="${factory.type.nameCode}"/></h8>
+                            <div class="center-card-title">
+                                <h8 class="centered-text"><spring:message code="${factory.type.nameCode}"/></h8>
+                            </div>
                             <c:set var="factoriesProduction" value="${factory.factoriesProduction}"/>
                             <c:set var="inputMap" value="${factoriesProduction.inputs}"/>
                             <div class="factory-consuming">
@@ -241,7 +262,7 @@
                                                 <img class="resource-icon tooltipped" data-position="top" data-delay="50"
                                                      data-tooltip='<spring:message code="${res.nameCode}"/>' src="<c:url value="/resources/resources_icon/${res.id}.png"/>"/>
                                             </div>
-                                            <div class="col">
+                                            <div class="col no-padding">
                                                 <p>
                                                     <fmt:formatNumber pattern="#.##/s " value="${inputMap.get(res)}"/>
                                                 </p>
@@ -258,7 +279,7 @@
                                                 <img class="resource-icon tooltipped" data-position="top" data-delay="50"
                                                      data-tooltip='<spring:message code="${res.nameCode}"/>' src="<c:url value="/resources/resources_icon/${res.id}.png"/>"/>
                                             </div>
-                                            <div class="col">
+                                            <div class="col no-padding">
                                                 <p>
                                                     <fmt:formatNumber pattern="#.##/s " value="${outputMap.get(res)}"/>
                                                 </p>
@@ -275,7 +296,7 @@
                                                     <img src="<c:url value="/resources/upgrade_icon.png"/>" alt="upgrade_icon"/>
                                                 </div>
                                                 <div class="row no-margins">
-                                                    <div class="col">
+                                                    <div class="col no-padding">
                                                         <img class="resource-icon tooltipped" data-position="top" data-delay="50"
                                                              src="<c:url value="/resources/resources_icon/3.png"/>"/>
                                                     </div>
@@ -301,6 +322,7 @@
     <div class="col s9 m8">
     </div>
 </div>
+
 </body>
 
 

@@ -5,6 +5,12 @@
 }
 .modal {
 	overflow: visible !important;
+	min-height: 20em;
+}
+
+.center-card-title {
+	font-weight: 800;
+	min-height: 3em;
 }
 
 ul {
@@ -56,7 +62,7 @@ form .error {
 
 img.resource-icon {
     height: 1.2rem;
-    width: auto;
+    width: 1.2rem;
 }
 
 .marketButton {
@@ -69,10 +75,40 @@ body {
 	height: 100vh;
 	min-width: 1200px;
 	background-color: #DEDEDE;
+	position: relative;
 }
 
 div.factory-card-container {
 	position: relative;
+}
+.preloader-wrapper{
+	position: absolute!important;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	margin: auto;
+	height: 10em !important;
+	width: 10em !important;
+	z-index: 5;
+}
+
+
+.preloader-wrapper.hidden {
+	display: none !important;
+}
+
+#loading-disabler {
+	position: absolute;
+	height: 100%;
+	width: 100%;
+	background-color: #000000;
+	opacity: 0.4;
+	z-index: 2;
+}
+
+#loading-disabler.hidden {
+	display: none !important;
 }
 
 .no-margins {
@@ -84,7 +120,7 @@ div.factory-card-container {
 }
 
 .factory-consuming, .factory-producing{
-    min-height: 6rem;
+    min-height: 6.4rem;
 }
 
 div.col.button-container {

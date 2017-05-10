@@ -50,6 +50,46 @@ function refreshView() {
         res = element.data("resource");
         element.text(String(abbreviateNumber(storagesMap[res], false)) + " + " + String(abbreviateNumber(productionsMap[res], true)) + unitPerSec)
     }
+
+
+    // TODO: make it different... but TIME IS NOT ENOUGH TO MAKE IT WELL
+    // update sell price
+    var unit = document.getElementById("market.sell.unit").value
+    var multiplier
+    switch (unit){
+        case "K": multiplier = 1000; break;
+        case "M": multiplier = 1000000; break;
+        case "B": multiplier = 1000000000; break;
+        case "T": multiplier = 1000000000000; break;
+        case "none":
+        default: multiplier = 1; break
+    }
+    var resourceId = document.getElementById("market.sell.resources").value;
+    var quantity = document.getElementById("market.sell.quantity").value;
+    if(resourceId != "" && quantity != "" && unit != "") {
+        document.getElementById("market.sell.price").innerHTML = "Gain: $" +abbreviateNumber(parseInt(quantity) * multiplier * costBuyResources[resourceId])
+    } else {
+        document.getElementById("market.sell.price").innerHTML = ""
+    }
+
+    // update buy price
+    var unit = document.getElementById("market.buy.unit").value
+    var multiplier
+    switch (unit){
+        case "K": multiplier = 1000; break;
+        case "M": multiplier = 1000000; break;
+        case "B": multiplier = 1000000000; break;
+        case "T": multiplier = 1000000000000; break;
+        case "none":
+        default: multiplier = 1; break
+    }
+    resourceId = document.getElementById("market.buy.resources").value;
+    quantity = document.getElementById("market.buy.quantity").value;
+    if(resourceId != "" && quantity != "" && unit != "") {
+        document.getElementById("market.buy.price").innerHTML = "Cost: $" + abbreviateNumber(parseInt(quantity) * multiplier * costBuyResources[resourceId])
+    } else {
+        document.getElementById("market.buy.price").innerHTML = ""
+    }
 }
 
 function refreshUpgradesBuyability() {
@@ -103,6 +143,8 @@ setInterval(function(){
 
 // Buy listener
 $.each($(".buyFactory"),function (i,element){
+    document.getElementById("loading").classList.add("hidden");
+    document.getElementById("loading-disabler").classList.add("hidden");
     $("#" + element.id).clickSpark({
         particleImagePath: contextPath + '/resources/star_icon.png',
         particleCount: 55,
@@ -122,6 +164,8 @@ function buyFactory(id){
         {
             factoryId: id
         }, function(data) {
+            document.getElementById("loading").classList.remove("hidden");
+            document.getElementById("loading-disabler").classList.remove("hidden");
             window.location = contextPath + "#sucBuyFact"
             window.location.reload()
     });
@@ -129,6 +173,8 @@ function buyFactory(id){
 
 // Upgrade listener
 $.each($(".upgradeButton"),function (i,element){
+    document.getElementById("loading").classList.add("hidden");
+    document.getElementById("loading-disabler").classList.add("hidden");
     $("#" + element.id).clickSpark({
         particleImagePath: contextPath + '/resources/star_icon.png',
         particleCount: 55,
@@ -147,6 +193,8 @@ function upgradeFactory(factId) {
         {
             factoryId: factId //$("#"+element.id).data("factoryid")
         }, function(data) {
+            document.getElementById("loading").classList.remove("hidden");
+            document.getElementById("loading-disabler").classList.remove("hidden");
             window.location = contextPath + "#sucUpgFac"
             window.location.reload()
     });
@@ -169,7 +217,7 @@ function abbreviateNumber(value,decimals) {
         if (shortValue % 1 != 0)  shortNum = shortValue.toFixed(1);
         newValue = shortValue+suffixes[suffixNum];
     }
-    return decimals ? Math.round(100* newValue)/100 : newValue;
+    return decimals ? Math.floor(100* newValue)/100 : newValue;
 }
 
 function truncate(number)
@@ -219,17 +267,8 @@ $(function() {
                 default: multiplier = 1; break
             }
             var resourceId = document.getElementById("market.buy.resources").value;
-            var quantity = document.getElementById("market.sell.quantity").value;
+            var quantity = document.getElementById("market.buy.quantity").value;
 
-            if (resourceId == "") {
-                $("#market.buy.resources").removeClass("valid");
-                $("#market.buy.resources").addClass("invalid");
-            }
-
-            if (quantity == ""){
-                $("#market.buy.quantity").removeClass("valid");
-                $("#market.buy.quantity").addClass("invalid");
-            }
             var quantity = parseFloat(quantity)*multiplier;
 
             if (validateBuy(resourceId, quantity)) {
@@ -247,7 +286,7 @@ $(function() {
 
 
     function validateBuy(resourceId, quantity) {
-        if (storagesMap[3] >= quantity * costBuyResources[resourceId]) { //3: MONEY
+        if (storagesMap[resourceId] >= quantity * costBuyResources[resourceId]) { //3: MONEY
             return true;
         }
         return false
@@ -292,15 +331,6 @@ $(function() {
             var resourceId = document.getElementById("market.sell.resources").value;
             var quantity = document.getElementById("market.sell.quantity").value;
 
-            if (resourceId == "") {
-                $("#market.sell.resources").removeClass("valid");
-                $("#market.sell.resources").addClass("invalid");
-            }
-
-            if (quantity == ""){
-                $("#market.sell.quantity").removeClass("valid");
-                $("#market.sell.quantity").addClass("invalid");
-            }
             var quantity = parseFloat(quantity)*multiplier;
 
             if (validateSell(parseInt(resourceId), quantity)) {

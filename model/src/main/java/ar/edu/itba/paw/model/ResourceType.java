@@ -28,7 +28,7 @@ public enum ResourceType {
     ResourceType(int id,String name) {
         this.id = id;
         this.nameCode = name;
-        price = 100;
+        price = (id + 1) * 2;
     }
 
     public double getPrice() {
