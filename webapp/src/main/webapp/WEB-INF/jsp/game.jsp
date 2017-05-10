@@ -344,11 +344,11 @@
         "${resource.id}" : ${resource.price},
         </c:forEach>};
 
-    factoriesCost = { // factoryId -> (resource -> cant)
+    factoriesCost = { // factoryId -> (resourceId -> cant)
     <c:forEach items="${factories}" var="factory"> ${factory.type} : {
         <c:set var="cost" value="${factory.cost}"/>
         <c:forEach items="${cost.resources}" var="resource">
-        "${resource}" : ${cost.getValue(resource)},
+        "${resource.id}" : ${cost.getValue(resource)},
         </c:forEach>
     },</c:forEach>
     };

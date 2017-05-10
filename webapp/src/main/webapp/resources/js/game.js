@@ -129,8 +129,6 @@ function refreshFactoriesBuyability() {
             document.getElementById("factoryDisabler" + factId).classList.add("canBuy");
         }
     }
-    for (var i = 0; i < Object.keys(factoriesCost).length; i++) {
-    }
 }
 
 setInterval(function(){
@@ -143,8 +141,6 @@ setInterval(function(){
 
 // Buy listener
 $.each($(".buyFactory"),function (i,element){
-    document.getElementById("loading").classList.add("hidden");
-    document.getElementById("loading-disabler").classList.add("hidden");
     $("#" + element.id).clickSpark({
         particleImagePath: contextPath + '/resources/star_icon.png',
         particleCount: 55,
@@ -153,6 +149,8 @@ $.each($(".buyFactory"),function (i,element){
         particleRotationSpeed: 20,
         animationType:'explosion',
         callback: function() {
+            document.getElementById("loading").classList.remove("hidden");
+            document.getElementById("loading-disabler").classList.remove("hidden");
             buyFactory($("#"+element.id).data("factoryid"))
         }
     })
@@ -164,17 +162,13 @@ function buyFactory(id){
         {
             factoryId: id
         }, function(data) {
-            document.getElementById("loading").classList.remove("hidden");
-            document.getElementById("loading-disabler").classList.remove("hidden");
-            window.location = contextPath + "#sucBuyFact"
+            window.location.hash = "sucBuyFact"
             window.location.reload()
     });
 }
 
 // Upgrade listener
 $.each($(".upgradeButton"),function (i,element){
-    document.getElementById("loading").classList.add("hidden");
-    document.getElementById("loading-disabler").classList.add("hidden");
     $("#" + element.id).clickSpark({
         particleImagePath: contextPath + '/resources/star_icon.png',
         particleCount: 55,
@@ -183,6 +177,8 @@ $.each($(".upgradeButton"),function (i,element){
         particleRotationSpeed: 20,
         animationType:'explosion',
         callback: function() {
+            document.getElementById("loading").classList.remove("hidden");
+            document.getElementById("loading-disabler").classList.remove("hidden");
             upgradeFactory($("#"+element.id).data("factoryid"))
         }
     })
@@ -193,9 +189,7 @@ function upgradeFactory(factId) {
         {
             factoryId: factId //$("#"+element.id).data("factoryid")
         }, function(data) {
-            document.getElementById("loading").classList.remove("hidden");
-            document.getElementById("loading-disabler").classList.remove("hidden");
-            window.location = contextPath + "#sucUpgFac"
+            window.location.hash = "sucUpgFac"
             window.location.reload()
     });
 }
@@ -288,7 +282,7 @@ $(function() {
                         resourceId: resourceId,
                         quantity: quantity
                     }, function (data) {
-                        window.location = contextPath + "#sucBuyMarket"
+                        window.location.hash = "sucBuyMarket"
                         window.location.reload()
                 });
             }
@@ -297,7 +291,7 @@ $(function() {
 
 
     function validateBuy(resourceId, quantity) {
-        if (storagesMap[resourceId] >= quantity * costBuyResources[resourceId]) { //3: MONEY
+        if (storagesMap[3] >= quantity * costBuyResources[resourceId]) { //3: MONEY
             return true;
         }
         Materialize.toast('Not enough money to buy', 3000);
@@ -357,12 +351,12 @@ $(function() {
             var quantity = parseFloat(quantity)*multiplier;
 
             if (validateSell(parseInt(resourceId), quantity)) {
-                $.post(contextPath + "/" + userId + "/sellTqoMarket",
+                $.post(contextPath + "/" + userId + "/sellToMarket",
                     {
                         resourceId: resourceId,
                         quantity: quantity
                     }, function (data) {
-                        window.location = contextPath + "#sucSellMarket"
+                        window.location.hash = "sucSellMarket"
                         window.location.reload()
                     });
             }
