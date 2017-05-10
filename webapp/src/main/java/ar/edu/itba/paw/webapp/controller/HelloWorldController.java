@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.*;
 import org.springframework.validation.beanvalidation.CustomValidatorBean;
@@ -38,16 +39,16 @@ public class HelloWorldController {
 
 
     // INDEX
-    @RequestMapping("/")
+    @RequestMapping("/login")
     public ModelAndView index(@ModelAttribute("registerForm") final UserForm form) {
         ModelAndView mav = new ModelAndView("index");
 //        mav.addObject("message","Congratulations, you successfully setup the project (quite an achievement)");
         return mav;
     }
 
-    @RequestMapping(value = "/startGame", method = { RequestMethod.GET })
-    public ModelAndView startGame(@RequestParam("username") final String username){
-        User u = userService.findByUsername(username);
+    @RequestMapping(value = "/startGame", method = { RequestMethod.POST })
+    public ModelAndView startGame(){
+        User u = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if(u != null) return new ModelAndView("redirect:/" + u.getId() + "/game");
         return new ModelAndView("index");
     }
@@ -114,6 +115,7 @@ public class HelloWorldController {
     public ModelAndView buyFromMarket(@PathVariable long userId, @RequestParam("resourceId") final String resourceName,
                                       @RequestParam("quantity")final double quantity) {
         // DO STUFF
+
         System.out.println("Buying: " + userId + " " + resourceName + " " + quantity);
         return null;
     }

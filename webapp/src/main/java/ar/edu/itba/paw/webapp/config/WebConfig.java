@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.webapp.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
@@ -30,7 +31,6 @@ import java.nio.charset.StandardCharsets;
 public class WebConfig {
 
     // --------- WEBAPP
-
     /**
      * ViewResolver for the Webapp. JSP files located in WEB-INF/jsp/ will composed
      * the different views of our Webapp
