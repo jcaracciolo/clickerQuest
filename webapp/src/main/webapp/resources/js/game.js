@@ -12,6 +12,24 @@ $(document).ready(function(){
     $('select').material_select();
 });
 
+var URLevent = window.location.href.split("#").pop()
+if (URLevent != "") {
+    switch (URLevent) {
+        case "sucSellMarket":
+            Materialize.toast('Successful resource sell', 4000);
+            break;
+        case "sucBuyMarket":
+            Materialize.toast('Successful resource buy', 4000);
+            break;
+        case "sucBuyFact":
+            Materialize.toast('Successful factory buy ', 4000);
+            break;
+        case "sucUpgFac":
+            Materialize.toast('Successful factory upgrade', 4000);
+            break;
+    }
+    window.location.hash = ""
+}
 refreshValues(false);
 refreshView();
 refreshFactoriesBuyability();
@@ -103,7 +121,10 @@ function buyFactory(id){
     $.post(contextPath + "/" + userId + "/buyFactory",
         {
             factoryId: id
-        }, function(data) { window.location.reload() });
+        }, function(data) {
+            window.location = contextPath + "#sucBuyFact"
+            window.location.reload()
+    });
 }
 
 // Upgrade listener
@@ -125,7 +146,10 @@ function upgradeFactory(factId) {
     $.post(contextPath + "/" + userId + "/upgradeFactory",
         {
             factoryId: factId //$("#"+element.id).data("factoryid")
-        }, function(data) { window.location.reload() });
+        }, function(data) {
+            window.location = contextPath + "#sucUpgFac"
+            window.location.reload()
+    });
 }
 
 function abbreviateNumber(value,decimals) {
@@ -195,7 +219,18 @@ $(function() {
                 default: multiplier = 1; break
             }
             var resourceId = document.getElementById("market.buy.resources").value;
-            var quantity = parseFloat(document.getElementById("market.buy.quantity").value)*multiplier;
+            var quantity = document.getElementById("market.sell.quantity").value;
+
+            if (resourceId == "") {
+                $("#market.buy.resources").removeClass("valid");
+                $("#market.buy.resources").addClass("invalid");
+            }
+
+            if (quantity == ""){
+                $("#market.buy.quantity").removeClass("valid");
+                $("#market.buy.quantity").addClass("invalid");
+            }
+            var quantity = parseFloat(quantity)*multiplier;
 
             if (validateBuy(resourceId, quantity)) {
                 $.post(contextPath + "/" + userId + "/buyFromMarket",
@@ -203,6 +238,8 @@ $(function() {
                         resourceId: resourceId,
                         quantity: quantity
                     }, function (data) {
+                        window.location = contextPath + "#sucBuyMarket"
+                        window.location.reload()
                 });
             }
         }
@@ -253,7 +290,18 @@ $(function() {
                 default: multiplier = 1; break
             }
             var resourceId = document.getElementById("market.sell.resources").value;
-            var quantity = parseFloat(document.getElementById("market.sell.quantity").value)*multiplier;
+            var quantity = document.getElementById("market.sell.quantity").value;
+
+            if (resourceId == "") {
+                $("#market.sell.resources").removeClass("valid");
+                $("#market.sell.resources").addClass("invalid");
+            }
+
+            if (quantity == ""){
+                $("#market.sell.quantity").removeClass("valid");
+                $("#market.sell.quantity").addClass("invalid");
+            }
+            var quantity = parseFloat(quantity)*multiplier;
 
             if (validateSell(parseInt(resourceId), quantity)) {
                 $.post(contextPath + "/" + userId + "/sellToMarket",
@@ -261,6 +309,8 @@ $(function() {
                         resourceId: resourceId,
                         quantity: quantity
                     }, function (data) {
+                        window.location = contextPath + "#sucSellMarket"
+                        window.location.reload()
                     });
             }
         }

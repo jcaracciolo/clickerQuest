@@ -38,7 +38,14 @@ form button {
 	cursor: pointer;
 }
 form .error {
-	color: #ff0000;
+	color: #ff0000 !important;
+}
+
+#toast-container {
+	top: auto !important;
+	right: auto !important;
+	bottom: 5%;
+	width: 50%;
 }
 
 .upgradeButton.btn.waves-light {

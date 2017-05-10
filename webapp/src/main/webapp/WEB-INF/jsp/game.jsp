@@ -75,6 +75,7 @@
                             </c:if>
                         </c:forEach>
                     </select>
+                    <label for="market.sell.resources">asdasd</label>
                 </div>
                 <div class="col s2">
                     <input type="text" name="quantity" id="market.sell.quantity" placeholder="Quantity">
