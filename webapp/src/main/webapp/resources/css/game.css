@@ -77,9 +77,24 @@ body {
 	position: relative;
 }
 
+.nav-wrapper {
+	background-color: #354488;
+}
+.scrollable-y.card {
+	background-color: #3f51b5;
+}
+
+.upper-logo {
+	max-height: 1em;
+	margin-top: 0.5em;
+	margin-left: 0.5em;
+	margin-right: 0.5em;
+}
+
 div.factory-card-container {
 	position: relative;
 }
+
 .preloader-wrapper{
 	position: absolute!important;
 	left: 0;

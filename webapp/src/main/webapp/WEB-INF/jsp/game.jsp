@@ -117,9 +117,24 @@
     </div>
 </div>
 <div class="row main-frame">
+    <div class="navbar-fixed">
+        <nav>
+            <div class="nav-wrapper">
+                <a href='<c:url value="/"/>' id="logo-container" href="#" class="brand-logo">
+                    <img class="upper-logo" src="<c:url value="/resources/clickerQuest_logo.png"/>" alt="logo"/>
+                </a>
+
+                <ul id="nav-mobile" class="right hide-on-med-and-down">
+                    <li><a href="sass.html">Sass</a></li>
+                    <li><a href="badges.html">Components</a></li>
+                    <li><a href="collapsible.html">JavaScript</a></li>
+                </ul>
+            </div>
+        </nav>
+    </div>
     <!-- LEFT PANEL -->
     <div class="col no-padding s2">
-        <div class="scrollable-y card indigo darken-1">
+        <div class="scrollable-y card darken-1">
             <div class="card-content white-text">
                 <span class="card-title"><spring:message code="game.profile"/></span>
                 <div class="section">
@@ -143,7 +158,7 @@
                             </div>
                             <div class="col">
                                 <p class="resourcesValue" data-resource="${resource.id}">
-                                    <%--<fmt:formatNumber value="${storageMap.getValue(resource)}" pattern="#" minFractionDigits="0" maxFractionDigits="0"/>--%>
+                                        <%--<fmt:formatNumber value="${storageMap.getValue(resource)}" pattern="#" minFractionDigits="0" maxFractionDigits="0"/>--%>
                                 </p>
                             </div>
                         </div>
@@ -219,7 +234,7 @@
     </div>
     <!-- RIGHT PANEL -->
     <div class="col no-padding s3">
-        <div class="scrollable-y card indigo darken-1">
+        <div class="scrollable-y card darken-1">
             <div class="card-content white-text">
                 <span class="card-title"><spring:message code="game.factories"/></span>
                 <c:forEach items="${factories}" var="factory" varStatus="loop">
