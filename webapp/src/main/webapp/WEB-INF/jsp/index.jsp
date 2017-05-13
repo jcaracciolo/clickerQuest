@@ -13,7 +13,7 @@
 <img id="logo" class="profile" src="<c:url value="/resources/clickerQuest_logo.png"/>" alt="logo"/>
 
 <%--<input id="usernameInput" type="text" name="username" placeholder="username">--%>
-<c:url value = "/startGame" var = "loginUrl"/>
+<c:url value = "/login" var = "loginUrl"/>
     <form action = "${loginUrl}" method = "post" enctype = "application/x-www-form-urlencoded">
         <div>
             <label for="usernameInput">Username: </label>

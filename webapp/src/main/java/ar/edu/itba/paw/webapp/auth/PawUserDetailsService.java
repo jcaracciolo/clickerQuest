@@ -10,6 +10,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
@@ -18,9 +20,9 @@ import java.util.Collection;
 @Component
 public class PawUserDetailsService implements UserDetailsService {
 
-    @Qualifier("userServiceImpl")
     @Autowired
     private UserService us;
+
     @Override
     public UserDetails loadUserByUsername (final String username) throws UsernameNotFoundException {
         final User user = us.findByUsername(username);

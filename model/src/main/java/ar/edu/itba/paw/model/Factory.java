@@ -25,7 +25,6 @@ public class Factory implements Comparable<Factory> {
         this.outputMultiplier = outputMultiplier;
         this.costReduction = costReduction;
         this.level = level;
-
     }
 
     public long getUserid() {

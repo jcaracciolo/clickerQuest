@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.*;
 import org.springframework.validation.beanvalidation.CustomValidatorBean;
@@ -17,9 +18,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 
-
+import javax.jws.soap.SOAPBinding;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.Arrays;
 import java.util.Random;
 import java.util.Set;
@@ -47,8 +49,9 @@ public class HelloWorldController {
     }
 
     @RequestMapping(value = "/startGame", method = { RequestMethod.POST })
-    public ModelAndView startGame(){
+    public ModelAndView startGame(Principal principal){
         User u = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        User u = (User) principal;
         if(u != null) return new ModelAndView("redirect:/" + u.getId() + "/game");
         return new ModelAndView("index");
     }
@@ -79,6 +82,7 @@ public class HelloWorldController {
         final User u = userService.create(form.getUsername(), form.getPassword(),imageID + ".jpg");
         return new ModelAndView("redirect:/" + u.getId() + "/game");
     }
+
 
     // GAME
     @RequestMapping(value = "/{userId}/game")
