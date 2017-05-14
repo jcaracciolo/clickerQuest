@@ -9,24 +9,24 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.*;
-import org.springframework.validation.beanvalidation.CustomValidatorBean;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 
-import javax.jws.soap.SOAPBinding;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.security.Principal;
-import java.util.Arrays;
 import java.util.Random;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.stream.Stream;
 
 /**
  * Created by juanfra on 22/03/17.
@@ -38,22 +38,17 @@ public class HelloWorldController {
     @Qualifier("userServiceImpl")
     @Autowired
     private UserService userService;
-
+    @Autowired
+    private AuthenticationProvider authProvider;
 
     // INDEX
     @RequestMapping("/login")
-    public ModelAndView index(@ModelAttribute("registerForm") final UserForm form) {
+    public ModelAndView index(@ModelAttribute("registerForm") final UserForm form, Principal principal) {
+        if(principal != null){
+            return new ModelAndView("redirect:/game");
+        }
         ModelAndView mav = new ModelAndView("index");
-//        mav.addObject("message","Congratulations, you successfully setup the project (quite an achievement)");
         return mav;
-    }
-
-    @RequestMapping(value = "/startGame", method = { RequestMethod.POST })
-    public ModelAndView startGame(Principal principal){
-        User u = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        User u = (User) principal;
-        if(u != null) return new ModelAndView("redirect:/" + u.getId() + "/game");
-        return new ModelAndView("index");
     }
 
     @RequestMapping(value = "/register")
@@ -66,69 +61,85 @@ public class HelloWorldController {
     // CREATE
     @RequestMapping(value = "/create", method = { RequestMethod.GET })
     public ModelAndView createGET( @ModelAttribute("registerForm") final UserForm form, final BindingResult errors) {
-        ModelAndView mav = new ModelAndView("registerForm");
+         ModelAndView mav = new ModelAndView("registerForm");
         mav.addObject("userform",new UserForm());
         return mav;
 
     }
 
     @RequestMapping(value = "/create", method = { RequestMethod.POST })
-    public ModelAndView createPOST(@Valid @ModelAttribute("registerForm") final UserForm form, final BindingResult rawErrors) {
+    public ModelAndView createPOST( @Valid @ModelAttribute("registerForm") final UserForm form, final BindingResult rawErrors, HttpServletRequest request) {
         BindingResult errors = prioritizeErrors(form,rawErrors);
         if (errors.hasErrors()) {
             return createGET(form,errors);
         }
         int imageID = Math.abs(new Random().nextInt() % 11);
         final User u = userService.create(form.getUsername(), form.getPassword(),imageID + ".jpg");
-        return new ModelAndView("redirect:/" + u.getId() + "/game");
+
+
+        UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(form.getUsername(), form.getPassword());
+
+        authRequest.setDetails(new WebAuthenticationDetails(request));
+        Authentication authentication = this.authProvider.authenticate(authRequest);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        return new ModelAndView("redirect:/game");
     }
 
 
     // GAME
-    @RequestMapping(value = "/{userId}/game")
-    public ModelAndView mainGameView(@PathVariable long userId){
+    @RequestMapping(value = "/game")
+    public ModelAndView mainGameView( Principal principal){
+        if(principal == null || principal.getName() == null){
+            return new ModelAndView("redirect:/login");
+        }
         ModelAndView mav = new ModelAndView("game");
-        if(userService.findById(userId) == null){
+        User u = userService.findByUsername(principal.getName());
+        if(u == null){
             mav = new ModelAndView("errorPage");
             mav.addObject("errorMsg", "404");
-            LOGGER.error("{} tried to skip login",userId);
+            LOGGER.error("{} tried to skip login",u.getId());
             return mav;
         }
-        Set<Factory> factories = new TreeSet(userService.getUserFactories(userId));
+        Set<Factory> factories = new TreeSet(userService.getUserFactories(u.getId()));
 
-        mav.addObject("user", userService.findById(userId));
-        mav.addObject("storage",userService.getUserStorage(userId));
+        mav.addObject("user", userService.findById(u.getId()));
+        mav.addObject("storage",userService.getUserStorage(u.getId()));
         mav.addObject("factories",factories);
-        mav.addObject("productions",userService.getUserProductions(userId));
+        mav.addObject("productions",userService.getUserProductions(u.getId()));
         return mav;
     }
 
-    @RequestMapping(value = "/{userId}/buyFactory")
-    public ModelAndView purchaseFactory(@PathVariable long userId, @RequestParam("factoryId") final int factoryId){
-        userService.purchaseFactory(userId, FactoryType.fromId(factoryId));
-        return new ModelAndView("redirect:/" + userId + "/game");
+    @RequestMapping(value = "/buyFactory")
+    @ResponseBody
+    public ModelAndView purchaseFactory(Principal principal, @RequestParam("factoryId") final int factoryId){
+        userService.purchaseFactory(userService.findByUsername(principal.getName()).getId(), FactoryType.fromId(factoryId));
+        return new ModelAndView("redirect:/game");
     }
 
-    @RequestMapping(value = "/{userId}/upgradeFactory")
-    public ModelAndView upgradeFactory(@PathVariable long userId, @RequestParam("factoryId") final int factoryId){
-        userService.purchaseUpgrade(userId, FactoryType.fromId(factoryId));
-        return new ModelAndView("redirect:/" + userId + "/game");
+    @RequestMapping(value = "/upgradeFactory")
+    @ResponseBody
+    public ModelAndView upgradeFactory(Principal principal, @RequestParam("factoryId") final int factoryId){
+        userService.purchaseUpgrade(userService.findByUsername(principal.getName()).getId(), FactoryType.fromId(factoryId));
+        return new ModelAndView("redirect:/game");
     }
 
-    @RequestMapping(value = "/{userId}/buyFromMarket", method = { RequestMethod.POST })
-    public ModelAndView buyFromMarket(@PathVariable long userId, @RequestParam("resourceId") final String resourceName,
+    @RequestMapping(value = "/buyFromMarket", method = { RequestMethod.POST })
+    @ResponseBody
+    public ModelAndView buyFromMarket(Principal principal, @RequestParam("resourceId") final String resourceName,
                                       @RequestParam("quantity")final double quantity) {
         // DO STUFF
 
-        System.out.println("Buying: " + userId + " " + resourceName + " " + quantity);
+        System.out.println("Buying: " + userService.findByUsername(principal.getName()).getId() + " " + resourceName + " " + quantity);
         return null;
     }
 
-    @RequestMapping(value = "/{userId}/sellToMarket", method = { RequestMethod.POST })
-    public ModelAndView sellToMarket(@PathVariable long userId, @RequestParam("resourceId") final String resourceName,
+    @RequestMapping(value = "/sellToMarket", method = { RequestMethod.POST })
+    @ResponseBody
+    public ModelAndView sellToMarket(Principal principal, @RequestParam("resourceId") final String resourceName,
                                       @RequestParam("quantity")final double quantity) {
         // DO STUFF
-        System.out.println("Selling: " + userId + " " + resourceName + " " + quantity);
+        System.out.println("Selling: " + userService.findByUsername(principal.getName()).getId() + " " + resourceName + " " + quantity);
         return null;
     }
 

@@ -101,12 +101,7 @@ $.each($(".buyFactory"),function (i,element){
 });
 
 
-function buyFactory(id){
-    $.post(contextPath + "/" + userId + "/buyFactory",
-        {
-            factoryId: id
-        }, function(data) { window.location.reload() });
-}
+
 
 // Upgrade listener
 $.each($(".upgradeButton"),function (i,element){
@@ -123,13 +118,23 @@ $.each($(".upgradeButton"),function (i,element){
     })
 });
 
-function upgradeFactory(factId) {
-    $.post(contextPath + "/" + userId + "/upgradeFactory",
+function buyFactory(id){
+    $.post(contextPath + "/buyFactory",
         {
-            factoryId: factId //$("#"+element.id).data("factoryid")
-        }, function(data) { window.location.reload() });
+            factoryId: id
+        }, function(data) {
+            window.location.reload()
+        });
 }
 
+function upgradeFactory(factId) {
+    $.post(contextPath + "/upgradeFactory",
+        {
+            factoryId: factId //$("#"+element.id).data("factoryid")
+        }, function(data) {
+            window.location.reload()
+        });
+}
 function abbreviateNumber(value,decimals) {
     var newValue = value;
     if(! decimals || value>=10000) {
@@ -204,7 +209,7 @@ $(function() {
                 case "none":
                 default: multiplier = 1; break
             }
-            $.post(contextPath + "/" + userId + "/buyToMarket",
+            $.post(contextPath + "/buyToMarket",
                 {
                     resourceId: document.getElementById("market.buy.resources").value,
                     quantity: parseFloat(document.getElementById("market.buy.quantity").value)*multiplier
@@ -256,7 +261,7 @@ $(function() {
                 case "none":
                 default: multiplier = 1; break
             }
-            $.post(contextPath + "/" + userId + "/sellToMarket",
+            $.post(contextPath + "/sellToMarket",
                 {
                     resourceId: document.getElementById("market.sell.resources").value,
                     quantity: parseFloat(document.getElementById("market.sell.quantity").value)*multiplier

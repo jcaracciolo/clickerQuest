@@ -12,6 +12,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -29,23 +30,29 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
         http.userDetailsService(userDetailsService)
-                .sessionManagement()
-                .invalidSessionUrl("/invalid")
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
+                .invalidSessionUrl("/login")
                 .and().authorizeRequests()
-                .antMatchers("/login").anonymous()
-                .antMatchers("/**")
-                .authenticated().and()
-                .formLogin().usernameParameter("j_username")
-                .passwordParameter("j_password")
-                .defaultSuccessUrl("/startGame")
-                .loginPage("/login").and().rememberMe()
-                .rememberMeParameter("j_rememberme")
-                .userDetailsService(userDetailsService)
-                .key("mysupersecretketthatnobodyknowsabout")
-                .tokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(30))
-                .and().logout().logoutUrl("/logout")
-                .logoutSuccessUrl("/loginlogout").and()
-                .exceptionHandling().accessDeniedPage("/403")
+                    .antMatchers("/login").permitAll()
+                    .antMatchers("/create").permitAll()
+                    .antMatchers("/**").authenticated()
+                .and()
+                    .formLogin()
+                    .usernameParameter("j_username")
+                    .passwordParameter("j_password")
+                    .defaultSuccessUrl("/game")
+                    .loginPage("/login")
+                .and()
+                    .rememberMe()
+                    .rememberMeParameter("j_rememberme")
+                    .userDetailsService(userDetailsService)
+                    .key("mysupersecretketthatnobodyknowsabout")
+                    .tokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(30))
+                .and()
+                    .logout().logoutUrl("/logout")
+                    .logoutSuccessUrl("/loginlogout")
+                .and()
+                    .exceptionHandling().accessDeniedPage("/403")
                 .and().csrf().disable();
     }
     @Override
@@ -55,6 +62,8 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+//        auth.inMemoryAuthentication().withUser("journal").password("journal").authorities("ROLE_USER");
+
         auth.userDetailsService(userDetailsService);
     }
 
