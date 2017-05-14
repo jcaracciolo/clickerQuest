@@ -129,6 +129,7 @@
                     <p class="username" data-userid="${user.id}"><c:out value="${user.username}"/></p>
                 </div>
             </div>
+            <a class="waves-effect waves-light btn logoutButton" href="/logout">Logout</a>
             <div class="divider"></div>
             <a class="waves-effect waves-light btn marketButton" href="#marketModal"><spring:message code="game.market"/></a>
             <div class="card-content white-text">

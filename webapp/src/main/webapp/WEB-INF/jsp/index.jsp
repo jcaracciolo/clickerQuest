@@ -14,24 +14,26 @@
 
 <%--<input id="usernameInput" type="text" name="username" placeholder="username">--%>
 <c:url value = "/login" var = "loginUrl"/>
-    <form action = "${loginUrl}" method = "post" enctype = "application/x-www-form-urlencoded">
-        <div>
-            <label for="usernameInput">Username: </label>
-            <input id = "usernameInput" name = "j_username" type ="text"/>
+    <form class="formu" action = "${loginUrl}" method = "post" enctype = "application/x-www-form-urlencoded">
+        <div class="container">
+            <div>
+                <label for="usernameInput"><spring:message code="signUp.username"/> :</label>
+                <input id = "usernameInput" name = "j_username" type ="text"/>
+            </div>
+            <div>
+                <label for ="passwordInput">Password: </label>
+                <input id = "passwordInput" name = "j_password" type = "password"/>
+            </div>
         </div>
         <div>
-            <label for ="passwordInput">Password: </label>
-            <input id = "passwordInput" name = "j_password" type = "password"/>
+            <input id="rememberMe" name = "j_rememberme" type = "checkbox"/>
+            <label for ="rememberMe"><spring:message code = "remember_me"/></label>
         </div>
         <div>
-            <label>
-                <input name = "j_rememberme" type = "checkbox"/>
-                <spring:message code = "remember_me"/>
-            </label>
+            <img id="playImg" type= "submit" class="profile" src="<c:url value="/resources/play_button.png"/>" alt="factory_img" />
         </div>
-        <div>
-            <button id="play" type= "submit" class="profile" src="<c:url value="/resources/play_button.png"/>" alt="factory_img" value="">Play!<button>
-            <%--<input type = "submit" value = "Login!"/>--%>
+        <div class="invisible">
+            <input id="play" type= "submit" />
         </div>
     </form>
 <p id="register"><spring:message code="index.register"/></p>

@@ -1,22 +1,9 @@
-// /**
-//  * Created by epord on 4/11/17.
-//  */
-// console.log("version 1.1");
-// sessionStorage.removeItem("usernameReg");
-//
-// // play click listener
-// document.getElementById("play").addEventListener("mousedown", function () {
-//     this.src = contextPath + "/resources/play_button_pressed.png"
-//
-// });
-// document.getElementById("play").addEventListener("mouseup", tryLogIn);
-//
-// $('#usernameInput').on('keydown', function(e) {
-//     if (e.which == 13) {
-//         e.preventDefault();
-//         tryLogIn();
-//     }
-// });
+
+
+document.getElementById("playImg").addEventListener("mousedown", function () {
+    $("#play").click();
+});
+
 // register listeners
 document.getElementById("register").addEventListener("mouseover", function() {
    this.classList.add("mouseOver")
