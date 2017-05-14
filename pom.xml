@@ -31,6 +31,7 @@
     <maven.compiler.target>1.8</maven.compiler.target>
     <maven-war-plugin.version>2.6</maven-war-plugin.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <spring-security.version>4.0.4.RELEASE</spring-security.version>
   </properties>
 
   <dependencyManagement>
@@ -137,7 +138,21 @@
         <version>${logback-ext-spring.version}</version>
         <scope>runtime</scope>
       </dependency>
-
+      <dependency>
+        <groupId>org.springframework.security</groupId>
+        <artifactId>spring-security-core</artifactId>
+        <version>${spring-security.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework.security</groupId>
+        <artifactId>spring-security-web</artifactId>
+        <version>${spring-security.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework.security</groupId>
+        <artifactId>spring-security-config</artifactId>
+        <version>${spring-security.version}</version>
+      </dependency>
     </dependencies>
   </dependencyManagement>
   <build>

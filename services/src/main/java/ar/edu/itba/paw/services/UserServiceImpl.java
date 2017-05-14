@@ -8,6 +8,8 @@ import ar.edu.itba.paw.model.packages.Implementations.Productions;
 import ar.edu.itba.paw.model.packages.Implementations.Storage;
 import ar.edu.itba.paw.model.packages.PackageBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -20,6 +22,8 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     UserDao userDao;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
     MarketDao marketDao;
@@ -58,8 +62,9 @@ public class UserServiceImpl implements UserService {
     //endregion
 
     //region creation
+
     public User create(String username, String password, String img) {
-        User user = userDao.create(username,password,img);
+        User user = userDao.create(username,passwordEncoder.encode(password),img);
         if(user != null){
             purchaseFactory(user.getId(),FactoryType.PEOPLE_RECRUITING_BASE);
             purchaseFactory(user.getId(),FactoryType.STOCK_INVESTMENT_BASE);
