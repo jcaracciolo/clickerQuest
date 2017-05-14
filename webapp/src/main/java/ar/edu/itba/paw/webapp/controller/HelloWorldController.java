@@ -1,10 +1,7 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.UserService;
-import ar.edu.itba.paw.model.Factory;
-import ar.edu.itba.paw.model.FactoryType;
-import ar.edu.itba.paw.model.ResourceType;
-import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.webapp.form.UserForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,7 +11,6 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.*;
@@ -100,11 +96,11 @@ public class HelloWorldController {
             return mav;
         }
         Set<Factory> factories = new TreeSet(userService.getUserFactories(u.getId()));
-
-        mav.addObject("user", userService.findById(u.getId()));
-        mav.addObject("storage",userService.getUserStorage(u.getId()));
+        Wealth wealth = userService.getUserWealth(u.getId());
+        mav.addObject("user", u);
+        mav.addObject("storage",wealth.getStorage());
         mav.addObject("factories",factories);
-        mav.addObject("productions",userService.getUserProductions(u.getId()));
+        mav.addObject("productions",wealth.getProductions());
         return mav;
     }
 
