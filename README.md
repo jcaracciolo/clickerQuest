@@ -1,28 +1,31 @@
-This is a multi-module project for Web Aplication Proyects, ITBA.
-This aplicacion is an Idle game in development.
+This is a multi-module project for Web Application Proyects, ITBA.
 
-### Steps to bootstrap in IntelliJ IDEA
-- Clone the project
-- Start IntelliJ Idea and select import project
-- Select the root folder of the git repository
-- From the three available options, choose Maven
-- Select the following options:
+This application is an Idle game in development.
+
+## Steps to bootstrap in IntelliJ IDEA
+1. Clone the project
+2. Start IntelliJ Idea and select import project
+3. Select the root folder of the git repository
+4. From the three available options, choose Maven
+5. Select the following options:
+
   - [ ] Import Maven projects automatically
   - [ ] Create IntelliJ IDEA modules for aggregator projects
-  - [ ] Create module groups for mult-module Maven projects
-  - [ ] Keep source and test folders on reimport
+  - [ ] Create module groups for multi-module Maven projects
+  - [ ] Keep source and test folders on re-import
   - [ ] Exclude build directory
   - [ ] User Maven output directories: `Detect automatically`
   - [ ] Automatically download: `Sources` and `Documentation`
-- Continue with import
-- Select the webapp/src/main/java folder and rigth click -> Mark directory as -> Sources Root
 
-### Configure jetty:
+6. Continue with import
+7. Select the `webapp/src/main/java` folder and right click, select `Mark directory as -> Sources Root`
 
-- Download the plugin [from this site](https://plugins.jetbrains.com/plugin/download?updateId=22888) (if you already have jetty Runner as plugin uninstall it)
-- If you are a Mac user, jump straight to the steps [described in this link](https://www.jetbrains.com/help/idea/2016.3/installing-updating-and-uninstalling-repository-plugins.html)
-- File -> Settings -> Plugins -> install from disk
-- Select the downloaded zip
+## Configure `jetty`:
+
+1. Download the plugin [from this site](https://plugins.jetbrains.com/plugin/download?updateId=22888) (if you already have jetty Runner as plugin uninstall it)
+2. If you are a Mac user, jump straight to the steps [described in this link](https://www.jetbrains.com/help/idea/2016.3/installing-updating-and-uninstalling-repository-plugins.html)
+3. File -> Settings -> Plugins -> install from disk
+4. Select the downloaded zip
 - Restart IDEA
 - Run -> Edit Configurations
 - '+' -> select Jetty Runner -> name it 'Development'
@@ -35,33 +38,63 @@ This aplicacion is an Idle game in development.
 IMPORTANT: DO NOT UPDATE THE JETTY PLUGIN OR IT WILL NOT WORK
 
 ### Configure Postgres:
-- Install postgres (sudo apt-get install postgresql)
-- Start postres server (sudo service postgresql start)
-- Change to user "postgres" (sudo su postgres)
-- Create root user (createusername root) (si tira error no pasa nada)
-- Create main database (createdb clickerQuest -O root)
-- Enter psql (psql)
-- Change root password (ALTER USER root WITH PASSWORD 'root')
-- Type ( \g ) to send the query
-- "ALTER ROLE" Means it was successful
-- ( \q ) Exit psql
-- ??
-- Profit!!
+
+1. Install postgres (sudo apt-get install postgresql)
+2. Start postres server (sudo service postgresql start)
+3. Change to user "postgres" (sudo su postgres)
+4. Create root user (createusername root) (si tira error no pasa nada)
+5. Create main database (createdb clickerQuest -O root)
+6. Enter psql (psql)
+7. Change root password (ALTER USER root WITH PASSWORD 'root')
+8. Type ( \g ) to send the query
+9. "ALTER ROLE" Means it was successful
+10. ( \q ) Exit psql
+11. ??
+12. Profit!!
 
 
 ### Deploy
-- Set run as "Deploy"
-- ```mvn clean package```
-- Look for .war in "webapp/target" and rename it to 'app.war'
-- ```sftp user@pampero.itba.edu.ar```
-- Inside of sftp: ```put path/to/app.war```
-- Close session of sftp
-- ```ssh user@pampero.itba.edu.ar```
-- Inside of ssh: ```sftp paw-2017a-4@10.16.1.110```
-- Pass: *ooc4Choo*
-- Inside sftp:
+
+1. Set run as "Deploy"
+2. ```mvn clean package```
+3. Look for .war in `webapp/target`and rename it to `app.war`
+4. `sftp user@pampero.itba.edu.ar`
+5. Inside of sftp, run `put path/to/app.war`
+6. Close session of sftp
+7. Run `ssh user@pampero.itba.edu.ar`
+8. Inside of ssh: `sftp paw-2017a-4@10.16.1.110`
+9. Password is: `ooc4Choo`
+10. Inside of sftp run:
+
 ```
 cd web/
 put path/to/app.wr/in/pampero
 ```
 
+
+## Available routes
+
+ * GET `/login`
+ * POST `/login`
+ * GET `/register`
+ * POST `/register`
+ * GET `/create`
+ * POST `/create`
+
+ * GET `/game`
+    * Needs authentication.
+
+ * POST `/buyFactory`
+    * Needs authentication.
+
+ * POST `/upgradeFactory`
+    * Needs authentication.
+
+ * POST `/buyFromMarket`
+    * Needs authentication.
+
+ * POST `/sellToMarket`
+    * Needs authentication.
+
+ * GET `/errors`
+    * Needs authentication.

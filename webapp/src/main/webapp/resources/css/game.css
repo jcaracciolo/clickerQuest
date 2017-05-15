@@ -67,6 +67,9 @@ img.resource-icon {
 .marketButton {
 	left: 25%;
 }
+.logoutButton{
+	left: 25%;
+}
 
 body {
 	font-family: Fixedsys;

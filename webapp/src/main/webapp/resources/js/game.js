@@ -157,16 +157,6 @@ $.each($(".buyFactory"),function (i,element){
 });
 
 
-function buyFactory(id){
-    $.post(contextPath + "/" + userId + "/buyFactory",
-        {
-            factoryId: id
-        }, function(data) {
-            window.location.hash = "sucBuyFact"
-            window.location.reload()
-    });
-}
-
 // Upgrade listener
 $.each($(".upgradeButton"),function (i,element){
     $("#" + element.id).clickSpark({
@@ -184,8 +174,18 @@ $.each($(".upgradeButton"),function (i,element){
     })
 });
 
+function buyFactory(id){
+    $.post(contextPath + "/buyFactory",
+        {
+            factoryId: id
+        }, function(data) {
+            window.location.hash = "sucBuyFact"
+            window.location.reload()
+        });
+}
+
 function upgradeFactory(factId) {
-    $.post(contextPath + "/" + userId + "/upgradeFactory",
+    $.post(contextPath + "/upgradeFactory",
         {
             factoryId: factId //$("#"+element.id).data("factoryid")
         }, function(data) {
@@ -277,7 +277,7 @@ $(function() {
             var quantity = parseFloat(quantity)*multiplier;
 
             if (validateBuy(resourceId, quantity)) {
-                $.post(contextPath + "/" + userId + "/buyFromMarket",
+                $.post(contextPath + "/buyFromMarket",
                     {
                         resourceId: resourceId,
                         quantity: quantity
@@ -351,7 +351,7 @@ $(function() {
             var quantity = parseFloat(quantity)*multiplier;
 
             if (validateSell(parseInt(resourceId), quantity)) {
-                $.post(contextPath + "/" + userId + "/sellToMarket",
+                $.post(contextPath + "/sellToMarket",
                     {
                         resourceId: resourceId,
                         quantity: quantity

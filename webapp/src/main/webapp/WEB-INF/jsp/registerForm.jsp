@@ -36,16 +36,6 @@
 <c:set var="storageMap" value="${storage.getUpdatedStorage(productions)}"/>
 
 <!--Import jQuery before materialize.js-->
-<script type="text/javascript">
-    contextPath = '<%=request.getContextPath()%>';
-    var maxUserLen = <c:out value="${userform.maxUsernameLenght}"/> ;
-    var minUserLen = <c:out value="${userform.minUsernameLenght}"/> ;
-    var maxPassLen = <c:out value="${userform.maxPassLenght}"/> ;
-    var minPassLen = <c:out value="${userform.minPassLenght}"/> ;
-    var userRegex = /<c:out value="${userform.usernameRegex}"/>/;
-    var passRegex = /<c:out value="${userform.passRegex}"/>/ ;
-    var err = "<c:out value="${error.toString}"/>" ;
-</script>
 <script type="text/javascript" src="<c:url value="https://code.jquery.com/jquery-2.1.1.min.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/resources/js/materialize.min.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/resources/js/create.js"/>"></script>

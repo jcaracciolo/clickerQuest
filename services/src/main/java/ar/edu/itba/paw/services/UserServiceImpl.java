@@ -7,23 +7,34 @@ import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.model.packages.Implementations.Productions;
 import ar.edu.itba.paw.model.packages.Implementations.Storage;
 import ar.edu.itba.paw.model.packages.PackageBuilder;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 import java.util.*;
+import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
 public class UserServiceImpl implements UserService {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
 
     @Autowired
     UserDao userDao;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
     MarketDao marketDao;
 
+    Cache<String,User> userCache = CacheBuilder.newBuilder().maximumSize(5).build();
+    Cache<Long,Wealth> wealthCache = CacheBuilder.newBuilder().maximumSize(5).build();
     //region Retrieval
     public User findById(long id) {
         return userDao.findById(id);
@@ -31,35 +42,55 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findByUsername(String username) {
-        return userDao.findByUsername(username);
+        User user = null;
+        try {
+            user = userCache.get(username,()-> userDao.findByUsername(username));
+        } catch (CacheLoader.InvalidCacheLoadException e) {
+            LOGGER.error(e.toString());
+        } catch (ExecutionException e) {
+            LOGGER.error(e.toString());
+        }
+        return user;
     }
 
     @Override
     public Wealth getUserWealth(long userid) {
-        Wealth w = userDao.getUserWealth(userid);
-        Map<ResourceType,Double> storageRaw = w.getStorage().rawMap();
 
-        if(storageRaw.size() != w.getStorage().rawMap().size() ) {
-            //TODO ta todo mal log here
-            return null;
+        Wealth wealth = null;
+
+        try {
+            return wealthCache.get(userid, () -> {
+                Wealth w = userDao.getUserWealth(userid);
+                Map<ResourceType,Double> storageRaw = w.getStorage().rawMap();
+
+                if(storageRaw.size() != w.getStorage().rawMap().size() ) {
+                    LOGGER.error("TODO ESTA MAL");
+                    return null;
+                }
+
+                if(storageRaw.size() < ResourceType.values().length) {
+                    Stream.of(ResourceType.values()).filter(
+                            resType -> storageRaw.keySet().stream().noneMatch(r -> r == resType))
+                            .forEach(   resType -> create(resType,userid));
+
+                    return userDao.getUserWealth(userid);
+                }
+                return w;
+            });
+        } catch (CacheLoader.InvalidCacheLoadException e) {
+            LOGGER.error(e.toString());
+        } catch (ExecutionException e) {
+            LOGGER.error(e.toString());
         }
-
-        if(storageRaw.size() < ResourceType.values().length) {
-            Stream.of(ResourceType.values()).filter(
-                    resType -> storageRaw.keySet().stream().noneMatch(r -> r == resType))
-                    .forEach(   resType -> create(resType,userid));
-
-            return userDao.getUserWealth(userid);
-        }
-
-        return w;
+        return wealth;
     }
 
     //endregion
 
     //region creation
+
     public User create(String username, String password, String img) {
-        User user = userDao.create(username,password,img);
+        User user = userDao.create(username,passwordEncoder.encode(password),img);
         if(user != null){
             purchaseFactory(user.getId(),FactoryType.PEOPLE_RECRUITING_BASE);
             purchaseFactory(user.getId(),FactoryType.STOCK_INVESTMENT_BASE);
@@ -97,7 +128,7 @@ public class UserServiceImpl implements UserService {
             Wealth wealth = w.purchaseResult(f);
             Factory factory = f.purchaseResult();
 
-            wealth = userDao.update(wealth);
+            wealth = updateWealth(userid,wealth);
             factory = userDao.update(factory);
 
             return factory != null && wealth != null;
@@ -154,7 +185,7 @@ public class UserServiceImpl implements UserService {
             Wealth newWealth = w.calculateProductions(factories);
             newWealth = newWealth.addResource(ResourceType.MONEY,-factory.getNextUpgrade().getCost());
             userDao.update(newFactory);
-            userDao.update(newWealth);
+            updateWealth(userid,newWealth);
             return true;
         } else {
             return false;
@@ -185,7 +216,7 @@ public class UserServiceImpl implements UserService {
         wbuilder.addItem(ResourceType.MONEY,cost);
 
         Wealth newWealth = new Wealth(userid,wbuilder.buildPackage(),wealth.getProductions());
-        userDao.update(newWealth);
+        updateWealth(userid,newWealth);
         marketDao.registerPurchase(new StockMarketEntry(userid,resourceType,-amount));
 
         return newWealth;
@@ -211,9 +242,14 @@ public class UserServiceImpl implements UserService {
         wbuilder.addItem(resourceType,amount);
 
         Wealth newWealth = new Wealth(userid,wbuilder.buildPackage(),wealth.getProductions());
-        userDao.update(newWealth);
+        updateWealth(userid,newWealth);
         marketDao.registerPurchase(new StockMarketEntry(userid,resourceType,amount));
 
         return newWealth;
+    }
+
+    private Wealth updateWealth(long userId, Wealth wealth){
+        wealthCache.put(userId,wealth);
+        return userDao.update(wealth);
     }
 }
