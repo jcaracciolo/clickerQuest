@@ -26,8 +26,8 @@ import java.util.Set;
 import java.util.TreeSet;
 
 @Controller
-public class HelloWorldController {
-    private static final Logger LOGGER = LoggerFactory.getLogger(HelloWorldController.class);
+public class MainController {
+    private static final Logger LOGGER = LoggerFactory.getLogger(MainController.class);
 
     @Qualifier("userServiceImpl")
     @Autowired
