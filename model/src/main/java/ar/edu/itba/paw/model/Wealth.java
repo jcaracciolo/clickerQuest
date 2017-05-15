@@ -90,8 +90,8 @@ public class Wealth {
         storageBuilder.addItem(ResourceType.MONEY,-u.getCost());
 
         productions.rawMap().forEach(productionsBuilder::putItem);
-        Map<ResourceType,Double> factoryInputs = f.getRecipe().getInputs();
-        Map<ResourceType,Double> factoryOutputs = f.getRecipe().getOutputs();
+        Map<ResourceType,Double> factoryInputs = f.getFactoriesProduction().getInputs();
+        Map<ResourceType,Double> factoryOutputs = f.getFactoriesProduction().getOutputs();
 
 
         if (u.getInputReduction() != 1) {

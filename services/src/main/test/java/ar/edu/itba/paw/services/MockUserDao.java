@@ -93,6 +93,16 @@ class MockUserDao implements UserDao {
     }
 
     @Override
+    public Factory create(Factory factory, long userId) {
+        return null;
+    }
+
+    @Override
+    public ResourceType create(ResourceType type, long userId) {
+        return null;
+    }
+
+    @Override
     public String getProfileImage(long userid) {
         MockUserDaoData d = getUserMockData(userid);
         if(d==null) return null;
@@ -118,16 +128,6 @@ class MockUserDao implements UserDao {
         MockUserDaoData d = getUserMockData(userid);
         if(d==null) return null;
         return d.factories;
-    }
-
-    @Override
-    public Factory getUserFactory(long userid, FactoryType type) {
-        MockUserDaoData d = getUserMockData(userid);
-        if(d==null) return null;
-        return d.factories
-                .stream().filter(
-                        (f) -> f.getType() == type
-                ).findAny().get();
     }
 
     @Override
