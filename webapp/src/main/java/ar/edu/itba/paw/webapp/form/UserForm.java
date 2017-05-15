@@ -1,8 +1,6 @@
 package ar.edu.itba.paw.webapp.form;
 
-import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.validation.FieldError;
-import org.springframework.validation.ObjectError;
 
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;

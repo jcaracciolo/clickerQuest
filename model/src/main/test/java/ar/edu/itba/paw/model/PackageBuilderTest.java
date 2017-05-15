@@ -45,7 +45,6 @@ public class PackageBuilderTest {
         );
 
         assertEquals(pb.getResources().size(),0);
-        assertEquals(pb.getResources().size(),0);
     }
 
     @Test

@@ -3,8 +3,6 @@ package ar.edu.itba.paw.persistence;
 import ar.edu.itba.paw.interfaces.MarketDao;
 import ar.edu.itba.paw.model.ResourceType;
 import ar.edu.itba.paw.model.StockMarketEntry;
-import ar.edu.itba.paw.model.User;
-import ar.edu.itba.paw.model.Wealth;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;

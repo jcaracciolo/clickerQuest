@@ -94,12 +94,43 @@ class MockUserDao implements UserDao {
 
     @Override
     public Factory create(Factory factory, long userId) {
-        return null;
+        MockUserDaoData d = getUserMockData(userId);
+        if(d==null) return null;
+
+        if( d.factories.stream().anyMatch( (f)-> f.getType() == factory.getType() ) )
+            return null;
+
+        d.factories.add(factory);
+        return factory;
     }
 
     @Override
     public ResourceType create(ResourceType type, long userId) {
-        return null;
+        MockUserDaoData d = getUserMockData(userId);
+
+        if ( d.wealth.getStorage().rawMap().entrySet()
+                .stream().anyMatch( (e)-> e.getKey() == type )) {
+            return null;
+        }
+
+        PackageBuilder<Storage> storageB = Storage.packageBuilder();
+        PackageBuilder<Productions> productionsB = Productions.packageBuilder();
+
+        d.wealth.getStorage().rawMap().forEach(storageB::putItem);
+        d.wealth.getStorage().getLastUpdated().forEach(storageB::setLastUpdated);
+        d.wealth.getProductions().rawMap().forEach(productionsB::putItem);
+
+        storageB.putItemWithDate(
+                type,
+                type.equals(ResourceType.MONEY)?13000D:0D,
+                Calendar.getInstance());
+
+        productionsB.addItem(type,0D);
+
+        Wealth newWealth = new Wealth(userId,storageB.buildPackage(),productionsB.buildPackage());
+        d.wealth = newWealth;
+
+        return type;
     }
 
     @Override

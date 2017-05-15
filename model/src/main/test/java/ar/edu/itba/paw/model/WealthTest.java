@@ -8,9 +8,7 @@ import org.junit.Test;
 
 import java.util.Calendar;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static junit.framework.TestCase.assertNotNull;
 import static org.junit.Assert.*;
