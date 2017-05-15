@@ -7,9 +7,6 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-/**
- * Created by juanfra on 25/03/17.
- */
 @ComponentScan({ "ar.edu.itba.paw.services" })
 @Configuration
 public class TestConfig {

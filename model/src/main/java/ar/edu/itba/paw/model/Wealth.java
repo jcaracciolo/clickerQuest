@@ -7,9 +7,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
 
-/**
- * Created by juanfra on 03/04/17.
- */
 public class Wealth {
 
     private long userid;

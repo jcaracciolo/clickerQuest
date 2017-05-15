@@ -5,9 +5,6 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
-/**
- * Created by juanfra on 27/03/17.
- */
 @Configuration
 @EnableWebMvc
 public class ResourceHandler extends WebMvcConfigurerAdapter {

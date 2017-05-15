@@ -37,9 +37,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     MarketDao marketDao;
 
-    Cache<String,User> userCache = CacheBuilder.newBuilder().maximumSize(5).build();
-    Cache<Long,Wealth> wealthCache = CacheBuilder.newBuilder().maximumSize(5).build();
-    //region Retrieval
+    Cache<String, User> userCache = CacheBuilder.newBuilder().maximumSize(5).build();
+    Cache<Long, Wealth> wealthCache = CacheBuilder.newBuilder().maximumSize(5).build();
+
     public User findById(long id) {
         return userDao.findById(id);
     }
@@ -89,10 +89,6 @@ public class UserServiceImpl implements UserService {
         return wealth;
     }
 
-    //endregion
-
-    //region creation
-
     public User create(String username, String password, String img) {
         User user = userDao.create(username,passwordEncoder.encode(password),img);
         if(user != null){
@@ -101,9 +97,6 @@ public class UserServiceImpl implements UserService {
         }
         return user;
     }
-
-    //endregion
-
 
     @Override
     public Productions getUserProductions(long id) {
@@ -122,6 +115,7 @@ public class UserServiceImpl implements UserService {
                 .filter( (f) -> f.getType() == type).findAny();
 
         Factory f;
+
         if(maybeFactory.isPresent()) {
             f = maybeFactory.get();
         } else {

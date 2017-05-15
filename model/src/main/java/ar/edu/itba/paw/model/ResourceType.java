@@ -3,9 +3,7 @@ package ar.edu.itba.paw.model;
 import java.util.Arrays;
 import java.util.Optional;
 
-/**
- * Created by juanfra on 31/03/17.
- */
+
 public enum ResourceType {
     CIRCUITS(12,"circuit-type"),
     CARDBOARD(11,"cardboard-type"),

@@ -13,9 +13,6 @@ import java.util.stream.Collectors;
 import static junit.framework.TestCase.assertNotNull;
 import static org.junit.Assert.*;
 
-/**
- * Unit test for Wealth model
- */
 public class WealthTest {
 
     private PackageBuilder<Productions> productionsBuilder;

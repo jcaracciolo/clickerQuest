@@ -14,9 +14,6 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by juanfra on 09/05/17.
- */
 @Repository
 public class MarketJdbcDao implements MarketDao {
 

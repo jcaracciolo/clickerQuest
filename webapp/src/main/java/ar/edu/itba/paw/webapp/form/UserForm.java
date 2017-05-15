@@ -5,9 +5,7 @@ import org.springframework.validation.FieldError;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-/**
- * Created by juanfra on 27/03/17.
- */
+
 public class UserForm {
     public int getMinUsernameLenght() {
         return minUsernameLenght;

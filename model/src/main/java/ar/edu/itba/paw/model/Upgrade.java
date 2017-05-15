@@ -1,8 +1,5 @@
 package ar.edu.itba.paw.model;
 
-/**
- * Created by juanfra on 31/03/17.
- */
 public class Upgrade {
     private FactoryType factoryType;
     private long level;

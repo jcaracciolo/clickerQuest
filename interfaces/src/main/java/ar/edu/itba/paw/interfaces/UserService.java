@@ -7,9 +7,6 @@ import ar.edu.itba.paw.model.packages.Implementations.Storage;
 import java.util.Collection;
 
 
-/**
- * Created by juanfra on 23/03/17.
- */
 public interface UserService {
 
     User findById(long id);

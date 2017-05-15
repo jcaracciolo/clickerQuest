@@ -9,9 +9,7 @@ import ar.edu.itba.paw.model.packages.PackageBuilder;
 import java.util.*;
 import java.util.stream.Collectors;
 
-/**
- * Created by juanfra on 13/04/17.
- */
+
 class MockUserDao implements UserDao {
 
     private List<MockUserDaoData> tables = new ArrayList<>();
