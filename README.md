@@ -72,4 +72,29 @@ put path/to/app.wr/in/pampero
 ```
 
 
+## Available routes
 
+ * GET `/login`
+ * POST `/login`
+ * GET `/register`
+ * POST `/register`
+ * GET `/create`
+ * POST `/create`
+
+ * GET `/game`
+    * Needs authentication.
+
+ * POST `/buyFactory`
+    * Needs authentication.
+
+ * POST `/upgradeFactory`
+    * Needs authentication.
+
+ * POST `/buyFromMarket`
+    * Needs authentication.
+
+ * POST `/sellToMarket`
+    * Needs authentication.
+
+ * GET `/errors`
+    * Needs authentication.
