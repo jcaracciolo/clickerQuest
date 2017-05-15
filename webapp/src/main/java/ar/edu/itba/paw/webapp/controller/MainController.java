@@ -38,25 +38,16 @@ public class MainController {
     // INDEX
     @RequestMapping("/login")
     public ModelAndView index(@ModelAttribute("registerForm") final UserForm form, Principal principal) {
-        if(principal != null){
-            return new ModelAndView("redirect:/game");
-        }
+        if(principal != null) return new ModelAndView("redirect:/game");
         ModelAndView mav = new ModelAndView("index");
         return mav;
     }
-
-    @RequestMapping(value = "/register")
-    public ModelAndView registerPOST(){
-        return new ModelAndView("redirect:/create");
-    }
-
-
 
     // CREATE
     @RequestMapping(value = "/create", method = { RequestMethod.GET })
     public ModelAndView createGET( @ModelAttribute("registerForm") final UserForm form, final BindingResult errors) {
         ModelAndView mav = new ModelAndView("registerForm");
-        mav.addObject("userform",new UserForm());
+        mav.addObject("userform", new UserForm());
         return mav;
 
     }
@@ -64,12 +55,10 @@ public class MainController {
     @RequestMapping(value = "/create", method = { RequestMethod.POST })
     public ModelAndView createPOST( @Valid @ModelAttribute("registerForm") final UserForm form, final BindingResult rawErrors, HttpServletRequest request) {
         BindingResult errors = prioritizeErrors(form,rawErrors);
-        if (errors.hasErrors()) {
-            return createGET(form,errors);
-        }
+        if (errors.hasErrors()) return createGET(form, errors);
+
         int imageID = Math.abs(new Random().nextInt() % 11);
         final User u = userService.create(form.getUsername(), form.getPassword(),imageID + ".jpg");
-
 
         UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(form.getUsername(), form.getPassword());
 
@@ -80,38 +69,40 @@ public class MainController {
         return new ModelAndView("redirect:/game");
     }
 
-
     // GAME
-    @RequestMapping(value = "/game")
+    @RequestMapping(value = "/game", method = { RequestMethod.GET })
     public ModelAndView mainGameView( Principal principal){
         if(principal == null || principal.getName() == null){
             return new ModelAndView("redirect:/login");
         }
         ModelAndView mav = new ModelAndView("game");
         User u = userService.findByUsername(principal.getName());
+
         if(u == null){
             mav = new ModelAndView("errorPage");
             mav.addObject("errorMsg", "404");
             LOGGER.error("{} tried to skip login",u.getId());
             return mav;
         }
+
         Set<Factory> factories = new TreeSet(userService.getUserFactories(u.getId()));
         Wealth wealth = userService.getUserWealth(u.getId());
         mav.addObject("user", u);
         mav.addObject("storage",wealth.getStorage());
         mav.addObject("factories",factories);
         mav.addObject("productions",wealth.getProductions());
+
         return mav;
     }
 
-    @RequestMapping(value = "/buyFactory")
+    @RequestMapping(value = "/buyFactory", method = { RequestMethod.POST })
     @ResponseBody
     public ModelAndView purchaseFactory(Principal principal, @RequestParam("factoryId") final int factoryId){
         userService.purchaseFactory(userService.findByUsername(principal.getName()).getId(), FactoryType.fromId(factoryId));
         return new ModelAndView("redirect:/game");
     }
 
-    @RequestMapping(value = "/upgradeFactory")
+    @RequestMapping(value = "/upgradeFactory", method = { RequestMethod.POST })
     @ResponseBody
     public ModelAndView upgradeFactory(Principal principal, @RequestParam("factoryId") final int factoryId){
         userService.purchaseUpgrade(userService.findByUsername(principal.getName()).getId(), FactoryType.fromId(factoryId));
@@ -127,6 +118,7 @@ public class MainController {
         if (resource != null) {
             userService.purchaseResourceType(u.getId(), resource, quantity);
         }
+
         return null;
     }
 
@@ -142,7 +134,8 @@ public class MainController {
     }
 
     // ERRORS
-    @RequestMapping(value = "/errors")
+    // Whenever you use a wrong route or you are have insufficient privileges
+    @RequestMapping(value = "/errors", method = { RequestMethod.GET })
     public ModelAndView renderErrorPage(HttpServletRequest httpRequest) {
 
         ModelAndView errorPage = new ModelAndView("errorPage");
