@@ -74,27 +74,34 @@ put path/to/app.wr/in/pampero
 
 ## Available routes
 
- * GET `/login`
- * POST `/login`
- * GET `/register`
- * POST `/register`
- * GET `/create`
- * POST `/create`
+ * `/login`
+    * GET
+ * `/login`
+    * POST
+ * `/register`
+    * GET
+ * `/register`
+    * POST
+ * `/create`
+    * GET
+ * `/create`
+    * POST
 
- * GET `/game`
-    * Needs authentication.
+ * The following routes need authentication:
+    * `/game`
+        * GET
 
- * POST `/buyFactory`
-    * Needs authentication.
+    * `/buyFactory`
+        * POST
 
- * POST `/upgradeFactory`
-    * Needs authentication.
+    * `/upgradeFactory`
+        * POST
 
- * POST `/buyFromMarket`
-    * Needs authentication.
+    * `/buyFromMarket`
+        * POST
 
- * POST `/sellToMarket`
-    * Needs authentication.
+    * `/sellToMarket`
+        * POST
 
- * GET `/errors`
-    * Needs authentication.
+    * `/errors`
+        * POST
