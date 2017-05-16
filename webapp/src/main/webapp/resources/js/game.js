@@ -4,6 +4,7 @@
 
 var url=window.location.href.split("/")
 var userId =url[url.length - 2];
+var localizedMessages;
 
 sessionStorage.removeItem("user");
 
@@ -12,24 +13,29 @@ $(document).ready(function(){
     $('select').material_select();
 });
 
-var URLevent = window.location.href.split("#").pop()
-if (URLevent != "") {
-    switch (URLevent) {
-        case "sucSellMarket":
-            Materialize.toast('Resource successfully sold', 4000);
-            break;
-        case "sucBuyMarket":
-            Materialize.toast('Resource successfully bought', 4000);
-            break;
-        case "sucBuyFact":
-            Materialize.toast('Factory successfully bought', 4000);
-            break;
-        case "sucUpgFac":
-            Materialize.toast('Factory successfully upgraded', 4000);
-            break;
-    }
-    window.location.hash = ""
+var URLevent = window.location.href.split("#").pop();
+var toPrint = window.sessionStorage.getItem("message");
+if(toPrint != null){
+    sessionStorage.removeItem("message");
+    Materialize.toast(toPrint,4000);
 }
+// if (URLevent != "") {
+//     switch (URLevent) {
+//         case "sucSellMarket":
+//             Materialize.toast('Resource successfully sold', 4000);
+//             break;
+//         case "sucBuyMarket":
+//             Materialize.toast('Resource successfully bought', 4000);
+//             break;
+//         case "sucBuyFact":
+//             Materialize.toast('Factory successfully bought', 4000);
+//             break;
+//         case "sucUpgFac":
+//             Materialize.toast('Factory successfully upgraded', 4000);
+//             break;
+//     }
+//     window.location.hash = ""
+// }
 refreshValues(false);
 refreshView();
 refreshFactoriesBuyability();
@@ -179,8 +185,12 @@ function buyFactory(id){
         {
             factoryId: id
         }, function(data) {
-            window.location.hash = "sucBuyFact"
-            window.location.reload()
+            var resp = JSON.parse(data);
+            if(resp.message !== null){
+                window.sessionStorage.setItem("message",resp.message);
+            }
+            // window.location.hash = "sucSellMarket";
+                location.reload();
         });
 }
 
@@ -189,8 +199,12 @@ function upgradeFactory(factId) {
         {
             factoryId: factId //$("#"+element.id).data("factoryid")
         }, function(data) {
-            window.location.hash = "sucUpgFac"
-            window.location.reload()
+            var resp = JSON.parse(data);
+            if(resp.message !== null){
+                window.sessionStorage.setItem("message",resp.message);
+            }
+        // window.location.hash = "sucSellMarket";
+            location.reload();
     });
 }
 
@@ -282,8 +296,10 @@ $(function() {
                         resourceId: resourceId,
                         quantity: quantity
                     }, function (data) {
-                        window.location.hash = "sucBuyMarket"
-                        window.location.reload()
+                        var resp = JSON.parse(data);
+                        window.sessionStorage.setItem("message",resp.message);
+                        // window.location.hash = "sucSellMarket";
+                            location.reload();
                 });
             }
         }
@@ -356,8 +372,10 @@ $(function() {
                         resourceId: resourceId,
                         quantity: quantity
                     }, function (data) {
-                        window.location.hash = "sucSellMarket"
-                        window.location.reload()
+                        var resp = JSON.parse(data);
+                        window.sessionStorage.setItem("message",resp.message);
+                        // window.location.hash = "sucSellMarket";
+                            location.reload();
                     });
             }
         }
@@ -372,3 +390,15 @@ $(function() {
         return false
     }
 });
+
+function loadMessages() {
+    $.post(contextPath + "/messages",
+        {
+            location: factId //$("#"+element.id).data("factoryid")
+        }, function(data) {
+            var resp = JSON.parse(data);
+            if(resp.upgradeSuccessful)
+                window.location.hash = "sucUpgFac"
+            window.location.reload()
+        });
+}

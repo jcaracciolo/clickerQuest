@@ -201,15 +201,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Wealth sellResourceType(long userid, ResourceType resourceType, double amount) {
+    public boolean sellResourceType(long userid, ResourceType resourceType, double amount) {
         if(resourceType == ResourceType.MONEY) {
-            return null;
+            return false;
         }
 
         Wealth wealth = getUserWealth(userid);
         double cost = (resourceType.getPrice()) * amount;
         if( wealth.getStorage().getValue(resourceType) <  amount ) {
-            return null;
+            return false;
         }
 
         PackageBuilder<Storage> wbuilder = Storage.packageBuilder();
@@ -227,15 +227,15 @@ public class UserServiceImpl implements UserService {
         updateWealth(userid,newWealth);
         marketDao.registerPurchase(new StockMarketEntry(userid,resourceType,-amount));
 
-        return newWealth;
+        return true;
     }
 
     @Override
-    public Wealth purchaseResourceType(long userid, ResourceType resourceType, double amount) {
+    public boolean purchaseResourceType(long userid, ResourceType resourceType, double amount) {
         Wealth wealth = getUserWealth(userid);
         double cost = (resourceType.getPrice()) * amount;
         if( wealth.getStorage().getValue(ResourceType.MONEY) <  cost ) {
-            return null;
+            return false;
         }
 
         PackageBuilder<Storage> wbuilder = Storage.packageBuilder();
@@ -253,7 +253,7 @@ public class UserServiceImpl implements UserService {
         updateWealth(userid,newWealth);
         marketDao.registerPurchase(new StockMarketEntry(userid,resourceType,amount));
 
-        return newWealth;
+        return true;
     }
 
     private Wealth updateWealth(long userId, Wealth wealth){
