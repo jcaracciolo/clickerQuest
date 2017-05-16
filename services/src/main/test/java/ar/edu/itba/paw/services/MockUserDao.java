@@ -25,6 +25,22 @@ class MockUserDao implements UserDao {
             this.wealth = wealth;
             this.factories = factories;
         }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            MockUserDaoData that = (MockUserDaoData) o;
+
+            return user != null ? user.getId() == that.user.getId() : that.user == null;
+
+        }
+
+        @Override
+        public int hashCode() {
+            return user != null ? user.hashCode() : 0;
+        }
     }
 
     private MockUserDaoData getUserMockData(long id){
@@ -79,6 +95,10 @@ class MockUserDao implements UserDao {
                     pBuilder.putItem(r,0D);
                 }
         );
+
+        //TODO delete this
+        sBuilder.addItem(ResourceType.MONEY,ResourceType.initialMoney());
+
         Wealth w = new Wealth(u.getId(),sBuilder.buildPackage(),pBuilder.buildPackage());
 
         List<Factory> factories = Arrays.stream(FactoryType.values()).map(

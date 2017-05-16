@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.model.packages;
 
 import ar.edu.itba.paw.model.ResourceType;
+import sun.jvm.hotspot.oops.Mark;
 
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
@@ -135,4 +136,41 @@ public abstract class ResourcePackage {
 
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ResourcePackage that = (ResourcePackage) o;
+
+        if(that.resources == null) {
+            return this.resources == null;
+        }
+
+        for(ResourceType r: resources.keySet()) {
+            double d = resources.get(r);
+            double thatD = that.resources.get(r);
+
+            if(Math.signum(d) != Math.signum(thatD)) {
+                return false;
+            }
+
+            if(d==0) {
+                if(that.resources.get(r)!=0) {
+                    return false;
+                }
+            } else if( Math.abs( thatD/d ) > 1.04 ) {
+                return false;
+
+            }
+        }
+
+        return true;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return resources != null ? resources.hashCode() : 0;
+    }
 }

@@ -133,20 +133,11 @@ public class UserJdbcDao implements UserDao {
 
         try {
              userId = jdbcInsertUsers.executeAndReturnKey(USER_REVERSE_ROW_MAPPER.toArgs(us));
-        }catch (Exception e){
+        }catch (Exception e) {
             return null;
         }
 
-        for (FactoryType type: FactoryType.values()){
-            Factory factory = type.defaultFactory(userId.longValue());
-            create(factory,userId.longValue());
-        }
-
-        for (ResourceType rt: ResourceType.values()) {
-            create(rt,userId.longValue());
-        }
-
-        return new User(userId.longValue(), username,password,img);
+        return us;
     }
 
     public Factory update(Factory f) {
@@ -281,7 +272,7 @@ public class UserJdbcDao implements UserDao {
     public ResourceType create(ResourceType type, long userId) {
         final RowWealth rw = new RowWealth(userId,type,
                 0,
-                type.equals(ResourceType.MONEY)?13000:0,
+                0,
                 Calendar.getInstance().getTimeInMillis());
         try {
             jdbcInsertWealths.execute(WEALTH_REVERSE_ROW_MAPPER.toArgs(rw));

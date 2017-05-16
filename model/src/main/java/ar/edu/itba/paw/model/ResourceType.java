@@ -41,6 +41,10 @@ public enum ResourceType {
         return id;
     }
 
+    public static double initialMoney() {
+        return 13000;
+    }
+
     @SuppressWarnings("OptionalGetWithoutIsPresent")
     public static ResourceType fromId(int id){
         return Arrays.stream(ResourceType.values()).filter((r) -> r.getId() ==id).findAny().get();
