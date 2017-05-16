@@ -257,6 +257,7 @@ public class UserServiceImpl implements UserService {
                                 oldUser.getProfileImage(),
                                 wealth.calculateScore());
         if(userDao.update(newUser) != null) {
+            userCache.put(newUser.getUsername(),newUser);
             return userDao.update(wealth);
         } else {
             return null;

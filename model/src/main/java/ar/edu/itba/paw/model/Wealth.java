@@ -123,14 +123,16 @@ public class Wealth {
         Arrays.stream(ResourceType.values()).forEach((r) -> productionsBuilder.putItem(r,0D));
         factories.stream()
                 .filter(f -> f.getAmount()>0)
-                .map(Factory::getFactoriesProduction).
-                forEach(factoriesProduction -> {
-                            factoriesProduction.getOutputs().keySet().
-                                    forEach(res -> productionsBuilder.addItem(res, factoriesProduction.getOutputs().get(res)));
-                            factoriesProduction.getInputs().keySet().
-                                    forEach(res -> productionsBuilder.addItem(res, -factoriesProduction.getInputs().get(res)));
-                        }
-                );
+                .map(Factory::getFactoriesProduction)
+                .map(FactoriesProduction::getOutputs)
+                .forEach((m) -> m.forEach(productionsBuilder::addItem));
+
+        factories.stream()
+                .filter(f -> f.getAmount()>0)
+                .map(Factory::getFactoriesProduction)
+                .map(FactoriesProduction::getInputs)
+                .forEach((m) -> m.forEach(
+                        (r,d) -> productionsBuilder.addItem(r,-d)));
 
         return new Wealth(userid,storage,productionsBuilder.buildPackage());
     }

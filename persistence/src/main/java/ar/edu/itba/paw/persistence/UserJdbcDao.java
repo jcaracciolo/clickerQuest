@@ -162,7 +162,7 @@ public class UserJdbcDao implements UserDao {
                         "username = ?," +
                         "password = ?," +
                         "profileImage = ?," +
-                        "score = ?," +
+                        "score = ? " +
                         " WHERE (userid = ?) ;",
                 u.getUsername(),
                 u.getPassword(),
