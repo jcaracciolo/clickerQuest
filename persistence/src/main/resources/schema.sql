@@ -2,7 +2,8 @@ CREATE TABLE IF NOT EXISTS users (
   userid BIGSERIAL PRIMARY KEY,
   username varchar(100) UNIQUE ,
   password varchar(100),
-  profileImage varchar(100)
+  profileImage varchar(100),
+  score DOUBLE PRECISION
 );
 
 CREATE TABLE IF NOT EXISTS factories (

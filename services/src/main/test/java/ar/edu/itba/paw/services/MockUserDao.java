@@ -35,11 +35,7 @@ class MockUserDao implements UserDao {
                         (t) -> t.user.getId() == id
                 ).findAny();
 
-        if(maybeUser.isPresent()){
-            return maybeUser.get();
-        } else {
-            return null;
-        }
+        return maybeUser.orElse(null);
     }
 
     @Override
@@ -193,5 +189,17 @@ class MockUserDao implements UserDao {
         PackageBuilder<Productions> builder = Productions.packageBuilder();
         p.rawMap().forEach(builder::putItem);
         return builder.buildPackage();
+    }
+
+    @Override
+    public User update(User u) {
+        MockUserDaoData oldUser = getUserMockData(u.getId());
+
+        if(oldUser != null) {
+            oldUser.user = u;
+            return u;
+        } else {
+            return null;
+        }
     }
 }

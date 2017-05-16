@@ -250,6 +250,16 @@ public class UserServiceImpl implements UserService {
 
     private Wealth updateWealth(long userId, Wealth wealth){
         wealthCache.put(userId,wealth);
-        return userDao.update(wealth);
+        User oldUser = findById(userId);
+        User newUser = new User(oldUser.getId(),
+                                oldUser.getUsername(),
+                                oldUser.getPassword(),
+                                oldUser.getProfileImage(),
+                                wealth.calculateScore());
+        if(userDao.update(newUser) != null) {
+            return userDao.update(wealth);
+        } else {
+            return null;
+        }
     }
 }

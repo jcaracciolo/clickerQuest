@@ -123,11 +123,11 @@ public class Wealth {
         Arrays.stream(ResourceType.values()).forEach((r) -> productionsBuilder.putItem(r,0D));
         factories.stream()
                 .filter(f -> f.getAmount()>0)
-                .map(factory -> factory.getFactoriesProduction()).
+                .map(Factory::getFactoriesProduction).
                 forEach(factoriesProduction -> {
-                            factoriesProduction.getOutputs().keySet().stream().
+                            factoriesProduction.getOutputs().keySet().
                                     forEach(res -> productionsBuilder.addItem(res, factoriesProduction.getOutputs().get(res)));
-                            factoriesProduction.getInputs().keySet().stream().
+                            factoriesProduction.getInputs().keySet().
                                     forEach(res -> productionsBuilder.addItem(res, -factoriesProduction.getInputs().get(res)));
                         }
                 );
@@ -143,5 +143,14 @@ public class Wealth {
         calculatedStorage.getLastUpdated().forEach(storageBuilder::setLastUpdated);
         storageBuilder.addItem(resource,amount);
         return new Wealth(userid,storageBuilder.buildPackage(),productions);
+    }
+
+    public double calculateScore() {
+        double score = productions.rawMap().entrySet().stream()
+                .map((e) -> e.getKey().getPrice() * e.getValue())
+                .reduce((d1,d2) -> d1+d2)
+                .orElse(0D);
+
+        return score;
     }
 }
