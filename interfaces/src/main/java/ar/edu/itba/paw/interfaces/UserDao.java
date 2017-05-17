@@ -25,9 +25,11 @@ public interface UserDao {
     Factory create(Factory factory, long userId);
     ResourceType create(ResourceType type, long userId);
 
-    String getProfileImage(final long userid);
+    String getProfileImage(long userid);
     Productions getUserProductions(long userid);
     Storage getUserStorage(long userid);
+
+    User update(User u);
 
     Collection<Factory> getUserFactories(long userid);
     Factory update(Factory f);

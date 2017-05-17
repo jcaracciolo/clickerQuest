@@ -97,7 +97,8 @@ public class UserJdbcDao implements UserDao {
             new User(rs.getLong("userid"),
                     rs.getString("username"),
                     rs.getString("password"),
-                    rs.getString("profileImage"));
+                    rs.getString("profileImage"),
+                    rs.getDouble("score"));
 
 
     private final static ReverseRowMapper<User> USER_REVERSE_ROW_MAPPER = (us) ->
@@ -106,6 +107,7 @@ public class UserJdbcDao implements UserDao {
         args.put("username",        us.getUsername());
         args.put("password",        us.getPassword());
         args.put("profileImage",    us.getProfileImage());
+        args.put("score",           us.getScore());
         return args;
     };
     //endregion
@@ -127,6 +129,7 @@ public class UserJdbcDao implements UserDao {
     }
 
     //region Update
+    @Override
     public User create(String username, String password,String img) {
         final User us = new User(0,username,password,img);
         final Number userId;
@@ -138,6 +141,32 @@ public class UserJdbcDao implements UserDao {
         }
 
         return new User(userId.longValue(),username,password,img);
+    }
+
+    @Override
+    public User update(User u) {
+        int rows = jdbcTemplate.update(
+                "UPDATE users SET " +
+                        "username = ?," +
+                        "password = ?," +
+                        "profileImage = ?," +
+                        "score = ? " +
+                        " WHERE (userid = ?) ;",
+                u.getUsername(),
+                u.getPassword(),
+                u.getProfileImage(),
+                u.getScore(),
+                u.getId());
+        if (rows == 1) {
+            return u;
+        } else if (rows > 1) {
+            //TODO multiple  updates
+
+            return null;
+        } else {
+            //TODO log no user update
+            return null;
+        }
     }
 
     public Factory update(Factory f) {
@@ -217,7 +246,7 @@ public class UserJdbcDao implements UserDao {
         return list.get(0);
     }
 
-    //TODO make a correct implementation
+    @Override
     public String getProfileImage(final long userid) {
         final List<User> list = jdbcTemplate.query("SELECT * FROM users WHERE userid = ?", USER_ROW_MAPPER, userid);
         if (list.isEmpty()) {

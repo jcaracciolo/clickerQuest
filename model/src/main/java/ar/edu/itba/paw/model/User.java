@@ -6,12 +6,19 @@ public class User {
     private String username;
     private String password;
     private String profileImage;
+    private double score;
 
     public User(long id, String username, String password, String profileImage) {
         this.id = id;
         this.username = username;
         this.password = password;
         this.profileImage = profileImage;
+        score = 0;
+    }
+
+    public User(long id, String username, String password, String profileImage, double score) {
+        this(id,username,password,profileImage);
+        this.score = score;
     }
 
     public String getProfileImage() {
@@ -28,6 +35,10 @@ public class User {
 
     public String getPassword() {
         return password;
+    }
+
+    public double getScore() {
+        return score;
     }
 
 

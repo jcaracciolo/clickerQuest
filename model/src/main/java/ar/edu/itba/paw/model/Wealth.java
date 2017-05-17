@@ -7,6 +7,9 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
 
+/**
+ * Created by juanfra on 03/04/17.
+ */
 public class Wealth {
 
     private long userid;
@@ -120,14 +123,16 @@ public class Wealth {
         Arrays.stream(ResourceType.values()).forEach((r) -> productionsBuilder.putItem(r,0D));
         factories.stream()
                 .filter(f -> f.getAmount()>0)
-                .map(factory -> factory.getFactoriesProduction()).
-                forEach(factoriesProduction -> {
-                            factoriesProduction.getOutputs().keySet().stream().
-                                    forEach(res -> productionsBuilder.addItem(res, factoriesProduction.getOutputs().get(res)));
-                            factoriesProduction.getInputs().keySet().stream().
-                                    forEach(res -> productionsBuilder.addItem(res, -factoriesProduction.getInputs().get(res)));
-                        }
-                );
+                .map(Factory::getFactoriesProduction)
+                .map(FactoriesProduction::getOutputs)
+                .forEach((m) -> m.forEach(productionsBuilder::addItem));
+
+        factories.stream()
+                .filter(f -> f.getAmount()>0)
+                .map(Factory::getFactoriesProduction)
+                .map(FactoriesProduction::getInputs)
+                .forEach((m) -> m.forEach(
+                        (r,d) -> productionsBuilder.addItem(r,-d)));
 
         return new Wealth(userid,storage,productionsBuilder.buildPackage());
     }
@@ -140,6 +145,15 @@ public class Wealth {
         calculatedStorage.getLastUpdated().forEach(storageBuilder::setLastUpdated);
         storageBuilder.addItem(resource,amount);
         return new Wealth(userid,storageBuilder.buildPackage(),productions);
+    }
+
+    public double calculateScore() {
+        double score = productions.rawMap().entrySet().stream()
+                .map((e) -> e.getKey().getPrice() * e.getValue())
+                .reduce((d1,d2) -> d1+d2)
+                .orElse(0D);
+
+        return score;
     }
 
     @Override

@@ -2,7 +2,8 @@ CREATE TABLE IF NOT EXISTS users (
   userid INTEGER IDENTITY PRIMARY KEY,
   username varchar(100) UNIQUE,
   password varchar(100),
-  profileImage varchar(100)
+  profileImage varchar(100),
+  score DOUBLE
 );
 
 CREATE TABLE IF NOT EXISTS factories (

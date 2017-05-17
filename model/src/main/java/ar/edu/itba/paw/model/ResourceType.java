@@ -47,7 +47,7 @@ public enum ResourceType {
 
     @SuppressWarnings("OptionalGetWithoutIsPresent")
     public static ResourceType fromId(int id){
-        return Arrays.stream(ResourceType.values()).filter((r) -> r.getId() ==id).findAny().get();
+        return Arrays.stream(ResourceType.values()).filter((r) -> r.getId() ==id).findAny().orElse(null);
     }
     public static Optional<ResourceType> fromName(String nameCode){
         return Arrays.stream(ResourceType.values()).filter((r) -> r.nameCode.equals(nameCode)).findAny();
