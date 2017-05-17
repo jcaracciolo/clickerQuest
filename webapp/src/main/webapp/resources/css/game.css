@@ -44,6 +44,8 @@ form button {
 }
 form .error {
 	color: #ff0000 !important;
+	text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
+	font-size: 0.9em;
 }
 
 #toast-container {
@@ -62,6 +64,11 @@ form .error {
 img.resource-icon {
     height: 1.2rem;
     width: 1.2rem;
+}
+
+#marketModal {
+	background-color: #3f51b5;
+	color: white;
 }
 
 .marketButton {
@@ -231,4 +238,9 @@ div.no-padding {
 
 .factory-main {
 	max-width: 17rem;
+}
+
+.right-description {
+	display: flex;
+	justify-content: space-around;
 }

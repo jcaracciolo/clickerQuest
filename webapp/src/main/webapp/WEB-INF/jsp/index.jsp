@@ -9,7 +9,7 @@
 </head>
 
 <body>
-
+<title><spring:message code="index.title"/></title>
 <img id="logo" class="profile" src="<c:url value="/resources/clickerQuest_logo.png"/>" alt="logo"/>
 
 <%--<input id="usernameInput" type="text" name="username" placeholder="username">--%>

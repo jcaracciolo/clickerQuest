@@ -10,6 +10,7 @@
     <link type="text/css" rel="stylesheet" href="<c:url value="/resources/css/register.css"/>"
 </head>
 <body>
+<title><spring:message code="register.title"/></title>
 <h2><spring:message code="signUp.register"/></h2>
     <c:url value="/create" var="postPath"/>
     <form:form modelAttribute="registerForm" action="${postPath}" method="post">

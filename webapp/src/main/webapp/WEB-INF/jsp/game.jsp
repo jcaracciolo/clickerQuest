@@ -14,6 +14,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <title><spring:message code="game.title"/></title>
     <!--Import css-->
     <link type="text/css" rel="stylesheet" href="<c:url value="/resources/css/game.css"/>"
           media="screen,projection"/>
@@ -116,22 +117,23 @@
         </form>
     </div>
 </div>
+<%-- NAVIGATION BAR --%>
 <div class="row main-frame">
     <div class="navbar-fixed">
         <nav>
             <div class="nav-wrapper">
-                <a href='<c:url value="/"/>' id="logo-container" href="#" class="brand-logo">
+                <a href='<c:url value="/game"/>' id="logo-container" href="#" class="brand-logo">
                     <img class="upper-logo" src="<c:url value="/resources/clickerQuest_logo.png"/>" alt="logo"/>
                 </a>
 
                 <ul id="nav-mobile" class="right hide-on-med-and-down">
-                    <li><a href="sass.html">Sass</a></li>
-                    <li><a href="badges.html">Components</a></li>
-                    <li><a href="collapsible.html">JavaScript</a></li>
+                    <li><a href="<c:url value='/logout'/>"><spring:message code='logout'/> </a></li>
                 </ul>
             </div>
         </nav>
     </div>
+</div>
+<div class="row">
     <!-- LEFT PANEL -->
     <div class="col no-padding s2">
         <div class="scrollable-y card darken-1">
@@ -144,7 +146,6 @@
                     <p class="username" data-userid="${user.id}"><c:out value="${user.username}"/></p>
                 </div>
             </div>
-            <a class="waves-effect waves-light btn logoutButton" href="/logout">Logout</a>
             <div class="divider"></div>
             <a class="waves-effect waves-light btn marketButton" href="#marketModal"><spring:message code="game.market"/></a>
             <div class="card-content white-text">
@@ -238,6 +239,12 @@
         <div class="scrollable-y card darken-1">
             <div class="card-content white-text">
                 <span class="card-title"><spring:message code="game.factories"/></span>
+                <div class="divider"></div>
+                <div class="right-description">
+                    <div><spring:message code="game.factory"/></div>
+                    <div><spring:message code="game.recipe"/></div>
+                    <div><spring:message code="game.upgrade"/></div>
+                </div>
                 <c:forEach items="${factories}" var="factory" varStatus="loop">
                     <div class="divider"></div>
                     <div class="section">
@@ -334,8 +341,6 @@
                 <div class="divider"></div>
             </div>
         </div>
-    </div>
-    <div class="col s9 m8">
     </div>
 </div>
 
