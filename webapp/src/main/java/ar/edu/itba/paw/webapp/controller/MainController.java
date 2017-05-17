@@ -2,28 +2,31 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.model.*;
+import ar.edu.itba.paw.webapp.config.ExposedResourceBundleMessageSource;
 import ar.edu.itba.paw.webapp.form.UserForm;
+import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.*;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.security.Principal;
-import java.util.Random;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
+import java.util.stream.Stream;
 
 @Controller
 public class MainController {
@@ -34,7 +37,8 @@ public class MainController {
     private UserService userService;
     @Autowired
     private AuthenticationProvider authProvider;
-
+    @Autowired
+    private ExposedResourceBundleMessageSource messageSource;
     // INDEX
     @RequestMapping("/login")
     public ModelAndView index(@ModelAttribute("registerForm") final UserForm form, Principal principal) {
@@ -91,46 +95,95 @@ public class MainController {
         mav.addObject("storage",wealth.getStorage());
         mav.addObject("factories",factories);
         mav.addObject("productions",wealth.getProductions());
-
+        mav.addObject("messages",getStaticStrings(LocaleContextHolder.getLocale()));
+        HashMap<Integer,String> asd = new HashMap<>();
+        mav.addObject("resourceTranslator",asd);
         return mav;
     }
 
     @RequestMapping(value = "/buyFactory", method = { RequestMethod.POST })
     @ResponseBody
-    public ModelAndView purchaseFactory(Principal principal, @RequestParam("factoryId") final int factoryId){
-        userService.purchaseFactory(userService.findByUsername(principal.getName()).getId(), FactoryType.fromId(factoryId));
-        return new ModelAndView("redirect:/game");
+    public String purchaseFactory(Principal principal, @RequestParam("factoryId") final int factoryId){
+        Boolean result = userService.purchaseFactory(userService.findByUsername(principal.getName()).getId(), FactoryType.fromId(factoryId));
+        JSONObject j = new JSONObject();
+        j.put("result",result);
+        j.put("type", "purchaseFactory");
+        j.put("factoryId",factoryId);
+        if(result){
+            String factoryName =  messageSource.getMessage(FactoryType.fromId(factoryId).getNameCode()
+                    ,null,LocaleContextHolder.getLocale());
+            String msg = messageSource.getMessage("game.factoryBuySuccessful"
+                    ,new Object[]{factoryName},LocaleContextHolder.getLocale());
+            j.put("message", msg);
+        }
+        return j.toJSONString();
     }
 
     @RequestMapping(value = "/upgradeFactory", method = { RequestMethod.POST })
     @ResponseBody
-    public ModelAndView upgradeFactory(Principal principal, @RequestParam("factoryId") final int factoryId){
-        userService.purchaseUpgrade(userService.findByUsername(principal.getName()).getId(), FactoryType.fromId(factoryId));
-        return new ModelAndView("redirect:/game");
+    public String upgradeFactory(Principal principal, @RequestParam("factoryId") final int factoryId){
+        long userId = userService.findByUsername(principal.getName()).getId();
+        Boolean result = userService.purchaseUpgrade(userId, FactoryType.fromId(factoryId));
+        long factoryLevel = userService.getUserFactories(userId).stream().filter(f -> f.getType().getId() == factoryId).findAny().get().getLevel();
+        JSONObject j = new JSONObject();
+        j.put("result",result);
+        j.put("type", "upgradeFactory");
+        j.put("factoryId",factoryId);
+        if(result){
+            String msg = messageSource.getMessage("game.upgradeSuccessful"
+                    ,new Object[]{factoryLevel},LocaleContextHolder.getLocale());
+            j.put("message", msg);
+        }
+        return j.toJSONString();
     }
 
     @RequestMapping(value = "/buyFromMarket", method = { RequestMethod.POST })
     @ResponseBody
-    public ModelAndView buyFromMarket(Principal principal, @RequestParam("resourceId") final int resourceId,
+    public String buyFromMarket(Principal principal, @RequestParam("resourceId") final int resourceId,
                                       @RequestParam("quantity")final double quantity) {
         User u = userService.findByUsername(principal.getName());
         ResourceType resource =  ResourceType.fromId(resourceId);
+        Boolean result = false;
         if (resource != null) {
-            userService.purchaseResourceType(u.getId(), resource, quantity);
+            result = userService.purchaseResourceType(u.getId(), resource, quantity);
         }
+        JSONObject j = new JSONObject();
+        j.put("result", result);
+        j.put("type", "buyFromMarket");
+        j.put("resourceId",resourceId);
+        j.put("quantity", quantity);
 
-        return null;
+        String resourceName =  messageSource.getMessage(ResourceType.fromId(resourceId).getNameCode()
+                ,null,LocaleContextHolder.getLocale());
+        String msg = messageSource.getMessage(result?"game.market.buySuccessful":"game.market.buyFail"
+                ,new Object[]{Math.round(quantity),resourceName},LocaleContextHolder.getLocale());
+        j.put("message", msg);
+
+        return j.toJSONString();
     }
 
     @RequestMapping(value = "/sellToMarket", method = { RequestMethod.POST })
     @ResponseBody
-    public ModelAndView sellToMarket(Principal principal, @RequestParam("resourceId") final int resourceId,
+    public String sellToMarket(Principal principal, @RequestParam("resourceId") final int resourceId,
                                       @RequestParam("quantity")final double quantity) {
         User u = userService.findByUsername(principal.getName());
         ResourceType resource =  ResourceType.fromId(resourceId);
+        Boolean result = false;
+
         if (resource != null) {
-            userService.sellResourceType(u.getId(), resource, quantity);
-        } return null;
+            result = userService.sellResourceType(u.getId(), resource, quantity);
+        }
+        JSONObject j = new JSONObject();
+        j.put("result", result);
+        j.put("type", "sellToMarket");
+        j.put("resourceId",resourceId);
+        j.put("quantity", quantity);
+        String resourceName =  messageSource.getMessage(ResourceType.fromId(resourceId).getNameCode()
+                ,null,LocaleContextHolder.getLocale());
+        String msg = messageSource.getMessage(result?"game.market.sellSuccessful":"game.market.buyFail"
+                ,new Object[]{Math.round(quantity),resourceName},LocaleContextHolder.getLocale());
+        j.put("message", msg);
+        return j.toJSONString();
     }
 
     // ERRORS
@@ -186,5 +239,15 @@ public class MainController {
         }
 
         return prioritizedErrors;
+    }
+
+    private JSONObject getStaticStrings(Locale locale){
+        Set<String> keys = messageSource.getKeys(locale);
+
+        JSONObject j = new JSONObject();
+        keys.stream().forEach(k -> j.put(k,messageSource.getMessage(k,null,locale)));
+        Stream.of(ResourceType.values()).forEach(rType -> j.put(rType.getId(),rType.getNameCode()));
+
+        return j;
     }
 }

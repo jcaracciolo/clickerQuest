@@ -1,9 +1,7 @@
 package ar.edu.itba.paw.model;
 import org.junit.Assert;
 
-/**
- * Created by juanfra on 13/04/17.
- */
+
 public class MyAssert extends Assert{
 
     static public void assertThrows(Class<? extends Throwable> clazz, Runnable lambda) {

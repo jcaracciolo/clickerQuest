@@ -65,5 +65,4 @@ public class Storage extends ResourcePackage {
         }
         return resourcePackageBuilder.buildPackage();
     }
-
 }

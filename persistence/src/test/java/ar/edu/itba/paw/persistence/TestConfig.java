@@ -8,9 +8,6 @@ import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 
 import javax.sql.DataSource;
 
-/**
- * Created by juanfra on 25/03/17.
- */
 @ComponentScan({ "ar.edu.itba.paw.persistence" })
 @Configuration
 public class TestConfig {

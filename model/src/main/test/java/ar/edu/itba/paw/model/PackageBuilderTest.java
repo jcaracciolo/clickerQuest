@@ -10,9 +10,6 @@ import org.junit.Test;
 import static ar.edu.itba.paw.model.MyAssert.assertThrows;
 import static org.junit.Assert.assertEquals;
 
-/**
- * Created by juanfra on 13/04/17.
- */
 public class PackageBuilderTest {
 
     private Validator<Double> VALIDATOR = (d) -> d>=5 && d<15;
@@ -44,7 +41,6 @@ public class PackageBuilderTest {
                 () -> pb.putItem(people,-3D)
         );
 
-        assertEquals(pb.getResources().size(),0);
         assertEquals(pb.getResources().size(),0);
     }
 

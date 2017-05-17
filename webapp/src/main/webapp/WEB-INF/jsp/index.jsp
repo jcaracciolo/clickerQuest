@@ -21,7 +21,7 @@
                 <input id = "usernameInput" name = "j_username" type ="text"/>
             </div>
             <div>
-                <label for ="passwordInput">Password: </label>
+                <label for ="passwordInput"><spring:message code="signUp.password"/></label>
                 <input id = "passwordInput" name = "j_password" type = "password"/>
             </div>
         </div>

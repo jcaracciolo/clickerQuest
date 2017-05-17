@@ -6,14 +6,11 @@ import java.lang.reflect.Field;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
- * Created by juanfra on 13/04/17.
- *  WARNING:
- *  DO NOT modify the variables ids by any means in any way shape or form
+ * WARNING:
+ * DO NOT modify the variables ids by any means in any way shape or form
  *
  * This test validates that the database ID are being maintained through the releases
  * If a FactoryType is added there should be established here as FACTORYNAME with the given ID

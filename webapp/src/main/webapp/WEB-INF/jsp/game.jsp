@@ -314,7 +314,7 @@
                                     <div id="upgradeDisabler${factory.getType()}" class="box black upgradeDisability canBuy"></div>
                                     <c:if test="${factory.amount != 0}">
                                         <div class="upgrade-button-container">
-                                            <button type="button" id="upgrade${factory.getType()}" data-factoryid="${factory.getType().getId()}" class="waves-effect waves-light upgradeButton btn">
+                                            <button type="button" id="upgrade${factory.getType()}" data-factoryid="${factory.getType().getId()}" class="waves-effect waves-light upgradeButton btn ${factory.getNextUpgrade().getNextUpgradeType()}">
                                                 <div class="card-image">
                                                     <img src="<c:url value="/resources/upgrade_icon.png"/>" alt="upgrade_icon"/>
                                                 </div>
@@ -385,19 +385,15 @@
     ${factory.type} : {
         <c:set var="recipe" value="${factory.recipe}"/>
         <c:forEach items="${recipe.resources}" var="resource">
-        "${resource}" : ${recipe.getValue(resource)},
+        "${resource.id}" : ${recipe.getValue(resource)},
         </c:forEach> },
     </c:forEach>
     };
 
-    function localizeRes(resNameCode) {
-        switch (resNameCode) {
-            <c:forEach items="${storage.resources}" var="res">
-            case '${res}': return "<spring:message code="${res.nameCode}"/>"
-            </c:forEach>
-        }
-        return undefined
-    }
+
+
+    messages = ${messages.toJSONString()};
+
 </script>
 <script type="text/javascript" src="<c:url value="https://code.jquery.com/jquery-2.1.1.min.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/resources/js/materialize.min.js"/>"></script>

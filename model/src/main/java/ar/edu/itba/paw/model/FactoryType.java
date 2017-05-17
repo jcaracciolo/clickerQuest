@@ -4,9 +4,7 @@ import ar.edu.itba.paw.model.packages.Implementations.BaseCost;
 import ar.edu.itba.paw.model.packages.Implementations.BaseRecipe;
 import ar.edu.itba.paw.model.packages.PackageBuilder;
 
-/**
- * Created by juanfra on 31/03/17.
- */
+
 public enum FactoryType {
     STOCK_INVESTMENT_BASE(0,"stock-investment-base"){
         public BaseCost getBaseCost(){

@@ -5,7 +5,6 @@ import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.model.packages.Implementations.Productions;
 import ar.edu.itba.paw.model.packages.Implementations.Storage;
 import ar.edu.itba.paw.model.packages.PackageBuilder;
-import org.omg.CORBA.INTERNAL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -14,8 +13,6 @@ import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Repository
 public class UserJdbcDao implements UserDao {
@@ -136,20 +133,11 @@ public class UserJdbcDao implements UserDao {
 
         try {
              userId = jdbcInsertUsers.executeAndReturnKey(USER_REVERSE_ROW_MAPPER.toArgs(us));
-        }catch (Exception e){
+        }catch (Exception e) {
             return null;
         }
 
-        for (FactoryType type: FactoryType.values()){
-            Factory factory = type.defaultFactory(userId.longValue());
-            create(factory,userId.longValue());
-        }
-
-        for (ResourceType rt: ResourceType.values()) {
-            create(rt,userId.longValue());
-        }
-
-        return new User(userId.longValue(), username,password,img);
+        return new User(userId.longValue(),username,password,img);
     }
 
     public Factory update(Factory f) {
@@ -284,7 +272,7 @@ public class UserJdbcDao implements UserDao {
     public ResourceType create(ResourceType type, long userId) {
         final RowWealth rw = new RowWealth(userId,type,
                 0,
-                type.equals(ResourceType.MONEY)?13000:0,
+                0,
                 Calendar.getInstance().getTimeInMillis());
         try {
             jdbcInsertWealths.execute(WEALTH_REVERSE_ROW_MAPPER.toArgs(rw));

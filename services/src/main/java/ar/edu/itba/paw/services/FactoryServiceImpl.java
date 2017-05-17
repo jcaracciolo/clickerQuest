@@ -3,10 +3,9 @@ package ar.edu.itba.paw.services;
 import ar.edu.itba.paw.interfaces.FactoryService;
 import ar.edu.itba.paw.model.FactoryType;
 import ar.edu.itba.paw.model.Upgrade;
+import org.springframework.stereotype.Service;
 
-/**
- * Created by juanfra on 02/04/17.
- */
+@Service
 public class FactoryServiceImpl implements FactoryService {
 
     public Upgrade getUpgrade(FactoryType type, int level){

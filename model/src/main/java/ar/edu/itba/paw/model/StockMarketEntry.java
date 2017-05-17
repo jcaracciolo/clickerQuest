@@ -2,9 +2,6 @@ package ar.edu.itba.paw.model;
 
 import java.util.Calendar;
 
-/**
- * Created by juanfra on 09/05/17.
- */
 public class StockMarketEntry {
 
     long time;

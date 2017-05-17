@@ -1,6 +1,5 @@
 package ar.edu.itba.paw.webapp.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.*;
@@ -17,10 +16,6 @@ import org.springframework.web.servlet.view.JstlView;
 
 import javax.sql.DataSource;
 import java.nio.charset.StandardCharsets;
-
-/**
- * Created by juanfra on 22/03/17.
- */
 
 @EnableWebMvc
 @ComponentScan({ "ar.edu.itba.paw.webapp.controller, ar.edu.itba.paw.services, ar.edu.itba.paw.persistence" })
@@ -108,11 +103,14 @@ public class WebConfig {
     }
 
     @Bean
-    public MessageSource messageSource() {
-        final ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
-        messageSource.setBasename("classpath:i18n/messages");
+    public ExposedResourceBundleMessageSource messageSource() {
+        final ExposedResourceBundleMessageSource messageSource = new ExposedResourceBundleMessageSource();
+        messageSource.setBasename("i18n/messages");
         messageSource.setDefaultEncoding(StandardCharsets.UTF_8.displayName());
+        ReloadableResourceBundleMessageSource ads ;
         return messageSource;
     }
+
+
 
 }

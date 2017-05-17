@@ -1,8 +1,7 @@
 package ar.edu.itba.paw.model;
 
-/**
- * Created by juanfra on 31/03/17.
- */
+import ar.edu.itba.paw.model.packages.UpgradeType;
+
 public class Upgrade {
     private FactoryType factoryType;
     private long level;
@@ -46,6 +45,19 @@ public class Upgrade {
         long localLevel = factoryType.getBaseRecipe().getInputs().isEmpty() ? level/2 : level/3;
         localLevel = Math.min(localLevel, MAX_UPGRADE_LEVEL);
         return Math.exp(-0.07 * localLevel);
+    }
+
+    public UpgradeType getNextUpgradeType(){
+        if(factoryType.getBaseRecipe().getInputs().isEmpty()){
+            if(level%2 == 0 && level <= MAX_UPGRADE_LEVEL * 2) {
+                return UpgradeType.COST_REDUCTION;
+            }
+            else return UpgradeType.OUTPUT_INCREASE;
+        } else {
+            if( level%3 == 2 || level > MAX_UPGRADE_LEVEL * 3) return UpgradeType.OUTPUT_INCREASE;
+            else if(level%3== 0) return UpgradeType.COST_REDUCTION;
+            else return UpgradeType.INPUT_REDUCTION;
+        }
     }
 
     public String toString() {

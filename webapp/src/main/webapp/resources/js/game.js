@@ -12,24 +12,29 @@ $(document).ready(function(){
     $('select').material_select();
 });
 
-var URLevent = window.location.href.split("#").pop()
-if (URLevent != "") {
-    switch (URLevent) {
-        case "sucSellMarket":
-            Materialize.toast('Resource successfully sold', 4000);
-            break;
-        case "sucBuyMarket":
-            Materialize.toast('Resource successfully bought', 4000);
-            break;
-        case "sucBuyFact":
-            Materialize.toast('Factory successfully bought', 4000);
-            break;
-        case "sucUpgFac":
-            Materialize.toast('Factory successfully upgraded', 4000);
-            break;
-    }
-    window.location.hash = ""
+var URLevent = window.location.href.split("#").pop();
+var toPrint = window.sessionStorage.getItem("message");
+if(toPrint != null){
+    sessionStorage.removeItem("message");
+    Materialize.toast(toPrint,4000);
 }
+// if (URLevent != "") {
+//     switch (URLevent) {
+//         case "sucSellMarket":
+//             Materialize.toast('Resource successfully sold', 4000);
+//             break;
+//         case "sucBuyMarket":
+//             Materialize.toast('Resource successfully bought', 4000);
+//             break;
+//         case "sucBuyFact":
+//             Materialize.toast('Factory successfully bought', 4000);
+//             break;
+//         case "sucUpgFac":
+//             Materialize.toast('Factory successfully upgraded', 4000);
+//             break;
+//     }
+//     window.location.hash = ""
+// }
 refreshValues(false);
 refreshView();
 refreshFactoriesBuyability();
@@ -39,6 +44,14 @@ function refreshValues(update){
     Object.keys(storagesMap).forEach(function (key,value) {
         storagesMap[key] = storagesMap[key] + productionsMap[key]
     });
+}
+
+function dec(mesageCode, arg0, arg1, arg2) {
+    var st = messages[mesageCode];
+    st.replace("{0}",arg0);
+    st.replace("{1}",arg1);
+    st.replace("{2}",arg2);
+    return st;
 }
 
 function refreshView() {
@@ -67,7 +80,7 @@ function refreshView() {
     var resourceId = document.getElementById("market.sell.resources").value;
     var quantity = document.getElementById("market.sell.quantity").value;
     if(resourceId != "" && quantity != "" && unit != "") {
-        document.getElementById("market.sell.price").innerHTML = "Gain: $" +abbreviateNumber(parseInt(quantity) * multiplier * costBuyResources[resourceId])
+        document.getElementById("market.sell.price").innerHTML = dec("game.market.profit") +abbreviateNumber(parseInt(quantity) * multiplier * costBuyResources[resourceId])
     } else {
         document.getElementById("market.sell.price").innerHTML = ""
     }
@@ -86,7 +99,7 @@ function refreshView() {
     resourceId = document.getElementById("market.buy.resources").value;
     quantity = document.getElementById("market.buy.quantity").value;
     if(resourceId != "" && quantity != "" && unit != "") {
-        document.getElementById("market.buy.price").innerHTML = "Cost: $" + abbreviateNumber(parseInt(quantity) * multiplier * costBuyResources[resourceId])
+        document.getElementById("market.buy.price").innerHTML = dec("game.market.cost")  + abbreviateNumber(parseInt(quantity) * multiplier * costBuyResources[resourceId])
     } else {
         document.getElementById("market.buy.price").innerHTML = ""
     }
@@ -179,8 +192,11 @@ function buyFactory(id){
         {
             factoryId: id
         }, function(data) {
-            window.location.hash = "sucBuyFact"
-            window.location.reload()
+            var resp = JSON.parse(data);
+            if(resp.message !== null){
+                window.sessionStorage.setItem("message",resp.message);
+            }
+                location.reload();
         });
 }
 
@@ -189,19 +205,23 @@ function upgradeFactory(factId) {
         {
             factoryId: factId //$("#"+element.id).data("factoryid")
         }, function(data) {
-            window.location.hash = "sucUpgFac"
-            window.location.reload()
+            var resp = JSON.parse(data);
+            if(resp.message !== null){
+                window.sessionStorage.setItem("message",resp.message);
+            }
+            location.reload();
     });
 }
 
 function abbreviateNumber(value,decimals) {
     var newValue = value;
+    var suffixNum =0;
+    var suffixes = ["", "K", "M", "B","T"];
     if(! decimals || value>=10000) {
         newValue = truncate(value);
     }
     if (newValue >= 10000) {
-        var suffixes = ["", "K", "M", "B","T"];
-        var suffixNum = Math.floor( (""+newValue).length/3 );
+        suffixNum = Math.floor( (""+newValue).length/3 );
         var shortValue = '';
         for (var precision = 2; precision >= 1; precision--) {
             shortValue = parseFloat( (suffixNum != 0 ? (newValue / Math.pow(1000,suffixNum) ) : newValue).toPrecision(precision));
@@ -209,9 +229,9 @@ function abbreviateNumber(value,decimals) {
             if (dotLessShortValue.length <= 2) { break; }
         }
         if (shortValue % 1 != 0)  shortNum = shortValue.toFixed(1);
-        newValue = shortValue+suffixes[suffixNum];
+        newValue = shortValue;
     }
-    return decimals ? Math.floor(100* newValue)/100 : newValue;
+    return (decimals ? Math.floor(100* newValue)/100 : newValue)+suffixes[suffixNum];
 }
 
 function truncate(number)
@@ -239,14 +259,14 @@ $(function() {
         },
         messages: {
             resources:{
-                required: "Please, select a resource"
+                required: dec("game.market.selectResource")
             },
             quantity: {
-                required: "Please, enter a quantity",
-                digits: "Only digits are allowed"
+                required: dec("game.market.selectQuantity"),
+                digits: dec("game.market.illegalCaracter")
             },
             unit:{
-                required: "Please, select an unit"
+                required: dec("game.market.selectUnit")
             }
         },
         submitHandler: function(form) {
@@ -282,8 +302,10 @@ $(function() {
                         resourceId: resourceId,
                         quantity: quantity
                     }, function (data) {
-                        window.location.hash = "sucBuyMarket"
-                        window.location.reload()
+                        var resp = JSON.parse(data);
+                        window.sessionStorage.setItem("message",resp.message);
+                        // window.location.hash = "sucSellMarket";
+                            location.reload();
                 });
             }
         }
@@ -294,7 +316,7 @@ $(function() {
         if (storagesMap[3] >= quantity * costBuyResources[resourceId]) { //3: MONEY
             return true;
         }
-        Materialize.toast('Not enough money to buy', 3000);
+        Materialize.toast(dec("game.market.buyFail"), 3000);
         return false
     }
 
@@ -313,14 +335,14 @@ $(function() {
         },
         messages: {
             resources:{
-                required: "Please, select a resource"
+                required: dec("game.market.selectResource")
             },
             quantity: {
-                required: "Please, enter a quantity",
-                digits: "Only digits are allowed"
+                required: dec("game.market.selectQuantity"),
+                digits: dec("game.market.illegalCaracter")
             },
             unit:{
-                required: "Please, select an unit"
+                required: dec("game.market.selectUnit")
             }
         },
         submitHandler: function(form) {
@@ -356,8 +378,10 @@ $(function() {
                         resourceId: resourceId,
                         quantity: quantity
                     }, function (data) {
-                        window.location.hash = "sucSellMarket"
-                        window.location.reload()
+                        var resp = JSON.parse(data);
+                        window.sessionStorage.setItem("message",resp.message);
+                        // window.location.hash = "sucSellMarket";
+                            location.reload();
                     });
             }
         }
@@ -368,7 +392,7 @@ $(function() {
         if (storagesMap[resourceId] >= quantity) {
             return true;
         }
-        Materialize.toast('Not enough storage to sell', 3000);
+        Materialize.toast(dec("game.market.sellFail","",dec(resourceId)), 3000);
         return false
     }
 });

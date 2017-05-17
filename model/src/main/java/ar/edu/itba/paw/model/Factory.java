@@ -4,9 +4,6 @@ import ar.edu.itba.paw.model.packages.Implementations.*;
 
 import java.util.Map;
 
-/**
- * Created by juanfra on 31/03/17.
- */
 public class Factory implements Comparable<Factory> {
 
     private long userid;

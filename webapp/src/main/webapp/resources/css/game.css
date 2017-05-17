@@ -244,3 +244,15 @@ div.no-padding {
 	display: flex;
 	justify-content: space-around;
 }
+
+button.OUTPUT_INCREASE{
+	background-color: blue;
+}
+
+button.INPUT_REDUCTION{
+	background-color: yellow;
+}
+
+button.COST_REDUCTION{
+	background-color: green;
+}

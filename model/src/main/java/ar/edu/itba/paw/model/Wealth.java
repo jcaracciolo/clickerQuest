@@ -7,9 +7,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
 
-/**
- * Created by juanfra on 03/04/17.
- */
 public class Wealth {
 
     private long userid;
@@ -143,5 +140,29 @@ public class Wealth {
         calculatedStorage.getLastUpdated().forEach(storageBuilder::setLastUpdated);
         storageBuilder.addItem(resource,amount);
         return new Wealth(userid,storageBuilder.buildPackage(),productions);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Wealth wealth = (Wealth) o;
+
+        if( !getStorage().equals(wealth.getStorage())) {
+            return false;
+        }
+
+        if ( !productions.equals(wealth.getProductions())) {
+            return false;
+        }
+
+        return userid == wealth.userid;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return (int) (userid ^ (userid >>> 32));
     }
 }

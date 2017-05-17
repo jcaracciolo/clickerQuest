@@ -10,12 +10,16 @@ import ar.edu.itba.paw.model.packages.PackageBuilder;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.slf4j.LoggerFactory;
-import org.slf4j.Logger;
-import java.util.*;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -33,9 +37,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     MarketDao marketDao;
 
-    Cache<String,User> userCache = CacheBuilder.newBuilder().maximumSize(5).build();
-    Cache<Long,Wealth> wealthCache = CacheBuilder.newBuilder().maximumSize(5).build();
-    //region Retrieval
+    Cache<String, User> userCache = CacheBuilder.newBuilder().maximumSize(5).build();
+    Cache<Long, Wealth> wealthCache = CacheBuilder.newBuilder().maximumSize(5).build();
+
     public User findById(long id) {
         return userDao.findById(id);
     }
@@ -85,21 +89,24 @@ public class UserServiceImpl implements UserService {
         return wealth;
     }
 
-    //endregion
-
-    //region creation
-
     public User create(String username, String password, String img) {
         User user = userDao.create(username,passwordEncoder.encode(password),img);
         if(user != null){
+
+            for (FactoryType type: FactoryType.values()){
+                Factory factory = type.defaultFactory(user.getId());
+                create(factory.getType(),user.getId());
+            }
+
+            for (ResourceType rt: ResourceType.values()) {
+                create(rt,user.getId());
+            }
+            setResourceStorage(user.getId(),ResourceType.MONEY,15000);
             purchaseFactory(user.getId(),FactoryType.PEOPLE_RECRUITING_BASE);
             purchaseFactory(user.getId(),FactoryType.STOCK_INVESTMENT_BASE);
         }
         return user;
     }
-
-    //endregion
-
 
     @Override
     public Productions getUserProductions(long id) {
@@ -118,6 +125,7 @@ public class UserServiceImpl implements UserService {
                 .filter( (f) -> f.getType() == type).findAny();
 
         Factory f;
+
         if(maybeFactory.isPresent()) {
             f = maybeFactory.get();
         } else {
@@ -153,7 +161,7 @@ public class UserServiceImpl implements UserService {
         return factories;
     }
 
-    public Factory create(FactoryType factoryType, long userId){
+    private Factory create(FactoryType factoryType, long userId){
         final Factory f = factoryType.defaultFactory(userId);
         userDao.create(f,userId);
         return f;
@@ -193,15 +201,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Wealth sellResourceType(long userid, ResourceType resourceType, double amount) {
+    public boolean sellResourceType(long userid, ResourceType resourceType, double amount) {
         if(resourceType == ResourceType.MONEY) {
-            return null;
+            return false;
         }
 
         Wealth wealth = getUserWealth(userid);
         double cost = (resourceType.getPrice()) * amount;
         if( wealth.getStorage().getValue(resourceType) <  amount ) {
-            return null;
+            return false;
         }
 
         PackageBuilder<Storage> wbuilder = Storage.packageBuilder();
@@ -219,15 +227,37 @@ public class UserServiceImpl implements UserService {
         updateWealth(userid,newWealth);
         marketDao.registerPurchase(new StockMarketEntry(userid,resourceType,-amount));
 
-        return newWealth;
+        return true;
+    }
+
+    private boolean setResourceStorage(long userid, ResourceType resourceType, double amount) {
+        Wealth wealth = getUserWealth(userid);
+
+        PackageBuilder<Storage> wbuilder = Storage.packageBuilder();
+        wealth.getStorage().rawMap().forEach(
+                (r,d) ->{
+                    if(r.equals(resourceType)){
+                        wbuilder.putItem(r,amount);
+                    }else  {
+                        wbuilder.putItem(r,d);
+                    }
+                }
+        );
+        wealth.getStorage().getLastUpdated().forEach(
+                (r,d) -> wbuilder.setLastUpdated(r,d)
+        );
+
+        Wealth newWealth = new Wealth(userid,wbuilder.buildPackage(),wealth.getProductions());
+        updateWealth(userid,newWealth);
+        return true;
     }
 
     @Override
-    public Wealth purchaseResourceType(long userid, ResourceType resourceType, double amount) {
+    public boolean purchaseResourceType(long userid, ResourceType resourceType,double amount){
         Wealth wealth = getUserWealth(userid);
         double cost = (resourceType.getPrice()) * amount;
         if( wealth.getStorage().getValue(ResourceType.MONEY) <  cost ) {
-            return null;
+            return false;
         }
 
         PackageBuilder<Storage> wbuilder = Storage.packageBuilder();
@@ -245,7 +275,7 @@ public class UserServiceImpl implements UserService {
         updateWealth(userid,newWealth);
         marketDao.registerPurchase(new StockMarketEntry(userid,resourceType,amount));
 
-        return newWealth;
+        return true;
     }
 
     private Wealth updateWealth(long userId, Wealth wealth){

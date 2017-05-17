@@ -17,9 +17,6 @@ import javax.sql.DataSource;
 import static junit.framework.TestCase.assertNotNull;
 import static org.junit.Assert.assertEquals;
 
-/**
- * Unit test for UserDao implementation in Jdbc
- */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestConfig.class)
 @Sql("classpath:schema.sql")

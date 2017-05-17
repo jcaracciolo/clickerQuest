@@ -7,9 +7,6 @@ import ar.edu.itba.paw.model.packages.Implementations.Storage;
 import java.util.Collection;
 
 
-/**
- * Created by juanfra on 23/03/17.
- */
 public interface UserService {
 
     User findById(long id);
@@ -23,8 +20,8 @@ public interface UserService {
 
     boolean purchaseFactory(long userid, FactoryType type);
     boolean purchaseUpgrade(long userid, FactoryType type);
-    Wealth purchaseResourceType(long userid, ResourceType resourceType, double amount);
-    Wealth sellResourceType(long userid, ResourceType resourceType, double amount);
+    boolean purchaseResourceType(long userid, ResourceType resourceType, double amount);
+    boolean sellResourceType(long userid, ResourceType resourceType, double amount);
 
     Collection<Factory> getUserFactories(long id);
 

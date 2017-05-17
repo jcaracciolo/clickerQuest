@@ -10,7 +10,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 /**
- * Created by juanfra on 13/04/17.
  *  WARNING:
  *  DO NOT modify the variables ids by any means in any way shape or form
  *
