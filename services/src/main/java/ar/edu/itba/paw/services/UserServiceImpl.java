@@ -101,7 +101,7 @@ public class UserServiceImpl implements UserService {
             for (ResourceType rt: ResourceType.values()) {
                 create(rt,user.getId());
             }
-
+            setResourceStorage(user.getId(),ResourceType.MONEY,15000);
             purchaseFactory(user.getId(),FactoryType.PEOPLE_RECRUITING_BASE);
             purchaseFactory(user.getId(),FactoryType.STOCK_INVESTMENT_BASE);
         }
@@ -230,8 +230,30 @@ public class UserServiceImpl implements UserService {
         return true;
     }
 
+    private boolean setResourceStorage(long userid, ResourceType resourceType, double amount) {
+        Wealth wealth = getUserWealth(userid);
+
+        PackageBuilder<Storage> wbuilder = Storage.packageBuilder();
+        wealth.getStorage().rawMap().forEach(
+                (r,d) ->{
+                    if(r.equals(resourceType)){
+                        wbuilder.putItem(r,amount);
+                    }else  {
+                        wbuilder.putItem(r,d);
+                    }
+                }
+        );
+        wealth.getStorage().getLastUpdated().forEach(
+                (r,d) -> wbuilder.setLastUpdated(r,d)
+        );
+
+        Wealth newWealth = new Wealth(userid,wbuilder.buildPackage(),wealth.getProductions());
+        updateWealth(userid,newWealth);
+        return true;
+    }
+
     @Override
-    public boolean purchaseResourceType(long userid, ResourceType resourceType, double amount) {
+    public boolean purchaseResourceType(long userid, ResourceType resourceType,double amount){
         Wealth wealth = getUserWealth(userid);
         double cost = (resourceType.getPrice()) * amount;
         if( wealth.getStorage().getValue(ResourceType.MONEY) <  cost ) {

@@ -137,7 +137,7 @@ public class UserJdbcDao implements UserDao {
             return null;
         }
 
-        return us;
+        return new User(userId.longValue(),username,password,img);
     }
 
     public Factory update(Factory f) {

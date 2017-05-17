@@ -370,14 +370,10 @@
     </c:forEach>
     };
 
-    function localizeRes(resNameCode) {
-        switch (resNameCode) {
-            <c:forEach items="${storage.resources}" var="res">
-            case '${res}': return "<spring:message code="${res.nameCode}"/>"
-            </c:forEach>
-        }
-        return undefined
-    }
+
+
+    messages = ${messages.toJSONString()};
+
 </script>
 <script type="text/javascript" src="<c:url value="https://code.jquery.com/jquery-2.1.1.min.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/resources/js/materialize.min.js"/>"></script>

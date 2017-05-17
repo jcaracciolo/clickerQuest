@@ -2,6 +2,7 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.model.*;
+import ar.edu.itba.paw.webapp.config.ExposedResourceBundleMessageSource;
 import ar.edu.itba.paw.webapp.form.UserForm;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -23,9 +25,8 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.security.Principal;
-import java.util.Random;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
+import java.util.stream.Stream;
 
 @Controller
 public class MainController {
@@ -37,7 +38,7 @@ public class MainController {
     @Autowired
     private AuthenticationProvider authProvider;
     @Autowired
-    private MessageSource messageSource;
+    private ExposedResourceBundleMessageSource messageSource;
     // INDEX
     @RequestMapping("/login")
     public ModelAndView index(@ModelAttribute("registerForm") final UserForm form, Principal principal) {
@@ -94,7 +95,9 @@ public class MainController {
         mav.addObject("storage",wealth.getStorage());
         mav.addObject("factories",factories);
         mav.addObject("productions",wealth.getProductions());
-
+        mav.addObject("messages",getStaticStrings(LocaleContextHolder.getLocale()));
+        HashMap<Integer,String> asd = new HashMap<>();
+        mav.addObject("resourceTranslator",asd);
         return mav;
     }
 
@@ -127,10 +130,8 @@ public class MainController {
         j.put("type", "upgradeFactory");
         j.put("factoryId",factoryId);
         if(result){
-            String factoryName =  messageSource.getMessage(FactoryType.fromId(factoryId).getNameCode()
-                    ,null,LocaleContextHolder.getLocale());
             String msg = messageSource.getMessage("game.upgradeSuccessful"
-                    ,new Object[]{factoryName},LocaleContextHolder.getLocale());
+                    ,new Object[]{factoryLevel},LocaleContextHolder.getLocale());
             j.put("message", msg);
         }
         return j.toJSONString();
@@ -238,5 +239,15 @@ public class MainController {
         }
 
         return prioritizedErrors;
+    }
+
+    private JSONObject getStaticStrings(Locale locale){
+        Set<String> keys = messageSource.getKeys(locale);
+
+        JSONObject j = new JSONObject();
+        keys.stream().forEach(k -> j.put(k,messageSource.getMessage(k,null,locale)));
+        Stream.of(ResourceType.values()).forEach(rType -> j.put(rType.getId(),rType.getNameCode()));
+
+        return j;
     }
 }
