@@ -20,24 +20,25 @@ This application is an Idle game in development.
 6. Continue with import
 7. Select the `webapp/src/main/java` folder and right click, select `Mark directory as -> Sources Root`
 
-## Configure `jetty`:
+## Configure Jetty:
 
 1. Download the plugin [from this site](https://plugins.jetbrains.com/plugin/download?updateId=22888) (if you already have jetty Runner as plugin uninstall it)
 2. If you are a Mac user, jump straight to the steps [described in this link](https://www.jetbrains.com/help/idea/2016.3/installing-updating-and-uninstalling-repository-plugins.html)
 3. File -> Settings -> Plugins -> install from disk
 4. Select the downloaded zip
-- Restart IDEA
-- Run -> Edit Configurations
-- '+' -> select Jetty Runner -> name it 'Development'
-- Setup Path = '\' , Webapp Folder = 'webapp/src/main/webapp' , Classes Folder = 'webapp/target/classes'
-- '+' -> select Jetty Runner -> name it 'Production'
-- Setup Path = '\' , Webapp Folder = 'webapp/src/main/webapp' , Classes Folder = 'webapp/target/classes'
-- Env Args -> Name: 'spring.profiles.active' Value: 'production'
-- Down, before Launch, run Maven Goal with the command "clean compile"
-- Done
+5. Restart IDEA
+6. Run -> Edit Configurations
+7. '+' -> select Jetty Runner -> name it 'Development'
+8. Setup Path = '\' , Webapp Folder = 'webapp/src/main/webapp' , Classes Folder = 'webapp/target/classes'
+9. '+' -> select Jetty Runner -> name it 'Production'
+10. Setup Path = '\' , Webapp Folder = 'webapp/src/main/webapp' , Classes Folder = 'webapp/target/classes'
+11. Env Args -> Name: 'spring.profiles.active' Value: 'production'
+12. Down, before Launch, run Maven Goal with the command "clean compile"
+13. Done
+
 IMPORTANT: DO NOT UPDATE THE JETTY PLUGIN OR IT WILL NOT WORK
 
-### Configure Postgres:
+## Configure Postgres:
 
 1. Install postgres (sudo apt-get install postgresql)
 2. Start postres server (sudo service postgresql start)
@@ -53,7 +54,7 @@ IMPORTANT: DO NOT UPDATE THE JETTY PLUGIN OR IT WILL NOT WORK
 12. Profit!!
 
 
-### Deploy
+## Deployment instructions
 
 1. Set run as "Deploy"
 2. ```mvn clean package```
