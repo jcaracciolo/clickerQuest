@@ -217,3 +217,15 @@ div.no-padding {
 .factory-main {
 	max-width: 17rem;
 }
+
+button.OUTPUT_INCREASE{
+	background-color: blue;
+}
+
+button.INPUT_REDUCTION{
+	background-color: yellow;
+}
+
+button.COST_REDUCTION{
+	background-color: green;
+}
