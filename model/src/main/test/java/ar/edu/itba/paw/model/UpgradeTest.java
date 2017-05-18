@@ -14,6 +14,7 @@ import static org.junit.Assert.assertTrue;
  * Created by Julian Benitez on 5/17/2017.
  */
 public class UpgradeTest {
+    //TODO this is wrong
     @Test
     public void upgradeTestNoInputs() throws Exception{
         Upgrade upgrade;

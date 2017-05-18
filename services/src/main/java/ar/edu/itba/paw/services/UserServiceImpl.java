@@ -107,8 +107,10 @@ public class UserServiceImpl implements UserService {
 
             purchaseFactory(user.getId(),FactoryType.PEOPLE_RECRUITING_BASE);
             purchaseFactory(user.getId(),FactoryType.STOCK_INVESTMENT_BASE);
+
+            return findById(user.getId());
         }
-        return user;
+        return null;
     }
 
     @Override

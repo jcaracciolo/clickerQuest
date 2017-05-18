@@ -43,6 +43,11 @@ class MockUserDao implements UserDao {
         }
     }
 
+    protected void clear(){
+        tables = new ArrayList<>();
+        counter = 0;
+    }
+
     @Override
     public Integer getGlobalRanking(long userId) {
         tables.sort( (d1,d2) -> d1.wealth.calculateScore()>d2.wealth.calculateScore() ? 1 : -1 );

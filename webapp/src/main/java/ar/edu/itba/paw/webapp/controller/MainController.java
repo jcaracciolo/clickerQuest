@@ -92,6 +92,7 @@ public class MainController {
         mav.addObject("storage",wealth.getStorage());
         mav.addObject("factories",factories);
         mav.addObject("productions",wealth.getProductions());
+        mav.addObject("globalRanking",userService.getGlobalRanking(u.getId()));
         return mav;
     }
 

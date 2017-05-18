@@ -54,14 +54,15 @@
             </div>
         </div>
         <div id="world-ranking">
-            <%-- TODO: add: arguments="${user.getWorldRanking()}" --%>
-            <p><spring:message code="profile.worldRanking" arguments="2"/> </p>
+            <p><spring:message code="profile.worldRanking" arguments="{globalRanking}"/> </p>
         </div>
-        <%-- TODO: if(user.hasGroup()) --%>
-        <div id="group-info">
-            <img class="group-logo" src="<c:url value="/resources/group_icons/1.png"/>" alt="group_logo"/>
-            <p>Super Group</p>
-        </div>
+        <c:if test="${user.clanIdentifier != null}">
+            <div id="group-info">
+                //TODO add clan data
+                <img class="group-logo" src="<c:url value="/resources/group_icons/1.png"/>" alt="group_logo"/>
+                <p>Super Group</p>
+            </div>
+        </c:if>
     </div>
     <div class="right-section">
         <div class="unlocked-factories-section">
