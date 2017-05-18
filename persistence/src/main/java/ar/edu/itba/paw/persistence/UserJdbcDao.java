@@ -44,7 +44,7 @@ public class UserJdbcDao implements UserDao {
         }
     }
 
-    private JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert jdbcInsertUsers;
     private final SimpleJdbcInsert jdbcInsertFactories;
     private final SimpleJdbcInsert jdbcInsertWealths;
@@ -93,21 +93,23 @@ public class UserJdbcDao implements UserDao {
 
     };
 
-    private final static RowMapper<User> USER_ROW_MAPPER = (rs, rowNum) ->
+    final static RowMapper<User> USER_ROW_MAPPER = (rs, rowNum) ->
             new User(rs.getLong("userid"),
                     rs.getString("username"),
                     rs.getString("password"),
                     rs.getString("profileImage"),
-                    rs.getDouble("score"));
+                    rs.getDouble("score"),
+                    rs.getInt("clanId"));
 
 
-    private final static ReverseRowMapper<User> USER_REVERSE_ROW_MAPPER = (us) ->
+    final static ReverseRowMapper<User> USER_REVERSE_ROW_MAPPER = (us) ->
     {
         final Map<String, Object> args = new HashMap();
         args.put("username",        us.getUsername());
         args.put("password",        us.getPassword());
         args.put("profileImage",    us.getProfileImage());
         args.put("score",           us.getScore());
+        args.put("clanId",          us.getClanIdentifier());
         return args;
     };
     //endregion

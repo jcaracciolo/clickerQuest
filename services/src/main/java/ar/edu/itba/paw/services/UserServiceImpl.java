@@ -285,7 +285,8 @@ public class UserServiceImpl implements UserService {
                                 oldUser.getUsername(),
                                 oldUser.getPassword(),
                                 oldUser.getProfileImage(),
-                                wealth.calculateScore());
+                                wealth.calculateScore(),
+                                oldUser.getClanIdentifier());
         if(userDao.update(newUser) != null) {
             userCache.put(newUser.getUsername(),newUser);
             return userDao.update(wealth);
