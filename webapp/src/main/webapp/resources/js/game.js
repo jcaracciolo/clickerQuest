@@ -12,29 +12,14 @@ $(document).ready(function(){
     $('select').material_select();
 });
 
-var URLevent = window.location.href.split("#").pop();
+// var URLevent = window.location.href.split("#").pop();
 var toPrint = window.sessionStorage.getItem("message");
+
 if(toPrint != null){
     sessionStorage.removeItem("message");
     Materialize.toast(toPrint,4000);
 }
-// if (URLevent != "") {
-//     switch (URLevent) {
-//         case "sucSellMarket":
-//             Materialize.toast('Resource successfully sold', 4000);
-//             break;
-//         case "sucBuyMarket":
-//             Materialize.toast('Resource successfully bought', 4000);
-//             break;
-//         case "sucBuyFact":
-//             Materialize.toast('Factory successfully bought', 4000);
-//             break;
-//         case "sucUpgFac":
-//             Materialize.toast('Factory successfully upgraded', 4000);
-//             break;
-//     }
-//     window.location.hash = ""
-// }
+
 refreshValues(false);
 refreshView();
 refreshFactoriesBuyability();
@@ -48,10 +33,16 @@ function refreshValues(update){
 
 function dec(mesageCode, arg0, arg1, arg2) {
     var st = messages[mesageCode];
-    st.replace("{0}",arg0);
-    st.replace("{1}",arg1);
-    st.replace("{2}",arg2);
+    st = st.replace("{0}",arg0);
+    st = st.replace("{1}",arg1);
+    st = st.replace("{2}",arg2);
     return st;
+}
+function decRes(resourceId) {
+    return messages.resources[resourceId];
+}
+function decFac(factoryId) {
+    return messages.factories[factoryId];
 }
 
 function refreshView() {
@@ -193,10 +184,15 @@ function buyFactory(id){
             factoryId: id
         }, function(data) {
             var resp = JSON.parse(data);
-            if(resp.message !== null){
-                window.sessionStorage.setItem("message",resp.message);
+            var msg ;
+            if(resp.result){
+                msg = dec("game.factoryBuySuccessful",dec(decFac(resp.factoryId)));
+            } else {
+                msg = dec("game.factoryBuyFail",dec(decFac(resp.factoryId)));
             }
-                location.reload();
+
+            window.sessionStorage.setItem("message",msg);
+            location.reload();
         });
 }
 
@@ -206,9 +202,14 @@ function upgradeFactory(factId) {
             factoryId: factId //$("#"+element.id).data("factoryid")
         }, function(data) {
             var resp = JSON.parse(data);
-            if(resp.message !== null){
-                window.sessionStorage.setItem("message",resp.message);
+
+            var msg ;
+            if(resp.result){
+                msg = dec("game.upgradeSuccessful",resp.level,dec(decFac(resp.factoryId)));
+            } else {
+                msg = dec("game.upgradeFail",resp.level,dec(decFac(resp.factoryId)));
             }
+            window.sessionStorage.setItem("message",msg);
             location.reload();
     });
 }
@@ -303,9 +304,15 @@ $(function() {
                         quantity: quantity
                     }, function (data) {
                         var resp = JSON.parse(data);
-                        window.sessionStorage.setItem("message",resp.message);
-                        // window.location.hash = "sucSellMarket";
-                            location.reload();
+
+                        var msg ;
+                        if(resp.result){
+                            msg = dec("game.market.buySuccessful",resp.quantity,dec(decRes(resp.resourceId)));
+                        } else {
+                            msg = dec("game.market.buyFail",resp.quantity,dec(decRes(resp.resourceId)));
+                        }
+                        window.sessionStorage.setItem("message",msg);
+                        location.reload();
                 });
             }
         }
@@ -316,7 +323,8 @@ $(function() {
         if (storagesMap[3] >= quantity * costBuyResources[resourceId]) { //3: MONEY
             return true;
         }
-        Materialize.toast(dec("game.market.buyFail"), 3000);
+        Materialize.toast(dec("game.market.buyFail",abbreviateNumber(quantity,false),dec(decRes(resourceId))), 3000);
+
         return false
     }
 
@@ -379,9 +387,15 @@ $(function() {
                         quantity: quantity
                     }, function (data) {
                         var resp = JSON.parse(data);
-                        window.sessionStorage.setItem("message",resp.message);
-                        // window.location.hash = "sucSellMarket";
-                            location.reload();
+
+                        var msg ;
+                        if(resp.result){
+                            msg = dec("game.market.sellSuccessful",resp.quantity,dec(decRes(resp.resourceId)));
+                        } else {
+                            msg = dec("game.market.sellFail",resp.quantity,dec(decRes(resp.resourceId)));
+                        }
+                        window.sessionStorage.setItem("message",msg);
+                        location.reload();
                     });
             }
         }
@@ -392,7 +406,7 @@ $(function() {
         if (storagesMap[resourceId] >= quantity) {
             return true;
         }
-        Materialize.toast(dec("game.market.sellFail","",dec(resourceId)), 3000);
+        Materialize.toast(dec("game.market.sellFail",abbreviateNumber(quantity,false),dec(decRes(resourceId))), 3000);
         return false
     }
 });

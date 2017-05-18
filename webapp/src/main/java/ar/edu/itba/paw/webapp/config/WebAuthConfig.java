@@ -43,18 +43,18 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                     .rememberMe()
                     .rememberMeParameter("j_rememberme")
                     .userDetailsService(userDetailsService)
-                    .key("mysupersecretketthatnobodyknowsabout")
+                    .key("d293LCB0ZSB0b21hc3RlIGxlIHRpZW1wbyBkZSBkZWNvZGlmaWNhcmxvPw==")
                     .tokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(30))
                 .and()
                     .logout().logoutUrl("/logout")
-                    .logoutSuccessUrl("/loginlogout")
+                    .logoutSuccessUrl("/login")
                 .and()
                     .exceptionHandling().accessDeniedPage("/403")
                 .and().csrf().disable();
     }
     @Override
     public void configure(final WebSecurity web) throws Exception{
-        web.ignoring().antMatchers("/css/**","/js/**","/img/**","/favicon.ico","/403","/resources/**");
+        web.ignoring().antMatchers("/404","/403","/resources/**");
     }
 
     @Autowired

@@ -76,9 +76,9 @@ public class MainController {
     // GAME
     @RequestMapping(value = "/game", method = { RequestMethod.GET })
     public ModelAndView mainGameView( Principal principal){
-        if(principal == null || principal.getName() == null){
-            return new ModelAndView("redirect:/login");
-        }
+//        if(principal == null || principal.getName() == null){
+//            return new ModelAndView("redirect:/login");
+//        }
         ModelAndView mav = new ModelAndView("game");
         User u = userService.findByUsername(principal.getName());
 
@@ -96,8 +96,6 @@ public class MainController {
         mav.addObject("factories",factories);
         mav.addObject("productions",wealth.getProductions());
         mav.addObject("messages",getStaticStrings(LocaleContextHolder.getLocale()));
-        HashMap<Integer,String> asd = new HashMap<>();
-        mav.addObject("resourceTranslator",asd);
         return mav;
     }
 
@@ -109,13 +107,6 @@ public class MainController {
         j.put("result",result);
         j.put("type", "purchaseFactory");
         j.put("factoryId",factoryId);
-        if(result){
-            String factoryName =  messageSource.getMessage(FactoryType.fromId(factoryId).getNameCode()
-                    ,null,LocaleContextHolder.getLocale());
-            String msg = messageSource.getMessage("game.factoryBuySuccessful"
-                    ,new Object[]{factoryName},LocaleContextHolder.getLocale());
-            j.put("message", msg);
-        }
         return j.toJSONString();
     }
 
@@ -129,11 +120,7 @@ public class MainController {
         j.put("result",result);
         j.put("type", "upgradeFactory");
         j.put("factoryId",factoryId);
-        if(result){
-            String msg = messageSource.getMessage("game.upgradeSuccessful"
-                    ,new Object[]{factoryLevel},LocaleContextHolder.getLocale());
-            j.put("message", msg);
-        }
+        j.put("level",factoryLevel);
         return j.toJSONString();
     }
 
@@ -152,12 +139,12 @@ public class MainController {
         j.put("type", "buyFromMarket");
         j.put("resourceId",resourceId);
         j.put("quantity", quantity);
-
-        String resourceName =  messageSource.getMessage(ResourceType.fromId(resourceId).getNameCode()
-                ,null,LocaleContextHolder.getLocale());
-        String msg = messageSource.getMessage(result?"game.market.buySuccessful":"game.market.buyFail"
-                ,new Object[]{Math.round(quantity),resourceName},LocaleContextHolder.getLocale());
-        j.put("message", msg);
+//
+//        String resourceName =  messageSource.getMessage(ResourceType.fromId(resourceId).getNameCode()
+//                ,null,LocaleContextHolder.getLocale());
+//        String msg = messageSource.getMessage(result?"game.market.buySuccessful":"game.market.buyFail"
+//                ,new Object[]{Math.round(quantity),resourceName},LocaleContextHolder.getLocale());
+//        j.put("message", msg);
 
         return j.toJSONString();
     }
@@ -178,11 +165,11 @@ public class MainController {
         j.put("type", "sellToMarket");
         j.put("resourceId",resourceId);
         j.put("quantity", quantity);
-        String resourceName =  messageSource.getMessage(ResourceType.fromId(resourceId).getNameCode()
-                ,null,LocaleContextHolder.getLocale());
-        String msg = messageSource.getMessage(result?"game.market.sellSuccessful":"game.market.buyFail"
-                ,new Object[]{Math.round(quantity),resourceName},LocaleContextHolder.getLocale());
-        j.put("message", msg);
+//        String resourceName =  messageSource.getMessage(ResourceType.fromId(resourceId).getNameCode()
+//                ,null,LocaleContextHolder.getLocale());
+//        String msg = messageSource.getMessage(result?"game.market.sellSuccessful":"game.market.buyFail"
+//                ,new Object[]{Math.round(quantity),resourceName},LocaleContextHolder.getLocale());
+//        j.put("message", msg);
         return j.toJSONString();
     }
 
@@ -246,8 +233,12 @@ public class MainController {
 
         JSONObject j = new JSONObject();
         keys.stream().forEach(k -> j.put(k,messageSource.getMessage(k,null,locale)));
-        Stream.of(ResourceType.values()).forEach(rType -> j.put(rType.getId(),rType.getNameCode()));
-
+        JSONObject resources = new JSONObject();
+        Stream.of(ResourceType.values()).forEach(rType -> resources.put(rType.getId(),rType.getNameCode()));
+        JSONObject factories = new JSONObject();
+        Arrays.stream(FactoryType.values()).forEach(fType -> factories.put(fType.getId(),fType.getNameCode()));
+        j.put("resources",resources);
+        j.put("factories",factories);
         return j;
     }
 }
