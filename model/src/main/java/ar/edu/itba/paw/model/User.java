@@ -22,6 +22,7 @@ public class User {
 
     public User(long id, String username, String password, String profileImage, double score, Integer clanId) {
         this(id,username,password,profileImage);
+        this.clanId = clanId;
         this.score = score;
     }
 

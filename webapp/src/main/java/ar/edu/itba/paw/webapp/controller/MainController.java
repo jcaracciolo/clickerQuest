@@ -85,7 +85,7 @@ public class MainController {
         if(u == null){
             mav = new ModelAndView("errorPage");
             mav.addObject("errorMsg", "404");
-            LOGGER.error("{} tried to skip login",u.getId());
+            LOGGER.error("{} tried to skip login",principal.getName());
             return mav;
         }
 
@@ -208,10 +208,11 @@ public class MainController {
                 errorMsg = "404"; // Not Found
                 break;
             }
-            case 500: {
+            case 500:
+            default:
                 errorMsg = "500";   // Server Error
                 break;
-            }
+
         }
         errorPage.addObject("errorMsg", errorMsg);
         return errorPage;
