@@ -1,8 +1,4 @@
 
-@font-face {
-	font-family: Fixedsys;
-	src: url('../fonts/FSEX300.ttf') format("truetype");;
-}
 .modal {
 	overflow: visible !important;
 	min-height: 20em;
@@ -87,18 +83,8 @@ body {
 	position: relative;
 }
 
-.nav-wrapper {
-	background-color: #354488;
-}
 .scrollable-y.card {
 	background-color: #3f51b5;
-}
-
-.upper-logo {
-	max-height: 1em;
-	margin-top: 0.5em;
-	margin-left: 0.5em;
-	margin-right: 0.5em;
 }
 
 div.factory-card-container {
@@ -136,14 +122,6 @@ div.factory-card-container {
 
 .dropdown-wrapper.error {
 	color: red;
-}
-
-.no-margins {
-	margin: 0 !important;
-}
-
-.no-padding {
-	padding: 0 !important;
 }
 
 .factory-consuming, .factory-producing{
