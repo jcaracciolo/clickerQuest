@@ -12,8 +12,8 @@ import java.util.Map;
  * Created by juanfra on 10/04/17.
  */
 public class BaseCost extends ResourcePackage {
-    public static Validator<Double> VALIDATOR = (d) -> d>=0 && d==Math.floor(d);
-    public static Creator<BaseCost> CREATOR = (pb) -> new BaseCost(pb.getResources());
+    public final static Validator<Double> VALIDATOR = (d) -> d>=0 && d==Math.floor(d);
+    public final static Creator<BaseCost> CREATOR = (pb) -> new BaseCost(pb.getResources());
 
     private BaseCost(Map<ResourceType, Double> map) {
         resources = super.generate(map,VALIDATOR);

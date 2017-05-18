@@ -15,7 +15,7 @@ class MockUserDao implements UserDao {
     private List<MockUserDaoData> tables = new ArrayList<>();
     private int counter = 0;
 
-    private class MockUserDaoData {
+    private static class MockUserDaoData {
         User user;
         Wealth wealth;
         List<Factory> factories;

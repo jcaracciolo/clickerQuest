@@ -8,16 +8,21 @@ public class User {
     private String profileImage;
     private double score;
 
+    // Null indicates no clan
+    private Integer clanId;
+
     public User(long id, String username, String password, String profileImage) {
         this.id = id;
         this.username = username;
         this.password = password;
         this.profileImage = profileImage;
-        score = 0;
+        this.clanId = null;
+        this.score = 0;
     }
 
-    public User(long id, String username, String password, String profileImage, double score) {
+    public User(long id, String username, String password, String profileImage, double score, Integer clanId) {
         this(id,username,password,profileImage);
+        this.clanId = clanId;
         this.score = score;
     }
 
@@ -41,5 +46,7 @@ public class User {
         return score;
     }
 
-
+    public Integer getClanIdentifier() {
+        return clanId;
+    }
 }

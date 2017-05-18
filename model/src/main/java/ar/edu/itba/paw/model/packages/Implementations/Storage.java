@@ -16,8 +16,8 @@ import java.util.Map;
  */
 public class Storage extends ResourcePackage {
 
-    public static Validator<Double> VALIDATOR = (d) -> d>=0 && d==Math.floor(d);
-    public static Creator<Storage> CREATOR = (pb) -> new Storage(pb.getResources(),pb.lastUpdated());
+    public final static Validator<Double> VALIDATOR = (d) -> d>=0 && d==Math.floor(d);
+    public final static Creator<Storage> CREATOR = (pb) -> new Storage(pb.getResources(),pb.lastUpdated());
 
     private Map<ResourceType,Calendar> lastUpdated;
 
