@@ -13,13 +13,11 @@ import com.google.common.cache.CacheLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -67,15 +65,22 @@ public class UserServiceImpl implements UserService {
                 Wealth w = userDao.getUserWealth(userid);
                 Map<ResourceType,Double> storageRaw = w.getStorage().rawMap();
 
-                if(storageRaw.size() != w.getStorage().rawMap().size() ) {
-                    LOGGER.error("TODO ESTA MAL");
-                    return null;
-                }
-
                 if(storageRaw.size() < ResourceType.values().length) {
+                    PackageBuilder<Storage> storageB = Storage.packageBuilder();
+                    PackageBuilder<Productions> productionsB = Productions.packageBuilder();
+                    Calendar now = Calendar.getInstance();
+
                     Stream.of(ResourceType.values()).filter(
                             resType -> storageRaw.keySet().stream().noneMatch(r -> r == resType))
-                            .forEach(   resType -> create(resType,userid));
+                            .forEach(   resType -> {
+                                storageB.putItem(resType,0D);
+                                productionsB.putItem(resType,0D);
+                            });
+
+                    w.getStorage().rawMap().forEach(storageB::putItem);
+                    w.getProductions().rawMap().forEach(productionsB::putItem);
+                    Stream.of(ResourceType.values()).forEach((r) -> storageB.setLastUpdated(r,now));
+                    updateWealth(new Wealth(userid,storageB.buildPackage(),productionsB.buildPackage()));
 
                     return userDao.getUserWealth(userid);
                 }
@@ -98,10 +103,8 @@ public class UserServiceImpl implements UserService {
                 create(factory.getType(),user.getId());
             }
 
-            for (ResourceType rt: ResourceType.values()) {
-                create(rt,user.getId());
-            }
-            setResourceStorage(user.getId(),ResourceType.MONEY,15000);
+            updateWealth(createWealth(user.getId()));
+
             purchaseFactory(user.getId(),FactoryType.PEOPLE_RECRUITING_BASE);
             purchaseFactory(user.getId(),FactoryType.STOCK_INVESTMENT_BASE);
         }
@@ -136,7 +139,7 @@ public class UserServiceImpl implements UserService {
             Wealth wealth = w.purchaseResult(f);
             Factory factory = f.purchaseResult();
 
-            wealth = updateWealth(userid,wealth);
+            wealth = updateWealth(wealth);
             factory = userDao.update(factory);
 
             return factory != null && wealth != null;
@@ -167,10 +170,6 @@ public class UserServiceImpl implements UserService {
         return f;
     }
 
-    private ResourceType create(ResourceType resourceType, long userId){
-        return userDao.create(resourceType,userId);
-    }
-
     @Override
     public String getProfileImage(long userid) {
         return userDao.getProfileImage(userid);
@@ -193,7 +192,7 @@ public class UserServiceImpl implements UserService {
             Wealth newWealth = w.calculateProductions(factories);
             newWealth = newWealth.addResource(ResourceType.MONEY,-factory.getNextUpgrade().getCost());
             userDao.update(newFactory);
-            updateWealth(userid,newWealth);
+            updateWealth(newWealth);
             return true;
         } else {
             return false;
@@ -224,7 +223,7 @@ public class UserServiceImpl implements UserService {
         wbuilder.addItem(ResourceType.MONEY,cost);
 
         Wealth newWealth = new Wealth(userid,wbuilder.buildPackage(),wealth.getProductions());
-        updateWealth(userid,newWealth);
+        updateWealth(newWealth);
         marketDao.registerPurchase(new StockMarketEntry(userid,resourceType,-amount));
 
         return true;
@@ -248,7 +247,7 @@ public class UserServiceImpl implements UserService {
         );
 
         Wealth newWealth = new Wealth(userid,wbuilder.buildPackage(),wealth.getProductions());
-        updateWealth(userid,newWealth);
+        updateWealth(newWealth);
         return true;
     }
 
@@ -272,13 +271,28 @@ public class UserServiceImpl implements UserService {
         wbuilder.addItem(resourceType,amount);
 
         Wealth newWealth = new Wealth(userid,wbuilder.buildPackage(),wealth.getProductions());
-        updateWealth(userid,newWealth);
+        updateWealth(newWealth);
         marketDao.registerPurchase(new StockMarketEntry(userid,resourceType,amount));
 
         return true;
     }
 
-    private Wealth updateWealth(long userId, Wealth wealth){
+    private Wealth createWealth(long userId) {
+        PackageBuilder<Storage> storageBuilder = Storage.packageBuilder();
+        PackageBuilder<Productions> productionsBuilder = Productions.packageBuilder();
+        Calendar now = Calendar.getInstance();
+
+        Arrays.stream(ResourceType.values()).forEach((r) ->  {
+            storageBuilder.putItemWithDate(r,0D,now);
+            productionsBuilder.putItem(r,0D);
+        });
+
+        storageBuilder.addItem(ResourceType.MONEY,ResourceType.initialMoney());
+        return new Wealth(userId,storageBuilder.buildPackage(),productionsBuilder.buildPackage());
+    }
+
+    private Wealth updateWealth(Wealth wealth){
+        long userId = wealth.getUserid();
         wealthCache.put(userId,wealth);
         User oldUser = findById(userId);
         User newUser = new User(oldUser.getId(),
@@ -293,5 +307,10 @@ public class UserServiceImpl implements UserService {
         } else {
             return null;
         }
+    }
+
+    @Override
+    public int getGlobalRanking(long userId) {
+        return userDao.getGlobalRanking(userId);
     }
 }

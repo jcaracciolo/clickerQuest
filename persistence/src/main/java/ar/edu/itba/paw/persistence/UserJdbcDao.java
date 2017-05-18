@@ -300,21 +300,25 @@ public class UserJdbcDao implements UserDao {
         return factory;
     }
 
-    public ResourceType create(ResourceType type, long userId) {
-        final RowWealth rw = new RowWealth(userId,type,
-                0,
-                0,
-                Calendar.getInstance().getTimeInMillis());
-        try {
-            jdbcInsertWealths.execute(WEALTH_REVERSE_ROW_MAPPER.toArgs(rw));
-        }catch (Exception e) {
+    //endregion
+
+
+    @Override
+    public Integer getGlobalRanking(long userId) {
+        List<Integer> values =  jdbcTemplate.query("SELECT row_number FROM " +
+                                    "(SELECT ROW_NUMBER() OVER(ORDER BY score DESC),* FROM users) as u " +
+                                    "WHERE userid = ?;",
+                                    (rs, rowNum) -> rs.getInt("row_number"),
+                                    userId);
+
+        if (values.size() == 0) {
+            //TODO log no update
+            return null;
+        } else if(values.size() >1) {
+            //TODO multiple updates
             return null;
         }
 
-        return type;
+        return values.get(0);
     }
-
-
-    //endregion
-
 }

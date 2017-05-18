@@ -14,6 +14,7 @@ public interface UserDao {
 
     User findById(long id);
     User findByUsername(String username);
+    Integer getGlobalRanking(long userId);
 
     /**
      * Create a new user.
@@ -23,7 +24,6 @@ public interface UserDao {
      */
     User create(String username, String Password, String profileImage);
     Factory create(Factory factory, long userId);
-    ResourceType create(ResourceType type, long userId);
 
     String getProfileImage(long userid);
     Productions getUserProductions(long userid);
