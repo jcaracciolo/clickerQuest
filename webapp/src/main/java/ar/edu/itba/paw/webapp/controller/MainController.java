@@ -73,6 +73,29 @@ public class MainController {
         return new ModelAndView("redirect:/game");
     }
 
+    // PROFILE
+    @RequestMapping(value = "/{username}", method = { RequestMethod.GET })
+    public ModelAndView profile(Principal principal, @PathVariable(value="username") String username){
+        ModelAndView mav = new ModelAndView("profile");
+        User u = userService.findByUsername(username);
+
+        if(u == null){
+            mav = new ModelAndView("errorPage");
+            mav.addObject("errorMsg", "404");
+            LOGGER.error("Looking for unexistant user profile: " + username);
+            return mav;
+        }
+
+        Set<Factory> factories = new TreeSet(userService.getUserFactories(u.getId()));
+        Wealth wealth = userService.getUserWealth(u.getId());
+        mav.addObject("user", u);
+        mav.addObject("storage",wealth.getStorage());
+        mav.addObject("factories",factories);
+        mav.addObject("productions",wealth.getProductions());
+        return mav;
+    }
+
+
     // GAME
     @RequestMapping(value = "/game", method = { RequestMethod.GET })
     public ModelAndView mainGameView( Principal principal){
@@ -85,7 +108,7 @@ public class MainController {
         if(u == null){
             mav = new ModelAndView("errorPage");
             mav.addObject("errorMsg", "404");
-            LOGGER.error("{} tried to skip login",u.getId());
+            LOGGER.error("Tried to skip login: " + principal.getName());
             return mav;
         }
 

@@ -16,6 +16,8 @@
 <head>
     <title><spring:message code="game.title"/></title>
     <!--Import css-->
+    <link type="text/css" rel="stylesheet" href="<c:url value="/resources/css/common.css"/>"
+          media="screen,projection"/>
     <link type="text/css" rel="stylesheet" href="<c:url value="/resources/css/game.css"/>"
           media="screen,projection"/>
     <link type="text/css" rel="stylesheet" href="<c:url value="/resources/css/materialize.min.css"/>"
@@ -61,7 +63,7 @@
                     </select>
                 </div>
                 <div class="col s2">
-                    <input type="text" name="quantity" id="market.buy.quantity" placeholder="Quantity">
+                    <input type="text" name="quantity" id="market.buy.quantity" placeholder="<spring:message code="game.market.quantity"/>">
                 </div>
                 <div id="market-buy-unit-wrapper" class="col s3 dropdown-wrapper">
                     <select name="unit" id="market.buy.unit">
@@ -122,7 +124,7 @@
     <div class="navbar-fixed">
         <nav>
             <div class="nav-wrapper">
-                <a href='<c:url value="/game"/>' id="logo-container" href="#" class="brand-logo">
+                <a href='<c:url value="/game"/>' id="logo-container" class="brand-logo">
                     <img class="upper-logo" src="<c:url value="/resources/clickerQuest_logo.png"/>" alt="logo"/>
                 </a>
 
