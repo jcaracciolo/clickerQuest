@@ -72,7 +72,7 @@ cd web/
 put path/to/app.wr/in/pampero
 ```
 
-# Connect to the database (in production)
+## Connect to the database (in production)
 
 1. Connect to pampero: `ssh <your_itba_username>@pampero.itba.edu.ar`
 2. Once logged into pampero, run: `psql 10.16.1.110 paw-2017a-4`
