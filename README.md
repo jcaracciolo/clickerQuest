@@ -79,6 +79,16 @@ put path/to/app.wr/in/pampero
 3. Password is: `ooc4Choo`
 4. Proceed with caution, remember: "With Great Power Comes Great Responsibility"
 
+
+### Useful commands:
+
+`\d` lists tables in current database.
+`\l` lists databases.
+`\c database-name` connects to that database.
+`\c` shows the database you are connected to.
+`\d table-name` describes that table.
+
+
 ## Available routes
 
  * `/login`
