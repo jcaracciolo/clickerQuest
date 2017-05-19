@@ -92,6 +92,7 @@ public class MainController {
         mav.addObject("storage",wealth.getStorage());
         mav.addObject("factories",factories);
         mav.addObject("productions",wealth.getProductions());
+        mav.addObject("globalRanking",userService.getGlobalRanking(u.getId()));
         return mav;
     }
 
@@ -218,10 +219,11 @@ public class MainController {
                 errorMsg = "404"; // Not Found
                 break;
             }
-            case 500: {
+            case 500:
+            default:
                 errorMsg = "500";   // Server Error
                 break;
-            }
+
         }
         errorPage.addObject("errorMsg", errorMsg);
         return errorPage;

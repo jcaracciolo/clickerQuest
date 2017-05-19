@@ -1,9 +1,16 @@
+CREATE TABLE IF NOT EXISTS clans (
+  clanId INTEGER IDENTITY PRIMARY KEY,
+  NAME VARCHAR (100) UNIQUE NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS users (
-  userid INTEGER IDENTITY PRIMARY KEY,
+  userid BIGINT IDENTITY PRIMARY KEY,
   username varchar(100) UNIQUE,
   password varchar(100),
   profileImage varchar(100),
-  score DOUBLE
+  score DOUBLE,
+  clanID INTEGER,
+  FOREIGN KEY (clanId) REFERENCES clans(clanId)  ON DELETE SET NULL
 );
 
 CREATE TABLE IF NOT EXISTS factories (
@@ -32,4 +39,4 @@ CREATE TABLE IF NOT EXISTS stockMarket (
   resourceType INTEGER,
   amount DOUBLE,
 PRIMARY KEY(time,userid,resourceType)
-)
+);

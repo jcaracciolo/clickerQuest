@@ -159,7 +159,7 @@ public abstract class ResourcePackage {
                 if(that.resources.get(r)!=0) {
                     return false;
                 }
-            } else if( Math.abs( thatD/d - 1 ) < 0.04 ) {
+            } else if( Math.abs( thatD/d - 1 ) >= 0.04 ) {
                 return false;
 
             }

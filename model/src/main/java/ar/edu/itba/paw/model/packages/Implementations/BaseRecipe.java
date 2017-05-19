@@ -12,8 +12,8 @@ import java.util.Map;
  * Created by juanfra on 08/04/17.
  */
 public class BaseRecipe extends ResourcePackage {
-    public static Validator<Double> VALIDATOR = (d) -> d!=0;
-    public static Creator<BaseRecipe> CREATOR = (pb) -> new BaseRecipe(pb.getResources());
+    public final static Validator<Double> VALIDATOR = (d) -> d!=0;
+    public final static Creator<BaseRecipe> CREATOR = (pb) -> new BaseRecipe(pb.getResources());
 
     private BaseRecipe(Map<ResourceType, Double> map) {
         resources = super.generate(map,VALIDATOR);

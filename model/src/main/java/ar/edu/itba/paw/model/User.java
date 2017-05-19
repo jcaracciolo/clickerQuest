@@ -8,16 +8,21 @@ public class User {
     private String profileImage;
     private double score;
 
+    // Null indicates no clan
+    private Integer clanId;
+
     public User(long id, String username, String password, String profileImage) {
         this.id = id;
         this.username = username;
         this.password = password;
         this.profileImage = profileImage;
-        score = 0;
+        this.clanId = null;
+        this.score = 0;
     }
 
-    public User(long id, String username, String password, String profileImage, double score) {
+    public User(long id, String username, String password, String profileImage, double score, Integer clanId) {
         this(id,username,password,profileImage);
+        this.clanId = clanId;
         this.score = score;
     }
 
@@ -41,5 +46,28 @@ public class User {
         return score;
     }
 
+    public Integer getClanIdentifier() {
+        return clanId;
+    }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        User user = (User) o;
+
+        if (id != user.id) return false;
+        if (Double.compare(user.score, score) != 0) return false;
+        if (!username.equals(user.username)) return false;
+        if (!password.equals(user.password)) return false;
+        if (!profileImage.equals(user.profileImage)) return false;
+        return clanId != null ? clanId.equals(user.clanId) : user.clanId == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return (int) (id ^ (id >>> 32));
+    }
 }

@@ -44,7 +44,7 @@ public class UserJdbcDao implements UserDao {
         }
     }
 
-    private JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert jdbcInsertUsers;
     private final SimpleJdbcInsert jdbcInsertFactories;
     private final SimpleJdbcInsert jdbcInsertWealths;
@@ -93,21 +93,23 @@ public class UserJdbcDao implements UserDao {
 
     };
 
-    private final static RowMapper<User> USER_ROW_MAPPER = (rs, rowNum) ->
+    final static RowMapper<User> USER_ROW_MAPPER = (rs, rowNum) ->
             new User(rs.getLong("userid"),
                     rs.getString("username"),
                     rs.getString("password"),
                     rs.getString("profileImage"),
-                    rs.getDouble("score"));
+                    rs.getDouble("score"),
+                    rs.getInt("clanId"));
 
 
-    private final static ReverseRowMapper<User> USER_REVERSE_ROW_MAPPER = (us) ->
+    final static ReverseRowMapper<User> USER_REVERSE_ROW_MAPPER = (us) ->
     {
         final Map<String, Object> args = new HashMap();
         args.put("username",        us.getUsername());
         args.put("password",        us.getPassword());
         args.put("profileImage",    us.getProfileImage());
         args.put("score",           us.getScore());
+        args.put("clanId",          us.getClanIdentifier());
         return args;
     };
     //endregion
@@ -298,21 +300,25 @@ public class UserJdbcDao implements UserDao {
         return factory;
     }
 
-    public ResourceType create(ResourceType type, long userId) {
-        final RowWealth rw = new RowWealth(userId,type,
-                0,
-                0,
-                Calendar.getInstance().getTimeInMillis());
-        try {
-            jdbcInsertWealths.execute(WEALTH_REVERSE_ROW_MAPPER.toArgs(rw));
-        }catch (Exception e) {
+    //endregion
+
+
+    @Override
+    public Integer getGlobalRanking(long userId) {
+        List<Integer> values =  jdbcTemplate.query("SELECT row_number FROM " +
+                                    "(SELECT ROW_NUMBER() OVER(ORDER BY score DESC),* FROM users) as u " +
+                                    "WHERE userid = ?;",
+                                    (rs, rowNum) -> rs.getInt("row_number"),
+                                    userId);
+
+        if (values.size() == 0) {
+            //TODO log no update
+            return null;
+        } else if(values.size() >1) {
+            //TODO multiple updates
             return null;
         }
 
-        return type;
+        return values.get(0);
     }
-
-
-    //endregion
-
 }

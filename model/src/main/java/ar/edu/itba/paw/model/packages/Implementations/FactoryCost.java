@@ -13,8 +13,8 @@ import java.util.Map;
  */
 public class FactoryCost extends ResourcePackage {
 
-    public static Validator<Double> VALIDATOR = (d) -> d>=0 && d==Math.floor(d);
-    public static Creator<FactoryCost> CREATOR = (pb) -> new FactoryCost(pb.getResources());
+    public final static Validator<Double> VALIDATOR = (d) -> d>=0 && d==Math.floor(d);
+    public final static Creator<FactoryCost> CREATOR = (pb) -> new FactoryCost(pb.getResources());
 
     private FactoryCost(Map<ResourceType, Double> map) {
         resources = super.generate(map,VALIDATOR);

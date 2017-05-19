@@ -1,13 +1,11 @@
 package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.interfaces.UserService;
-import ar.edu.itba.paw.model.FactoryType;
-import ar.edu.itba.paw.model.ResourceType;
-import ar.edu.itba.paw.model.User;
-import ar.edu.itba.paw.model.Wealth;
+import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.model.packages.Implementations.Productions;
 import ar.edu.itba.paw.model.packages.Implementations.Storage;
 import ar.edu.itba.paw.model.packages.PackageBuilder;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,13 +24,17 @@ public class UserServiceImplTest {
     @Autowired
     UserService userService;
 
+    // For reset purposes
+    @Autowired
+    MockUserDao mockUserDao;
+
     private String username = "Daniel";
     private String password = "l0b0--";
     private String img = "1.img";
 
-    @Test
-    public void test(){
-        assertTrue(true);
+    @Before
+    public void setup(){
+        mockUserDao.clear();
     }
 
     @Test
@@ -60,8 +62,17 @@ public class UserServiceImplTest {
         Arrays.stream(ResourceType.values()).forEach((r) -> storageB.putItemWithDate(r, 0D, Calendar.getInstance()));
         Arrays.stream(ResourceType.values()).forEach((r) -> productionsB.putItem(r, 0D));
 
-//        TODO fix this in UserDao
         storageB.addItem(ResourceType.MONEY,ResourceType.initialMoney());
+
+        assertEquals(FactoryType.PEOPLE_RECRUITING_BASE.getBaseCost().rawMap().size(),1);
+        Double recruitCost = FactoryType.PEOPLE_RECRUITING_BASE.getBaseCost().getValue(ResourceType.MONEY);
+        assertNotNull(recruitCost);
+        assertEquals(FactoryType.STOCK_INVESTMENT_BASE.getBaseCost().rawMap().size(),1);
+        Double investmentCost = FactoryType.STOCK_INVESTMENT_BASE.getBaseCost().getValue(ResourceType.MONEY);
+        assertNotNull(investmentCost);
+
+        storageB.addItem(ResourceType.MONEY, -recruitCost);
+        storageB.addItem(ResourceType.MONEY, -investmentCost);
         FactoryType.PEOPLE_RECRUITING_BASE.getBaseRecipe().getOutputs().forEach(productionsB::addItem);
         FactoryType.STOCK_INVESTMENT_BASE.getBaseRecipe().getOutputs().forEach(productionsB::addItem);
 

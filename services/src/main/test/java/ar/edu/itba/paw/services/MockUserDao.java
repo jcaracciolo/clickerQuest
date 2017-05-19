@@ -15,7 +15,7 @@ class MockUserDao implements UserDao {
     private List<MockUserDaoData> tables = new ArrayList<>();
     private int counter = 0;
 
-    private class MockUserDaoData {
+    private static class MockUserDaoData {
         User user;
         Wealth wealth;
         List<Factory> factories;
@@ -41,6 +41,24 @@ class MockUserDao implements UserDao {
         public int hashCode() {
             return user != null ? user.hashCode() : 0;
         }
+    }
+
+    protected void clear(){
+        tables = new ArrayList<>();
+        counter = 0;
+    }
+
+    @Override
+    public Integer getGlobalRanking(long userId) {
+        tables.sort( (d1,d2) -> d1.wealth.calculateScore()>d2.wealth.calculateScore() ? 1 : -1 );
+        int i = 1;
+        for(MockUserDaoData data: tables) {
+            if(data.user.getId() == userId){
+                return i;
+            }
+            i++;
+        }
+        return null;
     }
 
     private MockUserDaoData getUserMockData(long id){
@@ -92,9 +110,6 @@ class MockUserDao implements UserDao {
                 }
         );
 
-        //TODO delete this
-        sBuilder.addItem(ResourceType.MONEY,ResourceType.initialMoney());
-
         Wealth w = new Wealth(u.getId(),sBuilder.buildPackage(),pBuilder.buildPackage());
 
         List<Factory> factories = Arrays.stream(FactoryType.values()).map(
@@ -116,35 +131,6 @@ class MockUserDao implements UserDao {
 
         d.factories.add(factory);
         return factory;
-    }
-
-    @Override
-    public ResourceType create(ResourceType type, long userId) {
-        MockUserDaoData d = getUserMockData(userId);
-
-        if ( d.wealth.getStorage().rawMap().entrySet()
-                .stream().anyMatch( (e)-> e.getKey() == type )) {
-            return null;
-        }
-
-        PackageBuilder<Storage> storageB = Storage.packageBuilder();
-        PackageBuilder<Productions> productionsB = Productions.packageBuilder();
-
-        d.wealth.getStorage().rawMap().forEach(storageB::putItem);
-        d.wealth.getStorage().getLastUpdated().forEach(storageB::setLastUpdated);
-        d.wealth.getProductions().rawMap().forEach(productionsB::putItem);
-
-        storageB.putItemWithDate(
-                type,
-                type.equals(ResourceType.MONEY)?13000D:0D,
-                Calendar.getInstance());
-
-        productionsB.addItem(type,0D);
-
-        Wealth newWealth = new Wealth(userId,storageB.buildPackage(),productionsB.buildPackage());
-        d.wealth = newWealth;
-
-        return type;
     }
 
     @Override

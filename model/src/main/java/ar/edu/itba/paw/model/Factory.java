@@ -112,6 +112,23 @@ public class Factory implements Comparable<Factory> {
         return this.getType().getId() - f.getType().getId();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Factory factory = (Factory) o;
+        return userid != factory.userid && type == factory.type;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (userid ^ (userid >>> 32));
+        result = 31 * result + type.hashCode();
+        return result;
+    }
+
     public long getLevel() {
         return level;
     }
