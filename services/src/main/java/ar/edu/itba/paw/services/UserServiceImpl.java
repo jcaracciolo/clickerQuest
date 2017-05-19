@@ -237,30 +237,8 @@ public class UserServiceImpl implements UserService {
 
         Wealth newWealth = new Wealth(userid,wbuilder.buildPackage(),wealth.getProductions());
         updateWealth(newWealth);
-        marketDao.registerPurchase(new StockMarketEntry(userid,resourceType,-amount));
+        marketDao.registerPurchase(new StockMarketEntry(resourceType,-amount));
 
-        return true;
-    }
-
-    private boolean setResourceStorage(long userid, ResourceType resourceType, double amount) {
-        Wealth wealth = getUserWealth(userid);
-
-        PackageBuilder<Storage> wbuilder = Storage.packageBuilder();
-        wealth.getStorage().rawMap().forEach(
-                (r,d) ->{
-                    if(r.equals(resourceType)){
-                        wbuilder.putItem(r,amount);
-                    }else  {
-                        wbuilder.putItem(r,d);
-                    }
-                }
-        );
-        wealth.getStorage().getLastUpdated().forEach(
-                (r,d) -> wbuilder.setLastUpdated(r,d)
-        );
-
-        Wealth newWealth = new Wealth(userid,wbuilder.buildPackage(),wealth.getProductions());
-        updateWealth(newWealth);
         return true;
     }
 
@@ -286,7 +264,7 @@ public class UserServiceImpl implements UserService {
 
         Wealth newWealth = new Wealth(userid,wbuilder.buildPackage(),wealth.getProductions());
         updateWealth(newWealth);
-        marketDao.registerPurchase(new StockMarketEntry(userid,resourceType,amount));
+        marketDao.registerPurchase(new StockMarketEntry(resourceType,amount));
 
         return true;
     }

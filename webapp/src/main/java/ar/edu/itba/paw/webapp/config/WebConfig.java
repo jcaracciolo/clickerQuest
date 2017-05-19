@@ -12,6 +12,7 @@ import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 import org.springframework.jdbc.datasource.init.DataSourceInitializer;
 import org.springframework.jdbc.datasource.init.DatabasePopulator;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.ViewResolver;
@@ -27,6 +28,7 @@ import java.nio.charset.StandardCharsets;
 @Configuration
 @EnableTransactionManagement
 @Import(value = { WebAuthConfig.class })
+@EnableScheduling
 public class WebConfig {
 
     // --------- WEBAPP
