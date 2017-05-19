@@ -45,6 +45,13 @@ public class MainController {
         ModelAndView mav = new ModelAndView("index");
         return mav;
     }
+    // INDEX
+    @RequestMapping(value = "/loginRedirect")
+    public ModelAndView loginRedirect( Principal principal) {
+        User u = userService.findByUsername(principal.getName());
+        userService.calculateUserWealth(u.getId());
+        return new ModelAndView("redirect:/game");
+    }
 
     // CREATE
     @RequestMapping(value = "/create", method = { RequestMethod.GET })

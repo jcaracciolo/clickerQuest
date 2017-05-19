@@ -263,7 +263,7 @@ $(function() {
                 required: dec("game.market.selectResource")
             },
             quantity: {
-                required: dec("game.market.selectQuantity"),
+                required: dec("game.market.quantity"),
                 digits: dec("game.market.illegalCaracter")
             },
             unit:{
@@ -307,9 +307,9 @@ $(function() {
 
                         var msg ;
                         if(resp.result){
-                            msg = dec("game.market.buySuccessful",resp.quantity,dec(decRes(resp.resourceId)));
+                            msg = dec("game.market.buySuccessful",abbreviateNumber(resp.quantity,false),dec(decRes(resp.resourceId)));
                         } else {
-                            msg = dec("game.market.buyFail",resp.quantity,dec(decRes(resp.resourceId)));
+                            msg = dec("game.market.buyFail",abbreviateNumber(resp.quantity,false),dec(decRes(resp.resourceId)));
                         }
                         window.sessionStorage.setItem("message",msg);
                         location.reload();
@@ -346,7 +346,7 @@ $(function() {
                 required: dec("game.market.selectResource")
             },
             quantity: {
-                required: dec("game.market.selectQuantity"),
+                required: dec("game.market.quantity"),
                 digits: dec("game.market.illegalCaracter")
             },
             unit:{
@@ -390,9 +390,9 @@ $(function() {
 
                         var msg ;
                         if(resp.result){
-                            msg = dec("game.market.sellSuccessful",resp.quantity,dec(decRes(resp.resourceId)));
+                            msg = dec("game.market.sellSuccessful",abbreviateNumber(resp.quantity,false),dec(decRes(resp.resourceId)));
                         } else {
-                            msg = dec("game.market.sellFail",resp.quantity,dec(decRes(resp.resourceId)));
+                            msg = dec("game.market.sellFail",abbreviateNumber(resp.quantity,false),dec(decRes(resp.resourceId)));
                         }
                         window.sessionStorage.setItem("message",msg);
                         location.reload();
