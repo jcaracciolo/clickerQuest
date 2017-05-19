@@ -120,3 +120,59 @@ The following routes need authentication:
 
 * `/errors`
     * POST
+
+
+## Current DB schemas
+
+```
+                                      Table "public.users"
+    Column    |          Type          |                       Modifiers
+--------------+------------------------+--------------------------------------------------------
+ userid       | bigint                 | not null default nextval('users_userid_seq'::regclass)
+ username     | character varying(100) |
+ password     | character varying(100) |
+ profileimage | character varying(100) |
+Indexes:
+    "users_pkey" PRIMARY KEY, btree (userid)
+    "users_username_key" UNIQUE CONSTRAINT, btree (username)
+ ```
+ 
+ ```
+             Table "public.factories"
+       Column      |       Type       | Modifiers
+ ------------------+------------------+-----------
+  userid           | bigint           | not null
+  type             | integer          | not null
+  amount           | double precision |
+  inputreduction   | double precision |
+  outputmultiplier | double precision |
+  costreduction    | double precision |
+  level            | integer          |
+ Indexes:
+     "factories_pkey" PRIMARY KEY, btree (userid, type)
+ ```
+ 
+ ```
+          Table "public.stockmarket"
+     Column    |       Type       | Modifiers
+ --------------+------------------+-----------
+  time         | bigint           | not null
+  userid       | bigint           | not null
+  resourcetype | integer          | not null
+  amount       | double precision |
+ Indexes:
+     "stockmarket_pkey" PRIMARY KEY, btree ("time", userid, resourcetype)
+ ```
+ 
+ ```
+            Table "public.wealths"
+     Column    |       Type       | Modifiers
+ --------------+------------------+-----------
+  userid       | bigint           | not null
+  resourcetype | integer          | not null
+  production   | double precision |
+  storage      | double precision |
+  lastupdated  | bigint           |
+ Indexes:
+     "wealths_pkey" PRIMARY KEY, btree (userid, resourcetype)
+ ```
