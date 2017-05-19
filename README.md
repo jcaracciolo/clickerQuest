@@ -72,6 +72,22 @@ cd web/
 put path/to/app.wr/in/pampero
 ```
 
+## Connect to the database (in production)
+
+1. Connect to pampero: `ssh <your_itba_username>@pampero.itba.edu.ar`
+2. Once logged into pampero, run: `psql 10.16.1.110 paw-2017a-4`
+3. Password is: `ooc4Choo`
+4. Proceed with caution, remember: "With Great Power Comes Great Responsibility"
+
+
+### Useful commands:
+
+* `\d` lists tables in current database.
+* `\l` lists databases.
+* `\c database-name` connects to that database.
+* `\c` shows the database you are connected to.
+* `\d table-name` describes that table.
+
 
 ## Available routes
 

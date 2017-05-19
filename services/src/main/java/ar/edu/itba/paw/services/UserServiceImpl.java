@@ -100,6 +100,13 @@ public class UserServiceImpl implements UserService {
         return wealth;
     }
 
+    public Wealth calculateUserWealth(long userid){
+        Wealth oldWealth = getUserWealth(userid);
+        Wealth newWealth = oldWealth.calculateProductions(getUserFactories(userid));
+        updateWealth(newWealth);
+        return newWealth;
+    }
+
     @Transactional(propagation = Propagation.NESTED)
     public User create(String username, String password, String img) {
         User user = userDao.create(username,passwordEncoder.encode(password),img);
