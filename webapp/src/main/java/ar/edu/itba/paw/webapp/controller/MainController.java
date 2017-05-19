@@ -21,7 +21,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.security.Principal;
@@ -163,13 +162,6 @@ public class MainController {
         j.put("type", "buyFromMarket");
         j.put("resourceId",resourceId);
         j.put("quantity", quantity);
-//
-//        String resourceName =  messageSource.getMessage(ResourceType.fromId(resourceId).getNameCode()
-//                ,null,LocaleContextHolder.getLocale());
-//        String msg = messageSource.getMessage(result?"game.market.buySuccessful":"game.market.buyFail"
-//                ,new Object[]{Math.round(quantity),resourceName},LocaleContextHolder.getLocale());
-//        j.put("message", msg);
-
         return j.toJSONString();
     }
 
@@ -189,11 +181,6 @@ public class MainController {
         j.put("type", "sellToMarket");
         j.put("resourceId",resourceId);
         j.put("quantity", quantity);
-//        String resourceName =  messageSource.getMessage(ResourceType.fromId(resourceId).getNameCode()
-//                ,null,LocaleContextHolder.getLocale());
-//        String msg = messageSource.getMessage(result?"game.market.sellSuccessful":"game.market.buyFail"
-//                ,new Object[]{Math.round(quantity),resourceName},LocaleContextHolder.getLocale());
-//        j.put("message", msg);
         return j.toJSONString();
     }
 
@@ -223,7 +210,6 @@ public class MainController {
             default:
                 errorMsg = "500";   // Server Error
                 break;
-
         }
         errorPage.addObject("errorMsg", errorMsg);
         return errorPage;

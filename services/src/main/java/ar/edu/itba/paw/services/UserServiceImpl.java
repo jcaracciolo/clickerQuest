@@ -15,12 +15,18 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.swing.text.html.parser.Entity;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -55,6 +61,7 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
+    @Transactional(propagation = Propagation.NESTED)
     @Override
     public Wealth getUserWealth(long userid) {
 
@@ -80,9 +87,8 @@ public class UserServiceImpl implements UserService {
                     w.getStorage().rawMap().forEach(storageB::putItem);
                     w.getProductions().rawMap().forEach(productionsB::putItem);
                     Stream.of(ResourceType.values()).forEach((r) -> storageB.setLastUpdated(r,now));
-                    updateWealth(new Wealth(userid,storageB.buildPackage(),productionsB.buildPackage()));
-
-                    return userDao.getUserWealth(userid);
+                    w = new Wealth(userid,storageB.buildPackage(),productionsB.buildPackage());
+                    updateWealth(w);
                 }
                 return w;
             });
@@ -94,6 +100,7 @@ public class UserServiceImpl implements UserService {
         return wealth;
     }
 
+    @Transactional(propagation = Propagation.NESTED)
     public User create(String username, String password, String img) {
         User user = userDao.create(username,passwordEncoder.encode(password),img);
         if(user != null){
@@ -124,6 +131,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.NESTED)
     public boolean purchaseFactory(long userid, FactoryType type) {
         Wealth w = getUserWealth(userid);
         Optional<Factory> maybeFactory = userDao.getUserFactories(userid).stream()
@@ -150,6 +158,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.NESTED)
     public Collection<Factory> getUserFactories(long userid) {
         final Collection<Factory> factories = userDao.getUserFactories(userid);
         if(factories.size() < FactoryType.values().length){
@@ -178,6 +187,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.NESTED)
     public boolean purchaseUpgrade(long userid, FactoryType type) {
         Collection<Factory> factories = getUserFactories(userid);
         Factory factory = factories.stream()
@@ -202,6 +212,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.NESTED)
     public boolean sellResourceType(long userid, ResourceType resourceType, double amount) {
         if(resourceType == ResourceType.MONEY) {
             return false;
@@ -254,6 +265,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.NESTED)
     public boolean purchaseResourceType(long userid, ResourceType resourceType,double amount){
         Wealth wealth = getUserWealth(userid);
         double cost = (resourceType.getPrice()) * amount;
@@ -288,11 +300,11 @@ public class UserServiceImpl implements UserService {
             storageBuilder.putItemWithDate(r,0D,now);
             productionsBuilder.putItem(r,0D);
         });
-
         storageBuilder.addItem(ResourceType.MONEY,ResourceType.initialMoney());
         return new Wealth(userId,storageBuilder.buildPackage(),productionsBuilder.buildPackage());
     }
 
+    @Transactional(propagation = Propagation.NESTED)
     private Wealth updateWealth(Wealth wealth){
         long userId = wealth.getUserid();
         wealthCache.put(userId,wealth);
