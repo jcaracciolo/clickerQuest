@@ -82,11 +82,11 @@ put path/to/app.wr/in/pampero
 
 ### Useful commands:
 
-`\d` lists tables in current database.
-`\l` lists databases.
-`\c database-name` connects to that database.
-`\c` shows the database you are connected to.
-`\d table-name` describes that table.
+* `\d` lists tables in current database.
+* `\l` lists databases.
+* `\c database-name` connects to that database.
+* `\c` shows the database you are connected to.
+* `\d table-name` describes that table.
 
 
 ## Available routes
