@@ -10,10 +10,10 @@ import java.util.stream.Stream;
  * Created by juanfra on 17/05/17.
  */
 public class Clan implements Iterable<User> {
-    Set<User> users = new TreeSet<User>((u1,u2) ->  u1.getScore()>u2.getScore()?1:-1 );
+    private final Set<User> users = new TreeSet<User>((u1,u2) ->  u1.getScore()>u2.getScore()?1:-1 );
 
-    private int id;
-    private String name;
+    private final int id;
+    private final String name;
 
     public String getName() {
         return name;

@@ -13,9 +13,9 @@ import java.util.Map;
  */
 public class Wealth {
 
-    private long userid;
-    private Storage storage;
-    private Productions productions;
+    private final long userid;
+    private final Storage storage;
+    private final Productions productions;
 
     public Wealth(long userid, @NotNull  Storage storage, @NotNull Productions productions) {
         this.userid = userid;

@@ -19,7 +19,7 @@ public class Storage extends ResourcePackage {
     public final static Validator<Double> VALIDATOR = (d) -> d>=0 && d==Math.floor(d);
     public final static Creator<Storage> CREATOR = (pb) -> new Storage(pb.getResources(),pb.lastUpdated());
 
-    private Map<ResourceType,Calendar> lastUpdated;
+    private final Map<ResourceType,Calendar> lastUpdated;
 
     public static PackageBuilder<Storage> packageBuilder() {
         return new PackageBuilder<>(VALIDATOR,CREATOR);
