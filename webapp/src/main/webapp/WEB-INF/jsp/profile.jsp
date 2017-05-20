@@ -31,13 +31,26 @@
     <div class="navbar-fixed">
         <nav>
             <div class="nav-wrapper">
-                <a href='<c:url value="/game"/>' id="logo-container" href="#" class="brand-logo">
-                    <img class="upper-logo" src="<c:url value="/resources/clickerQuest_logo.png"/>" alt="logo"/>
-                </a>
-
-                <ul id="nav-mobile" class="right hide-on-med-and-down">
-                    <li><a href="<c:url value='/logout'/>"><spring:message code='logout'/> </a></li>
-                </ul>
+                <div>
+                    <a href='<c:url value="/game"/>' id="logo-container" href="#" class="brand-logo">
+                        <img class="upper-logo" src="<c:url value="/resources/clickerQuest_logo.png"/>" alt="logo"/>
+                    </a>
+                </div>
+                <div id="search-user">
+                    <form>
+                        <div class="input-field search-user">
+                            <input id="search" type="search" required>
+                            <label class="label-icon" for="search"><i class="material-icons">search</i>
+                            </label>
+                            <i class="material-icons closed">close</i>
+                        </div>
+                    </form>
+                </div>
+                <div id="logout">
+                    <ul id="nav-mobile">
+                        <li><a href="<c:url value='/logout'/>"><spring:message code='logout'/> </a></li>
+                    </ul>
+                </div>
             </div>
         </nav>
     </div>
@@ -58,7 +71,7 @@
         </div>
         <c:if test="${user.clanIdentifier != null}">
             <div id="group-info">
-                //TODO add clan data
+                <%-- TODO add clan data --%>
                 <img class="group-logo" src="<c:url value="/resources/group_icons/1.png"/>" alt="group_logo"/>
                 <p>Super Group</p>
             </div>
@@ -95,7 +108,7 @@
                             <img class="resource-icon tooltipped" data-position="top" data-delay="50"
                                  data-tooltip='<spring:message code="${res.nameCode}"/>' src="<c:url value="/resources/resources_icon/${res.id}.png"/>"/>
                         </div>
-                        <div>
+                        <div class="flex-left-text">
                             <p><fmt:formatNumber pattern="#.##" value="${storage.getValue(res)}"/> + <fmt:formatNumber pattern="#.##" value="${productions.getValue(res)}"/>/s</p>
                         </div>
                     </div>

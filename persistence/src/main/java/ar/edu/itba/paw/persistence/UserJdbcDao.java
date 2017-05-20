@@ -97,12 +97,18 @@ public class UserJdbcDao implements UserDao {
     };
 
     final static RowMapper<User> USER_ROW_MAPPER = (rs, rowNum) ->
-            new User(rs.getLong("userid"),
-                    rs.getString("username"),
-                    rs.getString("password"),
-                    rs.getString("profileImage"),
-                    rs.getDouble("score"),
-                    rs.getInt("clanId"));
+    {
+        Integer clanid = rs.getInt("clanid");
+        if(rs.wasNull()) clanid = null;
+        return new User(rs.getLong("userid"),
+                rs.getString("username"),
+                rs.getString("password"),
+                rs.getString("profileImage"),
+                rs.getDouble("score"),
+                clanid
+                );
+    };
+
 
 
     final static ReverseRowMapper<User> USER_REVERSE_ROW_MAPPER = (us) ->
@@ -155,12 +161,14 @@ public class UserJdbcDao implements UserDao {
                         "username = ?," +
                         "password = ?," +
                         "profileImage = ?," +
-                        "score = ? " +
+                        "score = ?, " +
+                        "clanid = ? " +
                         " WHERE (userid = ?) ;",
                 u.getUsername(),
                 u.getPassword(),
                 u.getProfileImage(),
                 u.getScore(),
+                u.getClanIdentifier(),
                 u.getId());
         if (rows == 1) {
             return u;

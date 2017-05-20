@@ -1,7 +1,9 @@
 package ar.edu.itba.paw.webapp.controller;
 
+import ar.edu.itba.paw.interfaces.ClanService;
 import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.model.*;
+import ar.edu.itba.paw.model.clan.Clan;
 import ar.edu.itba.paw.webapp.config.ExposedResourceBundleMessageSource;
 import ar.edu.itba.paw.webapp.form.UserForm;
 import org.json.simple.JSONObject;
@@ -31,6 +33,9 @@ import java.util.stream.Stream;
 public class MainController {
     private static final Logger LOGGER = LoggerFactory.getLogger(MainController.class);
 
+    @Qualifier("clanServiceImpl")
+    @Autowired
+    private ClanService clanService;
     @Qualifier("userServiceImpl")
     @Autowired
     private UserService userService;
@@ -95,6 +100,56 @@ public class MainController {
         return mav;
     }
 
+    // GROUP
+    @RequestMapping(value = "/clan/{clanName}", method = { RequestMethod.GET })
+    public ModelAndView clan(Principal principal, @PathVariable(value="clanName") String clanName){
+        ModelAndView mav = new ModelAndView("clan");
+
+        Clan clan = clanService.getClanByName(clanName);
+        if (clan == null) {
+            mav = new ModelAndView("errorPage");
+            mav.addObject("errorMsg", "404");
+            LOGGER.info("Clan does not exist " + clanName);
+            return mav;
+        }
+
+        User u = userService.findByUsername(principal.getName());
+        if(u == null) {
+            mav = new ModelAndView("errorPage");
+            mav.addObject("errorMsg", "404");
+            LOGGER.warn("Tried to skip login in clan: " + principal.getName());
+            return mav;
+        }
+//        clan.stream().
+        mav.addObject("user", u);
+        mav.addObject("clan", clan);
+        return mav;
+    }
+
+    @RequestMapping(value = "/createClan", method = { RequestMethod.POST })
+    @ResponseBody
+    public ModelAndView createClan(Principal principal, @RequestParam("clanName") final String clanName){
+        ModelAndView mav = new ModelAndView("clan");
+        Clan clan = clanService.createClan(clanName);
+
+        if (clan == null) {
+            // TODO: clan is null
+        }
+
+        User u = userService.findByUsername(principal.getName());
+
+        if(u == null){
+            mav = new ModelAndView("errorPage");
+            mav.addObject("errorMsg", "404");
+            LOGGER.warn("Creating clan without username " + principal.getName());
+            return mav;
+        }
+        clanService.addUserToClan(clan.getId(), u.getId());
+
+        mav.addObject("user", u);
+        mav.addObject("clan", clan);
+        return mav;
+    }
 
     // GAME
     @RequestMapping(value = "/game", method = { RequestMethod.GET })
@@ -108,7 +163,7 @@ public class MainController {
         if(u == null){
             mav = new ModelAndView("errorPage");
             mav.addObject("errorMsg", "404");
-            LOGGER.error("Tried to skip login: " + principal.getName());
+            LOGGER.warn("Tried to skip login in game: " + principal.getName());
             return mav;
         }
 

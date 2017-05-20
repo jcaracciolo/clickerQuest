@@ -42,7 +42,7 @@ public class ClanJdbcDao implements ClanDao {
     }
 
     private final static RowMapper<RowClan> CLAN_ROW_MAPPER = (rs, rowNum) ->
-            new RowClan(rs.getInt("clanId"),
+            new RowClan(rs.getInt("clanid"),
                     rs.getString("name")
             );
 
@@ -52,7 +52,7 @@ public class ClanJdbcDao implements ClanDao {
 
         jdbcInsertClans = new SimpleJdbcInsert(jdbcTemplate)
                 .withTableName("clans")
-                .usingGeneratedKeyColumns("clanId");
+                .usingGeneratedKeyColumns("clanid");
     }
 
     @Override
@@ -88,7 +88,7 @@ public class ClanJdbcDao implements ClanDao {
 
     @Override
     public Clan getClanById(int clanId) {
-        final List<RowClan> list = jdbcTemplate.query("SELECT * FROM clans WHERE clanId = ?", CLAN_ROW_MAPPER, clanId);
+        final List<RowClan> list = jdbcTemplate.query("SELECT * FROM clans WHERE clanid = ?", CLAN_ROW_MAPPER, clanId);
         if (list.isEmpty()) {
             return null;
         }
@@ -142,7 +142,7 @@ public class ClanJdbcDao implements ClanDao {
     }
 
     private List<User> getClanUsers(int clanId){
-        final List<User> users = jdbcTemplate.query("SELECT * FROM users WHERE clanId = ?", UserJdbcDao.USER_ROW_MAPPER,clanId);
+        final List<User> users = jdbcTemplate.query("SELECT * FROM users WHERE clanid = ?", UserJdbcDao.USER_ROW_MAPPER,clanId);
         if(users.isEmpty()) {
             return Collections.EMPTY_LIST;
         }
