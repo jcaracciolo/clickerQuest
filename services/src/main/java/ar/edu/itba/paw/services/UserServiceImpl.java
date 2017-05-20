@@ -97,7 +97,7 @@ public class UserServiceImpl implements UserService {
         } catch (ExecutionException e) {
             LOGGER.error(e.toString());
         }
-        return wealth;
+        return null;
     }
 
     public Wealth calculateUserWealth(long userid){

@@ -305,7 +305,7 @@ public class MainController {
         Set<String> keys = messageSource.getKeys(locale);
 
         JSONObject j = new JSONObject();
-        keys.stream().forEach(k -> j.put(k,messageSource.getMessage(k,null,locale)));
+        keys.forEach(k -> j.put(k,messageSource.getMessage(k,null,locale)));
         JSONObject resources = new JSONObject();
         Stream.of(ResourceType.values()).forEach(rType -> resources.put(rType.getId(),rType.getNameCode()));
         JSONObject factories = new JSONObject();
