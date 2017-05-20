@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.model;
 
 import ar.edu.itba.paw.model.packages.Implementations.*;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
@@ -14,7 +15,8 @@ public class Factory implements Comparable<Factory> {
     private double costReduction;
     private long level;
 
-    public Factory(long userid, FactoryType type, double amount, double inputReduction, double outputMultiplier, double costReduction, long level) {
+    public Factory(long userid, @NotNull FactoryType type, double amount, double inputReduction,
+                   double outputMultiplier, double costReduction, long level) {
         this.userid = userid;
         this.type = type;
         this.amount = amount;

@@ -1,7 +1,8 @@
 package ar.edu.itba.paw.model.packages;
 
+import ar.edu.itba.paw.model.FactoryType;
 import ar.edu.itba.paw.model.ResourceType;
-//import sun.jvm.hotspot.oops.Mark;
+import ar.edu.itba.paw.model.packages.Implementations.*;
 
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
@@ -10,25 +11,40 @@ import java.util.Set;
 import java.util.TreeMap;
 
 /**
- * Created by juanfra on 08/04/17.
+ * ResourcePackage represents a map of Resources to a double. Since the game handles numbers of up to trillion, doubles
+ * was the choice made, even for integer quantities (for example storage).
+ *
+ * There were many cases in which a map of resources was needed, and in order to be able to categorize them (to create
+ * an unique builder class for all of them) and not repeat code, an abstract class was needed. The following classes are
+ * the implementations of a ResourcePackage:
+ *
+ * - {@link Storage} Represents the amount of resources a player has
+ * - {@link Productions} Represents the amount of resources a player produces
+ * - {@link BaseRecipe} Represents the amount of resources a {@link FactoryType} consumes and produces
+ * - {@link Recipe} Represents the amount of resources a {@link FactoryType} consumes and produces for a certain player,
+ *      after applying modifiers
+ * - {@link FactoriesProduction} Represents the amount of resources the sum of all {@link FactoryType} for a certain
+        player, after applying modifiers, consumes and produces
+ * - {@link BaseCost} Represents the amount of resources a {@link FactoryType} costs to buy
+ * - {@link FactoryCost} Represents the amount of resources a {@link FactoryType} costs to buy for a certain player
+        after applying modifiers
+ *
+ * We decided to separate each of these classes in order to know at any given line of code what type of map we are
+ * working with as well not being able to apply modifiers twice or more, thus generating bugs. Each class have as well
+ * a validator for it so that when building one there cant be at any given moment an object with an illegal state
  */
 public abstract class ResourcePackage {
     protected Map<ResourceType,Double> resources;
     protected Formatter formatter;
 
-    public Map<ResourceType,String> formatted(){
-        Map<ResourceType,String> output = new TreeMap<>();
-        for(ResourceType r: resources.keySet()){
-            output.put(r,formatter.format(resources.get(r)));
-        }
-        return output;
-    }
     public Set<ResourceType> getResources(){
         return resources.keySet();
     }
+
     public Double getValue(ResourceType resource){
         return resources.get(resource);
     }
+
     public boolean contains(ResourceType resource){
         return resources.containsKey(resource);
     }
@@ -47,7 +63,39 @@ public abstract class ResourcePackage {
         return newMap;
     }
 
+    protected Map<ResourceType,Double> getInputs(){
+        Map<ResourceType,Double> map = new TreeMap<>();
+
+        resources.entrySet().stream()
+                .filter(m -> m.getValue() < 0)
+                .forEach(m -> map.put(m.getKey(),-m.getValue()));
+
+        return map;
+    }
+
+    protected Map<ResourceType,Double> getOutputs(){
+        Map<ResourceType,Double> map = new TreeMap<>();
+
+        resources.entrySet().stream()
+                .filter(m -> m.getValue() > 0)
+                .forEach(m -> map.put(m.getKey(),m.getValue()));
+
+        return map;
+    }
+
+    public Map<ResourceType,Double> rawMap(){
+        return generate(resources,(r)-> true);
+    }
+
     private static char[] c = new char[]{'k', 'm', 'b', 't'};
+
+    public Map<ResourceType,String> formatted(){
+        Map<ResourceType,String> output = new TreeMap<>();
+        for(ResourceType r: resources.keySet()){
+            output.put(r,formatter.format(resources.get(r)));
+        }
+        return output;
+    }
 
     public void printPackage(){
         System.out.println("outputs");
@@ -80,16 +128,6 @@ public abstract class ResourcePackage {
         return map;
     }
 
-    protected Map<ResourceType,Double> getInputs(){
-        Map<ResourceType,Double> map = new TreeMap<>();
-
-        resources.entrySet().stream()
-                .filter(m -> m.getValue() < 0)
-                .forEach(m -> map.put(m.getKey(),-m.getValue()));
-
-        return map;
-    }
-
     protected Map<ResourceType,String> getFormattedOutputs(){
         Map<ResourceType,String> map = new TreeMap<>();
 
@@ -98,20 +136,6 @@ public abstract class ResourcePackage {
         );
 
         return map;
-    }
-
-    protected Map<ResourceType,Double> getOutputs(){
-        Map<ResourceType,Double> map = new TreeMap<>();
-
-        resources.entrySet().stream()
-                .filter(m -> m.getValue() > 0)
-                .forEach(m -> map.put(m.getKey(),m.getValue()));
-
-        return map;
-    }
-
-    public Map<ResourceType,Double> rawMap(){
-        return generate(resources,(r)-> true);
     }
 
     private static String coolFormat(double n){
