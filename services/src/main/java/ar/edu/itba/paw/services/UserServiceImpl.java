@@ -44,8 +44,8 @@ public class UserServiceImpl implements UserService {
     Cache<String, User> userCache = CacheBuilder.newBuilder().maximumSize(5).build();
     Cache<Long, Wealth> wealthCache = CacheBuilder.newBuilder().maximumSize(5).build();
 
-    public User findById(long id) {
-        return userDao.findById(id);
+    public User findById(long userid) {
+        return userDao.findById(userid);
     }
 
     @Override
