@@ -18,6 +18,8 @@ public interface UserService {
     Wealth getUserWealth(long id);
     Productions getUserProductions(long id);
     Storage getUserStorage(long id);
+    Wealth calculateUserWealth(long userid);
+
 
     boolean purchaseFactory(long userid, FactoryType type);
     boolean purchaseUpgrade(long userid, FactoryType type);

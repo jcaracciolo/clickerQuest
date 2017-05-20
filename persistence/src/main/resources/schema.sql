@@ -5,10 +5,10 @@ CREATE TABLE IF NOT EXISTS clans (
 
 CREATE TABLE IF NOT EXISTS users (
   userid BIGSERIAL PRIMARY KEY,
-  username varchar(100) UNIQUE ,
-  password varchar(100),
-  profileImage varchar(100),
-  score DOUBLE PRECISION,
+  username varchar(100) UNIQUE NOT NULL ,
+  password varchar(100) NOT NULL,
+  profileImage varchar(100) NOT NULL,
+  score DOUBLE PRECISION DEFAULT 0,
   clanId INT,
   FOREIGN KEY (clanId) REFERENCES clans(clanId) ON DELETE SET NULL
 );
@@ -22,6 +22,7 @@ CREATE TABLE IF NOT EXISTS factories (
   costReduction DOUBLE PRECISION,
   level INT,
   PRIMARY KEY(userid, type)
+  FOREIGN KEY (userid) REFERENCES users(userid) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS wealths (
@@ -31,12 +32,10 @@ CREATE TABLE IF NOT EXISTS wealths (
   storage DOUBLE PRECISION,
   lastUpdated BIGINT,
   PRIMARY KEY(userid, resourceType)
+  FOREIGN KEY (userid) REFERENCES users(userid) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS stockMarket (
-  time BIGINT,
-  userid BIGINT,
-  resourceType INT,
-  amount DOUBLE PRECISION,
-  PRIMARY KEY(time,userid,resourceType)
+  resourceType INT PRIMARY KEY ,
+  amount DOUBLE PRECISION
 );

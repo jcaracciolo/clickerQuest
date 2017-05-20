@@ -44,8 +44,8 @@ public class UserServiceImpl implements UserService {
     Cache<String, User> userCache = CacheBuilder.newBuilder().maximumSize(5).build();
     Cache<Long, Wealth> wealthCache = CacheBuilder.newBuilder().maximumSize(5).build();
 
-    public User findById(long id) {
-        return userDao.findById(id);
+    public User findById(long userid) {
+        return userDao.findById(userid);
     }
 
     @Override
@@ -98,6 +98,13 @@ public class UserServiceImpl implements UserService {
             LOGGER.error(e.toString());
         }
         return wealth;
+    }
+
+    public Wealth calculateUserWealth(long userid){
+        Wealth oldWealth = getUserWealth(userid);
+        Wealth newWealth = oldWealth.calculateProductions(getUserFactories(userid));
+        updateWealth(newWealth);
+        return newWealth;
     }
 
     @Transactional(propagation = Propagation.NESTED)
@@ -237,30 +244,8 @@ public class UserServiceImpl implements UserService {
 
         Wealth newWealth = new Wealth(userid,wbuilder.buildPackage(),wealth.getProductions());
         updateWealth(newWealth);
-        marketDao.registerPurchase(new StockMarketEntry(userid,resourceType,-amount));
+        marketDao.registerPurchase(new StockMarketEntry(resourceType,-amount));
 
-        return true;
-    }
-
-    private boolean setResourceStorage(long userid, ResourceType resourceType, double amount) {
-        Wealth wealth = getUserWealth(userid);
-
-        PackageBuilder<Storage> wbuilder = Storage.packageBuilder();
-        wealth.getStorage().rawMap().forEach(
-                (r,d) ->{
-                    if(r.equals(resourceType)){
-                        wbuilder.putItem(r,amount);
-                    }else  {
-                        wbuilder.putItem(r,d);
-                    }
-                }
-        );
-        wealth.getStorage().getLastUpdated().forEach(
-                (r,d) -> wbuilder.setLastUpdated(r,d)
-        );
-
-        Wealth newWealth = new Wealth(userid,wbuilder.buildPackage(),wealth.getProductions());
-        updateWealth(newWealth);
         return true;
     }
 
@@ -286,7 +271,7 @@ public class UserServiceImpl implements UserService {
 
         Wealth newWealth = new Wealth(userid,wbuilder.buildPackage(),wealth.getProductions());
         updateWealth(newWealth);
-        marketDao.registerPurchase(new StockMarketEntry(userid,resourceType,amount));
+        marketDao.registerPurchase(new StockMarketEntry(resourceType,amount));
 
         return true;
     }

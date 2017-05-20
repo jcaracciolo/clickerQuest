@@ -143,15 +143,15 @@ public class UserJdbcDao implements UserDao {
     @Override
     public User create(String username, String password,String img) {
         final User us = new User(0,username,password,img);
-        final Number userId;
+        final long userId;
 
         try {
-             userId = jdbcInsertUsers.executeAndReturnKey(USER_REVERSE_ROW_MAPPER.toArgs(us));
+             userId = jdbcInsertUsers.executeAndReturnKey(USER_REVERSE_ROW_MAPPER.toArgs(us)).longValue();
         }catch (Exception e) {
             return null;
         }
 
-        return new User(userId.longValue(),username,password,img);
+        return new User(userId,username,password,img);
     }
 
     @Override

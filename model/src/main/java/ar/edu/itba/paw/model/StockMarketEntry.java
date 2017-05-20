@@ -4,31 +4,12 @@ import java.util.Calendar;
 
 public class StockMarketEntry {
 
-    long time;
-    long userid;
-    ResourceType resourceType;
-    double amount;
+    private ResourceType resourceType;
+    private double amount;
 
-    public StockMarketEntry(long time, long userid, ResourceType resourceType, double amount) {
-        this.time = time;
-        this.userid = userid;
+    public StockMarketEntry(ResourceType resourceType, double amount) {
         this.resourceType = resourceType;
         this.amount = amount;
-    }
-
-    public StockMarketEntry(long userid, ResourceType resourceType, double amount) {
-        this.time = Calendar.getInstance().getTimeInMillis();
-        this.userid = userid;
-        this.resourceType = resourceType;
-        this.amount = amount;
-    }
-
-    public long getTime() {
-        return time;
-    }
-
-    public long getUserid() {
-        return userid;
     }
 
     public ResourceType getResourceType() {

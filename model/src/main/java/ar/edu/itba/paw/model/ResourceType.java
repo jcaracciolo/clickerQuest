@@ -5,32 +5,38 @@ import java.util.Optional;
 
 
 public enum ResourceType {
-    CIRCUITS(12,"circuit-type"),
-    CARDBOARD(11,"cardboard-type"),
-    COPPER_CABLE(10,"copper-cable-type"),
-    COPPER(9,"copper-type"),
-    METAL_SCRAP(8,"metal-scrap-type"),
-    RUBBER(7,"rubber-type"),
-    TIRES(6,"tires-type"),
-    IRON(5,"iron-type"),
-    PEOPLE(4,"people-type"),
-    MONEY(3,"money-type"),
-    GOLD(2,"gold-type"),
-    PLASTIC(1,"plastic-type"),
-    POWER(0,"power-type");
+    CIRCUITS(12,"circuit-type",5),
+    CARDBOARD(11,"cardboard-type",0.1),
+    COPPER_CABLE(10,"copper-cable-type",0.5),
+    COPPER(9,"copper-type",1),
+    METAL_SCRAP(8,"metal-scrap-type",1.1),
+    RUBBER(7,"rubber-type",0.4),
+    TIRES(6,"tires-type",0.8),
+    IRON(5,"iron-type",0.5),
+    PEOPLE(4,"people-type",0.9),
+    MONEY(3,"money-type",1),
+    GOLD(2,"gold-type",2),
+    PLASTIC(1,"plastic-type",5),
+    POWER(0,"power-type",10);
 
     private int id;
     private String nameCode;
     private double price;
+    private double popularity;
 
-    ResourceType(int id,String name) {
+    ResourceType(int id,String name,double price) {
         this.id = id;
         this.nameCode = name;
-        price = (id + 1) * 2;
+        this.price = price;
+        this.popularity = 1;
+    }
+
+    public void setPopularity(double popularity) {
+        this.popularity = popularity;
     }
 
     public double getPrice() {
-        return price;
+        return price * popularity;
     }
 
     public String getNameCode() {
