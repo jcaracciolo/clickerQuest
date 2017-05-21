@@ -37,3 +37,5 @@ CREATE TABLE IF NOT EXISTS stockMarket (
   resourceType INT PRIMARY KEY ,
   amount DOUBLE PRECISION
 );
+
+select factories.userid from (factories left outer join users ON factories.userid = users.userid) where username IS NULL;
