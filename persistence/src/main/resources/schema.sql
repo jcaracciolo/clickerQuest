@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS factories (
   outputMultiplier DOUBLE PRECISION,
   costReduction DOUBLE PRECISION,
   level INT,
-  PRIMARY KEY(userid, type)
+  PRIMARY KEY(userid, type),
   FOREIGN KEY (userid) REFERENCES users(userid) ON DELETE CASCADE
 );
 
@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS wealths (
   production DOUBLE PRECISION,
   storage DOUBLE PRECISION,
   lastUpdated BIGINT,
-  PRIMARY KEY(userid, resourceType)
+  PRIMARY KEY(userid, resourceType),
   FOREIGN KEY (userid) REFERENCES users(userid) ON DELETE CASCADE
 );
 
