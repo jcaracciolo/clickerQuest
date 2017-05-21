@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS clans (
-  clanId INTEGER IDENTITY PRIMARY KEY,
+  clanid INTEGER IDENTITY PRIMARY KEY,
   NAME VARCHAR (100) UNIQUE NOT NULL
 );
 
@@ -22,6 +22,7 @@ CREATE TABLE IF NOT EXISTS factories (
   costReduction DOUBLE,
   level INTEGER,
   PRIMARY KEY(userid, type)
+    FOREIGN KEY (userid) REFERENCES users(userid)  ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS wealths (
@@ -31,12 +32,13 @@ CREATE TABLE IF NOT EXISTS wealths (
   storage DOUBLE,
   lastUpdated BIGINT,
   PRIMARY KEY(userid, resourceType)
+  FOREIGN KEY (userid) REFERENCES users(userid)  ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS stockMarket (
   time BIGINT,
   userid BIGINT,
   resourceType INTEGER,
-  amount DOUBLE,
-PRIMARY KEY(time,userid,resourceType)
+  amount DOUBLE DEFAULT 0,
+  PRIMARY KEY(time,userid,resourceType)
 );

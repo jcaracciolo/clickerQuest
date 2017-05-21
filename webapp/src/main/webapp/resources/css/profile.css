@@ -20,7 +20,8 @@ img.profile-img {
 .left-section {
     display: flex;
     flex-direction: column;
-    flex-basis: 25%;
+    flex-grow: 1;
+    width: 0;
     height: 100vh;
     color: white;
     background-color: #3f51b5;
@@ -32,7 +33,9 @@ img.profile-img {
 .right-section {
     display: flex;
     flex-direction: column;
-    flex-grow: 1;
+    flex-grow: 3;
+    align-items: stretch;
+    width: 0;
     overflow-y: scroll;
 }
 
@@ -46,6 +49,7 @@ img.profile-img {
 
 .unlocked-factories-section {
     display: flex;
+    align-items: center;
     flex-direction: column;
 }
 
@@ -72,6 +76,7 @@ img.profile-img {
 
 #world-ranking {
     font-size: 1.5rem;
+    align-self: center;
 }
 
 .title {
@@ -80,6 +85,7 @@ img.profile-img {
 
 .resources-section {
     display: flex;
+    align-items: center;
     flex-direction: column;
     margin-top: 2rem;
 }
@@ -88,11 +94,16 @@ img.profile-img {
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
+    align-self: stretch;
     height: 20rem;
+    margin-left: 5%;
+    margin-right: 5%;
+    margin-top: 5%;
 }
 
 .resource {
     display: flex;
+    margin-left: 5%;
     flex-direction: row;
     align-items: center;
 }
@@ -124,4 +135,9 @@ img.group-logo {
 img.resource-icon {
     max-width: 2.5rem;
     max-height: 2.5rem;
+}
+
+.flex-left-text {
+    text-align: left;
+    margin-left: 10%;
 }

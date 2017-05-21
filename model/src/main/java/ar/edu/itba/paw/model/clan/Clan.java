@@ -4,6 +4,7 @@ import ar.edu.itba.paw.model.User;
 
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 /**
  * Created by juanfra on 17/05/17.
@@ -16,6 +17,10 @@ public class Clan implements Iterable<User> {
 
     public String getName() {
         return name;
+    }
+
+    public boolean addUser(User u) {
+        return users.add(u);
     }
 
     Clan(Collection<User> users,int id,String name) {
@@ -65,5 +70,21 @@ public class Clan implements Iterable<User> {
     @Override
     public Spliterator<User> spliterator() {
         return users.spliterator();
+    }
+
+    public Stream<User> stream(){
+        return users.stream();
+    }
+
+    public Set<User> getUsers() {
+        return users;
+    }
+
+    public boolean containsUser(long userId) {
+        return stream().filter((u)->u.getId()==userId).map((u)->true).findAny().orElse(false);
+    }
+
+    public int getId() {
+        return id;
     }
 }

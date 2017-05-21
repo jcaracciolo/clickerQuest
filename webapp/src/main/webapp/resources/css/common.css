@@ -3,9 +3,17 @@
     font-family: Fixedsys;
     src: url('../fonts/FSEX300.ttf') format("truetype");;
 }
-
 .nav-wrapper {
+    display: flex;
     background-color: #354488;
+}
+
+nav .brand-logo {
+    margin-left: 20px;
+}
+nav form {
+    margin-left: 180px;
+    width: 300px;
 }
 
 .upper-logo {
@@ -13,6 +21,24 @@
     margin-top: 0.5em;
     margin-left: 0.5em;
     margin-right: 0.5em;
+}
+
+#search-user {
+    width: 5rem;
+}
+
+#logout {
+    margin-right: 0;
+    margin-left: auto;
+}
+
+#search-user {
+    margin-right: 0;
+    margin-left: auto;
+}
+
+.input-field.search-user {
+    background-color: #417ec8;
 }
 
 .no-margins {

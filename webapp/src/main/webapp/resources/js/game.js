@@ -142,6 +142,25 @@ setInterval(function(){
     refreshUpgradesBuyability();
 }, 1000);
 
+// Create listener
+document.getElementById("createClan").addEventListener("click", function () {
+    $.post(contextPath + "/createClan",
+        {
+            clanName: "Testclan13"
+        }, function(data) {
+            var resp = JSON.parse(data);
+            var msg ;
+            if(resp.result){
+                msg = dec("game.factoryBuySuccessful",dec(decFac(resp.factoryId)));
+            } else {
+                msg = dec("game.factoryBuyFail",dec(decFac(resp.factoryId)));
+            }
+
+            window.sessionStorage.setItem("message",msg);
+            location.reload();
+        });
+});
+
 
 // Buy listener
 $.each($(".buyFactory"),function (i,element){
@@ -263,7 +282,7 @@ $(function() {
                 required: dec("game.market.selectResource")
             },
             quantity: {
-                required: dec("game.market.quantity"),
+                required: dec("game.market.selectQuantity"),
                 digits: dec("game.market.illegalCaracter")
             },
             unit:{

@@ -120,21 +120,39 @@
     </div>
 </div>
 <%-- NAVIGATION BAR --%>
-<div class="row main-frame">
+<div class="row main-frame no-margins">
     <div class="navbar-fixed">
         <nav>
             <div class="nav-wrapper">
-                <a href='<c:url value="/game"/>' id="logo-container" class="brand-logo">
-                    <img class="upper-logo" src="<c:url value="/resources/clickerQuest_logo.png"/>" alt="logo"/>
-                </a>
-
-                <ul id="nav-mobile" class="right hide-on-med-and-down">
+                <div>
+                    <a href='<c:url value="/game"/>' id="logo-container" href="#" class="brand-logo">
+                        <img class="upper-logo" src="<c:url value="/resources/clickerQuest_logo.png"/>" alt="logo"/>
+                    </a>
+                </div>
+                <div id="search-user">
+                    <form>
+                        <div class="input-field search-user">
+                            <input id="search" type="search" required>
+                            <label class="label-icon" for="search"><i class="material-icons">search</i>
+                            </label>
+                            <i class="material-icons closed">close</i>
+                        </div>
+                    </form>
+                </div>
+                <div id="createClan">
+                    <ul>
+                        <li><a><spring:message code='create.clan'/> </a></li>
+                    </ul>
+                </div> <div id="logout">
+                <ul id="nav-mobile">
                     <li><a href="<c:url value='/logout'/>"><spring:message code='logout'/> </a></li>
                 </ul>
+            </div>
             </div>
         </nav>
     </div>
 </div>
+
 <div class="row">
     <!-- LEFT PANEL -->
     <div class="col no-padding s2">

@@ -97,12 +97,18 @@ public class UserJdbcDao implements UserDao {
     };
 
     final static RowMapper<User> USER_ROW_MAPPER = (rs, rowNum) ->
-            new User(rs.getLong("userid"),
-                    rs.getString("username"),
-                    rs.getString("password"),
-                    rs.getString("profileImage"),
-                    rs.getDouble("score"),
-                    rs.getInt("clanId"));
+    {
+        Integer clanid = rs.getInt("clanid");
+        if(rs.wasNull()) clanid = null;
+        return new User(rs.getLong("userid"),
+                rs.getString("username"),
+                rs.getString("password"),
+                rs.getString("profileImage"),
+                rs.getDouble("score"),
+                clanid
+                );
+    };
+
 
 
     final static ReverseRowMapper<User> USER_REVERSE_ROW_MAPPER = (us) ->
@@ -137,15 +143,15 @@ public class UserJdbcDao implements UserDao {
     @Override
     public User create(String username, String password,String img) {
         final User us = new User(0,username,password,img);
-        final Number userId;
+        final long userId;
 
         try {
-             userId = jdbcInsertUsers.executeAndReturnKey(USER_REVERSE_ROW_MAPPER.toArgs(us));
+             userId = jdbcInsertUsers.executeAndReturnKey(USER_REVERSE_ROW_MAPPER.toArgs(us)).longValue();
         }catch (Exception e) {
             return null;
         }
 
-        return new User(userId.longValue(),username,password,img);
+        return new User(userId,username,password,img);
     }
 
     @Override
@@ -155,12 +161,14 @@ public class UserJdbcDao implements UserDao {
                         "username = ?," +
                         "password = ?," +
                         "profileImage = ?," +
-                        "score = ? " +
+                        "score = ?, " +
+                        "clanid = ? " +
                         " WHERE (userid = ?) ;",
                 u.getUsername(),
                 u.getPassword(),
                 u.getProfileImage(),
                 u.getScore(),
+                u.getClanIdentifier(),
                 u.getId());
         if (rows == 1) {
             return u;
