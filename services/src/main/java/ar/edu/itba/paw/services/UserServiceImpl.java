@@ -311,4 +311,11 @@ public class UserServiceImpl implements UserService {
     public int getGlobalRanking(long userId) {
         return userDao.getGlobalRanking(userId);
     }
+
+    @Override
+    public List<User> globalUsers(int pag, int userPerPage) {
+        List<User> users = userDao.globalUsers(pag,userPerPage);
+        users.sort((u1,u2)->u1.getScore()<u2.getScore()?1:-1);
+        return Collections.unmodifiableList(users);
+    }
 }

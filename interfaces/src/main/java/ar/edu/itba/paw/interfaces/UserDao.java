@@ -8,6 +8,7 @@ import ar.edu.itba.paw.model.packages.Implementations.Productions;
 import ar.edu.itba.paw.model.packages.Implementations.Storage;
 
 import java.util.Collection;
+import java.util.List;
 
 
 public interface UserDao {
@@ -38,5 +39,6 @@ public interface UserDao {
     Wealth getUserWealth(long userid);
     Wealth update(Wealth w);
 
+    List<User> globalUsers(int pag, int userPerPage);
 
 }

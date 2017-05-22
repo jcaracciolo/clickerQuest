@@ -5,6 +5,7 @@ import ar.edu.itba.paw.model.packages.Implementations.Productions;
 import ar.edu.itba.paw.model.packages.Implementations.Storage;
 
 import java.util.Collection;
+import java.util.List;
 
 
 public interface UserService {
@@ -29,4 +30,6 @@ public interface UserService {
     Collection<Factory> getUserFactories(long id);
 
     String getProfileImage(long userid);
-}
+    List<User> globalUsers(int pag, int userPerPage);
+
+    }

@@ -5,6 +5,7 @@ import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.model.packages.Implementations.Productions;
 import ar.edu.itba.paw.model.packages.Implementations.Storage;
 import ar.edu.itba.paw.model.packages.PackageBuilder;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -348,5 +349,29 @@ public class UserJdbcDao implements UserDao {
         }
 
         return values.get(0);
+    }
+
+    @Override
+    public List<User> globalUsers(int pag, int userPerPage) {
+
+        if(pag<0 || userPerPage<=0) {
+            throw new IllegalArgumentException("Page and maxPage must be an positive integer");
+        }
+
+        int min = pag * userPerPage;
+        int max = (pag + 1) * userPerPage - 1;
+
+
+        List<User> users = jdbcTemplate.query(
+                "SELECT * FROM ( SELECT ROW_NUMBER() OVER(ORDER BY score DESC),* FROM users) as u" +
+                        " WHERE row_number BETWEEN ? AND ?",
+                USER_ROW_MAPPER,
+                min,max);
+
+        if(users.isEmpty()) {
+            return Collections.EMPTY_LIST;
+        } else {
+            return users;
+        }
     }
 }

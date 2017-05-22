@@ -234,4 +234,10 @@ class MockUserDao implements UserDao {
         d.wealth = copyWealth(wealth);
         return d.wealth;
     }
+
+    @Override
+    public List<User> globalUsers(int pag, int userPerPage) {
+        return tables.stream().map((d) -> d.user)
+                .collect(Collectors.toList());
+    }
 }

@@ -11,9 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -27,6 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Controller
@@ -243,6 +242,18 @@ public class MainController {
         j.put("type", "sellToMarket");
         j.put("resourceId",resourceId);
         j.put("quantity", quantity);
+        return j.toJSONString();
+    }
+
+    // TODO Implement This correctly
+    @RequestMapping(value = "/AllUsers", method = { RequestMethod.GET })
+    @ResponseBody
+    public String AllUsers(Principal principal) {
+
+        JSONObject j = new JSONObject();
+        List<User> users = userService.globalUsers(0,100);
+
+        j.put("users", users.stream().map((u) -> u.getScore()).collect(Collectors.toList()));
         return j.toJSONString();
     }
 
