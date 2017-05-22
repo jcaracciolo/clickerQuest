@@ -27,7 +27,12 @@ nav form {
     width: 5rem;
 }
 
-#logout {
+nav .button {
+    margin-right: 0;
+    margin-left: 0;
+}
+
+nav .button.last {
     margin-right: 0;
     margin-left: auto;
 }
