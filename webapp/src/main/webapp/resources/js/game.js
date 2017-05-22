@@ -142,25 +142,17 @@ setInterval(function(){
     refreshUpgradesBuyability();
 }, 1000);
 
-// Create listener
-document.getElementById("createClan").addEventListener("click", function () {
+// Create clan listener
+document.getElementById("createClanSend").addEventListener("click", function () {
+    var clanName = document.getElementById("clanNameInput").value;
+    console.log("Creating clan: " + clanName);
     $.post(contextPath + "/createClan",
         {
-            clanName: "Testclan13"
+            clanName: clanName
         }, function(data) {
-            var resp = JSON.parse(data);
-            var msg ;
-            if(resp.result){
-                msg = dec("game.factoryBuySuccessful",dec(decFac(resp.factoryId)));
-            } else {
-                msg = dec("game.factoryBuyFail",dec(decFac(resp.factoryId)));
-            }
-
-            window.sessionStorage.setItem("message",msg);
-            location.reload();
+            window.location.replace(contextPath + "/clan/" + clanName);
         });
 });
-
 
 // Buy listener
 $.each($(".buyFactory"),function (i,element){

@@ -44,6 +44,14 @@
     </div>
     </div>
 </div>
+<%-- Create Clan Modal --%>
+<div id="clanModal" class="modal">
+    <div class="modal-content">
+        <spring:message code="game.createClan.selectName"/><br>
+        <input type="text" name="clanName" id="clanNameInput">
+        <button id="createClanSend"><spring:message code="game.create"/></button>
+    </div>
+</div>
 <!-- Market Modal -->
 <div id="marketModal" class="modal">
     <div class="modal-content">
@@ -139,15 +147,31 @@
                         </div>
                     </form>
                 </div>
-                <div id="createClan">
-                    <ul>
-                        <li><a><spring:message code='create.clan'/> </a></li>
+                <c:choose>
+                    <c:when test="${user.clanIdentifier == null}">
+                        <div id="createClan" class="button last">
+                            <ul>
+                                <li>
+                                    <a href="#clanModal"><spring:message code='create.clan'/></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </c:when>
+                    <c:otherwise>
+                        <div id="createClan" class="button last">
+                            <ul>
+                                <li>
+                                    <a href="<c:url value='/clan/${clan.name}'/>"><spring:message code='game.seeMyClan'/></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </c:otherwise>
+                </c:choose>
+                <div id="logout">
+                    <ul id="nav-mobile">
+                        <li><a href="<c:url value='/logout'/>"><spring:message code='logout'/> </a></li>
                     </ul>
-                </div> <div id="logout">
-                <ul id="nav-mobile">
-                    <li><a href="<c:url value='/logout'/>"><spring:message code='logout'/> </a></li>
-                </ul>
-            </div>
+                </div>
             </div>
         </nav>
     </div>
@@ -158,12 +182,12 @@
     <div class="col no-padding s2">
         <div class="scrollable-y card darken-1">
             <div class="card-content white-text">
-                <span class="card-title"><spring:message code="game.profile"/></span>
                 <div class="section">
+                    <a href="<c:url value="/myProfile"/>" class="username" data-userid="${user.id}"><c:out value="${user.username}"/></a>
                     <div class="card-image profile-picture">
                         <img class="profile" src="<c:url value="/resources/profile_images/${user.profileImage}"/>"/>
                     </div>
-                    <p class="username" data-userid="${user.id}"><c:out value="${user.username}"/></p>
+                    <p id="score"><spring:message code="score"/> <fmt:formatNumber pattern="#">${user.score}</fmt:formatNumber></p>
                 </div>
             </div>
             <div class="divider"></div>

@@ -43,8 +43,8 @@ public class MainController {
     @Autowired
     private ExposedResourceBundleMessageSource messageSource;
     // INDEX
-    @RequestMapping("/login")
-    public ModelAndView index(@ModelAttribute("registerForm") final UserForm form, Principal principal) {
+    @RequestMapping(value = {"/login","/"})
+    public ModelAndView index(@ModelAttribute("registerForm") final UserForm form, Principal principal,final BindingResult errors) {
         if(principal != null) return new ModelAndView("redirect:/game");
         ModelAndView mav = new ModelAndView("index");
         return mav;
@@ -84,7 +84,7 @@ public class MainController {
     }
 
     // PROFILE
-    @RequestMapping(value = "/{username}", method = { RequestMethod.GET })
+    @RequestMapping(value = "/u/{username}", method = { RequestMethod.GET })
     public ModelAndView profile(Principal principal, @PathVariable(value="username") String username){
         ModelAndView mav = new ModelAndView("profile");
         User u = userService.findByUsername(username);
@@ -94,6 +94,11 @@ public class MainController {
             mav.addObject("errorMsg", "404");
             LOGGER.error("Looking for unexistant user profile: " + username);
             return mav;
+        }
+
+        Integer clanid = u.getClanIdentifier();
+        if (clanid != null) {
+            mav.addObject("clan", clanService.getClanById(clanid));
         }
 
         Set<Factory> factories = new TreeSet(userService.getUserFactories(u.getId()));
@@ -106,7 +111,12 @@ public class MainController {
         return mav;
     }
 
-    // GROUP
+    @RequestMapping(value = "/myProfile", method = { RequestMethod.GET })
+    public ModelAndView myProfile(Principal principal) {
+        return profile(principal, principal.getName());
+    }
+
+    // CLAN
     @RequestMapping(value = "/clan/{clanName}", method = { RequestMethod.GET })
     public ModelAndView clan(Principal principal, @PathVariable(value="clanName") String clanName){
         ModelAndView mav = new ModelAndView("clan");
@@ -126,7 +136,7 @@ public class MainController {
             LOGGER.warn("Tried to skip login in clan: " + principal.getName());
             return mav;
         }
-//        clan.stream().
+
         mav.addObject("user", u);
         mav.addObject("clan", clan);
         return mav;
@@ -139,7 +149,7 @@ public class MainController {
         Clan clan = clanService.createClan(clanName);
 
         if (clan == null) {
-            // TODO: clan is null
+            // TODO: clan is null (return 'clan already exists')
         }
 
         User u = userService.findByUsername(principal.getName());
@@ -157,7 +167,57 @@ public class MainController {
         return mav;
     }
 
-    // GAME
+    @RequestMapping(value = "/leaveClan", method = { RequestMethod.POST })
+    @ResponseBody
+    public void leaveClan(Principal principal, @RequestParam("clanName") final String clanName){
+        ModelAndView mav = new ModelAndView("clan");
+
+        User u = userService.findByUsername(principal.getName());
+
+        if(u == null){
+            // TODO: not logged user trying to leave clan
+        }
+        if(u.getClanIdentifier() == null) {
+            // TODO: user without clan trying to leave a clan
+        }
+
+        Clan clan = clanService.getClanByName(clanName);
+
+        if (clan == null) {
+            // TODO: return 'clan does not exist'
+        }
+
+        clanService.deleteFromClan(u.getId());
+
+        if (clan.getUsers().isEmpty()) {
+            // TODO: delete clan
+        }
+    }
+
+    @RequestMapping(value = "/joinClan", method = { RequestMethod.POST })
+    @ResponseBody
+    public void joinClan(Principal principal, @RequestParam("clanName") final String clanName){
+        ModelAndView mav = new ModelAndView("clan");
+
+        User u = userService.findByUsername(principal.getName());
+
+        if(u == null){
+            // TODO: not logged user trying to leave clan
+        }
+        if(u.getClanIdentifier() != null) {
+            // TODO: user with clan trying to join another clan
+        }
+
+        Clan clan = clanService.getClanByName(clanName);
+
+        if (clan == null) {
+            // TODO: return 'clan does not exist'
+        }
+
+        clanService.addUserToClan(clan.getId(), u.getId());
+    }
+
+        // GAME
     @RequestMapping(value = "/game", method = { RequestMethod.GET })
     public ModelAndView mainGameView( Principal principal){
 //        if(principal == null || principal.getName() == null){
@@ -171,6 +231,11 @@ public class MainController {
             mav.addObject("errorMsg", "404");
             LOGGER.warn("Tried to skip login in game: " + principal.getName());
             return mav;
+        }
+
+        Integer clanId = u.getClanIdentifier();
+        if (clanId != null) {
+            mav.addObject("clan", clanService.getClanById(clanId));
         }
 
         Set<Factory> factories = new TreeSet(userService.getUserFactories(u.getId()));

@@ -26,6 +26,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 </head>
 <body>
+<%-- Create Clan Modal --%>
+<div id="clanModal" class="modal">
+    <div class="modal-content">
+        <spring:message code="game.createClan.selectName"/><br>
+        <input type="text" name="clanName" id="clanNameInput">
+        <button id="createClanSend"><spring:message code="game.create"/></button>
+    </div>
+</div>
 <%-- NAVIGATION BAR --%>
 <div class="row main-frame no-margins">
     <div class="navbar-fixed">
@@ -46,6 +54,26 @@
                         </div>
                     </form>
                 </div>
+                <c:choose>
+                    <c:when test="${user.clanIdentifier == null}">
+                        <div id="createClan" class="button last">
+                            <ul>
+                                <li>
+                                    <a href="#clanModal"><spring:message code='create.clan'/></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </c:when>
+                    <c:otherwise>
+                        <div id="createClan" class="button last">
+                            <ul>
+                                <li>
+                                    <a href="<c:url value='/clan/${clan.name}'/>"><spring:message code='game.seeMyClan'/></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </c:otherwise>
+                </c:choose>
                 <div id="logout">
                     <ul id="nav-mobile">
                         <li><a href="<c:url value='/logout'/>"><spring:message code='logout'/> </a></li>
@@ -60,20 +88,25 @@
     <div class="left-section">
         <div class="main-user-properties">
             <div>
+                <p id="username">${user.username}</p>
+            </div>
+            <div>
                 <img class="profile-img" src="<c:url value="/resources/profile_images/${user.profileImage}"/>"/>
             </div>
             <div>
-                <p id="username">${user.username}</p>
+                <p id="score"><spring:message code="score"/> <fmt:formatNumber pattern="#">${user.score}</fmt:formatNumber></p>
             </div>
         </div>
         <div id="world-ranking">
-            <p><spring:message code="profile.worldRanking" arguments="{globalRanking}"/> </p>
+            <p><spring:message code="profile.worldRanking" arguments="${globalRanking}"/> </p>
         </div>
         <c:if test="${user.clanIdentifier != null}">
             <div id="group-info">
                 <%-- TODO add clan data --%>
-                <img class="group-logo" src="<c:url value="/resources/group_icons/1.png"/>" alt="group_logo"/>
-                <p>Super Group</p>
+                <c:if test="${user.clanIdentifier != null}">
+                    <img class="group-logo" src="<c:url value="/resources/group_icons/1.png"/>" alt="group_logo"/>
+                    <p>${clan.name}</p>
+                </c:if>
             </div>
         </c:if>
     </div>
@@ -123,5 +156,7 @@
 
 <script type="text/javascript" src="<c:url value="https://code.jquery.com/jquery-2.1.1.min.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/resources/js/materialize.min.js"/>"></script>
+<script type="text/javascript">$('.modal').modal();</script>
+
 
 </html>
