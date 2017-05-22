@@ -1,17 +1,20 @@
 package ar.edu.itba.paw.model;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 public class User {
 
-    private long id;
-    private String username;
-    private String password;
-    private String profileImage;
-    private double score;
+    private final long id;
+    private final String username;
+    private final String password;
+    private final String profileImage;
+    private final double score;
 
-    // Null indicates no clan
+    @Nullable
     private Integer clanId;
 
-    public User(long id, String username, String password, String profileImage) {
+    public User(long id,  @NotNull String username, @NotNull String password, @NotNull String profileImage) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -20,8 +23,12 @@ public class User {
         this.score = 0;
     }
 
-    public User(long id, String username, String password, String profileImage, double score, Integer clanId) {
-        this(id,username,password,profileImage);
+    public User(long id,  @NotNull String username,  @NotNull String password,  @NotNull String profileImage,
+                double score, @Nullable Integer clanId) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.profileImage = profileImage;
         this.clanId = clanId;
         this.score = score;
     }

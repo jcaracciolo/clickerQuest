@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.model;
 
 import ar.edu.itba.paw.model.packages.UpgradeType;
+import org.jetbrains.annotations.NotNull;
 
 public class Upgrade {
     private FactoryType factoryType;
@@ -9,7 +10,7 @@ public class Upgrade {
     private double cost;
     private static final long MAX_UPGRADE_LEVEL = 10;
 
-    private Upgrade(FactoryType factoryType, long level, String description, double cost) {
+    private Upgrade(@NotNull  FactoryType factoryType, long level,@NotNull String description, double cost) {
         this.level = level;
         this.description = description;
         this.factoryType = factoryType;

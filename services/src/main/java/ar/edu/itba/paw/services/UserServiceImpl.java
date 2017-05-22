@@ -97,7 +97,7 @@ public class UserServiceImpl implements UserService {
         } catch (ExecutionException e) {
             LOGGER.error(e.toString());
         }
-        return wealth;
+        return null;
     }
 
     public Wealth calculateUserWealth(long userid){
@@ -117,7 +117,7 @@ public class UserServiceImpl implements UserService {
                 create(factory.getType(),user.getId());
             }
 
-            updateWealth(createWealth(user.getId()));
+            userDao.create(createWealth(user.getId()));
 
             purchaseFactory(user.getId(),FactoryType.PEOPLE_RECRUITING_BASE);
             purchaseFactory(user.getId(),FactoryType.STOCK_INVESTMENT_BASE);
@@ -200,7 +200,12 @@ public class UserServiceImpl implements UserService {
         Factory factory = factories.stream()
                 .filter(
                         (f) -> f.getType().getId() == type.getId()
-                ).findAny().get();
+                ).findAny().orElse(null);
+
+        if(factory==null) {
+            //TODO log this
+            throw new RuntimeException("Factory not found");
+        }
 
         Wealth w = getUserWealth(userid);
 
@@ -232,12 +237,9 @@ public class UserServiceImpl implements UserService {
         }
 
         PackageBuilder<Storage> wbuilder = Storage.packageBuilder();
-        wealth.getStorage().rawMap().forEach(
-                (r,d) -> wbuilder.putItem(r,d)
-        );
-        wealth.getStorage().getLastUpdated().forEach(
-                (r,d) -> wbuilder.setLastUpdated(r,d)
-        );
+
+        wealth.getStorage().rawMap().forEach(wbuilder::putItem);
+        wealth.getStorage().getLastUpdated().forEach(wbuilder::setLastUpdated);
 
         wbuilder.addItem(resourceType,-amount);
         wbuilder.addItem(ResourceType.MONEY,cost);
@@ -259,12 +261,9 @@ public class UserServiceImpl implements UserService {
         }
 
         PackageBuilder<Storage> wbuilder = Storage.packageBuilder();
-        wealth.getStorage().rawMap().forEach(
-                (r,d) -> wbuilder.putItem(r,d)
-        );
-        wealth.getStorage().getLastUpdated().forEach(
-                (r,d) -> wbuilder.setLastUpdated(r,d)
-        );
+
+        wealth.getStorage().rawMap().forEach(wbuilder::putItem);
+        wealth.getStorage().getLastUpdated().forEach(wbuilder::setLastUpdated);
 
         wbuilder.addItem(ResourceType.MONEY,-cost);
         wbuilder.addItem(resourceType,amount);

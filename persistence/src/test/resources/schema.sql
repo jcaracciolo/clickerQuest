@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS factories (
   outputMultiplier DOUBLE,
   costReduction DOUBLE,
   level INTEGER,
-  PRIMARY KEY(userid, type)
+  PRIMARY KEY(userid, type),
     FOREIGN KEY (userid) REFERENCES users(userid)  ON DELETE CASCADE
 );
 
@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS wealths (
   production DOUBLE,
   storage DOUBLE,
   lastUpdated BIGINT,
-  PRIMARY KEY(userid, resourceType)
+  PRIMARY KEY(userid, resourceType),
   FOREIGN KEY (userid) REFERENCES users(userid)  ON DELETE CASCADE
 );
 

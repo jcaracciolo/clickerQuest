@@ -155,6 +155,23 @@ public class UserJdbcDao implements UserDao {
     }
 
     @Override
+    public Wealth create(Wealth wealth) {
+        Storage s = wealth.getStorage();
+        Productions p = wealth.getProductions();
+        for(ResourceType r: ResourceType.values()) {
+            RowWealth rw = new RowWealth(wealth.getUserid(),
+                    r,
+                    p.getValue(r),
+                    s.getValue(r),
+                    s.getLastUpdated(r).getTimeInMillis()
+            );
+            jdbcInsertWealths.execute(WEALTH_REVERSE_ROW_MAPPER.toArgs(rw));
+        }
+
+        return wealth;
+    }
+
+    @Override
     public User update(User u) {
         int rows = jdbcTemplate.update(
                 "UPDATE users SET " +

@@ -34,6 +34,7 @@
     <spring-security.version>4.0.4.RELEASE</spring-security.version>
     <guava.version>21.0</guava.version>
     <json.simple.version>1.1.1</json.simple.version>
+    <jetbrainsVersion>13.0</jetbrainsVersion>
   </properties>
 
   <dependencyManagement>
@@ -174,6 +175,12 @@
         <groupId>org.springframework</groupId>
         <artifactId>spring-tx</artifactId>
         <version>${springVersion}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.jetbrains</groupId>
+        <artifactId>annotations</artifactId>
+        <version>${jetbrainsVersion}</version>
       </dependency>
 
 

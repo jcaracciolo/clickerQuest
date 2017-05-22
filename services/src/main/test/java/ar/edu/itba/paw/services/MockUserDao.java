@@ -5,6 +5,7 @@ import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.model.packages.Implementations.Productions;
 import ar.edu.itba.paw.model.packages.Implementations.Storage;
 import ar.edu.itba.paw.model.packages.PackageBuilder;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -20,7 +21,7 @@ class MockUserDao implements UserDao {
         Wealth wealth;
         List<Factory> factories;
 
-        private MockUserDaoData(User user, Wealth wealth, List<Factory> factories) {
+        private MockUserDaoData(@Nullable User user,@Nullable Wealth wealth,@Nullable List<Factory> factories) {
             this.user = user;
             this.wealth = wealth;
             this.factories = factories;
@@ -100,23 +101,7 @@ class MockUserDao implements UserDao {
         User u = new User(counter,username,password,profileImage);
         counter++;
 
-        PackageBuilder<Storage> sBuilder = Storage.packageBuilder();
-        PackageBuilder<Productions> pBuilder = Productions.packageBuilder();
-        Calendar now = Calendar.getInstance();
-        Arrays.stream(ResourceType.values()).forEach(
-                (r) -> {
-                    sBuilder.putItemWithDate(r,0D,now);
-                    pBuilder.putItem(r,0D);
-                }
-        );
-
-        Wealth w = new Wealth(u.getId(),sBuilder.buildPackage(),pBuilder.buildPackage());
-
-        List<Factory> factories = Arrays.stream(FactoryType.values()).map(
-                (f) -> new Factory(u.getId(),f,0,1,1,1,0)
-        ).collect(Collectors.toList());
-
-        tables.add(new MockUserDaoData(u,w,factories));
+        tables.add(new MockUserDaoData(u,null,null));
 
         return u;
     }
@@ -125,6 +110,9 @@ class MockUserDao implements UserDao {
     public Factory create(Factory factory, long userId) {
         MockUserDaoData d = getUserMockData(userId);
         if(d==null) return null;
+        if(d.factories==null) {
+            d.factories=new ArrayList<>();
+        }
 
         if( d.factories.stream().anyMatch( (f)-> f.getType() == factory.getType() ) )
             return null;
@@ -236,5 +224,14 @@ class MockUserDao implements UserDao {
         } else {
             return null;
         }
+    }
+
+    @Override
+    public Wealth create(Wealth wealth) {
+        MockUserDaoData d = getUserMockData(wealth.getUserid());
+        if(d==null) return null;
+        if(d.wealth!=null) return null;
+        d.wealth = copyWealth(wealth);
+        return d.wealth;
     }
 }

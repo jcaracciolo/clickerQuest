@@ -18,7 +18,7 @@ import java.util.Map;
 @Repository
 public class MarketJdbcDao implements MarketDao {
 
-    private JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert jdbcInsertStockMakert;
 
 

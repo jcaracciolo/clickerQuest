@@ -2,6 +2,7 @@ package ar.edu.itba.paw.model;
 
 import ar.edu.itba.paw.model.packages.Implementations.*;
 import ar.edu.itba.paw.model.packages.PackageBuilder;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -12,12 +13,11 @@ import java.util.Map;
  */
 public class Wealth {
 
-    private long userid;
-    //Already calculated data, ready for display
-    private Storage storage;
-    private Productions productions;
+    private final long userid;
+    private final Storage storage;
+    private final Productions productions;
 
-    public Wealth(long userid, Storage storage, Productions productions) {
+    public Wealth(long userid, @NotNull  Storage storage, @NotNull Productions productions) {
         this.userid = userid;
         this.storage = storage;
         this.productions = productions;
@@ -33,14 +33,6 @@ public class Wealth {
 
     public Productions getProductions() {
         return productions;
-    }
-
-    public Map<ResourceType,String> getFormattedStorage(){
-        return getStorage().formatted();
-    }
-
-    public Map<ResourceType,String> getFormattedProductions(){
-        return getProductions().formatted();
     }
 
     public Wealth purchaseResult(Factory f) {

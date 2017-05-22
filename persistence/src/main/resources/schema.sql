@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS wealths (
 );
 
 CREATE TABLE IF NOT EXISTS stockMarket (
-  resourceType INT PRIMARY KEY ,
+  resourceType INT PRIMARY KEY,
   amount DOUBLE PRECISION
 );
 

@@ -42,15 +42,15 @@ public class WealthTest {
         Double delta = 0D;
 
         Storage updatedS = wealth.getStorage();
-        assertEquals(updatedS.getResources(),s.getResources());
         assertTrue(updatedS.rawMap().size()>0);
+        assertEquals(updatedS.getResources(),s.getResources());
         updatedS.rawMap().forEach(
                 (r,d) -> assertEquals(d,0,delta)
         );
 
         Productions updatedP = wealth.getProductions();
-        assertEquals(updatedP.getResources(),p.getResources());
         assertTrue(updatedP.rawMap().size()>0);
+        assertEquals(updatedP.getResources(),p.getResources());
         updatedP.rawMap().forEach(
                 (r,d) -> assertEquals(d,0D,delta)
         );
@@ -194,7 +194,6 @@ public class WealthTest {
         afterPurchase.getProductions().rawMap().entrySet()
                 .stream().filter(m-> !baseRecipeOutputs.containsKey(m.getKey()))
                 .collect(Collectors.toMap(m->m.getKey(), m-> m.getValue()));
-        ;
 
         assertFalse(outputsIntact.isEmpty());
         outputsIntact.forEach((r,d) -> assertEquals(0,d,0D));
