@@ -44,8 +44,8 @@ public class MainController {
     @Autowired
     private ExposedResourceBundleMessageSource messageSource;
     // INDEX
-    @RequestMapping("/login")
-    public ModelAndView index(@ModelAttribute("registerForm") final UserForm form, Principal principal) {
+    @RequestMapping(value = {"/login","/"})
+    public ModelAndView index(@ModelAttribute("registerForm") final UserForm form, Principal principal,final BindingResult errors) {
         if(principal != null) return new ModelAndView("redirect:/game");
         ModelAndView mav = new ModelAndView("index");
         return mav;

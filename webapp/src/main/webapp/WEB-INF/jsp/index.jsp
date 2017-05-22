@@ -15,7 +15,7 @@
 <%--<input id="usernameInput" type="text" name="username" placeholder="username">--%>
 <c:url value = "/login" var = "loginUrl"/>
     <form class="formu" action = "${loginUrl}" method = "post" enctype = "application/x-www-form-urlencoded">
-        <div class="container">
+        <div class="container" id="inputContainer">
             <div>
                 <label for="usernameInput"><spring:message code="signUp.username"/> :</label>
                 <input id = "usernameInput" name = "j_username" type ="text"/>
@@ -24,6 +24,7 @@
                 <label for ="passwordInput"><spring:message code="signUp.password"/></label>
                 <input id = "passwordInput" name = "j_password" type = "password"/>
             </div>
+            <p id="loginFailLabel" for ="inputContainer" class="formError invisible"><spring:message code="index.loginFail"/></p>
         </div>
         <div>
             <input id="rememberMe" name = "j_rememberme" type = "checkbox"/>
