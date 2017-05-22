@@ -47,3 +47,12 @@ input {
     width: 30%;
     margin: auto;
 }
+
+#loginFailLabel{
+    width: 80%;
+    margin: auto;
+    font-weight: 600;
+    color: #ff2222;
+    margin-top: 0em;
+    max-width: 30em;
+}
