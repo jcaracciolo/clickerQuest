@@ -150,7 +150,11 @@
                 <c:choose>
                     <c:when test="${user.clanIdentifier == null}">
                         <div id="createClan" class="button last">
-                            <a href="#clanModal"><spring:message code='create.clan'/></a>
+                            <ul>
+                                <li>
+                                    <a href="#clanModal"><spring:message code='create.clan'/></a>
+                                </li>
+                            </ul>
                         </div>
                     </c:when>
                     <c:otherwise>
