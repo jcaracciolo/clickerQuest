@@ -85,7 +85,7 @@ public class MainController {
     }
 
     // PROFILE
-    @RequestMapping(value = "/{username}", method = { RequestMethod.GET })
+    @RequestMapping(value = "/u/{username}", method = { RequestMethod.GET })
     public ModelAndView profile(Principal principal, @PathVariable(value="username") String username){
         ModelAndView mav = new ModelAndView("profile");
         User u = userService.findByUsername(username);
@@ -97,6 +97,11 @@ public class MainController {
             return mav;
         }
 
+        Integer clanid = u.getClanIdentifier();
+        if (clanid != null) {
+            mav.addObject("clan", clanService.getClanById(clanid));
+        }
+
         Set<Factory> factories = new TreeSet(userService.getUserFactories(u.getId()));
         Wealth wealth = userService.getUserWealth(u.getId());
         mav.addObject("user", u);
@@ -105,6 +110,11 @@ public class MainController {
         mav.addObject("productions",wealth.getProductions());
         mav.addObject("globalRanking",userService.getGlobalRanking(u.getId()));
         return mav;
+    }
+
+    @RequestMapping(value = "/myProfile", method = { RequestMethod.GET })
+    public ModelAndView myProfile(Principal principal) {
+        return profile(principal, principal.getName());
     }
 
     // CLAN
@@ -179,6 +189,10 @@ public class MainController {
         }
 
         clanService.deleteFromClan(u.getId());
+
+        if (clan.getUsers().isEmpty()) {
+            // TODO: delete clan
+        }
     }
 
     @RequestMapping(value = "/joinClan", method = { RequestMethod.POST })

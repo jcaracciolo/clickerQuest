@@ -69,8 +69,13 @@ img.profile-img {
     margin-right: 1.5rem;
 }
 
-#username {
+#username{
     font-size: 2rem;
+    margin: 0;
+}
+
+#score{
+    font-size: 1.5rem;
     margin: 0;
 }
 

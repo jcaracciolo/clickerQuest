@@ -182,12 +182,12 @@
     <div class="col no-padding s2">
         <div class="scrollable-y card darken-1">
             <div class="card-content white-text">
-                <span class="card-title"><spring:message code="game.profile"/></span>
                 <div class="section">
+                    <a href="<c:url value="/myProfile"/>" class="username" data-userid="${user.id}"><c:out value="${user.username}"/></a>
                     <div class="card-image profile-picture">
                         <img class="profile" src="<c:url value="/resources/profile_images/${user.profileImage}"/>"/>
                     </div>
-                    <p class="username" data-userid="${user.id}"><c:out value="${user.username}"/></p>
+                    <p id="score"><spring:message code="score"/> <fmt:formatNumber pattern="#">${user.score}</fmt:formatNumber></p>
                 </div>
             </div>
             <div class="divider"></div>
