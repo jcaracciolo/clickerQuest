@@ -7,6 +7,7 @@ import ar.edu.itba.paw.model.FactoryType;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.clan.Clan;
 import ar.edu.itba.paw.model.clan.ClanBuilder;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -56,10 +57,7 @@ public class ClanJdbcDao implements ClanDao {
     }
 
     @Override
-    public Clan createClan(String name) {
-        if(name==null) {
-            return null;
-        }
+    public Clan createClan(@NotNull  String name) {
 
         final Map<String, Object> args = new HashMap();
         args.put("name",       name);

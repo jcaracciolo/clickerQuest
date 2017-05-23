@@ -11,9 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -27,6 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Controller
@@ -85,7 +84,7 @@ public class MainController {
     }
 
     // PROFILE
-    @RequestMapping(value = "/{username}", method = { RequestMethod.GET })
+    @RequestMapping(value = "/u/{username}", method = { RequestMethod.GET })
     public ModelAndView profile(Principal principal, @PathVariable(value="username") String username){
         ModelAndView mav = new ModelAndView("profile");
         User u = userService.findByUsername(username);
@@ -97,6 +96,11 @@ public class MainController {
             return mav;
         }
 
+        Integer clanid = u.getClanIdentifier();
+        if (clanid != null) {
+            mav.addObject("clan", clanService.getClanById(clanid));
+        }
+
         Set<Factory> factories = new TreeSet(userService.getUserFactories(u.getId()));
         Wealth wealth = userService.getUserWealth(u.getId());
         mav.addObject("user", u);
@@ -105,6 +109,11 @@ public class MainController {
         mav.addObject("productions",wealth.getProductions());
         mav.addObject("globalRanking",userService.getGlobalRanking(u.getId()));
         return mav;
+    }
+
+    @RequestMapping(value = "/myProfile", method = { RequestMethod.GET })
+    public ModelAndView myProfile(Principal principal) {
+        return profile(principal, principal.getName());
     }
 
     // CLAN
@@ -179,6 +188,10 @@ public class MainController {
         }
 
         clanService.deleteFromClan(u.getId());
+
+        if (clan.getUsers().isEmpty()) {
+            // TODO: delete clan
+        }
     }
 
     @RequestMapping(value = "/joinClan", method = { RequestMethod.POST })
@@ -204,7 +217,25 @@ public class MainController {
         clanService.addUserToClan(clan.getId(), u.getId());
     }
 
-        // GAME
+    // GLOBAL RANKING
+    @RequestMapping(value = "/worldRanking", method = { RequestMethod.GET })
+    public ModelAndView globalRanking(Principal principal){
+        ModelAndView mav = new ModelAndView("globalRanking");
+
+        User u = userService.findByUsername(principal.getName());
+        if(u == null) {
+            mav = new ModelAndView("errorPage");
+            mav.addObject("errorMsg", "404");
+            LOGGER.warn("Not logged in watching global ranking");
+            return mav;
+        }
+        List<User> users = userService.globalUsers(1,10);
+        mav.addObject("user", u);
+        mav.addObject("globalRanking", userService.globalUsers(1,10));
+        return mav;
+    }
+
+    // GAME
     @RequestMapping(value = "/game", method = { RequestMethod.GET })
     public ModelAndView mainGameView( Principal principal){
 //        if(principal == null || principal.getName() == null){
@@ -294,6 +325,18 @@ public class MainController {
         j.put("type", "sellToMarket");
         j.put("resourceId",resourceId);
         j.put("quantity", quantity);
+        return j.toJSONString();
+    }
+
+    // TODO Implement This correctly
+    @RequestMapping(value = "/AllUsers", method = { RequestMethod.GET })
+    @ResponseBody
+    public String AllUsers(Principal principal) {
+
+        JSONObject j = new JSONObject();
+        List<User> users = userService.globalUsers(0,100);
+
+        j.put("users", users.stream().map((u) -> u.getScore()).collect(Collectors.toList()));
         return j.toJSONString();
     }
 

@@ -18,7 +18,9 @@ public class Upgrade {
     }
 
     public static Upgrade getUpgrade(FactoryType type, long level) {
-        if(level<=0) return null;
+        if(level<=0) {
+            throw new IllegalArgumentException("Level must but positive integer greater than 0");
+        }
         return new Upgrade(type, level,"Upgrade n°" + level, 300*level);
     }
 
@@ -48,7 +50,7 @@ public class Upgrade {
         return Math.exp(-0.07 * localLevel);
     }
 
-    public UpgradeType getNextUpgradeType(){
+    public UpgradeType getType(){
         if(factoryType.getBaseRecipe().getInputs().isEmpty()){
             if(level%2 == 0 && level <= MAX_UPGRADE_LEVEL * 2) {
                 return UpgradeType.COST_REDUCTION;

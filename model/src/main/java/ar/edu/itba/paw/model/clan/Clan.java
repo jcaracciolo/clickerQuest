@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.model.clan;
 
 import ar.edu.itba.paw.model.User;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -10,7 +11,7 @@ import java.util.stream.Stream;
  * Created by juanfra on 17/05/17.
  */
 public class Clan implements Iterable<User> {
-    private final Set<User> users = new TreeSet<User>((u1,u2) ->  u1.getScore()>u2.getScore()?1:-1 );
+    private final Set<User> users = new TreeSet<User>((u1,u2) ->  u1.getScore()<u2.getScore()?1:-1 );
 
     private final int id;
     private final String name;
@@ -23,7 +24,7 @@ public class Clan implements Iterable<User> {
         return users.add(u);
     }
 
-    Clan(Collection<User> users,int id,String name) {
+    Clan(@NotNull Collection<User> users, int id,@NotNull String name) {
         this.name = name;
         this.id = id;
         this.users.addAll(users);

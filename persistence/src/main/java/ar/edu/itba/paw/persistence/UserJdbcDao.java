@@ -5,6 +5,7 @@ import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.model.packages.Implementations.Productions;
 import ar.edu.itba.paw.model.packages.Implementations.Storage;
 import ar.edu.itba.paw.model.packages.PackageBuilder;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -158,15 +159,16 @@ public class UserJdbcDao implements UserDao {
     public Wealth create(Wealth wealth) {
         Storage s = wealth.getStorage();
         Productions p = wealth.getProductions();
-        for(ResourceType r: ResourceType.values()) {
-            RowWealth rw = new RowWealth(wealth.getUserid(),
-                    r,
-                    p.getValue(r),
-                    s.getValue(r),
-                    s.getLastUpdated(r).getTimeInMillis()
-            );
-            jdbcInsertWealths.execute(WEALTH_REVERSE_ROW_MAPPER.toArgs(rw));
-        }
+        wealth.getStorage().getResources().forEach( (r) -> {
+                    RowWealth rw = new RowWealth(wealth.getUserid(),
+                            r,
+                            p.getValue(r),
+                            s.getValue(r),
+                            s.getLastUpdated(r).getTimeInMillis()
+                    );
+                    jdbcInsertWealths.execute(WEALTH_REVERSE_ROW_MAPPER.toArgs(rw));
+                }
+        );
 
         return wealth;
     }
@@ -302,6 +304,10 @@ public class UserJdbcDao implements UserDao {
 
     public Wealth getUserWealth(long userid) {
         final List<RowWealth> list = jdbcTemplate.query("SELECT * FROM wealths WHERE userid = ?", WEALTH_ROW_MAPPER, userid);
+        if(list.isEmpty()) {
+            return null;
+        }
+
         PackageBuilder<Storage> storage = Storage.packageBuilder();
         PackageBuilder<Productions> productions = Productions.packageBuilder();
         for (RowWealth rw: list) {
@@ -348,5 +354,29 @@ public class UserJdbcDao implements UserDao {
         }
 
         return values.get(0);
+    }
+
+    @Override
+    public List<User> globalUsers(int pag, int userPerPage) {
+
+        if(pag<=0 || userPerPage<=0) {
+            throw new IllegalArgumentException("Page and maxPage must be an positive integer");
+        }
+
+        int min = (pag -1) * userPerPage + 1;
+        int max = pag * userPerPage;
+
+
+        List<User> users = jdbcTemplate.query(
+                "SELECT * FROM ( SELECT ROW_NUMBER() OVER(ORDER BY score DESC),* FROM users) as u" +
+                        " WHERE row_number BETWEEN ? AND ?",
+                USER_ROW_MAPPER,
+                min,max);
+
+        if(users.isEmpty()) {
+            return Collections.EMPTY_LIST;
+        } else {
+            return users;
+        }
     }
 }

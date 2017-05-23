@@ -91,21 +91,6 @@ div.factory-card-container {
 	position: relative;
 }
 
-#clanModal {
-	top: 64px !important; /* height of navbar */
-	min-height: 12rem;
-    margin-right: 0;
-    margin-left: auto;
-	width: 20rem;
-	background-color: #3f51b5;
-	color: white;
-}
-
-#clanNameInput {
-	background-color: white;
-	color: black;
-}
-
 .preloader-wrapper{
 	position: absolute!important;
 	left: 0;
@@ -197,20 +182,32 @@ div.buyFactorySection:hover {
 	margin: 0;
 }
 
+#score {
+    font-size: 1.5rem;
+}
+
 p {
-	font-size: 1rem
+	font-size: 1rem;
 }
 
 p.centered-text {
 	text-align: center;
 }
 
-p.username {
-	font-size: 1.2rem;
+a.username {
+	font-size: 1.7rem;
+	color: white;
+}
+
+a.username:hover {
+	color: black;
 }
 
 div.section {
 	padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 div.divider {
@@ -239,13 +236,43 @@ div.no-padding {
 }
 
 button.OUTPUT_INCREASE{
-	background-color: blue;
+	background-color: orange;
+    color: black;
+    min-width: 5.5rem;
 }
 
 button.INPUT_REDUCTION{
-	background-color: yellow;
+	background-color: gold;
+    color: black;
+	min-width: 5.5rem;
 }
 
 button.COST_REDUCTION{
-	background-color: green;
+	background-color: limegreen;
+    color: black;
+    min-width: 5.5rem;
+}
+
+img.upgradeImage {
+	padding: 0.1rem;
+}
+
+#createClanSend {
+    width: 6rem;
+    height: auto;
+    display: flex;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+#createClanSend:hover {
+    cursor: pointer;
+}
+
+input.inputerror {
+    border-bottom: 1px solid red !important;
+}
+
+input.inputClan.inputerror {
+    border-bottom: 4px solid red !important;
 }

@@ -10,6 +10,7 @@ import ar.edu.itba.paw.model.packages.PackageBuilder;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,8 +65,6 @@ public class UserServiceImpl implements UserService {
     @Transactional(propagation = Propagation.NESTED)
     @Override
     public Wealth getUserWealth(long userid) {
-
-        Wealth wealth = null;
 
         try {
             return wealthCache.get(userid, () -> {
@@ -139,7 +138,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(propagation = Propagation.NESTED)
-    public boolean purchaseFactory(long userid, FactoryType type) {
+    public boolean purchaseFactory(long userid,@NotNull FactoryType type) {
         Wealth w = getUserWealth(userid);
         Optional<Factory> maybeFactory = userDao.getUserFactories(userid).stream()
                 .filter( (f) -> f.getType() == type).findAny();
@@ -310,5 +309,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public int getGlobalRanking(long userId) {
         return userDao.getGlobalRanking(userId);
+    }
+
+    @Override
+    public List<User> globalUsers(int pag, int userPerPage) {
+        List<User> users = userDao.globalUsers(pag,userPerPage);
+        users.sort((u1,u2)->u1.getScore()<u2.getScore()?1:-1);
+        return Collections.unmodifiableList(users);
     }
 }

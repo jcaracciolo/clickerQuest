@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.model.clan;
 
 import ar.edu.itba.paw.model.User;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
 import java.util.Set;
@@ -16,10 +17,7 @@ public class ClanBuilder implements Iterable<User> {
     private int id;
     private String name;
 
-    public static ClanBuilder construct(int id,String name) {
-        if (name==null) {
-            return null;
-        }
+    public static ClanBuilder construct(int id,@NotNull String name) {
         return new ClanBuilder(id,name);
     }
 
