@@ -78,7 +78,7 @@
         <c:forEach items="${clan.users}" var="u">
             <div class="table-row">
                 <p><c:out value="${pos}"></c:out></p>
-                <p>${u.username}</p>
+                <p class="username-link" data-username="${u.username}">${u.username}</p>
                 <p><fmt:formatNumber pattern="#" value="${u.score}"/></p>
                 <c:set var="pos" value="${pos + 1}"/>
             </div>

@@ -5,9 +5,11 @@
 
 <html>
 <head>
-    <title><spring:message code="game.title"/> - ${clan.name}</title>
+    <title><spring:message code="game.title"/> - <spring:message code="globalRanking.title"/></title>
     <!--Import css-->
     <link type="text/css" rel="stylesheet" href="<c:url value="/resources/css/common.css"/>"
+          media="screen,projection"/>
+    <link type="text/css" rel="stylesheet" href="<c:url value="/resources/css/clan.css"/>"
           media="screen,projection"/>
     <link type="text/css" rel="stylesheet" href="<c:url value="/resources/css/materialize.min.css"/>"
           media="screen,projection"/>
@@ -80,7 +82,7 @@
             <div><spring:message code="ranking.score"/></div>
         </div>
         <c:set var="pos" value="1"/>
-        <c:forEach items="${ranking.users}" var="u">
+        <c:forEach items="${globalRanking}" var="u">
             <div class="table-row">
                 <p><c:out value="${pos}"></c:out></p>
                 <p>${u.username}</p>
