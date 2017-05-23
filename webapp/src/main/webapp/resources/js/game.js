@@ -4,6 +4,7 @@
 
 var url=window.location.href.split("/")
 var userId =url[url.length - 2];
+var selectedBar =null;
 
 sessionStorage.removeItem("user");
 
@@ -11,8 +12,19 @@ $(document).ready(function(){
     $('.modal').modal();
     $('select').material_select();
 });
+window.onkeyup = function(e) {
+    var key = e.keyCode ? e.keyCode : e.which;
 
-// var URLevent = window.location.href.split("#").pop();
+    if (key == 13) {
+
+        if($( "#clanNameInput" ).is(":focus")){
+            createClan();
+        } else if($( "#search" ).is(":focus")){
+            searchCommunity();
+        }
+    }
+};
+
 var toPrint = window.sessionStorage.getItem("message");
 
 if(toPrint != null){
@@ -33,6 +45,10 @@ function refreshValues(update){
 
 function dec(mesageCode, arg0, arg1, arg2) {
     var st = messages[mesageCode];
+    if(st == null) {
+        console.log(mesageCode + ":no message");
+        return;
+    }
     st = st.replace("{0}",arg0);
     st = st.replace("{1}",arg1);
     st = st.replace("{2}",arg2);
@@ -134,7 +150,6 @@ function refreshFactoriesBuyability() {
         }
     }
 }
-
 setInterval(function(){
     refreshValues(true);
     refreshView();
@@ -142,8 +157,19 @@ setInterval(function(){
     refreshUpgradesBuyability();
 }, 1000);
 
+
+var searchCommunity = function () {
 // Create clan listener
-document.getElementById("createClanSend").addEventListener("click", function () {
+    var clanName = document.getElementById("search").value;
+    console.log("Searching clan: " + clanName);
+    $.post(contextPath + "/search",
+        {
+            searchTerm: clanName
+        }, function(data) {
+
+        });
+}
+var createClan = function () {
     var clanName = document.getElementById("clanNameInput").value;
     console.log("Creating clan: " + clanName);
     $.post(contextPath + "/createClan",
@@ -152,7 +178,8 @@ document.getElementById("createClanSend").addEventListener("click", function () 
         }, function(data) {
             window.location.replace(contextPath + "/clan/" + clanName);
         });
-});
+};
+document.getElementById("createClanSend").addEventListener("click", createClan);
 
 // Buy listener
 $.each($(".buyFactory"),function (i,element){
@@ -274,7 +301,7 @@ $(function() {
                 required: dec("game.market.selectResource")
             },
             quantity: {
-                required: dec("game.market.selectQuantity"),
+                required: dec("game.market.quantity"),
                 digits: dec("game.market.illegalCaracter")
             },
             unit:{
