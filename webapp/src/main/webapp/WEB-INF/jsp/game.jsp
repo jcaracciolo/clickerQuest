@@ -49,7 +49,8 @@
     <div class="modal-content">
         <spring:message code="game.createClan.selectName"/><br>
         <input class="inputClan" type="text" name="clanName" id="clanNameInput">
-        <img id="createClanSend" src="<c:url value="/resources/buttons/create.png"/>"/>
+        <spring:message code="buttonFolder" var="buttonLocale"/>
+        <img id="createClanSend" src="<c:url value="/resources/${buttonLocale}/create.png"/>"/>
     </div>
 </div>
 <!-- Market Modal -->
@@ -65,7 +66,7 @@
                         <option value="" disabled selected><spring:message code="game.market.selectResource"/></option>
                         <c:forEach items="${storage.resources}" var="resource">
                             <c:if test="${resource != 'MONEY'}">
-                                <option value="<c:out value='${resource.id}'/>"><spring:message code="${resource.nameCode}"/><fmt:formatNumber pattern=" ($#)">${resource.price}</fmt:formatNumber></option>
+                                <option value="<c:out value='${resource.id}'/>"><spring:message code="${resource.nameCode}"/><fmt:formatNumber pattern=" ($#.##)">${resource.price}</fmt:formatNumber></option>
                             </c:if>
                         </c:forEach>
                     </select>
@@ -105,7 +106,7 @@
                     </select>
                 </div>
                 <div class="col s2">
-                    <input type="text" name="quantity" id="market.sell.quantity" placeholder="Quantity">
+                    <input type="text" name="quantity" id="market.sell.quantity" placeholder="<spring:message code="game.market.quantity"/>">
                 </div>
                 <div id="market-sell-unit-wrapper" class="col s3 dropdown-wrapper">
                     <select name="unit" id="market.sell.unit">
@@ -150,7 +151,7 @@
                 <div id="globalRanking" class="button last">
                     <ul>
                         <li>
-                            <a href="<c:url value='/worldRanking'/>"><spring:message code='game.seeGlobalRanking'/></a>
+                            <a href="<c:url value='/worldRanking/1'/>"><spring:message code='game.seeGlobalRanking'/></a>
                         </li>
                     </ul>
                 </div>
