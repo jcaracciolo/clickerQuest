@@ -184,7 +184,7 @@ public class UserServiceImpl implements UserService {
 
     private Factory create(FactoryType factoryType, long userId){
         final Factory f = factoryType.defaultFactory(userId);
-        userDao.create(f,userId);
+        userDao.create(f);
         return f;
     }
 

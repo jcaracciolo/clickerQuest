@@ -5,6 +5,7 @@ import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.model.packages.Implementations.Productions;
 import ar.edu.itba.paw.model.packages.Implementations.Storage;
 import ar.edu.itba.paw.model.packages.PackageBuilder;
+import ar.edu.itba.paw.model.packages.Paginating;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -107,8 +108,8 @@ class MockUserDao implements UserDao {
     }
 
     @Override
-    public Factory create(Factory factory, long userId) {
-        MockUserDaoData d = getUserMockData(userId);
+    public Factory create(Factory factory) {
+        MockUserDaoData d = getUserMockData(factory.getUserid());
         if(d==null) return null;
         if(d.factories==null) {
             d.factories=new ArrayList<>();
@@ -236,8 +237,9 @@ class MockUserDao implements UserDao {
     }
 
     @Override
-    public List<User> globalUsers(int pag, int userPerPage) {
-        return tables.stream().map((d) -> d.user)
-                .collect(Collectors.toList());
+    public Paginating<User> globalUsers(int pag, int userPerPage) {
+        return new Paginating<>(pag,userPerPage,counter,
+                (int)Math.ceil(counter/(double)userPerPage),
+                tables.stream().map((d) -> d.user).collect(Collectors.toList()));
     }
 }
