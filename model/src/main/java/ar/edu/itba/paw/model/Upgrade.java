@@ -18,7 +18,9 @@ public class Upgrade {
     }
 
     public static Upgrade getUpgrade(FactoryType type, long level) {
-        if(level<=0) return null;
+        if(level<=0) {
+            throw new IllegalArgumentException("Level must but positive integer greater than 0");
+        }
         return new Upgrade(type, level,"Upgrade n°" + level, 300*level);
     }
 

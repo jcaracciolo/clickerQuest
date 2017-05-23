@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.model.clan;
 
 import ar.edu.itba.paw.model.User;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -23,7 +24,7 @@ public class Clan implements Iterable<User> {
         return users.add(u);
     }
 
-    Clan(Collection<User> users,int id,String name) {
+    Clan(@NotNull Collection<User> users, int id,@NotNull String name) {
         this.name = name;
         this.id = id;
         this.users.addAll(users);

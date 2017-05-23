@@ -35,10 +35,11 @@ public class Wealth {
         return productions;
     }
 
-    public Wealth purchaseResult(Factory f) {
-        if (f == null || !f.isBuyable(this)) {
+    public Wealth purchaseResult(@NotNull  Factory f) {
+        if (!f.isBuyable(this)) {
             return null;
         }
+
         Storage calculatedStorage = getStorage();
         Recipe recipe = f.getRecipe();
         FactoryCost cost = f.getCost();
@@ -62,10 +63,8 @@ public class Wealth {
         return new Wealth(userid,storageBuilder.buildPackage(),productionsBuilder.buildPackage());
     }
 
-    public Wealth upgradeResult(Factory f) {
-        if(f == null ){
-            return null;
-        }
+    public Wealth upgradeResult(@NotNull Factory f) {
+
         if(!f.isUpgreadable(this)) {
             return null;
         }
@@ -107,10 +106,7 @@ public class Wealth {
         return new Wealth(userid,storageBuilder.buildPackage(),productionsBuilder.buildPackage());
     }
 
-    public Wealth calculateProductions(Collection<Factory> factories) {
-        if(factories == null ){
-            return null;
-        }
+    public Wealth calculateProductions(@NotNull  Collection<Factory> factories) {
         PackageBuilder<Productions> productionsBuilder = Productions.packageBuilder();
         Arrays.stream(ResourceType.values()).forEach((r) -> productionsBuilder.putItem(r,0D));
         factories.stream()
