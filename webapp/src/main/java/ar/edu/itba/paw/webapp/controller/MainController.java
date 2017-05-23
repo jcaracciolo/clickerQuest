@@ -217,7 +217,25 @@ public class MainController {
         clanService.addUserToClan(clan.getId(), u.getId());
     }
 
-        // GAME
+    // GLOBAL RANKING
+    @RequestMapping(value = "/worldRanking", method = { RequestMethod.GET })
+    public ModelAndView globalRanking(Principal principal){
+        ModelAndView mav = new ModelAndView("globalRanking");
+
+        User u = userService.findByUsername(principal.getName());
+        if(u == null) {
+            mav = new ModelAndView("errorPage");
+            mav.addObject("errorMsg", "404");
+            LOGGER.warn("Not logged in watching global ranking");
+            return mav;
+        }
+        List<User> users = userService.globalUsers(1,10);
+        mav.addObject("user", u);
+        mav.addObject("globalRanking", userService.globalUsers(1,10));
+        return mav;
+    }
+
+    // GAME
     @RequestMapping(value = "/game", method = { RequestMethod.GET })
     public ModelAndView mainGameView( Principal principal){
 //        if(principal == null || principal.getName() == null){

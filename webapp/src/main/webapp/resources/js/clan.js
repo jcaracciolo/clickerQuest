@@ -19,3 +19,12 @@ document.getElementById("clan-action").addEventListener("click", function () {
             break;
     }
 });
+
+var users = document.getElementsByClassName("username-link");
+for(var i = 0; i<users.length; i++) {
+    var user = users.item(i)
+    user.addEventListener("click", function () {
+        console.log(contextPath + "/u/" + user.dataset.username);
+        window.location.replace(contextPath + "/u/" + user.dataset.username)
+    })
+}

@@ -167,6 +167,13 @@
                         </div>
                     </c:otherwise>
                 </c:choose>
+                <div id="globalRanking" class="button">
+                    <ul>
+                        <li>
+                            <a href="<c:url value='/worldRanking'/>"><spring:message code='game.seeGlobalRanking'/></a>
+                        </li>
+                    </ul>
+                </div>
                 <div id="logout">
                     <ul id="nav-mobile">
                         <li><a href="<c:url value='/logout'/>"><spring:message code='logout'/> </a></li>

@@ -9,8 +9,6 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <link type="text/css" rel="stylesheet" href="<c:url value="/resources/css/errorPage.css"/>"/>
     <!--Import css-->
-    <link type="text/css" rel="stylesheet" href="<c:url value="/resources/css/main_screen.css"/>"
-          media="screen,projection"/>
     <link type="text/css" rel="stylesheet" href="<c:url value="/resources/css/materialize.min.css"/>"
           media="screen,projection"/>
 
