@@ -18,6 +18,7 @@ import java.util.Map;
 @Repository
 public class MarketJdbcDao implements MarketDao {
 
+    private static final long refreshTime = 2*60*1000;
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert jdbcInsertStockMakert;
 
@@ -62,16 +63,15 @@ public class MarketJdbcDao implements MarketDao {
 
             StockMarketEntry update = new StockMarketEntry(
                     last.getResourceType(),
-                    last.getAmount() + stockMarketEntry.getAmount()>0? 1 : -1
+                    last.getAmount() + (stockMarketEntry.getAmount()>0? 1 : -1)
                     );
 
             if(entryList.size() == 0) {
                 jdbcInsertStockMakert.execute(MARKET_REVERSE_STOCK_ROW_MAPPER.toArgs(update));
             } else {
-                jdbcTemplate.query(
-                        "UPDATE stockMarket SET amount = ?" +
-                                " where resourceType = ?",
-                        MARKET_STOCK_ROW_MAPPER,
+                jdbcTemplate.update(
+                        "UPDATE stockMarket SET amount = ? " +
+                                " where resourcetype = ?;",
                         update.getAmount(),
                         update.getResourceType().getId());
             }
@@ -82,7 +82,7 @@ public class MarketJdbcDao implements MarketDao {
         return true;
     }
 
-    @Scheduled(fixedDelay=100000)
+    @Scheduled(fixedDelay=refreshTime)
     public void updatePrices(){
         List<StockMarketEntry> entries = jdbcTemplate.query("SELECT * FROM stockMarket",MARKET_STOCK_ROW_MAPPER);
         Double total = entries.stream().map(StockMarketEntry::getAmount).reduce((d1,d2)-> d1+d2).orElse(null);
@@ -96,14 +96,19 @@ public class MarketJdbcDao implements MarketDao {
     }
 
     public double popularityCalculator(double puchases, double totalAmount, double totalSum) {
-        return popularityExponential(puchases * totalAmount / totalSum);
+        double pop =  popularityExponential(puchases * totalAmount / totalSum);
+        return pop;
     }
 
     private double popularityExponential(double x) {
         double slope = 0.5;
         double max = 3D;
 
-        return ( (1+1/max) - Math.exp(-(x-1) * slope) ) * max;
+        if(x>=1) {
+            return ( (1+1/max) - Math.exp(-(x-1) * slope) ) * max;
+        } else {
+            return Math.exp((x-1) * slope);
+        }
     }
 
 }
