@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.model.packages;
 
 import ar.edu.itba.paw.model.ResourceType;
+import ar.edu.itba.paw.model.packages.Implementations.Storage;
 
 import java.util.Calendar;
 import java.util.HashMap;
@@ -51,16 +52,17 @@ public class PackageBuilder<T extends ResourcePackage> {
     }
 
     public PackageBuilder<T> putItems(ResourcePackage resources) {
-        for(ResourceType res: resources.resources.keySet()){
-            putItem(res,resources.getValue(res));
-        }
+        resources.rawMap().forEach(this::putItem);
+        return this;
+    }
+
+    public PackageBuilder<T> setDates(Storage storage) {
+        storage.getLastUpdated().forEach(this::setLastUpdated);
         return this;
     }
 
     public PackageBuilder<T> addItems(ResourcePackage resources) {
-        for(ResourceType res: resources.resources.keySet()){
-            addItem(res,resources.getValue(res));
-        }
+        resources.rawMap().forEach(this::addItem);
         return this;
     }
 

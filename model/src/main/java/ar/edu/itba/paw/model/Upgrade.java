@@ -50,7 +50,7 @@ public class Upgrade {
         return Math.exp(-0.07 * localLevel);
     }
 
-    public UpgradeType getNextUpgradeType(){
+    public UpgradeType getType(){
         if(factoryType.getBaseRecipe().getInputs().isEmpty()){
             if(level%2 == 0 && level <= MAX_UPGRADE_LEVEL * 2) {
                 return UpgradeType.COST_REDUCTION;

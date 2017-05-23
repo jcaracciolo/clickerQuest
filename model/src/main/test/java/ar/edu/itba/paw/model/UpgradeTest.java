@@ -1,12 +1,6 @@
 package ar.edu.itba.paw.model;
 
-import ar.edu.itba.paw.model.FactoryType;
-import ar.edu.itba.paw.model.ResourceType;
-import ar.edu.itba.paw.model.Upgrade;
 import org.junit.Test;
-
-import java.util.HashSet;
-import java.util.Set;
 
 import static org.junit.Assert.assertTrue;
 
@@ -20,7 +14,7 @@ public class UpgradeTest {
         Upgrade upgrade;
         for (int i = 1; i < 35; i++) {
             upgrade = Upgrade.getUpgrade(FactoryType.STOCK_INVESTMENT_BASE,i);
-            System.out.println("level " + i + " " +upgrade.getNextUpgradeType());
+            System.out.println("level " + i + " " +upgrade.getType());
         }
     }
     @Test
@@ -28,7 +22,7 @@ public class UpgradeTest {
         Upgrade upgrade;
         for (int i = 1; i < 35; i++) {
             upgrade = Upgrade.getUpgrade(FactoryType.CIRCUIT_MAKER_BASE,i);
-            System.out.println("level " + i + " " +upgrade.getNextUpgradeType());
+            System.out.println("level " + i + " " +upgrade.getType());
         }
     }
 
