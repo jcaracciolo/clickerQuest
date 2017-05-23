@@ -6,6 +6,7 @@ import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.Wealth;
 import ar.edu.itba.paw.model.packages.Implementations.Productions;
 import ar.edu.itba.paw.model.packages.Implementations.Storage;
+import ar.edu.itba.paw.model.packages.Paginating;
 
 import java.util.Collection;
 import java.util.List;
@@ -39,6 +40,6 @@ public interface UserDao {
     Wealth getUserWealth(long userid);
     Wealth update(Wealth w);
 
-    List<User> globalUsers(int pag, int userPerPage);
+    Paginating<User> globalUsers(int pag, int userPerPage);
 
 }

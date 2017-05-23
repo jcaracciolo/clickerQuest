@@ -5,6 +5,7 @@ import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.model.packages.Implementations.Productions;
 import ar.edu.itba.paw.model.packages.Implementations.Storage;
 import ar.edu.itba.paw.model.packages.PackageBuilder;
+import ar.edu.itba.paw.model.packages.Paginating;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -357,15 +358,14 @@ public class UserJdbcDao implements UserDao {
     }
 
     @Override
-    public List<User> globalUsers(int pag, int userPerPage) {
+    public Paginating<User> globalUsers(int page, int userPerPage) {
 
-        if(pag<=0 || userPerPage<=0) {
+        if(page<=0 || userPerPage<=0) {
             throw new IllegalArgumentException("Page and maxPage must be an positive integer");
         }
 
-        int min = (pag -1) * userPerPage + 1;
-        int max = pag * userPerPage;
-
+        int min = (page -1) * userPerPage + 1;
+        int max = page * userPerPage;
 
         List<User> users = jdbcTemplate.query(
                 "SELECT * FROM ( SELECT ROW_NUMBER() OVER(ORDER BY score DESC),* FROM users) as u" +
@@ -373,10 +373,14 @@ public class UserJdbcDao implements UserDao {
                 USER_ROW_MAPPER,
                 min,max);
 
+        List<Integer> amount = jdbcTemplate.query("SELECT COUNT(*) FROM USERS",(rs, rowNum) -> rs.getInt("count"));
+
         if(users.isEmpty()) {
-            return Collections.EMPTY_LIST;
+            return null;
         } else {
-            return users;
+            int totalUsers = amount.get(0);
+            int totalPages = (int)Math.ceil(totalUsers/((double)userPerPage));
+            return new Paginating<>(page,userPerPage,amount.get(0),totalPages,users);
         }
     }
 }

@@ -7,6 +7,7 @@ import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.model.packages.Implementations.Productions;
 import ar.edu.itba.paw.model.packages.Implementations.Storage;
 import ar.edu.itba.paw.model.packages.PackageBuilder;
+import ar.edu.itba.paw.model.packages.Paginating;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
@@ -312,9 +313,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> globalUsers(int pag, int userPerPage) {
-        List<User> users = userDao.globalUsers(pag,userPerPage);
+    public Paginating<User> globalUsers(int pag, int userPerPage) {
+        Paginating<User> users = userDao.globalUsers(pag,userPerPage);
         users.sort((u1,u2)->u1.getScore()<u2.getScore()?1:-1);
-        return Collections.unmodifiableList(users);
+        return users;
     }
 }
