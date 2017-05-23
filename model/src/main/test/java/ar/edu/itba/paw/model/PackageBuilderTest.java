@@ -54,6 +54,8 @@ public class PackageBuilderTest {
                 () -> pb.addItem(people,-10D)
         );
         pb.addItem(people,3D);
+        assertEquals(pb.getResources().get(people),8D,0D);
+
     }
 
     @Test

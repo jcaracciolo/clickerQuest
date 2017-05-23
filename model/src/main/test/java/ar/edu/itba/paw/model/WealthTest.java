@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static ar.edu.itba.paw.model.MyAssert.assertThrows;
 import static junit.framework.TestCase.assertNotNull;
 import static org.junit.Assert.*;
 
@@ -67,6 +68,47 @@ public class WealthTest {
         assertEquals(updatedP.getResources(),productions.getResources());
         updatedP.rawMap().forEach(
                 (r,d) -> assertEquals(d,0D,delta)
+        );
+
+    }
+
+    @Test
+    public void testMoreProductionThanStorage() {
+        PackageBuilder<Storage> sb = Storage.packageBuilder();
+        PackageBuilder<Productions> pb = Productions.packageBuilder();
+        sb.putItemWithDate(ResourceType.PEOPLE,1D,Calendar.getInstance());
+        pb.putItem(ResourceType.PEOPLE,1D);
+        pb.putItem(ResourceType.MONEY,1D);
+
+        assertThrows(IllegalArgumentException.class,
+                () -> new Wealth(1,sb.buildPackage(),pb.buildPackage())
+                );
+
+    }
+
+    @Test
+    public void testMoreStorageThanProductions() {
+        PackageBuilder<Storage> sb = Storage.packageBuilder();
+        PackageBuilder<Productions> pb = Productions.packageBuilder();
+        sb.putItemWithDate(ResourceType.PEOPLE,1D,Calendar.getInstance());
+        sb.putItemWithDate(ResourceType.MONEY,1D,Calendar.getInstance());
+        pb.putItem(ResourceType.MONEY,1D);
+
+        assertThrows(IllegalArgumentException.class,
+                () -> new Wealth(1,sb.buildPackage(),pb.buildPackage())
+        );
+
+    }
+
+    @Test
+    public void testDifferentProductionsAndStorage() {
+        PackageBuilder<Storage> sb = Storage.packageBuilder();
+        PackageBuilder<Productions> pb = Productions.packageBuilder();
+        sb.putItemWithDate(ResourceType.PEOPLE,1D,Calendar.getInstance());
+        pb.putItem(ResourceType.MONEY,1D);
+
+        assertThrows(IllegalArgumentException.class,
+                () -> new Wealth(1,sb.buildPackage(),pb.buildPackage())
         );
 
     }

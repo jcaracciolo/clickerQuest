@@ -88,7 +88,4 @@ public class UpgradeTest {
         assertEquals(first.getType(),second.getType());
 
     }
-
-
-
 }

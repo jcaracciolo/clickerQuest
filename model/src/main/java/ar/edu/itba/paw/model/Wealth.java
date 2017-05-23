@@ -18,6 +18,9 @@ public class Wealth {
     private final Productions productions;
 
     public Wealth(long userid, @NotNull  Storage storage, @NotNull Productions productions) {
+        if ( !storage.getResources().equals(productions.getResources()) ) {
+            throw new IllegalArgumentException("Storage and Productions must have same resources");
+        }
         this.userid = userid;
         this.storage = storage;
         this.productions = productions;

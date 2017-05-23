@@ -159,15 +159,16 @@ public class UserJdbcDao implements UserDao {
     public Wealth create(Wealth wealth) {
         Storage s = wealth.getStorage();
         Productions p = wealth.getProductions();
-        for(ResourceType r: ResourceType.values()) {
-            RowWealth rw = new RowWealth(wealth.getUserid(),
-                    r,
-                    p.getValue(r),
-                    s.getValue(r),
-                    s.getLastUpdated(r).getTimeInMillis()
-            );
-            jdbcInsertWealths.execute(WEALTH_REVERSE_ROW_MAPPER.toArgs(rw));
-        }
+        wealth.getStorage().getResources().forEach( (r) -> {
+                    RowWealth rw = new RowWealth(wealth.getUserid(),
+                            r,
+                            p.getValue(r),
+                            s.getValue(r),
+                            s.getLastUpdated(r).getTimeInMillis()
+                    );
+                    jdbcInsertWealths.execute(WEALTH_REVERSE_ROW_MAPPER.toArgs(rw));
+                }
+        );
 
         return wealth;
     }
@@ -303,6 +304,10 @@ public class UserJdbcDao implements UserDao {
 
     public Wealth getUserWealth(long userid) {
         final List<RowWealth> list = jdbcTemplate.query("SELECT * FROM wealths WHERE userid = ?", WEALTH_ROW_MAPPER, userid);
+        if(list.isEmpty()) {
+            return null;
+        }
+
         PackageBuilder<Storage> storage = Storage.packageBuilder();
         PackageBuilder<Productions> productions = Productions.packageBuilder();
         for (RowWealth rw: list) {
