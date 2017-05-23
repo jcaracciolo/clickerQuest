@@ -272,3 +272,7 @@ img.upgradeImage {
 input.inputerror {
     border-bottom: 1px solid red !important;
 }
+
+input.inputClan.inputerror {
+    border-bottom: 4px solid red !important;
+}

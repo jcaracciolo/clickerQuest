@@ -41,7 +41,14 @@
                         </div>
                     </form>
                 </div>
-                <div class="button last">
+                <div id="globalRanking" class="button last">
+                    <ul>
+                        <li>
+                            <a href="<c:url value='/worldRanking'/>"><spring:message code='game.seeGlobalRanking'/></a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="button">
                     <ul>
                         <li>
                             <c:set var="userid" value="${user.id}"/>

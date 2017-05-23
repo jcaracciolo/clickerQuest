@@ -145,7 +145,13 @@ setInterval(function(){
 // Create clan listener
 document.getElementById("createClanSend").addEventListener("click", function () {
     var clanName = document.getElementById("clanNameInput").value;
-    console.log("Creating clan: " + clanName);
+    var ret;
+    if (!clanName.match("^[a-zA-Z\+\-\.\_\*]+$")) {
+        ret = true;
+        document.getElementById("clanNameInput").classList.add("inputerror")
+    } else {document.getElementById("clanNameInput").classList.remove("inputerror")}
+    if (ret) {return;}
+
     $.post(contextPath + "/createClan",
         {
             clanName: clanName

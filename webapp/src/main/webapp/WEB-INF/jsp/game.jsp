@@ -48,7 +48,7 @@
 <div id="clanModal" class="modal">
     <div class="modal-content">
         <spring:message code="game.createClan.selectName"/><br>
-        <input type="text" name="clanName" id="clanNameInput">
+        <input class="inputClan" type="text" name="clanName" id="clanNameInput">
         <img id="createClanSend" src="<c:url value="/resources/buttons/create.png"/>"/>
     </div>
 </div>
