@@ -25,7 +25,7 @@ public interface UserDao {
      * @return The created user.
      */
     User create(String username, String Password, String profileImage);
-    Factory create(Factory factory, long userId);
+    Factory create(Factory factory);
     Wealth create(Wealth wealth);
 
     String getProfileImage(long userid);

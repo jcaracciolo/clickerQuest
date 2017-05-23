@@ -120,7 +120,7 @@ public class Factory implements Comparable<Factory> {
         if (o == null || getClass() != o.getClass()) return false;
 
         Factory factory = (Factory) o;
-        return userid != factory.userid && type == factory.type;
+        return userid == factory.userid && type == factory.type;
 
     }
 

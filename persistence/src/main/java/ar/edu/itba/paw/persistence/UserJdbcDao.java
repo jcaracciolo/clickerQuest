@@ -160,7 +160,7 @@ public class UserJdbcDao implements UserDao {
     public Wealth create(Wealth wealth) {
         Storage s = wealth.getStorage();
         Productions p = wealth.getProductions();
-        wealth.getStorage().getResources().forEach( (r) -> {
+        wealth.getProductions().getResources().forEach( (r) -> {
                     RowWealth rw = new RowWealth(wealth.getUserid(),
                             r,
                             p.getValue(r),
@@ -233,7 +233,7 @@ public class UserJdbcDao implements UserDao {
     public Wealth update(Wealth w) {
         Storage s = w.getStorage();
         Productions p = w.getProductions();
-        for(ResourceType r: ResourceType.values()) {
+        for(ResourceType r: w.getProductions().getResources()) {
             int rows = jdbcTemplate.update(
                     "UPDATE wealths SET " +
                             "production = ?," +
@@ -325,7 +325,7 @@ public class UserJdbcDao implements UserDao {
         return cal;
     }
 
-    public Factory create(Factory factory, long userId){
+    public Factory create(Factory factory){
         try {
             jdbcInsertFactories.execute(FACTORY_REVERSE_ROW_MAPPER.toArgs(factory));
         }catch (Exception e){

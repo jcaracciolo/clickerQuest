@@ -4,6 +4,7 @@ import ar.edu.itba.paw.interfaces.ClanService;
 import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.model.clan.Clan;
+import ar.edu.itba.paw.model.packages.Paginating;
 import ar.edu.itba.paw.webapp.config.ExposedResourceBundleMessageSource;
 import ar.edu.itba.paw.webapp.form.UserForm;
 import org.json.simple.JSONObject;
@@ -229,7 +230,7 @@ public class MainController {
             LOGGER.warn("Not logged in watching global ranking");
             return mav;
         }
-        List<User> users = userService.globalUsers(1,10);
+        Paginating<User> users = userService.globalUsers(1,10);
         mav.addObject("user", u);
         mav.addObject("globalRanking", userService.globalUsers(1,10));
         return mav;
@@ -325,18 +326,6 @@ public class MainController {
         j.put("type", "sellToMarket");
         j.put("resourceId",resourceId);
         j.put("quantity", quantity);
-        return j.toJSONString();
-    }
-
-    // TODO Implement This correctly
-    @RequestMapping(value = "/AllUsers", method = { RequestMethod.GET })
-    @ResponseBody
-    public String AllUsers(Principal principal) {
-
-        JSONObject j = new JSONObject();
-        List<User> users = userService.globalUsers(0,100);
-
-        j.put("users", users.stream().map((u) -> u.getScore()).collect(Collectors.toList()));
         return j.toJSONString();
     }
 
