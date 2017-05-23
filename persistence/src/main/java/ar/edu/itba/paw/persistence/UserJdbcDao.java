@@ -359,12 +359,12 @@ public class UserJdbcDao implements UserDao {
     @Override
     public List<User> globalUsers(int pag, int userPerPage) {
 
-        if(pag<0 || userPerPage<=0) {
+        if(pag<=0 || userPerPage<=0) {
             throw new IllegalArgumentException("Page and maxPage must be an positive integer");
         }
 
-        int min = pag * userPerPage;
-        int max = (pag + 1) * userPerPage - 1;
+        int min = (pag -1) * userPerPage + 1;
+        int max = pag * userPerPage;
 
 
         List<User> users = jdbcTemplate.query(
