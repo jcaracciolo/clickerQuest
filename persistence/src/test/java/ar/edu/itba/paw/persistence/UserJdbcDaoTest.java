@@ -1,7 +1,11 @@
 package ar.edu.itba.paw.persistence;
 
+import ar.edu.itba.paw.model.ResourceType;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.Wealth;
+import ar.edu.itba.paw.model.packages.Implementations.Productions;
+import ar.edu.itba.paw.model.packages.Implementations.Storage;
+import ar.edu.itba.paw.model.packages.PackageBuilder;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,8 +18,11 @@ import org.springframework.test.jdbc.JdbcTestUtils;
 
 import javax.sql.DataSource;
 
+import java.util.Calendar;
+
 import static junit.framework.TestCase.assertNotNull;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestConfig.class)
@@ -33,13 +40,13 @@ public class UserJdbcDaoTest {
     @Before
     public void setUp() {
         jdbcTemplate = new JdbcTemplate(ds);
-        jdbcTemplate.execute("TRUNCATE TABLE users RESTART IDENTITY AND COMMIT");
-        jdbcTemplate.execute("TRUNCATE TABLE factories RESTART IDENTITY AND COMMIT");
-        jdbcTemplate.execute("TRUNCATE TABLE wealths RESTART IDENTITY AND COMMIT");
+        jdbcTemplate.execute("TRUNCATE TABLE users RESTART IDENTITY AND COMMIT NO CHECK");
+        jdbcTemplate.execute("TRUNCATE TABLE factories RESTART IDENTITY AND COMMIT NO CHECK");
+        jdbcTemplate.execute("TRUNCATE TABLE wealths RESTART IDENTITY AND COMMIT NO CHECK");
     }
 
     @Test
-    public void testCreate() {
+    public void testCreateUSer() {
         final User user = userDao.create(USERNAME, PASSWORD,IMAGE);
         assertNotNull(user);
         assertEquals(USERNAME, user.getUsername());
@@ -49,7 +56,7 @@ public class UserJdbcDaoTest {
     }
 
     @Test
-    public void testId() {
+    public void testUserId() {
         final String username2 = USERNAME + "2";
         final String username3 = USERNAME + "3";
 
@@ -68,8 +75,38 @@ public class UserJdbcDaoTest {
     }
 
     @Test
-    public void testWealth() {
+    public void testNullWealth(){
         final User user = userDao.create(USERNAME, PASSWORD,IMAGE);
-        Wealth wealth = userDao.getUserWealth(user.getId());
+        Wealth nullWealth = userDao.getUserWealth(user.getId());
+        assertNull(nullWealth);
+        assertEquals(0, JdbcTestUtils.countRowsInTable(jdbcTemplate, "wealths"));
+
     }
+    @Test
+    public void testEmptyWealth() {
+        final User user = userDao.create(USERNAME, PASSWORD,IMAGE);
+        Wealth wealth = new Wealth(user.getId(), Storage.packageBuilder().buildPackage(), Productions.packageBuilder().buildPackage());
+        userDao.create(wealth);
+        Wealth receivedWealth = userDao.getUserWealth(user.getId());
+        assertNull(receivedWealth);
+        assertEquals(0, JdbcTestUtils.countRowsInTable(jdbcTemplate, "wealths"));
+
+    }
+
+    @Test
+    public void testFilledWealth() {
+        final User user = userDao.create(USERNAME, PASSWORD,IMAGE);
+        PackageBuilder<Storage> sb = Storage.packageBuilder();
+        PackageBuilder<Productions> pb = Productions.packageBuilder();
+        sb.putItemWithDate(ResourceType.PEOPLE,1D, Calendar.getInstance());
+        pb.putItem(ResourceType.PEOPLE,1D);
+
+        Wealth wealth = new Wealth(user.getId(), sb.buildPackage(), pb.buildPackage());
+        userDao.create(wealth);
+        Wealth receivedWealth = userDao.getUserWealth(user.getId());
+        assertEquals(wealth,receivedWealth);
+        assertEquals(1, JdbcTestUtils.countRowsInTable(jdbcTemplate, "wealths"));
+
+    }
+
 }
