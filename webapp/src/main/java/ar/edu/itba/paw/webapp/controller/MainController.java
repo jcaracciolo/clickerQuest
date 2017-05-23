@@ -4,6 +4,7 @@ import ar.edu.itba.paw.interfaces.ClanService;
 import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.model.clan.Clan;
+import ar.edu.itba.paw.model.packages.Paginating;
 import ar.edu.itba.paw.webapp.config.ExposedResourceBundleMessageSource;
 import ar.edu.itba.paw.webapp.form.UserForm;
 import org.json.simple.JSONObject;
@@ -144,27 +145,29 @@ public class MainController {
 
     @RequestMapping(value = "/createClan", method = { RequestMethod.POST })
     @ResponseBody
-    public ModelAndView createClan(Principal principal, @RequestParam("clanName") final String clanName){
+    public String createClan(Principal principal, @RequestParam("clanName") final String clanName){
         ModelAndView mav = new ModelAndView("clan");
         Clan clan = clanService.createClan(clanName);
 
         if (clan == null) {
             // TODO: clan is null (return 'clan already exists')
+            JSONObject j = new JSONObject();
+            j.put("result", "exists");
+            return j.toJSONString();
         }
 
         User u = userService.findByUsername(principal.getName());
 
         if(u == null){
-            mav = new ModelAndView("errorPage");
-            mav.addObject("errorMsg", "404");
-            LOGGER.warn("Creating clan without username " + principal.getName());
-            return mav;
+            JSONObject j = new JSONObject();
+            j.put("result","noUser");
+            return j.toJSONString();
         }
         clanService.addUserToClan(clan.getId(), u.getId());
 
-        mav.addObject("user", u);
-        mav.addObject("clan", clan);
-        return mav;
+        JSONObject j = new JSONObject();
+        j.put("result","ok");
+        return j.toJSONString();
     }
 
     @RequestMapping(value = "/leaveClan", method = { RequestMethod.POST })
@@ -218,9 +221,16 @@ public class MainController {
     }
 
     // GLOBAL RANKING
-    @RequestMapping(value = "/worldRanking", method = { RequestMethod.GET })
-    public ModelAndView globalRanking(Principal principal){
+    @RequestMapping(value = "/worldRanking/{page}", method = { RequestMethod.GET })
+    public ModelAndView globalRanking(Principal principal, @PathVariable("page") Integer page){
         ModelAndView mav = new ModelAndView("globalRanking");
+
+        if (page <= 0) {
+            mav = new ModelAndView("errorPage");
+            mav.addObject("errorMsg", "404");
+            LOGGER.warn("Invalid page index");
+            return mav;
+        }
 
         User u = userService.findByUsername(principal.getName());
         if(u == null) {
@@ -229,9 +239,9 @@ public class MainController {
             LOGGER.warn("Not logged in watching global ranking");
             return mav;
         }
-        List<User> users = userService.globalUsers(1,10);
+        mav.addObject("pageNumber", page);
         mav.addObject("user", u);
-        mav.addObject("globalRanking", userService.globalUsers(1,10));
+        mav.addObject("globalRanking", userService.globalUsers(page,10));
         return mav;
     }
 
@@ -334,9 +344,9 @@ public class MainController {
     public String AllUsers(Principal principal) {
 
         JSONObject j = new JSONObject();
-        List<User> users = userService.globalUsers(0,100);
+       Paginating<User> pUsers = userService.globalUsers(0,100);
 
-        j.put("users", users.stream().map((u) -> u.getScore()).collect(Collectors.toList()));
+        j.put("users", pUsers.getItems().stream().map((u) -> u.getScore()).collect(Collectors.toList()));
         return j.toJSONString();
     }
 

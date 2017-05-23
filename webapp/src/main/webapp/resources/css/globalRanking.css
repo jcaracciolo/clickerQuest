@@ -1,0 +1,18 @@
+
+#pagination {
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    margin-top: 2rem;
+}
+
+#nextPage, #prevPage {
+    color: white;
+    margin-left: 2rem;
+    margin-right: 2rem;
+}
+
+#nextPage:hover, #prevPage:hover {
+    cursor: pointer;
+    color: black;
+}

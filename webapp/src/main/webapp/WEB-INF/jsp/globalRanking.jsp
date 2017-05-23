@@ -9,6 +9,8 @@
     <!--Import css-->
     <link type="text/css" rel="stylesheet" href="<c:url value="/resources/css/common.css"/>"
           media="screen,projection"/>
+    <link type="text/css" rel="stylesheet" href="<c:url value="/resources/css/globalRanking.css"/>"
+          media="screen,projection"/>
     <link type="text/css" rel="stylesheet" href="<c:url value="/resources/css/clan.css"/>"
           media="screen,projection"/>
     <link type="text/css" rel="stylesheet" href="<c:url value="/resources/css/materialize.min.css"/>"
@@ -41,29 +43,7 @@
                         </div>
                     </form>
                 </div>
-                <div class="button last">
-                    <c:choose>
-                        <c:when test="${user.clanIdentifier == null}">
-                            <div id="createClan" class="button last">
-                                <ul>
-                                    <li>
-                                        <a href="#clanModal"><spring:message code='create.clan'/></a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </c:when>
-                        <c:otherwise>
-                            <div id="createClan" class="button last">
-                                <ul>
-                                    <li>
-                                        <a href="<c:url value='/clan/${clan.name}'/>"><spring:message code='game.seeMyClan'/></a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </c:otherwise>
-                    </c:choose>
-                </div>
-                <div id="logout" class="button">
+                <div id="logout" class="button last">
                 <ul id="nav-mobile">
                     <li><a href="<c:url value='/logout'/>"><spring:message code='logout'/> </a></li>
                 </ul>
@@ -81,21 +61,35 @@
             <div><spring:message code="ranking.user"/></div>
             <div><spring:message code="ranking.score"/></div>
         </div>
-        <c:set var="pos" value="1"/>
-        <c:forEach items="${globalRanking}" var="u">
+        <c:forEach items="${globalRanking.items}" var="u">
             <div class="table-row">
                 <p><c:out value="${pos}"></c:out></p>
                 <p>${u.username}</p>
-                <p>${u.score}</p>
+                <p><fmt:formatNumber pattern="#.##" value="${u.score}"/></p>
                 <c:set var="pos" value="${pos + 1}"/>
             </div>
         </c:forEach>
+        <div id="pagination">
+            <c:set var="actualPage" value="${pageNumber}"/>
+            <c:if test="${actualPage <= 0}">
+                <div>
+                    <p id="prevPage"><spring:message code="globalRanking.prevPage"/> </p>
+                </div>
+            </c:if>
+            <c:if test="${globalRanking.totalItems <= actualPage}">
+                <div>
+                    <p id="nextPage"><spring:message code="globalRanking.nextPage"/> </p>
+                </div>
+            </c:if>
+        </div>
     </div>
 </div>
 
 </body>
 <script type="text/javascript">
     contextPath = '<%=request.getContextPath()%>';
+    pageNumber = ${pageNumber};
 </script>
-<script type="text/javascript" src="<c:url value="https://code.jquery.com/jquery-2.1.1.min.js"/>"></script>
+<script type="text/javascript" src='<c:url value="https://code.jquery.com/jquery-2.1.1.min.js"/>'></script>
+<script type="text/javascript" src='<c:url value="/resources/js/globalRanking.js"/>'></script>
 </html>
