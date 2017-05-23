@@ -253,79 +253,54 @@ function truncate(number)
         : Math.ceil(number);
 }
 
+document.getElementById("market.buy").addEventListener("click", function() {
+        var unit = document.getElementById("market.buy.unit").value
+        var multiplier
+        switch (unit){
+            case "K": multiplier = 1000; break;
+            case "M": multiplier = 1000000; break;
+            case "B": multiplier = 1000000000; break;
+            case "T": multiplier = 1000000000000; break;
+            case "none":
+            default: multiplier = 1; break
+        }
+        var resourceId = document.getElementById("market.buy.resources").value;
+        var quantity = document.getElementById("market.buy.quantity").value;
 
-// // Wait for the DOM to be ready
-$(function() {
-    $("form[name='market.buy']").validate({
-        resources:{
-            required: true
-        },
-        rules: {
-            quantity: {
-                required: true,
-                digits: true
-            },
-            unit:{
-                required: true
-            }
-        },
-        messages: {
-            resources:{
-                required: dec("game.market.selectResource")
-            },
-            quantity: {
-                required: dec("game.market.selectQuantity"),
-                digits: dec("game.market.illegalCaracter")
-            },
-            unit:{
-                required: dec("game.market.selectUnit")
-            }
-        },
-        submitHandler: function(form) {
-            var unit = document.getElementById("market.buy.unit").value
-            var multiplier
-            switch (unit){
-                case "K": multiplier = 1000; break;
-                case "M": multiplier = 1000000; break;
-                case "B": multiplier = 1000000000; break;
-                case "T": multiplier = 1000000000000; break;
-                case "none":
-                default: multiplier = 1; break
-            }
-            var resourceId = document.getElementById("market.buy.resources").value;
-            var quantity = document.getElementById("market.buy.quantity").value;
+        var ret = false;
+        if (resourceId == "") {
+            ret = true;
+            document.getElementById("market-buy-resource-wrapper").classList.add("error")
+        } else {document.getElementById("market-buy-resource-wrapper").classList.remove("error")}
+        if (!quantity.match("^[0-9]+$")) {
+            ret = true;
+            document.getElementById("market.buy.quantity").classList.add("inputerror")
+        } else {document.getElementById("market.buy.quantity").classList.remove("inputerror")}
+        if (unit == "") {
+            ret = true;
+            document.getElementById("market-buy-unit-wrapper").classList.add("error")
+        } else {document.getElementById("market-buy-unit-wrapper").classList.remove("error")}
+        if (ret) {return;}
 
-            var ret = false;
-            if (resourceId == "") {
-                ret = true;
-                document.getElementById("market-buy-resource-wrapper").classList.add("error")
-            } else {document.getElementById("market-buy-resource-wrapper").classList.remove("error")}
-            if (unit == "") {
-                ret = true;
-                document.getElementById("market-buy-unit-wrapper").classList.add("error")
-            } else {document.getElementById("market-buy-unit-wrapper").classList.remove("error")}
-            if (ret) {return;}
+        var quantity = parseFloat(quantity)*multiplier;
 
-            var quantity = parseFloat(quantity)*multiplier;
+        if (validateBuy(resourceId, quantity)) {
+            $.post(contextPath + "/buyFromMarket",
+                {
+                    resourceId: resourceId,
+                    quantity: quantity
+                }, function (data) {
+                    var resp = JSON.parse(data);
 
-            if (validateBuy(resourceId, quantity)) {
-                $.post(contextPath + "/buyFromMarket",
-                    {
-                        resourceId: resourceId,
-                        quantity: quantity
-                    }, function (data) {
-                        var resp = JSON.parse(data);
-
-                        var msg ;
-                        if(resp.result){
-                            msg = dec("game.market.buySuccessful",abbreviateNumber(resp.quantity,false),dec(decRes(resp.resourceId)));
-                        } else {
-                            msg = dec("game.market.buyFail",abbreviateNumber(resp.quantity,false),dec(decRes(resp.resourceId)));
-                        }
-                        window.sessionStorage.setItem("message",msg);
-                        location.reload();
-                });
-            }
+                    var msg ;
+                    if(resp.result){
+                        msg = dec("game.market.buySuccessful",abbreviateNumber(resp.quantity,false),dec(decRes(resp.resourceId)));
+                    } else {
+                        msg = dec("game.market.buyFail",abbreviateNumber(resp.quantity,false),dec(decRes(resp.resourceId)));
+                    }
+                    window.sessionStorage.setItem("message",msg);
+                    location.reload();
+            });
         }
     });
 
@@ -339,32 +314,7 @@ $(function() {
         return false
     }
 
-    $("form[name='market.sell']").validate({
-        resources:{
-            required: true
-        },
-        rules: {
-            quantity: {
-                required: true,
-                digits: true
-            },
-            unit:{
-                required: true
-            }
-        },
-        messages: {
-            resources:{
-                required: dec("game.market.selectResource")
-            },
-            quantity: {
-                required: dec("game.market.quantity"),
-                digits: dec("game.market.illegalCaracter")
-            },
-            unit:{
-                required: dec("game.market.selectUnit")
-            }
-        },
-        submitHandler: function(form) {
+document.getElementById("market.sell").addEventListener("click", function() {
             var unit = document.getElementById("market.sell.unit").value
             var multiplier
             switch (unit){
@@ -383,10 +333,15 @@ $(function() {
                 ret = true;
                 document.getElementById("market-sell-resources-wrapper").classList.add("error")
             } else {document.getElementById("market-sell-resources-wrapper").classList.remove("error")}
+            if (!quantity.match("^[0-9]+$")) {
+                ret = true;
+                document.getElementById("market.sell.quantity").classList.add("inputerror")
+            } else {document.getElementById("market.sell.quantity").classList.remove("inputerror")}
             if (unit == "") {
                 ret = true;
                 document.getElementById("market-sell-unit-wrapper").classList.add("error")
             } else {document.getElementById("market-sell-unit-wrapper").classList.remove("error")}
+
             if (ret) {return;}
 
             var quantity = parseFloat(quantity)*multiplier;
@@ -409,8 +364,7 @@ $(function() {
                         location.reload();
                     });
             }
-        }
-    });
+        });
 
 
     function validateSell(resourceId, quantity) {
@@ -420,4 +374,3 @@ $(function() {
         Materialize.toast(dec("game.market.sellFail",abbreviateNumber(quantity,false),dec(decRes(resourceId))), 3000);
         return false
     }
-});

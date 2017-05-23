@@ -256,3 +256,19 @@ button.COST_REDUCTION{
 img.upgradeImage {
 	padding: 0.1rem;
 }
+
+#createClanSend {
+    width: 6rem;
+    height: auto;
+    display: flex;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+#createClanSend:hover {
+    cursor: pointer;
+}
+
+input.inputerror {
+    border-bottom: 1px solid red !important;
+}

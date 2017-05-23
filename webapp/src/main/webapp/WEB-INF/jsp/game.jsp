@@ -49,7 +49,7 @@
     <div class="modal-content">
         <spring:message code="game.createClan.selectName"/><br>
         <input type="text" name="clanName" id="clanNameInput">
-        <button id="createClanSend"><spring:message code="game.create"/></button>
+        <img id="createClanSend" src="<c:url value="/resources/buttons/create.png"/>"/>
     </div>
 </div>
 <!-- Market Modal -->
@@ -147,9 +147,16 @@
                         </div>
                     </form>
                 </div>
+                <div id="globalRanking" class="button last">
+                    <ul>
+                        <li>
+                            <a href="<c:url value='/worldRanking'/>"><spring:message code='game.seeGlobalRanking'/></a>
+                        </li>
+                    </ul>
+                </div>
                 <c:choose>
                     <c:when test="${user.clanIdentifier == null}">
-                        <div id="createClan" class="button last">
+                        <div id="createClan" class="button">
                             <ul>
                                 <li>
                                     <a href="#clanModal"><spring:message code='create.clan'/></a>
@@ -158,7 +165,7 @@
                         </div>
                     </c:when>
                     <c:otherwise>
-                        <div id="createClan" class="button last">
+                        <div id="createClan" class="button">
                             <ul>
                                 <li>
                                     <a href="<c:url value='/clan/${clan.name}'/>"><spring:message code='game.seeMyClan'/></a>
@@ -167,13 +174,6 @@
                         </div>
                     </c:otherwise>
                 </c:choose>
-                <div id="globalRanking" class="button">
-                    <ul>
-                        <li>
-                            <a href="<c:url value='/worldRanking'/>"><spring:message code='game.seeGlobalRanking'/></a>
-                        </li>
-                    </ul>
-                </div>
                 <div id="logout">
                     <ul id="nav-mobile">
                         <li><a href="<c:url value='/logout'/>"><spring:message code='logout'/> </a></li>
