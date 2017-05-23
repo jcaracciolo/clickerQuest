@@ -76,7 +76,7 @@
                 <div id="market-buy-unit-wrapper" class="col s3 dropdown-wrapper">
                     <select name="unit" id="market.buy.unit">
                         <option value="" disabled selected><spring:message code="game.market.selectUnit"/></option>
-                        <option value="none"><i>No unit</i></option>
+                        <option value="none"><i><spring:message code="game.market.noUnit"/></i></option>
                         <option value="K">K</option>
                         <option value="M">M</option>
                         <option value="B">B</option>
@@ -87,7 +87,7 @@
                     <p id="market.buy.price"></p>
                 </div>
                 <div class="col s2">
-                    <button type="submit"><spring:message code="game.market.buy"/></button>
+                    <button id="market.buy" type="submit"><spring:message code="game.market.buy"/></button>
                 </div>
             </div>
         </form>
@@ -110,7 +110,7 @@
                 <div id="market-sell-unit-wrapper" class="col s3 dropdown-wrapper">
                     <select name="unit" id="market.sell.unit">
                         <option value="" disabled selected><spring:message code="game.market.selectUnit"/> </option>
-                        <option value="none"><i>No unit</i></option>
+                        <option value="none"><i><spring:message code="game.market.noUnit"/></i></option>
                         <option value="K">K</option>
                         <option value="M">M</option>
                         <option value="B">B</option>
@@ -121,7 +121,7 @@
                     <p id="market.sell.price"></p>
                 </div>
                 <div class="col s2">
-                    <button type="submit"><spring:message code="game.market.sell"/></button>
+                    <button id="market.sell" type="submit"><spring:message code="game.market.sell"/></button>
                 </div>
             </div>
         </form>
@@ -358,13 +358,37 @@
                                     <div id="upgradeDisabler${factory.getType()}" class="box black upgradeDisability canBuy"></div>
                                     <c:if test="${factory.amount != 0}">
                                         <div class="upgrade-button-container">
-                                            <button type="button" id="upgrade${factory.getType()}" data-factoryid="${factory.getType().getId()}" class="waves-effect waves-light upgradeButton btn ${factory.getNextUpgrade().getNextUpgradeType()}">
-                                                <div class="card-image">
-                                                    <img src="<c:url value="/resources/upgrade_icon.png"/>" alt="upgrade_icon"/>
+                                                    <c:choose>
+                                                        <c:when test='${factory.getNextUpgrade().getType().toString().equals("OUTPUT_INCREASE")}'>
+                                                        <button type="button" id="upgrade${factory.getType()}" data-factoryid="${factory.getType().getId()}"
+                                                                class="waves-effect waves-light upgradeButton btn ${factory.getNextUpgrade().getType()} tooltipped"
+                                                                data-position="down" data-delay="50"
+                                                                data-tooltip='<spring:message code="upgrade.outputIncrease"/>'>
+                                                            <div class="card-image"><img class="upgradeImage"
+                                                                 src="<c:url value='/resources/upgrade_icons/increase.png'/>" alt="upgrade_icon"/>
+                                                        </c:when>
+                                                        <c:when test='${factory.getNextUpgrade().getType().toString().equals("INPUT_REDUCTION")}'>
+                                                                <button type="button" id="upgrade${factory.getType()}" data-factoryid="${factory.getType().getId()}"
+                                                                        class="waves-effect waves-light upgradeButton btn ${factory.getNextUpgrade().getType()} tooltipped"
+                                                                        data-position="down" data-delay="50"
+                                                                        data-tooltip='<spring:message code="upgrade.inputReduction"/>'>
+                                                                    <div class="card-image"><img class="upgradeImage"
+                                                            src="<c:url value='/resources/upgrade_icons/reduce.png'/>" alt="upgrade_icon"/>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                                        <button type="button" id="upgrade${factory.getType()}" data-factoryid="${factory.getType().getId()}"
+                                                                                class="waves-effect waves-light upgradeButton btn ${factory.getNextUpgrade().getType()} tooltipped"
+                                                                                data-position="down" data-delay="50"
+                                                                                data-tooltip='<spring:message code="upgrade.costReduction"/>'>
+                                                                            <div class="card-image"><img class="upgradeImage"
+                                                                 src="<c:url value='/resources/upgrade_icons/cost_reduction.png'/>" alt="upgrade_icon"/>
+                                                        </c:otherwise>
+                                                    </c:choose>
                                                 </div>
                                                 <div class="row no-margins">
                                                     <div class="col no-padding">
                                                         <img class="resource-icon tooltipped" data-position="top" data-delay="50"
+                                                             data-tooltip='<spring:message code="money-type"/>'
                                                              src="<c:url value="/resources/resources_icon/3.png"/>"/>
                                                     </div>
                                                     <div class="col">

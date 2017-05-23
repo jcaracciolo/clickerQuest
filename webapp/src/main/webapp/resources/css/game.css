@@ -236,13 +236,23 @@ div.no-padding {
 }
 
 button.OUTPUT_INCREASE{
-	background-color: blue;
+	background-color: orange;
+    color: black;
+    min-width: 5.5rem;
 }
 
 button.INPUT_REDUCTION{
-	background-color: yellow;
+	background-color: gold;
+    color: black;
+	min-width: 5.5rem;
 }
 
 button.COST_REDUCTION{
-	background-color: green;
+	background-color: limegreen;
+    color: black;
+    min-width: 5.5rem;
+}
+
+img.upgradeImage {
+	padding: 0.1rem;
 }

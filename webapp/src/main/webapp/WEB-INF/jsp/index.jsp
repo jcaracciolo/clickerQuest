@@ -31,7 +31,7 @@
             <label for ="rememberMe"><spring:message code = "remember_me"/></label>
         </div>
         <div>
-            <img id="playImg" type= "submit" class="profile" src="<c:url value="/resources/play_button.png"/>" alt="factory_img" />
+            <img id="playImg" type= "submit" class="profile" src="<c:url value="/resources/buttons/play.png"/>" alt="factory_img" />
         </div>
         <div class="invisible">
             <input id="play" type= "submit" />
