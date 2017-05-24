@@ -45,7 +45,7 @@
                     </a>
                 </div>
                 <div id="search-user">
-                    <form>
+                    <form onSubmit="return false;" autocomplete="off">
                         <div class="input-field search-user">
                             <input id="search" type="search" required>
                             <label class="label-icon" for="search"><i class="material-icons">search</i>

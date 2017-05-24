@@ -9,3 +9,13 @@ if(clan != null) {
         window.location = contextPath + "/clan/" + clan.dataset.clanname
     })
 }
+
+window.onkeyup = function(e) {
+    var key = e.keyCode ? e.keyCode : e.which;
+
+    if (key == 13) {
+        if($( "#search" ).is(":focus")){
+            searchCommunity(true);
+        }
+    }
+};

@@ -28,25 +28,25 @@ This application is an Idle game in development.
 4. Select the downloaded zip
 5. Restart IDEA
 6. Run -> Edit Configurations
-7. '+' -> select Jetty Runner -> name it 'Development'
-8. Setup Path = '\' , Webapp Folder = 'webapp/src/main/webapp' , Classes Folder = 'webapp/target/classes'
-9. '+' -> select Jetty Runner -> name it 'Production'
-10. Setup Path = '\' , Webapp Folder = 'webapp/src/main/webapp' , Classes Folder = 'webapp/target/classes'
-11. Env Args -> Name: 'spring.profiles.active' Value: 'production'
-12. Down, before Launch, run Maven Goal with the command "clean compile"
-13. Done
+7. Select `+` -> select Jetty Runner -> name it `Development`
+8. Setup Path = `'\'` , Webapp Folder = `webapp/src/main/webapp` , Classes Folder = `webapp/target/classes`
+9. Select `+` -> select Jetty Runner -> name it `Production`
+10. Setup Path = `'\'` , Webapp Folder = `webapp/src/main/webapp` , Classes Folder = `webapp/target/classes`
+11. Env Args -> Name: `spring.profiles.active` Value: `production`
+12. Down, before Launch, run Maven Goal with the command `clean compile`
+13. Done :)
 
 IMPORTANT: DO NOT UPDATE THE JETTY PLUGIN OR IT WILL NOT WORK
 
-## Configure Postgres:
+## Configure Postgres (Linux instructions)
 
-1. Install postgres (sudo apt-get install postgresql)
-2. Start postres server (sudo service postgresql start)
-3. Change to user "postgres" (sudo su postgres)
-4. Create root user (createusername root) (si tira error no pasa nada)
-5. Create main database (createdb clickerQuest -O root)
-6. Enter psql (psql)
-7. Change root password (ALTER USER root WITH PASSWORD 'root')
+1. Install postgres: `sudo apt-get install postgresql`
+2. Start postres server: `sudo service postgresql start`
+3. Change to user "postgres": `sudo su postgres`
+4. Create root user: `createusername root` (si tira error no pasa nada)
+5. Create main database: `createdb clickerQuest -O root`
+6. Enter psql: `psql`
+7. Change root password: `ALTER USER root WITH PASSWORD 'root'`
 8. Type ( \g ) to send the query
 9. "ALTER ROLE" Means it was successful
 10. ( \q ) Exit psql
@@ -79,6 +79,11 @@ put path/to/app.wr/in/pampero
 3. Password is: `ooc4Choo`
 4. Proceed with caution, remember: "With Great Power Comes Great Responsibility"
 
+
+## Existent user in production (for testing purposes)
+
+* User: `wolf`
+* Password: `1q2w3e4r`
 
 ### Useful commands:
 
@@ -122,23 +127,37 @@ The following routes need authentication:
     * POST
 
 
+## See logs in production
+
+* There are two types of logs: `warning` and `error` logs.
+* **Limitations**: currently the application saves the last 200 logs, for each file.
+* The `warning` logs can be found in production at: `pawserver.it.itba.edu.ar/logs/warning-logs.yyyy-mm-dd.log`
+* The `error` logs can be found in production at: `pawserver.it.itba.edu.ar/logs/error-logs.yyyy-mm-dd.log`
+  * Where `yyyy-mm-dd` is the day you are searching for. Example: `2017-05-24`
+
+
 ## Current DB schemas
 
 ```
-                                      Table "public.users"
-    Column    |          Type          |                       Modifiers
---------------+------------------------+--------------------------------------------------------
- userid       | bigint                 | not null default nextval('users_userid_seq'::regclass)
+
+                      Table users
+    Column    |          Type          |             Modifiers
+--------------+------------------------+--------------------------------------
+ userid       | bigint                 | not null default 
+              |                        | nextval('users_userid_seq'::regclass)
  username     | character varying(100) |
  password     | character varying(100) |
  profileimage | character varying(100) |
+
 Indexes:
     "users_pkey" PRIMARY KEY, btree (userid)
     "users_username_key" UNIQUE CONSTRAINT, btree (username)
+    
  ```
  
  ```
-             Table "public.factories"
+ 
+                     Table factories
              
        Column      |       Type       | Modifiers
  ------------------+------------------+-----------
@@ -149,24 +168,30 @@ Indexes:
   outputmultiplier | double precision |
   costreduction    | double precision |
   level            | integer          |
+ 
  Indexes:
      "factories_pkey" PRIMARY KEY, btree (userid, type)
+     
  ```
  
  ```
-          Table "public.stockmarket"
+ 
+                 Table stockmarket
      Column    |       Type       | Modifiers
  --------------+------------------+-----------
   time         | bigint           | not null
   userid       | bigint           | not null
   resourcetype | integer          | not null
   amount       | double precision |
+ 
  Indexes:
      "stockmarket_pkey" PRIMARY KEY, btree ("time", userid, resourcetype)
+     
  ```
  
  ```
-            Table "public.wealths"
+ 
+                   Table wealths
      Column    |       Type       | Modifiers
  --------------+------------------+-----------
   userid       | bigint           | not null
@@ -174,6 +199,8 @@ Indexes:
   production   | double precision |
   storage      | double precision |
   lastupdated  | bigint           |
+ 
  Indexes:
      "wealths_pkey" PRIMARY KEY, btree (userid, resourcetype)
+     
  ```
