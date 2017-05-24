@@ -53,9 +53,9 @@ var searchCommunity = function (direct) {
                 onAutocomplete: function(val) {
                     // Callback function when value is autcompleted.
                     if(this.firstChild.src === userImageSrc){
-                        window.location.replace(contextPath + "/u/" + val.trim());
+                        window.location = contextPath + "/u/" + val.trim();
                     } else {
-                        window.location.replace(contextPath + "/clan/" + val.trim());
+                        window.location = contextPath + "/clan/" + val.trim();
                     }
                 }
             });
