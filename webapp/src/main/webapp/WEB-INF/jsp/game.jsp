@@ -61,7 +61,7 @@
         <p><spring:message code="game.market.welcome"/></p>
 
         <form action="" name="market.buy">
-            <div class="row">
+            <div class="row market-block">
                 <div id="market-buy-resource-wrapper" class="col s3 dropdown-wrapper">
                     <select name="resources" id="market.buy.resources" required>
                         <option value="" disabled selected><spring:message code="game.market.selectResource"/></option>
@@ -86,16 +86,17 @@
                     </select>
                 </div>
                 <div class="col s2">
-                    <p id="market.buy.price"></p>
+                    <p id="market.buy.price" class="calculatedPrice"></p>
                 </div>
                 <div class="col s2">
-                    <button id="market.buy" type="submit"><spring:message code="game.market.buy"/></button>
+                    <spring:message code="buttonFolder" var="buttonsFolder"/>
+                    <img id="market.buy" class="marketButton" src='<c:url value="/resources/${buttonsFolder}/buy.png"/>'/>
                 </div>
             </div>
         </form>
 
         <form action="" name="market.sell">
-            <div class="row">
+            <div class="row market-block">
                 <div id="market-sell-resources-wrapper" class="col s3 dropdown-wrapper">
                     <select name="resources" id="market.sell.resources" required>
                         <option value="" disabled selected><spring:message code="game.market.selectResource"/> </option>
@@ -120,10 +121,11 @@
                     </select>
                 </div>
                 <div class="col s2">
-                    <p id="market.sell.price"></p>
+                    <p id="market.sell.price" class="calculatedPrice"></p>
                 </div>
                 <div class="col s2">
-                    <button id="market.sell" type="submit"><spring:message code="game.market.sell"/></button>
+                    <spring:message code="buttonFolder" var="buttonsFolder"/>
+                    <img id="market.sell" class="marketButton" src='<c:url value="/resources/${buttonsFolder}/sell.png"/>'/>
                 </div>
             </div>
         </form>
@@ -219,6 +221,7 @@
                             </div>
                         </div>
                     </c:forEach>
+                    <div class="divider last"></div>
                 </div>
             </div>
         </div>
@@ -286,6 +289,7 @@
         <div class="row factory-row">
             </c:if>
             </c:forEach>
+                <div class="divider last"></div>
         </div>
     </div>
     <!-- RIGHT PANEL -->
@@ -416,7 +420,7 @@
                         <!-- END OF FACTORY CARD -->
                     </div>
                 </c:forEach>
-                <div class="divider"></div>
+                <div class="divider last"></div>
             </div>
         </div>
     </div>
