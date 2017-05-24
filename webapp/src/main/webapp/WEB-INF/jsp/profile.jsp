@@ -85,7 +85,7 @@
             </div>
         </div>
         <div id="world-ranking">
-            <p>#<spring:message code="profile.worldRanking" arguments="${globalRanking}"/> </p>
+            <p><spring:message code="profile.worldRanking" arguments="${globalRanking}"/> </p>
         </div>
         <c:if test="${user.clanIdentifier != null}">
             <div id="group-info">
