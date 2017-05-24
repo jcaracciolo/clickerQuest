@@ -30,14 +30,15 @@
         <form:errors path="repeatPassword" cssClass="formError" element="p"/>
     </div>
     <div>
-        <input type="submit" value="<spring:message code="signUp.register"/>!"/>
+        <spring:message code="buttonFolder" var="buttonsFolder"/>
+        <img id="register" type="submit" src='<c:url value="/resources/${buttonsFolder}/register.png"/>'/>
     </div>
 </form:form>
 </body>
 <c:set var="storageMap" value="${storage.getUpdatedStorage(productions)}"/>
 
 <!--Import jQuery before materialize.js-->
-<script type="text/javascript" src="<c:url value="https://code.jquery.com/jquery-2.1.1.min.js"/>"></script>
-<script type="text/javascript" src="<c:url value="/resources/js/materialize.min.js"/>"></script>
-<script type="text/javascript" src="<c:url value="/resources/js/create.js"/>"></script>
+<script type="text/javascript" src='<c:url value="https://code.jquery.com/jquery-2.1.1.min.js"/>'></script>
+<script type="text/javascript" src='<c:url value="/resources/js/materialize.min.js"/>'></script>
+<script type="text/javascript" src='<c:url value="/resources/js/create.js"/>'></script>
 </html>

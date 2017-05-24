@@ -13,3 +13,12 @@ if (next != null) {
         window.location.replace(contextPath + "/worldRanking/" + (pageNumber + 1))
     });
 }
+
+var users = document.getElementsByClassName("username-link");
+for(var i = 0; i<users.length; i++) {
+    var user = users.item(i)
+    user.addEventListener("click", function () {
+        console.log(contextPath + "/u/" + this.dataset.username);
+        window.location.replace(contextPath + "/u/" + this.dataset.username)
+    })
+}

@@ -44,7 +44,7 @@
                 <div id="globalRanking" class="button last">
                     <ul>
                         <li>
-                            <a href="<c:url value='/worldRanking'/>"><spring:message code='game.seeGlobalRanking'/></a>
+                            <a href="<c:url value='/worldRanking/1'/>"><spring:message code='game.seeGlobalRanking'/></a>
                         </li>
                     </ul>
                 </div>
@@ -99,5 +99,8 @@
     clanName = '<c:out value="${clan.name}"/>';
 </script>
 <script type="text/javascript" src="<c:url value="https://code.jquery.com/jquery-2.1.1.min.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/resources/js/materialize.min.js"/>"></script>
+
 <script type="text/javascript" src="<c:url value="/resources/js/clan.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/resources/js/autocomplete.js"/>"></script>
 </html>

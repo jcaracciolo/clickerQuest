@@ -61,22 +61,23 @@
             <div><spring:message code="ranking.user"/></div>
             <div><spring:message code="ranking.score"/></div>
         </div>
+        <c:set var="pos" value="1"/>
         <c:forEach items="${globalRanking.items}" var="u">
             <div class="table-row">
-                <p><c:out value="${pos}"></c:out></p>
-                <p>${u.username}</p>
-                <p><fmt:formatNumber pattern="#.##" value="${u.score}"/></p>
+                <p><c:out value="${pos + (page-1)*10}"></c:out></p>
+                <p class="username-link" data-username="${u.username}">${u.username}</p>
+                <p><fmt:formatNumber pattern="#" value="${u.score}"/></p>
                 <c:set var="pos" value="${pos + 1}"/>
             </div>
         </c:forEach>
         <div id="pagination">
             <c:set var="actualPage" value="${pageNumber}"/>
-            <c:if test="${actualPage <= 0}">
+            <c:if test="${actualPage > 1}">
                 <div>
                     <p id="prevPage"><spring:message code="globalRanking.prevPage"/> </p>
                 </div>
             </c:if>
-            <c:if test="${globalRanking.totalItems <= actualPage}">
+            <c:if test="${globalRanking.totalPages > actualPage}">
                 <div>
                     <p id="nextPage"><spring:message code="globalRanking.nextPage"/> </p>
                 </div>
@@ -90,6 +91,10 @@
     contextPath = '<%=request.getContextPath()%>';
     pageNumber = ${pageNumber};
 </script>
+
 <script type="text/javascript" src='<c:url value="https://code.jquery.com/jquery-2.1.1.min.js"/>'></script>
+<script type="text/javascript" src="<c:url value="/resources/js/materialize.min.js"/>"></script>
 <script type="text/javascript" src='<c:url value="/resources/js/globalRanking.js"/>'></script>
+<script type="text/javascript" src="<c:url value="/resources/js/autocomplete.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/resources/js/userProfile.js"/>"></script>
 </html>

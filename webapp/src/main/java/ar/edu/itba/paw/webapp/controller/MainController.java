@@ -7,6 +7,7 @@ import ar.edu.itba.paw.model.clan.Clan;
 import ar.edu.itba.paw.model.packages.Paginating;
 import ar.edu.itba.paw.webapp.config.ExposedResourceBundleMessageSource;
 import ar.edu.itba.paw.webapp.form.UserForm;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -133,7 +134,7 @@ public class MainController {
         User u = userService.findByUsername(principal.getName());
         if(u == null) {
             mav = new ModelAndView("errorPage");
-            mav.addObject("errorMsg", "404");
+            mav.addObject("errorMsg", "401");
             LOGGER.warn("Tried to skip login in clan: " + principal.getName());
             return mav;
         }
@@ -147,15 +148,13 @@ public class MainController {
     @ResponseBody
     public String createClan(Principal principal, @RequestParam("clanName") final String clanName){
         ModelAndView mav = new ModelAndView("clan");
-        Clan clan = clanService.createClan(clanName);
-
-        if (clan == null) {
-            // TODO: clan is null (return 'clan already exists')
+        if (clanService.getClanByName(clanName) != null) {
             JSONObject j = new JSONObject();
             j.put("result", "exists");
             return j.toJSONString();
         }
 
+        Clan clan = clanService.createClan(clanName);
         User u = userService.findByUsername(principal.getName());
 
         if(u == null){
@@ -178,16 +177,16 @@ public class MainController {
         User u = userService.findByUsername(principal.getName());
 
         if(u == null){
-            // TODO: not logged user trying to leave clan
+            return;
         }
         if(u.getClanIdentifier() == null) {
-            // TODO: user without clan trying to leave a clan
+            return;
         }
 
         Clan clan = clanService.getClanByName(clanName);
 
         if (clan == null) {
-            // TODO: return 'clan does not exist'
+            return;
         }
 
         clanService.deleteFromClan(u.getId());
@@ -205,16 +204,16 @@ public class MainController {
         User u = userService.findByUsername(principal.getName());
 
         if(u == null){
-            // TODO: not logged user trying to leave clan
+            return;
         }
         if(u.getClanIdentifier() != null) {
-            // TODO: user with clan trying to join another clan
+            return;
         }
 
         Clan clan = clanService.getClanByName(clanName);
 
         if (clan == null) {
-            // TODO: return 'clan does not exist'
+            return;
         }
 
         clanService.addUserToClan(clan.getId(), u.getId());
@@ -235,7 +234,7 @@ public class MainController {
         User u = userService.findByUsername(principal.getName());
         if(u == null) {
             mav = new ModelAndView("errorPage");
-            mav.addObject("errorMsg", "404");
+            mav.addObject("errorMsg", "401");
             LOGGER.warn("Not logged in watching global ranking");
             return mav;
         }
@@ -256,7 +255,7 @@ public class MainController {
 
         if(u == null){
             mav = new ModelAndView("errorPage");
-            mav.addObject("errorMsg", "404");
+            mav.addObject("errorMsg", "401");
             LOGGER.warn("Tried to skip login in game: " + principal.getName());
             return mav;
         }
@@ -347,6 +346,26 @@ public class MainController {
        Paginating<User> pUsers = userService.globalUsers(0,100);
 
         j.put("users", pUsers.getItems().stream().map((u) -> u.getScore()).collect(Collectors.toList()));
+        return j.toJSONString();
+    }
+
+
+    @RequestMapping(value = "/search", method = { RequestMethod.POST })
+    @ResponseBody
+    public String search(Principal principal, @RequestParam("search") final String search){
+        long userId = userService.findByUsername(principal.getName()).getId();
+        Collection<User> users = userService.findByKeyword(search);
+        Collection<String> clans = clanService.findByKeyword(search);
+
+        JSONArray usersJson = new JSONArray();
+        JSONObject j = new JSONObject();
+        users.stream().forEach(user -> usersJson.add(user.getUsername()));
+        JSONArray clansJson = new JSONArray();
+        clans.stream().forEach(clan -> clansJson.add(clan));
+        j.put("type", "search");
+        j.put("result", users.size() + clans.size() > 0);
+        j.put("users",usersJson);
+        j.put("clans",clans);
         return j.toJSONString();
     }
 

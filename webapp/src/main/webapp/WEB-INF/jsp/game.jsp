@@ -22,10 +22,8 @@
           media="screen,projection"/>
     <link type="text/css" rel="stylesheet" href="<c:url value="/resources/css/materialize.min.css"/>"
           media="screen,projection"/>
-
     <!--Import Google Icon Font-->
     <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-
     <!--Let browser know website is optimized for mobile-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 </head>
@@ -60,7 +58,7 @@
         <p><spring:message code="game.market.welcome"/></p>
 
         <form action="" name="market.buy">
-            <div class="row">
+            <div class="row market-block">
                 <div id="market-buy-resource-wrapper" class="col s3 dropdown-wrapper">
                     <select name="resources" id="market.buy.resources" required>
                         <option value="" disabled selected><spring:message code="game.market.selectResource"/></option>
@@ -85,16 +83,17 @@
                     </select>
                 </div>
                 <div class="col s2">
-                    <p id="market.buy.price"></p>
+                    <p id="market.buy.price" class="calculatedPrice"></p>
                 </div>
                 <div class="col s2">
-                    <p id="market.buy" type="submit"><spring:message code="game.market.buy"/></p>
+                    <spring:message code="buttonFolder" var="buttonsFolder"/>
+                    <img id="market.buy" class="marketButton" src='<c:url value="/resources/${buttonsFolder}/buy.png"/>'/>
                 </div>
             </div>
         </form>
 
         <form action="" name="market.sell">
-            <div class="row">
+            <div class="row market-block">
                 <div id="market-sell-resources-wrapper" class="col s3 dropdown-wrapper">
                     <select name="resources" id="market.sell.resources" required>
                         <option value="" disabled selected><spring:message code="game.market.selectResource"/> </option>
@@ -119,10 +118,11 @@
                     </select>
                 </div>
                 <div class="col s2">
-                    <p id="market.sell.price"></p>
+                    <p id="market.sell.price" class="calculatedPrice"></p>
                 </div>
                 <div class="col s2">
-                    <button id="market.sell" type="submit"><spring:message code="game.market.sell"/></button>
+                    <spring:message code="buttonFolder" var="buttonsFolder"/>
+                    <img id="market.sell" class="marketButton" src='<c:url value="/resources/${buttonsFolder}/sell.png"/>'/>
                 </div>
             </div>
         </form>
@@ -139,7 +139,8 @@
                     </a>
                 </div>
                 <div id="search-user">
-                    <form>
+                    <%--<select class="js-example-data-array-selected"><select/>--%>
+                    <form onSubmit="return false;">
                         <div class="input-field search-user">
                             <input id="search" type="search" required>
                             <label class="label-icon" for="search"><i class="material-icons">search</i>
@@ -217,6 +218,7 @@
                             </div>
                         </div>
                     </c:forEach>
+                    <div class="divider last"></div>
                 </div>
             </div>
         </div>
@@ -284,6 +286,7 @@
         <div class="row factory-row">
             </c:if>
             </c:forEach>
+                <div class="divider last"></div>
         </div>
     </div>
     <!-- RIGHT PANEL -->
@@ -414,7 +417,7 @@
                         <!-- END OF FACTORY CARD -->
                     </div>
                 </c:forEach>
-                <div class="divider"></div>
+                <div class="divider last"></div>
             </div>
         </div>
     </div>
@@ -474,7 +477,9 @@
 <script type="text/javascript" src="<c:url value="https://code.jquery.com/jquery-2.1.1.min.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/resources/js/materialize.min.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/resources/js/clickspark.min.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/resources/js/autocomplete.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/resources/js/game.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/resources/js/jquery-validator-framework/jquery.validate.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/resources/js/jquery-validator-framework/additional-methods.js"/>"></script>
+
 </html>

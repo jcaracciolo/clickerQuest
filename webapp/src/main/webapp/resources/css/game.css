@@ -276,3 +276,26 @@ input.inputerror {
 input.inputClan.inputerror {
     border-bottom: 4px solid red !important;
 }
+
+img.marketButton {
+	width: 6rem;
+}
+
+img.marketButton:hover {
+	cursor: pointer;
+ }
+
+.market-block {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+}
+
+.calculatedPrice {
+    margin: 0;
+}
+
+.divider.last {
+    height: 4rem;
+    display: inline-block;
+}

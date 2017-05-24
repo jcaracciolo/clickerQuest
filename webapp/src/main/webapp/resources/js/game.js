@@ -1,10 +1,5 @@
-/**
- * Created by epord on 05/04/17.
- */
-
 var url=window.location.href.split("/")
 var userId =url[url.length - 2];
-
 sessionStorage.removeItem("user");
 
 $(document).ready(function(){
@@ -12,10 +7,21 @@ $(document).ready(function(){
     $('select').material_select();
 });
 
-// var URLevent = window.location.href.split("#").pop();
+window.onkeyup = function(e) {
+    var key = e.keyCode ? e.keyCode : e.which;
+
+    if (key == 13) {
+        if($( "#clanNameInput" ).is(":focus")){
+            createClanFunction();
+        } else if($( "#search" ).is(":focus")){
+            // searchCommunity();
+        }
+    }
+};
+
 var toPrint = window.sessionStorage.getItem("message");
 
-if(toPrint != null){
+if(toPrint !== null){
     sessionStorage.removeItem("message");
     Materialize.toast(toPrint,4000);
 }
@@ -33,6 +39,10 @@ function refreshValues(update){
 
 function dec(mesageCode, arg0, arg1, arg2) {
     var st = messages[mesageCode];
+    if(st == null) {
+        console.log(mesageCode + ":no message");
+        return;
+    }
     st = st.replace("{0}",arg0);
     st = st.replace("{1}",arg1);
     st = st.replace("{2}",arg2);
@@ -134,7 +144,6 @@ function refreshFactoriesBuyability() {
         }
     }
 }
-
 setInterval(function(){
     refreshValues(true);
     refreshView();
@@ -143,7 +152,7 @@ setInterval(function(){
 }, 1000);
 
 // Create clan listener
-document.getElementById("createClanSend").addEventListener("click", function () {
+var createClanFunction = function () {
     var clanName = document.getElementById("clanNameInput").value;
     var ret;
     if (!clanName.match("^[a-zA-Z\+\-\.\_\*]+$")) {
@@ -168,7 +177,8 @@ document.getElementById("createClanSend").addEventListener("click", function () 
                 window.location.replace(contextPath + "/clan/" + clanName);
             }
         });
-});
+}
+document.getElementById("createClanSend").addEventListener("click", createClanFunction);
 
 // Buy listener
 $.each($(".buyFactory"),function (i,element){
@@ -262,8 +272,7 @@ function abbreviateNumber(value,decimals) {
     return (decimals ? Math.floor(100* newValue)/100 : newValue)+suffixes[suffixNum];
 }
 
-function truncate(number)
-{
+function truncate(number) {
     return number > 0
         ? Math.floor(number)
         : Math.ceil(number);
@@ -321,14 +330,14 @@ document.getElementById("market.buy").addEventListener("click", function() {
     });
 
 
-    function validateBuy(resourceId, quantity) {
-        if (storagesMap[3] >= quantity * costBuyResources[resourceId]) { //3: MONEY
-            return true;
-        }
-        Materialize.toast(dec("game.market.buyFail",abbreviateNumber(quantity,false),dec(decRes(resourceId))), 3000);
-
-        return false
+function validateBuy(resourceId, quantity) {
+    if (storagesMap[3] >= quantity * costBuyResources[resourceId]) { //3: MONEY
+        return true;
     }
+    Materialize.toast(dec("game.market.buyFail",abbreviateNumber(quantity,false),dec(decRes(resourceId))), 3000);
+
+    return false;
+}
 
 document.getElementById("market.sell").addEventListener("click", function() {
             var unit = document.getElementById("market.sell.unit").value

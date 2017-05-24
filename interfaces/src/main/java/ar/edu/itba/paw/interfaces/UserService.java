@@ -13,6 +13,8 @@ public interface UserService {
 
     User findById(long id);
     User findByUsername(String username);
+    Collection<User> findByKeyword(String search);
+
     int getGlobalRanking(long userId);
 
     User create(String username, String Password, String img);

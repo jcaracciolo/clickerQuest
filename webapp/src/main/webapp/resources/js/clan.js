@@ -14,7 +14,7 @@ document.getElementById("clan-action").addEventListener("click", function () {
                 {
                     clanName: clanName
                 }, function(data) {
-                    window.location.replace(contextPath + "/clan/" + clanName);
+                    window.location.replace(contextPath + "/game");
                 });
             break;
     }
@@ -28,3 +28,4 @@ for(var i = 0; i<users.length; i++) {
         window.location.replace(contextPath + "/u/" + user.dataset.username)
     })
 }
+

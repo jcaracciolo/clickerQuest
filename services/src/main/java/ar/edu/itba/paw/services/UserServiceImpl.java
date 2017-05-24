@@ -43,61 +43,47 @@ public class UserServiceImpl implements UserService {
     @Autowired
     MarketDao marketDao;
 
-    Cache<String, User> userCache = CacheBuilder.newBuilder().maximumSize(5).build();
-    Cache<Long, Wealth> wealthCache = CacheBuilder.newBuilder().maximumSize(5).build();
-
     public User findById(long userid) {
         return userDao.findById(userid);
     }
 
     @Override
     public User findByUsername(String username) {
-        User user = null;
-        try {
-            user = userCache.get(username,()-> userDao.findByUsername(username));
-        } catch (CacheLoader.InvalidCacheLoadException e) {
-            LOGGER.error(e.toString());
-        } catch (ExecutionException e) {
-            LOGGER.error(e.toString());
-        }
-        return user;
+        return userDao.findByUsername(username);
     }
+
+    @Override
+    public Collection<User> findByKeyword(String search) {
+        if(!search.matches("^[a-zA-Z0-9]+$")) return Collections.emptyList();
+        return userDao.findByKeyword(search);
+    }
+
 
     @Transactional(propagation = Propagation.NESTED)
     @Override
     public Wealth getUserWealth(long userid) {
+        Wealth w = userDao.getUserWealth(userid);
+        Map<ResourceType,Double> storageRaw = w.getStorage().rawMap();
 
-        try {
-            return wealthCache.get(userid, () -> {
-                Wealth w = userDao.getUserWealth(userid);
-                Map<ResourceType,Double> storageRaw = w.getStorage().rawMap();
+        if(storageRaw.size() < ResourceType.values().length) {
+            PackageBuilder<Storage> storageB = Storage.packageBuilder();
+            PackageBuilder<Productions> productionsB = Productions.packageBuilder();
+            Calendar now = Calendar.getInstance();
 
-                if(storageRaw.size() < ResourceType.values().length) {
-                    PackageBuilder<Storage> storageB = Storage.packageBuilder();
-                    PackageBuilder<Productions> productionsB = Productions.packageBuilder();
-                    Calendar now = Calendar.getInstance();
+            Stream.of(ResourceType.values()).filter(
+                    resType -> storageRaw.keySet().stream().noneMatch(r -> r == resType))
+                    .forEach(   resType -> {
+                        storageB.putItem(resType,0D);
+                        productionsB.putItem(resType,0D);
+                    });
 
-                    Stream.of(ResourceType.values()).filter(
-                            resType -> storageRaw.keySet().stream().noneMatch(r -> r == resType))
-                            .forEach(   resType -> {
-                                storageB.putItem(resType,0D);
-                                productionsB.putItem(resType,0D);
-                            });
-
-                    w.getStorage().rawMap().forEach(storageB::putItem);
-                    w.getProductions().rawMap().forEach(productionsB::putItem);
-                    Stream.of(ResourceType.values()).forEach((r) -> storageB.setLastUpdated(r,now));
-                    w = new Wealth(userid,storageB.buildPackage(),productionsB.buildPackage());
-                    updateWealth(w);
-                }
-                return w;
-            });
-        } catch (CacheLoader.InvalidCacheLoadException e) {
-            LOGGER.error(e.toString());
-        } catch (ExecutionException e) {
-            LOGGER.error(e.toString());
+            w.getStorage().rawMap().forEach(storageB::putItem);
+            w.getProductions().rawMap().forEach(productionsB::putItem);
+            Stream.of(ResourceType.values()).forEach((r) -> storageB.setLastUpdated(r,now));
+            w = new Wealth(userid,storageB.buildPackage(),productionsB.buildPackage());
+            updateWealth(w);
         }
-        return null;
+        return w;
     }
 
     public Wealth calculateUserWealth(long userid){
@@ -291,7 +277,6 @@ public class UserServiceImpl implements UserService {
     @Transactional(propagation = Propagation.NESTED)
     private Wealth updateWealth(Wealth wealth){
         long userId = wealth.getUserid();
-        wealthCache.put(userId,wealth);
         User oldUser = findById(userId);
         User newUser = new User(oldUser.getId(),
                                 oldUser.getUsername(),
@@ -300,7 +285,6 @@ public class UserServiceImpl implements UserService {
                                 wealth.calculateScore(),
                                 oldUser.getClanIdentifier());
         if(userDao.update(newUser) != null) {
-            userCache.put(newUser.getUsername(),newUser);
             return userDao.update(wealth);
         } else {
             return null;
