@@ -79,13 +79,7 @@ put path/to/app.wr/in/pampero
 3. Password is: `ooc4Choo`
 4. Proceed with caution, remember: "With Great Power Comes Great Responsibility"
 
-
-## Existent user in production (for testing purposes)
-
-* User: `wolf`
-* Password: `1q2w3e4r`
-
-### Useful commands:
+### Useful commands to query la database:
 
 * `\d` lists tables in current database.
 * `\l` lists databases.
@@ -93,6 +87,11 @@ put path/to/app.wr/in/pampero
 * `\c` shows the database you are connected to.
 * `\d table-name` describes that table.
 
+
+## Existent user in production (for testing purposes)
+
+* User: `wolf`
+* Password: `1q2w3e4r`
 
 ## Available routes
 
