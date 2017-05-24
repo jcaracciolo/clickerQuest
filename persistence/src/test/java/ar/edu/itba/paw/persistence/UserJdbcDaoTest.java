@@ -1,8 +1,6 @@
 package ar.edu.itba.paw.persistence;
 
-import ar.edu.itba.paw.model.ResourceType;
-import ar.edu.itba.paw.model.User;
-import ar.edu.itba.paw.model.Wealth;
+import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.model.packages.Implementations.Productions;
 import ar.edu.itba.paw.model.packages.Implementations.Storage;
 import ar.edu.itba.paw.model.packages.PackageBuilder;
@@ -19,10 +17,14 @@ import org.springframework.test.jdbc.JdbcTestUtils;
 import javax.sql.DataSource;
 
 import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 import static junit.framework.TestCase.assertNotNull;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestConfig.class)
@@ -75,15 +77,16 @@ public class UserJdbcDaoTest {
     }
 
     @Test
-    public void testNullWealth(){
+    public void testCreateNullWealth(){
         final User user = userDao.create(USERNAME, PASSWORD,IMAGE);
         Wealth nullWealth = userDao.getUserWealth(user.getId());
         assertNull(nullWealth);
         assertEquals(0, JdbcTestUtils.countRowsInTable(jdbcTemplate, "wealths"));
 
     }
+
     @Test
-    public void testEmptyWealth() {
+    public void testCreateEmptyWealth() {
         final User user = userDao.create(USERNAME, PASSWORD,IMAGE);
         Wealth wealth = new Wealth(user.getId(), Storage.packageBuilder().buildPackage(), Productions.packageBuilder().buildPackage());
         userDao.create(wealth);
@@ -94,7 +97,7 @@ public class UserJdbcDaoTest {
     }
 
     @Test
-    public void testFilledWealth() {
+    public void testCreateFilledWealth() {
         final User user = userDao.create(USERNAME, PASSWORD,IMAGE);
         PackageBuilder<Storage> sb = Storage.packageBuilder();
         PackageBuilder<Productions> pb = Productions.packageBuilder();
@@ -106,6 +109,73 @@ public class UserJdbcDaoTest {
         Wealth receivedWealth = userDao.getUserWealth(user.getId());
         assertEquals(wealth,receivedWealth);
         assertEquals(1, JdbcTestUtils.countRowsInTable(jdbcTemplate, "wealths"));
+
+    }
+
+    @Test
+    public void testUpdateFilledWealth() {
+        final User user = userDao.create(USERNAME, PASSWORD,IMAGE);
+        PackageBuilder<Storage> sb = Storage.packageBuilder();
+        PackageBuilder<Productions> pb = Productions.packageBuilder();
+        sb.putItemWithDate(ResourceType.PEOPLE,1D, Calendar.getInstance());
+        pb.putItem(ResourceType.PEOPLE,1D);
+
+        Wealth wealth = new Wealth(user.getId(), sb.buildPackage(), pb.buildPackage());
+        userDao.create(wealth);
+
+        sb.addItem(ResourceType.PEOPLE,1D);
+        pb.addItem(ResourceType.PEOPLE,1D);
+        Wealth newWealth = new Wealth(user.getId(), sb.buildPackage(), pb.buildPackage());
+        userDao.update(newWealth);
+
+        Wealth receivedWealth = userDao.getUserWealth(user.getId());
+        assertEquals(receivedWealth,newWealth);
+
+    }
+
+    @Test
+    public void testCreateEmptyFactories(){
+        final User user = userDao.create(USERNAME, PASSWORD,IMAGE);
+        Collection<Factory> factories = userDao.getUserFactories(user.getId());
+        assertTrue(factories.isEmpty());
+        assertEquals(0, JdbcTestUtils.countRowsInTable(jdbcTemplate, "factories"));
+
+    }
+    @Test
+    public void testCreateFactories() {
+        final User user = userDao.create(USERNAME, PASSWORD,IMAGE);
+        Factory factory1 = FactoryType.BOILER_BASE.defaultFactory(user.getId());
+        Factory factory2 = FactoryType.STOCK_INVESTMENT_BASE.defaultFactory(user.getId());
+        Factory factory3 = FactoryType.CABLE_MAKER_BASE.defaultFactory(user.getId());
+
+        userDao.create(factory1);
+        userDao.create(factory2);
+        userDao.create(factory3);
+
+        Collection<Factory> factories = userDao.getUserFactories(user.getId());
+        assertEquals(3, JdbcTestUtils.countRowsInTable(jdbcTemplate, "factories"));
+        assertTrue(factories.contains(factory1));
+        assertTrue(factories.contains(factory2));
+        assertTrue(factories.contains(factory3));
+
+    }
+
+    @Test
+    public void testUpdateFactory() {
+        final User user = userDao.create(USERNAME, PASSWORD,IMAGE);
+        Factory factory1 = FactoryType.BOILER_BASE.defaultFactory(user.getId());
+        Factory factory2 = FactoryType.CIRCUIT_MAKER_BASE.defaultFactory(user.getId());
+
+        userDao.create(factory1);
+        userDao.create(factory2);
+
+        Factory newFactory = factory1.upgradeResult();
+        userDao.update(newFactory);
+
+        Collection<Factory> factories = userDao.getUserFactories(user.getId());
+        assertEquals(2, JdbcTestUtils.countRowsInTable(jdbcTemplate, "factories"));
+        assertTrue(factories.contains(newFactory));
+        assertTrue(factories.contains(factory2));
 
     }
 

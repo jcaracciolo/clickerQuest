@@ -182,7 +182,17 @@ var createClanFunction = function () {
         {
             clanName: clanName
         }, function(data) {
-            window.location.replace(contextPath + "/clan/" + clanName);
+            var resp = JSON.parse(data);
+
+            var msg;
+            if (resp.result == "exists") {
+                msg = dec("game.msg.clanAlreadyExists");
+                window.sessionStorage.setItem("message", msg);
+                location.reload();
+            } else if(resp.result == "noUser") {
+            } else {
+                window.location.replace(contextPath + "/clan/" + clanName);
+            }
         });
 }
 document.getElementById("createClanSend").addEventListener("click", createClanFunction);

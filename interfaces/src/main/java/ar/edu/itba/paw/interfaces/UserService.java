@@ -3,6 +3,7 @@ package ar.edu.itba.paw.interfaces;
 import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.model.packages.Implementations.Productions;
 import ar.edu.itba.paw.model.packages.Implementations.Storage;
+import ar.edu.itba.paw.model.packages.Paginating;
 
 import java.util.Collection;
 import java.util.List;
@@ -32,6 +33,6 @@ public interface UserService {
     Collection<Factory> getUserFactories(long id);
 
     String getProfileImage(long userid);
-    List<User> globalUsers(int pag, int userPerPage);
+    Paginating<User> globalUsers(int pag, int userPerPage);
 
     }

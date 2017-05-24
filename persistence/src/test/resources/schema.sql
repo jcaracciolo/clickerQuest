@@ -35,10 +35,8 @@ CREATE TABLE IF NOT EXISTS wealths (
   FOREIGN KEY (userid) REFERENCES users(userid)  ON DELETE CASCADE
 );
 
+
 CREATE TABLE IF NOT EXISTS stockMarket (
-  time BIGINT,
-  userid BIGINT,
-  resourceType INTEGER,
-  amount DOUBLE DEFAULT 0,
-  PRIMARY KEY(time,userid,resourceType)
+  resourceType INT PRIMARY KEY,
+  amount DOUBLE PRECISION
 );

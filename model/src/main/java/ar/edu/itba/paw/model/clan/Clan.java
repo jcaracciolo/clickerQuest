@@ -20,10 +20,6 @@ public class Clan implements Iterable<User> {
         return name;
     }
 
-    public boolean addUser(User u) {
-        return users.add(u);
-    }
-
     Clan(@NotNull Collection<User> users, int id,@NotNull String name) {
         this.name = name;
         this.id = id;
