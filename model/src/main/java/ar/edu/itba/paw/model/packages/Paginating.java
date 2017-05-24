@@ -2,7 +2,6 @@ package ar.edu.itba.paw.model.packages;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;

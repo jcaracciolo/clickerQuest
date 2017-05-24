@@ -6,7 +6,6 @@ import ar.edu.itba.paw.model.packages.Implementations.Storage;
 import ar.edu.itba.paw.model.packages.Paginating;
 
 import java.util.Collection;
-import java.util.List;
 
 
 public interface UserService {

@@ -4,7 +4,6 @@ import ar.edu.itba.paw.interfaces.MarketDao;
 import ar.edu.itba.paw.model.ResourceType;
 import ar.edu.itba.paw.model.StockMarketEntry;
 import ar.edu.itba.paw.model.User;
-import ar.edu.itba.paw.model.clan.Clan;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,13 +12,10 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.jdbc.JdbcTestUtils;
 
 import javax.sql.DataSource;
-
 import java.util.Map;
 
-import static junit.framework.TestCase.assertNotNull;
 import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -86,7 +82,9 @@ public class MarketJdbcDaoTest {
 
     @Test
     public void testEmptyPopularities(){
-        assertNull(marketDao.getPopularities());
+        marketDao.getPopularities().forEach(
+                (r,d) -> assertEquals(1,d,0)
+        );
     }
 
 

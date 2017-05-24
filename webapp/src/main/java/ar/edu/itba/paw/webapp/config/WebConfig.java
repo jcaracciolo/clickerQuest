@@ -1,9 +1,7 @@
 package ar.edu.itba.paw.webapp.config;
 
-import ar.edu.itba.paw.interfaces.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.*;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.core.io.Resource;

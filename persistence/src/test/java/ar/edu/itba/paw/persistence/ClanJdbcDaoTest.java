@@ -1,10 +1,7 @@
 package ar.edu.itba.paw.persistence;
 
-import ar.edu.itba.paw.model.*;
+import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.clan.Clan;
-import ar.edu.itba.paw.model.packages.Implementations.Productions;
-import ar.edu.itba.paw.model.packages.Implementations.Storage;
-import ar.edu.itba.paw.model.packages.PackageBuilder;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,12 +13,10 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.jdbc.JdbcTestUtils;
 
 import javax.sql.DataSource;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.List;
 
 import static junit.framework.TestCase.assertNotNull;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestConfig.class)

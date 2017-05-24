@@ -5,7 +5,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
 import java.util.Set;
-import java.util.Spliterator;
 import java.util.TreeSet;
 import java.util.function.Consumer;
 

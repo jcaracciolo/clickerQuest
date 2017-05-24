@@ -1,7 +1,6 @@
 package ar.edu.itba.paw.interfaces;
 
 import ar.edu.itba.paw.model.Factory;
-import ar.edu.itba.paw.model.ResourceType;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.Wealth;
 import ar.edu.itba.paw.model.packages.Implementations.Productions;
@@ -9,7 +8,6 @@ import ar.edu.itba.paw.model.packages.Implementations.Storage;
 import ar.edu.itba.paw.model.packages.Paginating;
 
 import java.util.Collection;
-import java.util.List;
 
 
 public interface UserDao {

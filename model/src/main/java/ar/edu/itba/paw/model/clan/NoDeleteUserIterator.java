@@ -3,7 +3,6 @@ package ar.edu.itba.paw.model.clan;
 import ar.edu.itba.paw.model.User;
 
 import java.util.Iterator;
-import java.util.function.Consumer;
 
 /**
  * Created by juanfra on 17/05/17.

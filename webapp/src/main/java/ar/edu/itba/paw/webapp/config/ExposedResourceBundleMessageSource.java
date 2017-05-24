@@ -1,11 +1,10 @@
 package ar.edu.itba.paw.webapp.config;
 
-        import org.springframework.context.annotation.Bean;
-        import org.springframework.context.support.ResourceBundleMessageSource;
+import org.springframework.context.support.ResourceBundleMessageSource;
 
-        import java.util.Locale;
-        import java.util.ResourceBundle;
-        import java.util.Set;
+import java.util.Locale;
+import java.util.ResourceBundle;
+import java.util.Set;
 
 public class ExposedResourceBundleMessageSource extends
         ResourceBundleMessageSource {

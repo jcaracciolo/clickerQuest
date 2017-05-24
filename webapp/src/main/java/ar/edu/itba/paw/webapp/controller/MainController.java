@@ -4,7 +4,6 @@ import ar.edu.itba.paw.interfaces.ClanService;
 import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.model.clan.Clan;
-import ar.edu.itba.paw.model.packages.Paginating;
 import ar.edu.itba.paw.webapp.config.ExposedResourceBundleMessageSource;
 import ar.edu.itba.paw.webapp.form.UserForm;
 import org.json.simple.JSONArray;
@@ -23,11 +22,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.*;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Controller

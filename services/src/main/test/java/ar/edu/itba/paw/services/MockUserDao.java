@@ -1,14 +1,19 @@
 package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.interfaces.UserDao;
-import ar.edu.itba.paw.model.*;
+import ar.edu.itba.paw.model.Factory;
+import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.model.Wealth;
 import ar.edu.itba.paw.model.packages.Implementations.Productions;
 import ar.edu.itba.paw.model.packages.Implementations.Storage;
 import ar.edu.itba.paw.model.packages.PackageBuilder;
 import ar.edu.itba.paw.model.packages.Paginating;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -52,7 +57,7 @@ class MockUserDao implements UserDao {
 
     @Override
     public Integer getGlobalRanking(long userId) {
-        tables.sort( (d1,d2) -> d1.wealth.calculateScore()>d2.wealth.calculateScore() ? 1 : -1 );
+        tables.sort( (d1,d2) -> d1.wealth.calculateScore()<d2.wealth.calculateScore() ? 1 : -1 );
         int i = 1;
         for(MockUserDaoData data: tables) {
             if(data.user.getId() == userId){
@@ -240,6 +245,12 @@ class MockUserDao implements UserDao {
     public Paginating<User> globalUsers(int pag, int userPerPage) {
         return new Paginating<>(pag,userPerPage,counter,
                 (int)Math.ceil(counter/(double)userPerPage),
-                tables.stream().map((d) -> d.user).collect(Collectors.toList()));
+                tables.stream().limit(userPerPage).map((d) -> d.user).collect(Collectors.toList()));
+    }
+
+    @Override
+    public Collection<User> findByKeyword(String search) {
+        return tables.stream().map((d)->d.user).filter((u)->u.getUsername().contains(search))
+                .collect(Collectors.toList());
     }
 }

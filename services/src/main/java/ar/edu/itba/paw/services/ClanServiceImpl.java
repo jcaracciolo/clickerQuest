@@ -2,7 +2,6 @@ package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.interfaces.ClanDao;
 import ar.edu.itba.paw.interfaces.ClanService;
-import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.clan.Clan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
