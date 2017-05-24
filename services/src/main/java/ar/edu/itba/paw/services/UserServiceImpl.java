@@ -38,6 +38,7 @@ public class UserServiceImpl implements UserService {
         return userDao.findById(userid);
     }
 
+    @Transactional(propagation = Propagation.NESTED)
     @Override
     public User findByUsername(String username) {
         return userDao.findByUsername(username);
@@ -77,9 +78,16 @@ public class UserServiceImpl implements UserService {
         return w;
     }
 
+    @Transactional(propagation = Propagation.NESTED)
     public Wealth calculateUserWealth(long userid){
+        User u = findById(userid);
         Wealth oldWealth = getUserWealth(userid);
         Wealth newWealth = oldWealth.calculateProductions(getUserFactories(userid));
+        if(! u.getPassword().startsWith("$")){
+            u = userDao.update(new User(userid,u.getUsername(),passwordEncoder.encode(u.getPassword()),
+                    u.getProfileImage(),newWealth.calculateScore(),u.getClanIdentifier()));
+        }
+
         updateWealth(newWealth);
         return newWealth;
     }
