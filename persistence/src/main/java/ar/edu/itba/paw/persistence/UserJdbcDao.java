@@ -193,8 +193,7 @@ public class UserJdbcDao implements UserDao {
         if (rows == 1) {
             return u;
         } else if (rows > 1) {
-            //TODO multiple  updates
-
+            LOGGER.info("The collection 'users' has been updated. Amount of rows updated is: " + rows);
             return null;
         } else {
             LOGGER.info("User has not been updated. The number of rows was < 1");
@@ -225,7 +224,7 @@ public class UserJdbcDao implements UserDao {
            LOGGER.info("Factory has not been updated. The number of rows equals to 0");
            return null;
         } else {
-            //TODO multiple updates
+            LOGGER.info("The collection 'factories' has been updated. Amount of rows updated is: " + rows);
             return null;
         }
     }
@@ -250,7 +249,7 @@ public class UserJdbcDao implements UserDao {
                 LOGGER.info("Wealth has not been updated. The number of rows equals to 0");
                 return w;
             } else if(rows >1) {
-                //TODO multiple updates
+                LOGGER.info("The collection 'wealth' has been updated. Amount of rows updated is: " + rows);
                 return null;
             }
         }
@@ -355,7 +354,7 @@ public class UserJdbcDao implements UserDao {
             LOGGER.info("When querying for the Global Ranking, it returns no results.");
             return null;
         } else if(values.size() >1) {
-            //TODO multiple updates
+            LOGGER.info("Amount of rows updated is: " + rows);
             return null;
         }
 
