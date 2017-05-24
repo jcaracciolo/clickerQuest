@@ -6,7 +6,7 @@ document.getElementById("clan-action").addEventListener("click", function () {
                 {
                     clanName: clanName
                 }, function(data) {
-                    window.location.replace(contextPath + "/clan/" + clanName);
+                    window.location = contextPath + "/clan/" + clanName;
                 });
             break;
         case "leave":
@@ -14,7 +14,7 @@ document.getElementById("clan-action").addEventListener("click", function () {
                 {
                     clanName: clanName
                 }, function(data) {
-                    window.location.replace(contextPath + "/game");
+                    window.location = contextPath + "/game";
                 });
             break;
     }
@@ -25,7 +25,7 @@ for(var i = 0; i<users.length; i++) {
     var user = users.item(i)
     user.addEventListener("click", function () {
         console.log(contextPath + "/u/" + user.dataset.username);
-        window.location.replace(contextPath + "/u/" + user.dataset.username)
+        window.location = contextPath + "/u/" + user.dataset.username;
     })
 }
 

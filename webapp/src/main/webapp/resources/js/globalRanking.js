@@ -2,7 +2,7 @@
 var prev = document.getElementById("prevPage")
 if (prev != null) {
     prev.addEventListener("click", function () {
-        window.location.replace(contextPath + "/worldRanking/" + (pageNumber - 1))
+        window.location = contextPath + "/worldRanking/" + (pageNumber - 1)
     });
 }
 
@@ -10,7 +10,7 @@ if (prev != null) {
 var next = document.getElementById("nextPage")
 if (next != null) {
     next.addEventListener("click", function () {
-        window.location.replace(contextPath + "/worldRanking/" + (pageNumber + 1))
+        window.location = contextPath + "/worldRanking/" + (pageNumber + 1)
     });
 }
 
@@ -19,6 +19,6 @@ for(var i = 0; i<users.length; i++) {
     var user = users.item(i)
     user.addEventListener("click", function () {
         console.log(contextPath + "/u/" + this.dataset.username);
-        window.location.replace(contextPath + "/u/" + this.dataset.username)
+        window.location = contextPath + "/u/" + this.dataset.username
     })
 }
