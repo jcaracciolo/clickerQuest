@@ -93,7 +93,7 @@ public class MainController {
         if(u == null){
             mav = new ModelAndView("errorPage");
             mav.addObject("errorMsg", "404");
-            LOGGER.error("looking for unexistant user profile: " + username);
+            LOGGER.error("Looking for inexistent user profile: " + username);
             return mav;
         }
 
