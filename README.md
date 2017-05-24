@@ -80,6 +80,11 @@ put path/to/app.wr/in/pampero
 4. Proceed with caution, remember: "With Great Power Comes Great Responsibility"
 
 
+## Existent user in production (for testing purposes)
+
+* User: `wolf`
+* Password: `1q2w3e4r`
+
 ### Useful commands:
 
 * `\d` lists tables in current database.
