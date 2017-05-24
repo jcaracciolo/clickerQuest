@@ -7,13 +7,13 @@
 <head>
     <title><spring:message code="game.title"/> - <spring:message code="globalRanking.title"/></title>
     <!--Import css-->
-    <link type="text/css" rel="stylesheet" href="<c:url value="/resources/css/common.css"/>"
+    <link type="text/css" rel="stylesheet" href='<c:url value="/resources/css/common.css"/>'
           media="screen,projection"/>
-    <link type="text/css" rel="stylesheet" href="<c:url value="/resources/css/globalRanking.css"/>"
+    <link type="text/css" rel="stylesheet" href='<c:url value="/resources/css/globalRanking.css"/>'
           media="screen,projection"/>
-    <link type="text/css" rel="stylesheet" href="<c:url value="/resources/css/clan.css"/>"
+    <link type="text/css" rel="stylesheet" href='<c:url value="/resources/css/clan.css"/>'
           media="screen,projection"/>
-    <link type="text/css" rel="stylesheet" href="<c:url value="/resources/css/materialize.min.css"/>"
+    <link type="text/css" rel="stylesheet" href='<c:url value="/resources/css/materialize.min.css"/>'
           media="screen,projection"/>
 
     <!--Import Google Icon Font-->
@@ -93,8 +93,8 @@
 </script>
 
 <script type="text/javascript" src='<c:url value="https://code.jquery.com/jquery-2.1.1.min.js"/>'></script>
-<script type="text/javascript" src="<c:url value="/resources/js/materialize.min.js"/>"></script>
+<script type="text/javascript" src='<c:url value="/resources/js/materialize.min.js"/>'></script>
 <script type="text/javascript" src='<c:url value="/resources/js/globalRanking.js"/>'></script>
-<script type="text/javascript" src="<c:url value="/resources/js/autocomplete.js"/>"></script>
-<script type="text/javascript" src="<c:url value="/resources/js/userProfile.js"/>"></script>
+<script type="text/javascript" src='<c:url value="/resources/js/autocomplete.js"/>'></script>
+<script type="text/javascript" src='<c:url value="/resources/js/userProfile.js"/>'></script>
 </html>
