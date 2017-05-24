@@ -11,6 +11,7 @@
 </head>
 <body>
 <title><spring:message code="register.title"/></title>
+<p id="backBtn"><spring:message code="register.back"/></p>
 <h2><spring:message code="signUp.register"/></h2>
     <c:url value="/create" var="postPath"/>
     <form:form modelAttribute="registerForm" action="${postPath}" method="post">
