@@ -122,6 +122,14 @@ The following routes need authentication:
     * POST
 
 
+## See logs in production
+
+* There are two types of logs: `warning` and `error` logs.
+* **Limitations**: currently the application saves the last 200 logs, for each file.
+* The `warning` logs can be found in production at: `pawserver.it.itba.edu.ar/logs/warning-logs.yyyy-mm-dd.log`
+* The `error` logs can be found in production at: `pawserver.it.itba.edu.ar/logs/error-logs.yyyy-mm-dd.log`
+
+
 ## Current DB schemas
 
 ```
