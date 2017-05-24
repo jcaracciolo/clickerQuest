@@ -28,3 +28,4 @@ for(var i = 0; i<users.length; i++) {
         window.location.replace(contextPath + "/u/" + user.dataset.username)
     })
 }
+

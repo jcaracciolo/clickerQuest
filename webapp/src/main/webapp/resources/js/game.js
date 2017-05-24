@@ -1,28 +1,27 @@
 var url=window.location.href.split("/")
 var userId =url[url.length - 2];
-
 sessionStorage.removeItem("user");
 
 $(document).ready(function(){
     $('.modal').modal();
     $('select').material_select();
 });
+
 window.onkeyup = function(e) {
     var key = e.keyCode ? e.keyCode : e.which;
 
     if (key == 13) {
-
         if($( "#clanNameInput" ).is(":focus")){
-            createClan();
+            createClanFunction();
         } else if($( "#search" ).is(":focus")){
-            searchCommunity();
+            // searchCommunity();
         }
     }
 };
 
 var toPrint = window.sessionStorage.getItem("message");
 
-if(toPrint != null){
+if(toPrint !== null){
     sessionStorage.removeItem("message");
     Materialize.toast(toPrint,4000);
 }
@@ -152,22 +151,6 @@ setInterval(function(){
     refreshUpgradesBuyability();
 }, 1000);
 
-var searchCommunity = function () {
-// Create clan listener
-    var search = document.getElementById("search").value;
-    console.log("Searching clan: " + search);
-    $.post(contextPath + "/search",
-        {
-            search: search
-        }, function(data) {
-            var resp = JSON.parse(data);
-            // $(".js-example-data-array-selected").select2({
-            //     data: resp.users,
-            //     placeholder: "Search users or clans",
-            //     allowClear: true
-            // })
-        });
-}
 // Create clan listener
 var createClanFunction = function () {
     var clanName = document.getElementById("clanNameInput").value;
@@ -289,8 +272,7 @@ function abbreviateNumber(value,decimals) {
     return (decimals ? Math.floor(100* newValue)/100 : newValue)+suffixes[suffixNum];
 }
 
-function truncate(number)
-{
+function truncate(number) {
     return number > 0
         ? Math.floor(number)
         : Math.ceil(number);
@@ -348,14 +330,14 @@ document.getElementById("market.buy").addEventListener("click", function() {
     });
 
 
-    function validateBuy(resourceId, quantity) {
-        if (storagesMap[3] >= quantity * costBuyResources[resourceId]) { //3: MONEY
-            return true;
-        }
-        Materialize.toast(dec("game.market.buyFail",abbreviateNumber(quantity,false),dec(decRes(resourceId))), 3000);
-
-        return false;
+function validateBuy(resourceId, quantity) {
+    if (storagesMap[3] >= quantity * costBuyResources[resourceId]) { //3: MONEY
+        return true;
     }
+    Materialize.toast(dec("game.market.buyFail",abbreviateNumber(quantity,false),dec(decRes(resourceId))), 3000);
+
+    return false;
+}
 
 document.getElementById("market.sell").addEventListener("click", function() {
             var unit = document.getElementById("market.sell.unit").value

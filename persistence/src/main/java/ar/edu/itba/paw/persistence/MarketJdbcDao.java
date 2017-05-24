@@ -11,6 +11,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -87,7 +88,7 @@ public class MarketJdbcDao implements MarketDao {
     public Map<ResourceType,Double> getPopularities(){
         List<StockMarketEntry> entries = jdbcTemplate.query("SELECT * FROM stockMarket",MARKET_STOCK_ROW_MAPPER);
         Map<ResourceType,Double> popularities = new HashMap<>();
-        if(entries.isEmpty()) return null;
+        if(entries.isEmpty()) return Collections.emptyMap();
 
         Double minRes = entries.stream()
                 .map(StockMarketEntry::getAmount)
