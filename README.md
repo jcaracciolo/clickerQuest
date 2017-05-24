@@ -133,19 +133,22 @@ The following routes need authentication:
 * **Limitations**: currently the application saves the last 200 logs, for each file.
 * The `warning` logs can be found in production at: `pawserver.it.itba.edu.ar/logs/warning-logs.yyyy-mm-dd.log`
 * The `error` logs can be found in production at: `pawserver.it.itba.edu.ar/logs/error-logs.yyyy-mm-dd.log`
+  * Where `yyyy-mm-dd` is the day you are searching for. Example: 2017-05-24`
 
 
 ## Current DB schemas
 
 ```
 
-                                      Table "public.users"
-    Column    |          Type          |                       Modifiers
---------------+------------------------+--------------------------------------------------------
- userid       | bigint                 | not null default nextval('users_userid_seq'::regclass)
+                      Table users
+    Column    |          Type          |             Modifiers
+--------------+------------------------+--------------------------------------
+ userid       | bigint                 | not null default 
+              |                        | nextval('users_userid_seq'::regclass)
  username     | character varying(100) |
  password     | character varying(100) |
  profileimage | character varying(100) |
+
 Indexes:
     "users_pkey" PRIMARY KEY, btree (userid)
     "users_username_key" UNIQUE CONSTRAINT, btree (username)
@@ -154,7 +157,7 @@ Indexes:
  
  ```
  
-             Table "public.factories"
+                     Table factories
              
        Column      |       Type       | Modifiers
  ------------------+------------------+-----------
@@ -165,6 +168,7 @@ Indexes:
   outputmultiplier | double precision |
   costreduction    | double precision |
   level            | integer          |
+ 
  Indexes:
      "factories_pkey" PRIMARY KEY, btree (userid, type)
      
@@ -172,13 +176,14 @@ Indexes:
  
  ```
  
-          Table "public.stockmarket"
+                 Table stockmarket
      Column    |       Type       | Modifiers
  --------------+------------------+-----------
   time         | bigint           | not null
   userid       | bigint           | not null
   resourcetype | integer          | not null
   amount       | double precision |
+ 
  Indexes:
      "stockmarket_pkey" PRIMARY KEY, btree ("time", userid, resourcetype)
      
@@ -186,7 +191,7 @@ Indexes:
  
  ```
  
-            Table "public.wealths"
+                   Table wealths
      Column    |       Type       | Modifiers
  --------------+------------------+-----------
   userid       | bigint           | not null
@@ -194,6 +199,7 @@ Indexes:
   production   | double precision |
   storage      | double precision |
   lastupdated  | bigint           |
+ 
  Indexes:
      "wealths_pkey" PRIMARY KEY, btree (userid, resourcetype)
      
