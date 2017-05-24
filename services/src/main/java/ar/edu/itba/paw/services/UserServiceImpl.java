@@ -83,10 +83,8 @@ public class UserServiceImpl implements UserService {
         User u = findById(userid);
         Wealth oldWealth = getUserWealth(userid);
         Wealth newWealth = oldWealth.calculateProductions(getUserFactories(userid));
-        if(! u.getPassword().startsWith("$")){
-            u = userDao.update(new User(userid,u.getUsername(),passwordEncoder.encode(u.getPassword()),
+        u = userDao.update(new User(userid,u.getUsername(),u.getPassword(),
                     u.getProfileImage(),newWealth.calculateScore(),u.getClanIdentifier()));
-        }
 
         updateWealth(newWealth);
         return newWealth;

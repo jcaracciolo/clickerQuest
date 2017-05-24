@@ -45,7 +45,7 @@
                     </a>
                 </div>
                 <div id="search-user">
-                    <form>
+                    <form onSubmit="return false;" autocomplete="off">
                         <div class="input-field search-user">
                             <input id="search" type="search" required>
                             <label class="label-icon" for="search"><i class="material-icons">search</i>
@@ -167,7 +167,7 @@
 <script type="text/javascript" src="<c:url value="https://code.jquery.com/jquery-2.1.1.min.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/resources/js/materialize.min.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/resources/js/autocomplete.js"/>"></script>
-<script type="text/javascript" src="<c:url value="/resources/js/userProfile.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/resources/js/profile.js"/>"></script>
 <script type="text/javascript">$('.modal').modal();</script>
 
 

@@ -14,7 +14,7 @@ window.onkeyup = function(e) {
         if($( "#clanNameInput" ).is(":focus")){
             createClanFunction();
         } else if($( "#search" ).is(":focus")){
-            // searchCommunity();
+            searchCommunity(true);
         }
     }
 };

@@ -10,16 +10,19 @@ $(document).ready(function(){
 
 function startAutocomplete(id) {
     autocomplete_id = id;
-    autocomplete_id.autocomplete();
+    autocomplete_id.autocomplete({
+        limit: 5, // The max amount of results that can be shown at once. Default: Infinity.
+        minLength: 1 // The minimum length of the input for the autocomplete to start. Default: 1.
+    });
     autocomplete_id.on('change textInput input', function () {
         var searchTerm = this.value;
-        if(searchTerm.length > 2){
+        if(searchTerm.length > 1){
             searchCommunity();
         }
     });
 }
 
-var searchCommunity = function () {
+var searchCommunity = function (direct) {
 // Create clan listener
     var search = autocomplete_id.val();
     console.log("Searching clan: " + search);
@@ -33,10 +36,17 @@ var searchCommunity = function () {
                 data: {}});
             var temp;
             for(var i=0;i<resp.users.length;i++){
-                autoData[resp.users[i]]=userImageSrc;
+                autoData[resp.users[i]+' ']=userImageSrc;
             }
             for(var i=0;i<resp.clans.length;i++){
-                autoData[resp.clans[i]+' ']=clanImageSrc;
+                autoData[resp.clans[i]+'  ']=clanImageSrc;
+            }
+            if(direct){
+                if(resp.users.indexOf(search) != -1){
+                    window.location.replace(contextPath + "/u/" + search);
+                } else if(resp.clans.indexOf(search) != -1){
+                    window.location.replace(contextPath + "/clan/" + search);
+                }
             }
             $('#search').autocomplete({
                 data: autoData,
@@ -50,4 +60,8 @@ var searchCommunity = function () {
                 }
             });
         });
+}
+
+function changeSearchLocation(val){
+
 }
