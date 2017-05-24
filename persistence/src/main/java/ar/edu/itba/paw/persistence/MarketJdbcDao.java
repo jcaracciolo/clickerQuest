@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.MarketDao;
+import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.model.ResourceType;
 import ar.edu.itba.paw.model.StockMarketEntry;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +10,8 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Repository;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import javax.sql.DataSource;
 import java.util.Collections;
 import java.util.HashMap;
@@ -23,6 +25,8 @@ public class MarketJdbcDao implements MarketDao {
     private static final long refreshTime = 2*60*1000;
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert jdbcInsertStockMakert;
+    private static final Logger LOGGER = LoggerFactory.getLogger(MarketJdbcDao.class);
+
 
 
     private final static RowMapper<StockMarketEntry> MARKET_STOCK_ROW_MAPPER = (rs, rowNum) ->
@@ -55,7 +59,7 @@ public class MarketJdbcDao implements MarketDao {
                     MARKET_STOCK_ROW_MAPPER,stockMarketEntry.getResourceType().getId());
 
             if(entryList.size()>1) {
-                //TODO log this
+                LOGGER.error("There is more that one entry for that resource " + stockMarketEntry.getResourceType().getId());
                 throw new RuntimeException("Database corrupt");
             }
             StockMarketEntry last  =

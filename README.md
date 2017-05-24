@@ -138,7 +138,6 @@ Indexes:
  ```
  
  ```
- 
              Table "public.factories"
              
        Column      |       Type       | Modifiers

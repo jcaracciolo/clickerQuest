@@ -11,6 +11,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
 import java.util.*;
@@ -49,6 +51,8 @@ public class UserJdbcDao implements UserDao {
     private final SimpleJdbcInsert jdbcInsertUsers;
     private final SimpleJdbcInsert jdbcInsertFactories;
     private final SimpleJdbcInsert jdbcInsertWealths;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserJdbcDao.class);
 
     //region ROWMAPPER
     private final static RowMapper<Factory> FACTORY_ROW_MAPPER = (rs, rowNum) ->
@@ -189,11 +193,10 @@ public class UserJdbcDao implements UserDao {
         if (rows == 1) {
             return u;
         } else if (rows > 1) {
-            //TODO multiple  updates
-
+            LOGGER.info("The collection 'users' has been updated. Amount of rows updated is: " + rows);
             return null;
         } else {
-            //TODO log no user update
+            LOGGER.info("User has not been updated. The number of rows was < 1");
             return null;
         }
     }
@@ -218,10 +221,10 @@ public class UserJdbcDao implements UserDao {
         if(rows == 1) {
             return f;
         } else if (rows == 0) {
-            //TODO log no update
+           LOGGER.info("Factory has not been updated. The number of rows equals to 0");
            return null;
         } else {
-            //TODO multiple updates
+            LOGGER.info("The collection 'factories' has been updated. Amount of rows updated is: " + rows);
             return null;
         }
     }
@@ -243,10 +246,10 @@ public class UserJdbcDao implements UserDao {
                     r.getId());
 
             if (rows == 0) {
-                //TODO log no update
+                LOGGER.info("Wealth has not been updated. The number of rows equals to 0");
                 return w;
             } else if(rows >1) {
-                //TODO multiple updates
+                LOGGER.info("The collection 'wealth' has been updated. Amount of rows updated is: " + rows);
                 return null;
             }
         }
@@ -348,10 +351,10 @@ public class UserJdbcDao implements UserDao {
                                     userId);
 
         if (values.size() == 0) {
-            //TODO log no update
+            LOGGER.info("When querying for the Global Ranking, it returns no results.");
             return null;
         } else if(values.size() >1) {
-            //TODO multiple updates
+            LOGGER.info("Amount of values updated is: " + values.size());
             return null;
         }
 

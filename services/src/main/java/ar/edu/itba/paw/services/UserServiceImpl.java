@@ -188,7 +188,7 @@ public class UserServiceImpl implements UserService {
                 ).findAny().orElse(null);
 
         if(factory==null) {
-            //TODO log this
+            LOGGER.error("There was an error making the purchaseUpgrade: the factory is null");
             throw new RuntimeException("Factory not found");
         }
 
