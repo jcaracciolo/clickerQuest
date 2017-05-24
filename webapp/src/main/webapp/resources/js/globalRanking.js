@@ -22,3 +22,13 @@ for(var i = 0; i<users.length; i++) {
         window.location.replace(contextPath + "/u/" + this.dataset.username)
     })
 }
+
+window.onkeyup = function(e) {
+    var key = e.keyCode ? e.keyCode : e.which;
+
+    if (key == 13) {
+        if($( "#search" ).is(":focus")){
+            searchCommunity(true);
+        }
+    }
+};
