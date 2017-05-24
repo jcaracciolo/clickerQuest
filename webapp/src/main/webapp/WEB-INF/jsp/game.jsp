@@ -477,10 +477,9 @@
 <script type="text/javascript" src="<c:url value="https://code.jquery.com/jquery-2.1.1.min.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/resources/js/materialize.min.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/resources/js/clickspark.min.js"/>"></script>
-<script type="text/javascript" src="<c:url value="/resources/js/game.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/resources/js/autocomplete.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/resources/js/game.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/resources/js/jquery-validator-framework/jquery.validate.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/resources/js/jquery-validator-framework/additional-methods.js"/>"></script>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
 </html>
