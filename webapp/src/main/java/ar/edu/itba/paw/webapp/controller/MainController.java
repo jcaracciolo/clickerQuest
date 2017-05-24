@@ -190,10 +190,6 @@ public class MainController {
         }
 
         clanService.deleteFromClan(u.getId());
-
-        if (clan.getUsers().isEmpty()) {
-            // TODO: delete clan
-        }
     }
 
     @RequestMapping(value = "/joinClan", method = { RequestMethod.POST })
@@ -336,19 +332,6 @@ public class MainController {
         j.put("quantity", quantity);
         return j.toJSONString();
     }
-
-    // TODO Implement This correctly
-    @RequestMapping(value = "/AllUsers", method = { RequestMethod.GET })
-    @ResponseBody
-    public String AllUsers(Principal principal) {
-
-        JSONObject j = new JSONObject();
-       Paginating<User> pUsers = userService.globalUsers(0,100);
-
-        j.put("users", pUsers.getItems().stream().map((u) -> u.getScore()).collect(Collectors.toList()));
-        return j.toJSONString();
-    }
-
 
     @RequestMapping(value = "/search", method = { RequestMethod.POST })
     @ResponseBody
