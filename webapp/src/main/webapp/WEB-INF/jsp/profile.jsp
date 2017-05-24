@@ -61,26 +61,6 @@
                         </li>
                     </ul>
                 </div>
-                <c:choose>
-                    <c:when test="${user.clanIdentifier == null}">
-                        <div id="createClan" class="button">
-                            <ul>
-                                <li>
-                                    <a href="#clanModal"><spring:message code='create.clan'/></a>
-                                </li>
-                            </ul>
-                        </div>
-                    </c:when>
-                    <c:otherwise>
-                        <div id="createClan" class="button">
-                            <ul>
-                                <li>
-                                    <a href="<c:url value='/clan/${clan.name}'/>"><spring:message code='game.seeMyClan'/></a>
-                                </li>
-                            </ul>
-                        </div>
-                    </c:otherwise>
-                </c:choose>
                 <div id="logout">
                     <ul id="nav-mobile">
                         <li><a href="<c:url value='/logout'/>"><spring:message code='logout'/> </a></li>
