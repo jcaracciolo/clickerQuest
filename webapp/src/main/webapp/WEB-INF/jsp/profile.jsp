@@ -54,9 +54,16 @@
                         </div>
                     </form>
                 </div>
+                <div id="globalRanking" class="button last">
+                    <ul>
+                        <li>
+                            <a href="<c:url value='/worldRanking/1'/>"><spring:message code='game.seeGlobalRanking'/></a>
+                        </li>
+                    </ul>
+                </div>
                 <c:choose>
                     <c:when test="${user.clanIdentifier == null}">
-                        <div id="createClan" class="button last">
+                        <div id="createClan" class="button">
                             <ul>
                                 <li>
                                     <a href="#clanModal"><spring:message code='create.clan'/></a>
@@ -65,7 +72,7 @@
                         </div>
                     </c:when>
                     <c:otherwise>
-                        <div id="createClan" class="button last">
+                        <div id="createClan" class="button">
                             <ul>
                                 <li>
                                     <a href="<c:url value='/clan/${clan.name}'/>"><spring:message code='game.seeMyClan'/></a>
@@ -98,14 +105,14 @@
             </div>
         </div>
         <div id="world-ranking">
-            <p><spring:message code="profile.worldRanking" arguments="${globalRanking}"/> </p>
+            <p>#<spring:message code="profile.worldRanking" arguments="${globalRanking}"/> </p>
         </div>
         <c:if test="${user.clanIdentifier != null}">
             <div id="group-info">
-                <%-- TODO add clan data --%>
                 <c:if test="${user.clanIdentifier != null}">
-                    <img class="group-logo" src="<c:url value="/resources/group_icons/1.png"/>" alt="group_logo"/>
-                    <p>${clan.name}</p>
+                    <p class="subtitle"><spring:message code="profile.clan"/> </p>
+                    <br>
+                    <p href='<c:url value="/clan/${clan.name}"/>' id="clanLink" data-clanName="${clan.name}">${clan.name}</p>
                 </c:if>
             </div>
         </c:if>

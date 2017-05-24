@@ -14,7 +14,7 @@ document.getElementById("clan-action").addEventListener("click", function () {
                 {
                     clanName: clanName
                 }, function(data) {
-                    window.location.replace(contextPath + "/clan/" + clanName);
+                    window.location.replace(contextPath + "/game");
                 });
             break;
     }

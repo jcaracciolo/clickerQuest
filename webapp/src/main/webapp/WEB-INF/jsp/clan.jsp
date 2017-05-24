@@ -44,7 +44,7 @@
                 <div id="globalRanking" class="button last">
                     <ul>
                         <li>
-                            <a href="<c:url value='/worldRanking'/>"><spring:message code='game.seeGlobalRanking'/></a>
+                            <a href="<c:url value='/worldRanking/1'/>"><spring:message code='game.seeGlobalRanking'/></a>
                         </li>
                     </ul>
                 </div>

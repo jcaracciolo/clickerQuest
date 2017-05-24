@@ -134,7 +134,7 @@ public class MainController {
         User u = userService.findByUsername(principal.getName());
         if(u == null) {
             mav = new ModelAndView("errorPage");
-            mav.addObject("errorMsg", "404");
+            mav.addObject("errorMsg", "401");
             LOGGER.warn("Tried to skip login in clan: " + principal.getName());
             return mav;
         }
@@ -148,15 +148,13 @@ public class MainController {
     @ResponseBody
     public String createClan(Principal principal, @RequestParam("clanName") final String clanName){
         ModelAndView mav = new ModelAndView("clan");
-        Clan clan = clanService.createClan(clanName);
-
-        if (clan == null) {
-            // TODO: clan is null (return 'clan already exists')
+        if (clanService.getClanByName(clanName) != null) {
             JSONObject j = new JSONObject();
             j.put("result", "exists");
             return j.toJSONString();
         }
 
+        Clan clan = clanService.createClan(clanName);
         User u = userService.findByUsername(principal.getName());
 
         if(u == null){
@@ -179,16 +177,16 @@ public class MainController {
         User u = userService.findByUsername(principal.getName());
 
         if(u == null){
-            // TODO: not logged user trying to leave clan
+            return;
         }
         if(u.getClanIdentifier() == null) {
-            // TODO: user without clan trying to leave a clan
+            return;
         }
 
         Clan clan = clanService.getClanByName(clanName);
 
         if (clan == null) {
-            // TODO: return 'clan does not exist'
+            return;
         }
 
         clanService.deleteFromClan(u.getId());
@@ -206,16 +204,16 @@ public class MainController {
         User u = userService.findByUsername(principal.getName());
 
         if(u == null){
-            // TODO: not logged user trying to leave clan
+            return;
         }
         if(u.getClanIdentifier() != null) {
-            // TODO: user with clan trying to join another clan
+            return;
         }
 
         Clan clan = clanService.getClanByName(clanName);
 
         if (clan == null) {
-            // TODO: return 'clan does not exist'
+            return;
         }
 
         clanService.addUserToClan(clan.getId(), u.getId());
@@ -236,7 +234,7 @@ public class MainController {
         User u = userService.findByUsername(principal.getName());
         if(u == null) {
             mav = new ModelAndView("errorPage");
-            mav.addObject("errorMsg", "404");
+            mav.addObject("errorMsg", "401");
             LOGGER.warn("Not logged in watching global ranking");
             return mav;
         }
@@ -257,7 +255,7 @@ public class MainController {
 
         if(u == null){
             mav = new ModelAndView("errorPage");
-            mav.addObject("errorMsg", "404");
+            mav.addObject("errorMsg", "401");
             LOGGER.warn("Tried to skip login in game: " + principal.getName());
             return mav;
         }

@@ -30,6 +30,20 @@ img.profile-img {
     overflow-y: auto;
 }
 
+p.subtitle {
+    font-size: 1.25rem;
+}
+
+#clanLink {
+    font-size: 1.25rem;
+    margin-left: 0.75rem;
+}
+
+#clanLink:hover {
+    color: black;
+    cursor: pointer;
+}
+
 .right-section {
     display: flex;
     flex-direction: column;
@@ -128,6 +142,7 @@ img.factory-image {
     display: flex;
     flex-direction: row;
     align-items: center;
+    margin-left: 1.25rem;
 }
 
 img.group-logo {
