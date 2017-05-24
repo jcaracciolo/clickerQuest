@@ -37,6 +37,21 @@ h2 {
 
 }
 
+#backBtn {
+    font-family: Fixedsys;
+    color: white;
+    font-size: 1.5em;
+    text-shadow: -1px 0 black, 0 1px black, 4px 0 black, 0 -3px black;
+    margin-top: 1em;
+    width: 8rem;
+}
+
+#backBtn:hover {
+    color: black;
+    text-shadow: -1px 0 white, 0 1px white, 4px 0 white, 0 -3px white;
+    cursor: pointer;
+}
+
 #registerForm{
     /*background-color: darkblue;*/
     margin: auto;
