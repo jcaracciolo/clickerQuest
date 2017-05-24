@@ -21,7 +21,7 @@
                 <input id = "usernameInput" name = "j_username" type ="text"/>
             </div>
             <div>
-                <label for ="passwordInput"><spring:message code="signUp.password"/></label>
+                <label for ="passwordInput"><spring:message code="signUp.password"/> :</label>
                 <input id = "passwordInput" name = "j_password" type = "password"/>
             </div>
             <p id="loginFailLabel" for ="inputContainer" class="formError invisible"><spring:message code="index.loginFail"/></p>

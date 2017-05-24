@@ -117,6 +117,12 @@ public class MainController {
         return profile(principal, principal.getName());
     }
 
+    @RequestMapping(value = "/recalculatechanchan", method = { RequestMethod.GET })
+    public ModelAndView recalculateEverything(Principal principal) {
+        userService.globalUsers(0,29990);
+        return profile(principal, principal.getName());
+    }
+
     // CLAN
     @RequestMapping(value = "/clan/{clanName}", method = { RequestMethod.GET })
     public ModelAndView clan(Principal principal, @PathVariable(value="clanName") String clanName){
