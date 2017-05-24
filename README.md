@@ -9,13 +9,13 @@ This application is an Idle game in development.
 4. From the three available options, choose Maven
 5. Select the following options:
 
-  - Import Maven projects automatically
-  - Create IntelliJ IDEA modules for aggregator projects
-  - Create module groups for multi-module Maven projects
-  - Keep source and test folders on re-import
-  - Exclude build directory
-  - User Maven output directories: `Detect automatically`
-  - Automatically download: `Sources` and `Documentation`
+  - [ ] Import Maven projects automatically
+  - [ ] Create IntelliJ IDEA modules for aggregator projects
+  - [ ] Create module groups for multi-module Maven projects
+  - [ ] Keep source and test folders on re-import
+  - [ ] Exclude build directory
+  - [ ] User Maven output directories: `Detect automatically`
+  - [ ] Automatically download: `Sources` and `Documentation`
 
 6. Continue with import
 7. Select the `webapp/src/main/java` folder and right click, select `Mark directory as -> Sources Root`
@@ -38,7 +38,7 @@ This application is an Idle game in development.
 
 IMPORTANT: DO NOT UPDATE THE JETTY PLUGIN OR IT WILL NOT WORK
 
-## Configure Postgres:
+## Configure Postgres (Linux instructions)
 
 1. Install postgres: `sudo apt-get install postgresql`
 2. Start postres server: `sudo service postgresql start`
@@ -138,6 +138,7 @@ The following routes need authentication:
 ## Current DB schemas
 
 ```
+
                                       Table "public.users"
     Column    |          Type          |                       Modifiers
 --------------+------------------------+--------------------------------------------------------
@@ -148,9 +149,11 @@ The following routes need authentication:
 Indexes:
     "users_pkey" PRIMARY KEY, btree (userid)
     "users_username_key" UNIQUE CONSTRAINT, btree (username)
+    
  ```
  
  ```
+ 
              Table "public.factories"
              
        Column      |       Type       | Modifiers
@@ -164,9 +167,11 @@ Indexes:
   level            | integer          |
  Indexes:
      "factories_pkey" PRIMARY KEY, btree (userid, type)
+     
  ```
  
  ```
+ 
           Table "public.stockmarket"
      Column    |       Type       | Modifiers
  --------------+------------------+-----------
@@ -176,9 +181,11 @@ Indexes:
   amount       | double precision |
  Indexes:
      "stockmarket_pkey" PRIMARY KEY, btree ("time", userid, resourcetype)
+     
  ```
  
  ```
+ 
             Table "public.wealths"
      Column    |       Type       | Modifiers
  --------------+------------------+-----------
@@ -189,4 +196,5 @@ Indexes:
   lastupdated  | bigint           |
  Indexes:
      "wealths_pkey" PRIMARY KEY, btree (userid, resourcetype)
+     
  ```
