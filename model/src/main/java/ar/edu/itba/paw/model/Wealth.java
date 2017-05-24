@@ -140,7 +140,7 @@ public class Wealth {
 
     public double calculateScore() {
         double score = productions.rawMap().entrySet().stream()
-                .map((e) -> e.getKey().getPrice() * e.getValue())
+                .map((e) -> e.getKey().getBasePrice() * e.getValue())
                 .reduce((d1,d2) -> d1+d2)
                 .orElse(0D);
 

@@ -39,6 +39,10 @@ public enum ResourceType {
         return (int)Math.ceil(price * popularity);
     }
 
+    public int getBasePrice() {
+        return (int)Math.ceil(price);
+    }
+
     public String getNameCode() {
         return nameCode;
     }
