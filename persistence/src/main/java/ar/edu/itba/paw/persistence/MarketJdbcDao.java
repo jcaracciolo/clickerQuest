@@ -14,6 +14,7 @@ import javax.sql.DataSource;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 @Repository
 public class MarketJdbcDao implements MarketDao {
@@ -25,14 +26,14 @@ public class MarketJdbcDao implements MarketDao {
 
     private final static RowMapper<StockMarketEntry> MARKET_STOCK_ROW_MAPPER = (rs, rowNum) ->
                     new StockMarketEntry(
-                            ResourceType.fromId(rs.getInt("resourceType")),
+                            ResourceType.fromId(rs.getInt("resourcetype")),
                             rs.getDouble("amount"));
 
 
     private final static ReverseRowMapper<StockMarketEntry> MARKET_REVERSE_STOCK_ROW_MAPPER = (sme) ->
     {
         final Map<String, Object> args = new HashMap();
-        args.put("resourceType",    sme.getResourceType().getId());
+        args.put("resourcetype",    sme.getResourceType().getId());
         args.put("amount",          sme.getAmount());
         return args;
     };
@@ -82,33 +83,52 @@ public class MarketJdbcDao implements MarketDao {
         return true;
     }
 
-    @Scheduled(fixedDelay=refreshTime)
-    public void updatePrices(){
+    @Override
+    public Map<ResourceType,Double> getPopularities(){
         List<StockMarketEntry> entries = jdbcTemplate.query("SELECT * FROM stockMarket",MARKET_STOCK_ROW_MAPPER);
-        Double total = entries.stream().map(StockMarketEntry::getAmount).reduce((d1,d2)-> d1+d2).orElse(null);
-        if(total==null) return;
-        entries.forEach(
-                (e) -> {
-                    double popularity = popularityCalculator(e.getAmount(),entries.size(),total);
-                    e.getResourceType().setPopularity(popularity);
+        Map<ResourceType,Double> popularities = new HashMap<>();
+        if(entries.isEmpty()) return null;
+
+        Double minRes = entries.stream()
+                .map(StockMarketEntry::getAmount)
+                .reduce((d1,d2)->d1<d2?d1:d2)
+                .orElse(null);
+
+        Double min = minRes<0?-minRes:1;
+
+        Double total = 0D;
+        for(ResourceType r: ResourceType.values()) total+=min;
+
+        total += entries.stream()
+                .map(StockMarketEntry::getAmount)
+                .reduce((d1,d2)-> d1+d2).orElse(null);
+
+        Double finalTotal = total;
+        entries.forEach( (e) -> {
+                    double value = e.getAmount() + min;
+                    double popularity = popularityCalculator(value,ResourceType.values().length,finalTotal);
+                    if(popularity<0.5) popularity=0.5;
+                    popularities.put(e.getResourceType(),popularity);
                 }
         );
+        Stream.of(ResourceType.values()).filter((r)->!popularities.containsKey(r)).forEach((r)->popularities.put(r,min));
+        return popularities;
+    }
+
+    @Scheduled(fixedDelay=refreshTime)
+    public void updatePrices(){
+        Map<ResourceType,Double> popularities = getPopularities();
+        popularities.forEach(ResourceType::setPopularity);
     }
 
     public double popularityCalculator(double puchases, double totalAmount, double totalSum) {
-        double pop =  popularityExponential(puchases * totalAmount / totalSum);
-        return pop;
+        return popularityExponential(puchases * totalAmount / totalSum);
     }
 
     private double popularityExponential(double x) {
-        double slope = 0.5;
+        double slope = 0.3;
         double max = 3D;
-
-        if(x>=1) {
-            return ( (1+1/max) - Math.exp(-(x-1) * slope) ) * max;
-        } else {
-            return Math.exp((x-1) * slope);
-        }
+        return ( (1+1/max) - Math.exp(-(x-1) * slope) ) * max;
     }
 
 }

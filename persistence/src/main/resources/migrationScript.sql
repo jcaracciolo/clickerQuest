@@ -1,8 +1,8 @@
-ALTER TABLE users
- ADD score DOUBLE PRECISION;
-
-ALTER TABLE users
- ADD clanId INT,
- ADD FOREIGN KEY (clanId) REFERENCES clans(clanId) ON DELETE SET NULL;
-
- ALTER TABLE
+-- ALTER TABLE users
+--  ADD score DOUBLE PRECISION;
+--
+-- ALTER TABLE users
+--  ADD clanId INT,
+--  ADD FOREIGN KEY (clanId) REFERENCES clans(clanId) ON DELETE SET NULL;
+--
+--  ALTER TABLE

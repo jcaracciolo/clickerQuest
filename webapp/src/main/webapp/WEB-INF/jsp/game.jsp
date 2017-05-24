@@ -88,7 +88,7 @@
                     <p id="market.buy.price"></p>
                 </div>
                 <div class="col s2">
-                    <button id="market.buy" type="submit"><spring:message code="game.market.buy"/></button>
+                    <p id="market.buy" type="submit"><spring:message code="game.market.buy"/></p>
                 </div>
             </div>
         </form>
