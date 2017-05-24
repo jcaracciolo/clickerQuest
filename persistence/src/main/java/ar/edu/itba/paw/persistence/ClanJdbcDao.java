@@ -1,9 +1,6 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.ClanDao;
-import ar.edu.itba.paw.interfaces.UserDao;
-import ar.edu.itba.paw.model.Factory;
-import ar.edu.itba.paw.model.FactoryType;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.clan.Clan;
 import ar.edu.itba.paw.model.clan.ClanBuilder;
@@ -15,10 +12,8 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Created by juanfra on 17/05/17.
@@ -97,6 +92,15 @@ public class ClanJdbcDao implements ClanDao {
 
         return clanBuilder.buildClan();
     }
+
+    @Override
+    public Collection<String> findByKeyword(String search) {
+        StringBuilder s = new StringBuilder(search.toLowerCase()).append("%").insert(0,"%");
+        List<RowClan> rowClen = jdbcTemplate.query(
+                "SELECT * FROM clans where lower(name) like lower(?)", CLAN_ROW_MAPPER, s.toString());
+        return rowClen.stream().map(rowClan -> rowClan.name).collect(Collectors.toList());
+    }
+
 
     @Override
     public boolean addToClan(int clanId, long userId) {

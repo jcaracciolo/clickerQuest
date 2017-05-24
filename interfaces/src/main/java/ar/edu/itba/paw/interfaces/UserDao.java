@@ -15,6 +15,7 @@ public interface UserDao {
 
     User findById(long id);
     User findByUsername(String username);
+    Collection<User> findByKeyword(String search);
     Integer getGlobalRanking(long userId);
 
     /**

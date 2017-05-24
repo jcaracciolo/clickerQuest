@@ -15,6 +15,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.jws.soap.SOAPBinding;
 import javax.sql.DataSource;
 import java.util.*;
 
@@ -267,6 +268,11 @@ public class UserJdbcDao implements UserDao {
             return null;
         }
         return list.get(0);
+    }
+
+    public Collection<User> findByKeyword(final String search){
+        StringBuilder s = new StringBuilder(search.toLowerCase()).append("%").insert(0,"%");
+        return jdbcTemplate.query("SELECT * FROM users where lower(username) like lower(?)", USER_ROW_MAPPER, s.toString());
     }
 
     @Override

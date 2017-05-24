@@ -158,9 +158,14 @@ var searchCommunity = function () {
     console.log("Searching clan: " + search);
     $.post(contextPath + "/search",
         {
-            searchTerm: search
+            search: search
         }, function(data) {
-
+            var resp = JSON.parse(data);
+            // $(".js-example-data-array-selected").select2({
+            //     data: resp.users,
+            //     placeholder: "Search users or clans",
+            //     allowClear: true
+            // })
         });
 }
 // Create clan listener
@@ -180,7 +185,7 @@ var createClanFunction = function () {
             window.location.replace(contextPath + "/clan/" + clanName);
         });
 }
-document.getElementById("createClanSend").addEventListener("click", );
+document.getElementById("createClanSend").addEventListener("click", createClanFunction);
 
 // Buy listener
 $.each($(".buyFactory"),function (i,element){
@@ -339,7 +344,7 @@ document.getElementById("market.buy").addEventListener("click", function() {
         }
         Materialize.toast(dec("game.market.buyFail",abbreviateNumber(quantity,false),dec(decRes(resourceId))), 3000);
 
-        return false
+        return false;
     }
 
 document.getElementById("market.sell").addEventListener("click", function() {

@@ -2,10 +2,14 @@ package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.interfaces.ClanDao;
 import ar.edu.itba.paw.interfaces.ClanService;
+import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.clan.Clan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
+
+import java.util.Collection;
+import java.util.Collections;
 
 /**
  * Created by juanfra on 17/05/17.
@@ -33,6 +37,13 @@ public class ClanServiceImpl implements ClanService {
     }
 
     @Override
+    public Collection<String> findByKeyword(String search) {
+        if(!search.matches("^[a-zA-Z0-9]+$")) return Collections.emptyList();
+        Collection<String> asd = clanDao.findByKeyword(search);
+        return asd;
+    }
+
+    @Override
     public Clan addUserToClan(int clanId, long userId) {
         if( clanDao.addToClan(clanId,userId) ) {
             return getClanById(clanId);
@@ -45,4 +56,6 @@ public class ClanServiceImpl implements ClanService {
     public boolean deleteFromClan(long userId) {
         return clanDao.removeFromClan(userId);
     }
+
+
 }

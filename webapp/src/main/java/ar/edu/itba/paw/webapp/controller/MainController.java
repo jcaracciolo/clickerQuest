@@ -6,6 +6,7 @@ import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.model.clan.Clan;
 import ar.edu.itba.paw.webapp.config.ExposedResourceBundleMessageSource;
 import ar.edu.itba.paw.webapp.form.UserForm;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -337,6 +338,26 @@ public class MainController {
         List<User> users = userService.globalUsers(0,100);
 
         j.put("users", users.stream().map((u) -> u.getScore()).collect(Collectors.toList()));
+        return j.toJSONString();
+    }
+
+
+    @RequestMapping(value = "/search", method = { RequestMethod.POST })
+    @ResponseBody
+    public String search(Principal principal, @RequestParam("search") final String search){
+        long userId = userService.findByUsername(principal.getName()).getId();
+        Collection<User> users = userService.findByKeyword(search);
+        Collection<String> clans = clanService.findByKeyword(search);
+
+        JSONArray usersJson = new JSONArray();
+        JSONObject j = new JSONObject();
+        users.stream().forEach(user -> usersJson.add(user.getUsername()));
+        JSONArray clansJson = new JSONArray();
+        clans.stream().forEach(clan -> clansJson.add(clan));
+        j.put("type", "search");
+        j.put("result", users.size() + clans.size() > 0);
+        j.put("users",usersJson);
+        j.put("clans",clans);
         return j.toJSONString();
     }
 

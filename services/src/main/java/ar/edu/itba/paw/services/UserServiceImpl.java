@@ -42,8 +42,8 @@ public class UserServiceImpl implements UserService {
     @Autowired
     MarketDao marketDao;
 
-    Cache<String, User> userCache = CacheBuilder.newBuilder().maximumSize(5).build();
-    Cache<Long, Wealth> wealthCache = CacheBuilder.newBuilder().maximumSize(5).build();
+    Cache<String, User> userCache = CacheBuilder.newBuilder().maximumSize(0).build();
+    Cache<Long, Wealth> wealthCache = CacheBuilder.newBuilder().maximumSize(0).build();
 
     public User findById(long userid) {
         return userDao.findById(userid);
@@ -61,6 +61,14 @@ public class UserServiceImpl implements UserService {
         }
         return user;
     }
+
+    @Override
+    public Collection<User> findByKeyword(String search) {
+        if(!search.matches("^[a-zA-Z0-9]+$")) return Collections.emptyList();
+        Collection<User> asd = userDao.findByKeyword(search);
+        return asd;
+    }
+
 
     @Transactional(propagation = Propagation.NESTED)
     @Override

@@ -25,7 +25,8 @@
 
     <!--Import Google Icon Font-->
     <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-
+    <!--Import Select 2 css-->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
     <!--Let browser know website is optimized for mobile-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 </head>
@@ -87,7 +88,7 @@
                     <p id="market.buy.price"></p>
                 </div>
                 <div class="col s2">
-                    <button id="market.buy" type="submit"><spring:message code="game.market.buy"/></button>
+                    <input type="button" id="market.buy" ><spring:message code="game.market.buy"/></input>
                 </div>
             </div>
         </form>
@@ -105,7 +106,7 @@
                     </select>
                 </div>
                 <div class="col s2">
-                    <input type="text" name="quantity" id="market.sell.quantity" placeholder="Quantity">
+                    <img type="text" name="quantity" id="market.sell.quantity" placeholder="Quantity">
                 </div>
                 <div id="market-sell-unit-wrapper" class="col s3 dropdown-wrapper">
                     <select name="unit" id="market.sell.unit">
@@ -121,7 +122,7 @@
                     <p id="market.sell.price"></p>
                 </div>
                 <div class="col s2">
-                    <button id="market.sell" type="submit"><spring:message code="game.market.sell"/></button>
+                    <input type="button" id="market.sell" ><spring:message code="game.market.sell"/></input>
                 </div>
             </div>
         </form>
@@ -138,7 +139,8 @@
                     </a>
                 </div>
                 <div id="search-user">
-                    <form>
+                    <%--<select class="js-example-data-array-selected"><select/>--%>
+                    <form onSubmit="return false;">
                         <div class="input-field search-user">
                             <input id="search" type="search" required>
                             <label class="label-icon" for="search"><i class="material-icons">search</i>
@@ -476,4 +478,6 @@
 <script type="text/javascript" src="<c:url value="/resources/js/game.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/resources/js/jquery-validator-framework/jquery.validate.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/resources/js/jquery-validator-framework/additional-methods.js"/>"></script>
+<!--Import Select 2 css-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
 </html>
