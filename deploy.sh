@@ -6,7 +6,7 @@
 USERNAME="paw-2017a-4"
 PASSWORD="ooc4Choo"
 PAWSERVER="10.16.1.110"
-WEBAPP=webapp
+WEBAPP="webapp"
 
 # This script will automatically change your spring profile on the web.xml file
 # Make Sure you have set the spring.profiles.active param to either default or production in your web.xml
