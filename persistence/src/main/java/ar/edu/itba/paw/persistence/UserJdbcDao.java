@@ -354,7 +354,7 @@ public class UserJdbcDao implements UserDao {
             LOGGER.info("When querying for the Global Ranking, it returns no results.");
             return null;
         } else if(values.size() >1) {
-            LOGGER.info("Amount of rows updated is: " + rows);
+            LOGGER.info("Amount of values updated is: " + values.size());
             return null;
         }
 
