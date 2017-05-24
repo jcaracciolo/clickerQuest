@@ -133,7 +133,7 @@ The following routes need authentication:
 * **Limitations**: currently the application saves the last 200 logs, for each file.
 * The `warning` logs can be found in production at: `pawserver.it.itba.edu.ar/logs/warning-logs.yyyy-mm-dd.log`
 * The `error` logs can be found in production at: `pawserver.it.itba.edu.ar/logs/error-logs.yyyy-mm-dd.log`
-  * Where `yyyy-mm-dd` is the day you are searching for. Example: 2017-05-24`
+  * Where `yyyy-mm-dd` is the day you are searching for. Example: `2017-05-24`
 
 
 ## Current DB schemas
