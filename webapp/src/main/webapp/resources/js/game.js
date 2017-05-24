@@ -155,7 +155,7 @@ setInterval(function(){
 var createClanFunction = function () {
     var clanName = document.getElementById("clanNameInput").value;
     var ret;
-    if (!clanName.match("^[a-zA-Z\+\-\.\_\*]+$")) {
+    if (clanName.length > 25 || !clanName.match("^[a-zA-Z\+\-\.\_\*]+$")) {
         ret = true;
         document.getElementById("clanNameInput").classList.add("inputerror")
     } else {document.getElementById("clanNameInput").classList.remove("inputerror")}

@@ -2,7 +2,6 @@
 body {
     font-family: Fixedsys;
     /*min-width: 1200px;*/
-    overflow: hidden;
     position: relative;
     background-color: #DEDEDE;
 }

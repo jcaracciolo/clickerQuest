@@ -193,10 +193,10 @@ public class UserJdbcDao implements UserDao {
         if (rows == 1) {
             return u;
         } else if (rows > 1) {
-            LOGGER.info("The collection 'users' has been updated. Amount of rows updated is: " + rows);
+            LOGGER.warn("The collection 'users' has been updated. Amount of rows updated is: " + rows);
             return null;
         } else {
-            LOGGER.info("User has not been updated. The number of rows was < 1");
+            LOGGER.warn("User has not been updated. The number of rows was < 1");
             return null;
         }
     }
@@ -221,10 +221,10 @@ public class UserJdbcDao implements UserDao {
         if(rows == 1) {
             return f;
         } else if (rows == 0) {
-           LOGGER.info("Factory has not been updated. The number of rows equals to 0");
+           LOGGER.warn("Factory has not been updated. The number of rows equals to 0");
            return null;
         } else {
-            LOGGER.info("The collection 'factories' has been updated. Amount of rows updated is: " + rows);
+            LOGGER.warn("The collection 'factories' has been updated. Amount of rows updated is: " + rows);
             return null;
         }
     }
@@ -246,10 +246,10 @@ public class UserJdbcDao implements UserDao {
                     r.getId());
 
             if (rows == 0) {
-                LOGGER.info("Wealth has not been updated. The number of rows equals to 0");
+                LOGGER.warn("Wealth has not been updated. The number of rows equals to 0");
                 return w;
             } else if(rows >1) {
-                LOGGER.info("The collection 'wealth' has been updated. Amount of rows updated is: " + rows);
+                LOGGER.warn("The collection 'wealth' has been updated. Amount of rows updated is: " + rows);
                 return null;
             }
         }
@@ -351,10 +351,10 @@ public class UserJdbcDao implements UserDao {
                                     userId);
 
         if (values.size() == 0) {
-            LOGGER.info("When querying for the Global Ranking, it returns no results.");
+            LOGGER.warn("When querying for the Global Ranking, it returns no results.");
             return null;
         } else if(values.size() >1) {
-            LOGGER.info("Amount of values updated is: " + values.size());
+            LOGGER.warn("Amount of values updated is: " + values.size());
             return null;
         }
 

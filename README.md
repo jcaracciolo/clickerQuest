@@ -9,13 +9,13 @@ This application is an Idle game in development.
 4. From the three available options, choose Maven
 5. Select the following options:
 
-  - [ ] Import Maven projects automatically
-  - [ ] Create IntelliJ IDEA modules for aggregator projects
-  - [ ] Create module groups for multi-module Maven projects
-  - [ ] Keep source and test folders on re-import
-  - [ ] Exclude build directory
-  - [ ] User Maven output directories: `Detect automatically`
-  - [ ] Automatically download: `Sources` and `Documentation`
+  - Import Maven projects automatically
+  - Create IntelliJ IDEA modules for aggregator projects
+  - Create module groups for multi-module Maven projects
+  - Keep source and test folders on re-import
+  - Exclude build directory
+  - User Maven output directories: `Detect automatically`
+  - Automatically download: `Sources` and `Documentation`
 
 6. Continue with import
 7. Select the `webapp/src/main/java` folder and right click, select `Mark directory as -> Sources Root`
@@ -28,25 +28,25 @@ This application is an Idle game in development.
 4. Select the downloaded zip
 5. Restart IDEA
 6. Run -> Edit Configurations
-7. '+' -> select Jetty Runner -> name it 'Development'
-8. Setup Path = '\' , Webapp Folder = 'webapp/src/main/webapp' , Classes Folder = 'webapp/target/classes'
-9. '+' -> select Jetty Runner -> name it 'Production'
-10. Setup Path = '\' , Webapp Folder = 'webapp/src/main/webapp' , Classes Folder = 'webapp/target/classes'
-11. Env Args -> Name: 'spring.profiles.active' Value: 'production'
-12. Down, before Launch, run Maven Goal with the command "clean compile"
-13. Done
+7. Select `+` -> select Jetty Runner -> name it `Development`
+8. Setup Path = `'\'` , Webapp Folder = `webapp/src/main/webapp` , Classes Folder = `webapp/target/classes`
+9. Select `+` -> select Jetty Runner -> name it `Production`
+10. Setup Path = `'\'` , Webapp Folder = `webapp/src/main/webapp` , Classes Folder = `webapp/target/classes`
+11. Env Args -> Name: `spring.profiles.active` Value: `production`
+12. Down, before Launch, run Maven Goal with the command `clean compile`
+13. Done :)
 
 IMPORTANT: DO NOT UPDATE THE JETTY PLUGIN OR IT WILL NOT WORK
 
 ## Configure Postgres:
 
-1. Install postgres (sudo apt-get install postgresql)
-2. Start postres server (sudo service postgresql start)
-3. Change to user "postgres" (sudo su postgres)
-4. Create root user (createusername root) (si tira error no pasa nada)
-5. Create main database (createdb clickerQuest -O root)
-6. Enter psql (psql)
-7. Change root password (ALTER USER root WITH PASSWORD 'root')
+1. Install postgres: `sudo apt-get install postgresql`
+2. Start postres server: `sudo service postgresql start`
+3. Change to user "postgres": `sudo su postgres`
+4. Create root user: `createusername root` (si tira error no pasa nada)
+5. Create main database: `createdb clickerQuest -O root`
+6. Enter psql: `psql`
+7. Change root password: `ALTER USER root WITH PASSWORD 'root'`
 8. Type ( \g ) to send the query
 9. "ALTER ROLE" Means it was successful
 10. ( \q ) Exit psql
@@ -79,6 +79,11 @@ put path/to/app.wr/in/pampero
 3. Password is: `ooc4Choo`
 4. Proceed with caution, remember: "With Great Power Comes Great Responsibility"
 
+
+## Existent user in production (for testing purposes)
+
+* User: `wolf`
+* Password: `1q2w3e4r`
 
 ### Useful commands:
 
@@ -120,6 +125,14 @@ The following routes need authentication:
 
 * `/errors`
     * POST
+
+
+## See logs in production
+
+* There are two types of logs: `warning` and `error` logs.
+* **Limitations**: currently the application saves the last 200 logs, for each file.
+* The `warning` logs can be found in production at: `pawserver.it.itba.edu.ar/logs/warning-logs.yyyy-mm-dd.log`
+* The `error` logs can be found in production at: `pawserver.it.itba.edu.ar/logs/error-logs.yyyy-mm-dd.log`
 
 
 ## Current DB schemas

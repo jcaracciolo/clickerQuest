@@ -61,26 +61,6 @@
                         </li>
                     </ul>
                 </div>
-                <c:choose>
-                    <c:when test="${user.clanIdentifier == null}">
-                        <div id="createClan" class="button">
-                            <ul>
-                                <li>
-                                    <a href="#clanModal"><spring:message code='create.clan'/></a>
-                                </li>
-                            </ul>
-                        </div>
-                    </c:when>
-                    <c:otherwise>
-                        <div id="createClan" class="button">
-                            <ul>
-                                <li>
-                                    <a href="<c:url value='/clan/${clan.name}'/>"><spring:message code='game.seeMyClan'/></a>
-                                </li>
-                            </ul>
-                        </div>
-                    </c:otherwise>
-                </c:choose>
                 <div id="logout">
                     <ul id="nav-mobile">
                         <li><a href="<c:url value='/logout'/>"><spring:message code='logout'/> </a></li>
@@ -164,10 +144,10 @@
 <script type="text/javascript">
     contextPath = '<%=request.getContextPath()%>';
 </script>
-<script type="text/javascript" src="<c:url value="https://code.jquery.com/jquery-2.1.1.min.js"/>"></script>
-<script type="text/javascript" src="<c:url value="/resources/js/materialize.min.js"/>"></script>
-<script type="text/javascript" src="<c:url value="/resources/js/autocomplete.js"/>"></script>
-<script type="text/javascript" src="<c:url value="/resources/js/profile.js"/>"></script>
+<script type="text/javascript" src='<c:url value="https://code.jquery.com/jquery-2.1.1.min.js"/>'></script>
+<script type="text/javascript" src='<c:url value="/resources/js/materialize.min.js"/>'></script>
+<script type="text/javascript" src='<c:url value="/resources/js/autocomplete.js"/>'></script>
+<script type="text/javascript" src='<c:url value="/resources/js/profile.js"/>'></script>
 <script type="text/javascript">$('.modal').modal();</script>
 
 
