@@ -265,6 +265,16 @@ img.upgradeImage {
     margin-left: auto;
 }
 
+.buyButtonsContainer {
+	display: flex;
+	flex-direction: row;
+	align-content: space-between;
+}
+
+.multipleBuyBtn {
+	color: black;
+}
+
 #createClanSend:hover {
     cursor: pointer;
 }

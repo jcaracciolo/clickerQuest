@@ -192,7 +192,7 @@ $.each($(".buyFactory"),function (i,element){
         callback: function() {
             document.getElementById("loading").classList.remove("hidden");
             document.getElementById("loading-disabler").classList.remove("hidden");
-            buyFactory($("#"+element.id).data("factoryid"),5);
+            buyFactory($("#"+element.id).data("factoryid"),$("#"+element.id).data("amount"));
         }
     })
 });

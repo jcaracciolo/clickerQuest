@@ -413,6 +413,11 @@
                                     </c:if>
                                 </div>
                             </div>
+                                <div class="buyButtonsContainer">
+                                    <button id="buyOne${factory.getType()}" data-amount="1" data-factoryid="${factory.getType().getId()}" class="buyFactory multipleBuyBtn"><spring:message code="game.buyOne"/></button>
+                                    <button id="buyTen${factory.getType()}" data-amount="10" data-factoryid="${factory.getType().getId()}" class="buyFactory multipleBuyBtn"><spring:message code="game.buyTen"/></button>
+                                    <button id="buyHundred${factory.getType()}" data-amount="100" data-factoryid="${factory.getType().getId()}" class="buyFactory multipleBuyBtn"><spring:message code="game.buyHundred"/></button>
+                                </div>
                         </div>
                         <!-- END OF FACTORY CARD -->
                     </div>

@@ -22,13 +22,13 @@ img.profile-img {
     flex-direction: column;
     flex-grow: 1;
     width: 0;
-    overflow-y: auto;
+    /*overflow-y: auto;*/
     height: 100vh;
     color: white;
     background-color: #3f51b5;
     margin: 0;
     padding-bottom: 5rem;
-    overflow-y: auto;
+    /*overflow-y: auto;*/
 }
 
 p.subtitle {
@@ -49,11 +49,11 @@ p.subtitle {
     display: flex;
     flex-direction: column;
     flex-grow: 3;
-    overflow-y: auto;
+    /*overflow-y: auto;*/
     height: 100vh;
     align-items: stretch;
     width: 0;
-    overflow-y: scroll;
+    /*overflow-y: scroll;*/
 }
 
 .main-user-properties {
