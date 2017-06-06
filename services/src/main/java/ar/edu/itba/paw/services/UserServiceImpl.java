@@ -102,8 +102,8 @@ public class UserServiceImpl implements UserService {
 
             userDao.create(createWealth(user.getId()));
 
-            purchaseFactory(user.getId(),FactoryType.PEOPLE_RECRUITING_BASE);
-            purchaseFactory(user.getId(),FactoryType.STOCK_INVESTMENT_BASE);
+            purchaseFactory(user.getId(),FactoryType.PEOPLE_RECRUITING_BASE,1);
+            purchaseFactory(user.getId(),FactoryType.STOCK_INVESTMENT_BASE,1);
 
             return findById(user.getId());
         }
@@ -120,9 +120,12 @@ public class UserServiceImpl implements UserService {
         return userDao.getUserStorage(id);
     }
 
+
+
+
     @Override
     @Transactional(propagation = Propagation.NESTED)
-    public boolean purchaseFactory(long userid,@NotNull FactoryType type) {
+    public boolean purchaseFactory(long userid,@NotNull FactoryType type, long amountToBuy) {
         Wealth w = getUserWealth(userid);
         Optional<Factory> maybeFactory = userDao.getUserFactories(userid).stream()
                 .filter( (f) -> f.getType() == type).findAny();
@@ -135,17 +138,16 @@ public class UserServiceImpl implements UserService {
             return false;
         }
 
-        if( f.isBuyable(w)) {
-            Wealth wealth = w.purchaseResult(f);
-            Factory factory = f.purchaseResult();
+        if( f.isBuyable(w,amountToBuy)) {
+            Wealth wealth = w.purchaseResult(f,amountToBuy);
+            Factory factory = f.purchaseResult(amountToBuy);
 
             wealth = updateWealth(wealth);
             factory = userDao.update(factory);
 
             return factory != null && wealth != null;
         }
-        return false;
-    }
+        return false;    }
 
     @Override
     @Transactional(propagation = Propagation.NESTED)

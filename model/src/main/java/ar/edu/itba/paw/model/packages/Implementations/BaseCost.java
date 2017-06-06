@@ -24,11 +24,15 @@ public class BaseCost extends ResourcePackage {
         return new PackageBuilder<>(VALIDATOR,CREATOR);
     }
 
-    public FactoryCost calculateCost(double amount, double costReduction) {
+    public FactoryCost calculateCost(double currentAmount, double costReduction, double amountToBuy) {
         PackageBuilder<FactoryCost> builder = FactoryCost.packageBuilder();
         resources.forEach(
-                (r,d) -> builder.putItem(r,Math.floor(d*(amount+1)*costReduction))
+                (r,d) -> builder.putItem(r, Math.floor(d* gDiff(currentAmount,currentAmount+amountToBuy)*costReduction) )
         );
         return builder.buildPackage();
+    }
+    private double gDiff(double start, double end)
+    {
+        return ( end* ( end+ 1 ) ) / 2 - ( start* ( start+ 1 ) ) / 2 ;
     }
 }

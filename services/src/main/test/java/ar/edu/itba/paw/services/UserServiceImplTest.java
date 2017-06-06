@@ -99,10 +99,10 @@ public class UserServiceImplTest {
         User user2 = userService.create(username + "2",password,img);
         User user3 = userService.create(username + "3",password,img);
 
-        assertTrue(userService.purchaseFactory(user2.getId(),FactoryType.PEOPLE_RECRUITING_BASE));
+        assertTrue(userService.purchaseFactory(user2.getId(),FactoryType.PEOPLE_RECRUITING_BASE,1));
 
-        assertTrue(userService.purchaseFactory(user3.getId(),FactoryType.PEOPLE_RECRUITING_BASE));
-        assertTrue(userService.purchaseFactory(user3.getId(),FactoryType.PEOPLE_RECRUITING_BASE));
+        assertTrue(userService.purchaseFactory(user3.getId(),FactoryType.PEOPLE_RECRUITING_BASE,1));
+        assertTrue(userService.purchaseFactory(user3.getId(),FactoryType.PEOPLE_RECRUITING_BASE,1));
 
         int rank1 = userService.getGlobalRanking(user.getId());
         int rank2 = userService.getGlobalRanking(user2.getId());
@@ -174,7 +174,7 @@ public class UserServiceImplTest {
     @Test
     public void testPurchaseFactorySuccess(){
         User user = userService.create(username,password,img);
-        assertTrue(userService.purchaseFactory(user.getId(),FactoryType.PEOPLE_RECRUITING_BASE));
+        assertTrue(userService.purchaseFactory(user.getId(),FactoryType.PEOPLE_RECRUITING_BASE,1));
         Collection<Factory> factories = userService.getUserFactories(user.getId());
         assertEquals(factories.size(),FactoryType.values().length);
         factories.forEach((f)->{
@@ -195,7 +195,7 @@ public class UserServiceImplTest {
     @Test
     public void testPurchaseFactoryFail(){
         User user = userService.create(username,password,img);
-        assertFalse(userService.purchaseFactory(user.getId(),FactoryType.CABLE_MAKER_BASE));
+        assertFalse(userService.purchaseFactory(user.getId(),FactoryType.CABLE_MAKER_BASE,1));
         Collection<Factory> factories = userService.getUserFactories(user.getId());
         assertEquals(factories.size(),FactoryType.values().length);
         factories.forEach((f)->{
@@ -213,7 +213,7 @@ public class UserServiceImplTest {
     @Test
     public void purchaseFactoryUpdateWealthTest(){
         User user = userService.create(username,password,img);
-        assertTrue(userService.purchaseFactory(user.getId(),FactoryType.PEOPLE_RECRUITING_BASE));
+        assertTrue(userService.purchaseFactory(user.getId(),FactoryType.PEOPLE_RECRUITING_BASE,1));
         Factory factory = new Factory(user.getId(),FactoryType.PEOPLE_RECRUITING_BASE,1D,1,1,1,0);
         Wealth wealth = userService.getUserWealth(user.getId());
         assertEquals(wealth.getStorage().getValue(ResourceType.MONEY),
@@ -224,9 +224,9 @@ public class UserServiceImplTest {
     @Test
     public void purchaseMultipleFactoriesUpdateWealthTest(){
         User user = userService.create(username,password,img);
-        assertTrue(userService.purchaseFactory(user.getId(),FactoryType.PEOPLE_RECRUITING_BASE));
-        assertTrue(userService.purchaseFactory(user.getId(),FactoryType.PEOPLE_RECRUITING_BASE));
-        assertTrue(userService.purchaseFactory(user.getId(),FactoryType.PEOPLE_RECRUITING_BASE));
+        assertTrue(userService.purchaseFactory(user.getId(),FactoryType.PEOPLE_RECRUITING_BASE,1));
+        assertTrue(userService.purchaseFactory(user.getId(),FactoryType.PEOPLE_RECRUITING_BASE,1));
+        assertTrue(userService.purchaseFactory(user.getId(),FactoryType.PEOPLE_RECRUITING_BASE,1));
         double factory1Cost = new Factory(user.getId(),FactoryType.PEOPLE_RECRUITING_BASE,1D,1,1,1,0)
                 .getCost().getValue(ResourceType.MONEY);
         double factory2Cost = new Factory(user.getId(),FactoryType.PEOPLE_RECRUITING_BASE,2D,1,1,1,0)

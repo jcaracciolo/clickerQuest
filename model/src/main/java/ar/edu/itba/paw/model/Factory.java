@@ -56,7 +56,10 @@ public class Factory implements Comparable<Factory> {
     }
 
     public FactoryCost getCost() {
-        return type.getBaseCost().calculateCost(amount,costReduction);
+        return getCost(1);
+    }
+    public FactoryCost getCost(long amountToBuy) {
+        return type.getBaseCost().calculateCost(amount,costReduction,amountToBuy);
     }
 
     public FactoriesProduction getFactoriesProduction() {
@@ -67,9 +70,9 @@ public class Factory implements Comparable<Factory> {
         return getType().getId() + ".jpg";
     }
 
-    public Factory purchaseResult() {
+    public Factory purchaseResult(long amountToBuy) {
         return new Factory(userid,type,
-                amount +1,
+                amount +amountToBuy,
                 inputReduction,outputMultiplier,costReduction,level);
     }
 
@@ -84,8 +87,12 @@ public class Factory implements Comparable<Factory> {
         );
     }
 
+
     public boolean isBuyable(Wealth w) {
-        FactoryCost cost = getCost();
+        return isBuyable(w,1);
+    }
+    public boolean isBuyable(Wealth w, long amountToBuy) {
+        FactoryCost cost = getCost(amountToBuy);
         Storage storage = w.getStorage();
 
         for (ResourceType r: cost.getResources()) {
@@ -98,7 +105,7 @@ public class Factory implements Comparable<Factory> {
         Productions productions = w.getProductions();
 
         for (ResourceType r: need.keySet()) {
-            if(need.get(r) > productions.getValue(r)){
+            if(need.get(r)*amountToBuy > productions.getValue(r)){
                 return false;
             }
         }

@@ -192,7 +192,7 @@ $.each($(".buyFactory"),function (i,element){
         callback: function() {
             document.getElementById("loading").classList.remove("hidden");
             document.getElementById("loading-disabler").classList.remove("hidden");
-            buyFactory($("#"+element.id).data("factoryid"))
+            buyFactory($("#"+element.id).data("factoryid"),5);
         }
     })
 });
@@ -215,10 +215,11 @@ $.each($(".upgradeButton"),function (i,element){
     })
 });
 
-function buyFactory(id){
+function buyFactory(id,amount){
     $.post(contextPath + "/buyFactory",
         {
-            factoryId: id
+            factoryId: id,
+            amount: amount,
         }, function(data) {
             var resp = JSON.parse(data);
             var msg ;

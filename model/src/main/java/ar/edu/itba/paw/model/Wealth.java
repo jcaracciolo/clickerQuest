@@ -38,14 +38,14 @@ public class Wealth {
         return productions;
     }
 
-    public Wealth purchaseResult(@NotNull  Factory f) {
-        if (!f.isBuyable(this)) {
+    public Wealth purchaseResult(@NotNull  Factory f,long amountToBuy) {
+        if (!f.isBuyable(this,amountToBuy)) {
             return null;
         }
 
         Storage calculatedStorage = getStorage();
         Recipe recipe = f.getRecipe();
-        FactoryCost cost = f.getCost();
+        FactoryCost cost = f.getCost(amountToBuy);
         PackageBuilder<Storage> storageBuilder = Storage.packageBuilder();
         PackageBuilder<Productions> productionsBuilder = Productions.packageBuilder();
 
@@ -59,7 +59,7 @@ public class Wealth {
             }
 
             if (recipe.contains(r)){
-                productionsBuilder.addItem(r,recipe.getValue(r));
+                productionsBuilder.addItem(r,amountToBuy*recipe.getValue(r));
             }
         }
 

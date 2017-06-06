@@ -45,7 +45,7 @@ public class MainController {
     private ExposedResourceBundleMessageSource messageSource;
     // INDEX
     @RequestMapping(value = {"/login","/"})
-    public ModelAndView index(@ModelAttribute("registerForm") final UserForm form, Principal principal,final BindingResult errors) {
+    public ModelAndView index(@ModelAttribute("registerForm") final UserForm form, Principal principal) {
         if(principal != null) return new ModelAndView("redirect:/game");
         ModelAndView mav = new ModelAndView("index");
         return mav;
@@ -68,7 +68,8 @@ public class MainController {
     }
 
     @RequestMapping(value = "/create", method = { RequestMethod.POST })
-    public ModelAndView createPOST( @Valid @ModelAttribute("registerForm") final UserForm form, final BindingResult rawErrors, HttpServletRequest request) {
+    public ModelAndView createPOST( @Valid @ModelAttribute("registerForm") final UserForm form, final BindingResult rawErrors
+            , HttpServletRequest request) {
         BindingResult errors = prioritizeErrors(form,rawErrors);
         if (errors.hasErrors()) return createGET(form, errors);
 
@@ -278,8 +279,10 @@ public class MainController {
 
     @RequestMapping(value = "/buyFactory", method = { RequestMethod.POST })
     @ResponseBody
-    public String purchaseFactory(Principal principal, @RequestParam("factoryId") final int factoryId){
-        Boolean result = userService.purchaseFactory(userService.findByUsername(principal.getName()).getId(), FactoryType.fromId(factoryId));
+    public String purchaseFactory(Principal principal, @RequestParam("factoryId") final int factoryId,
+                                  @RequestParam("amount") final int amount){
+        Boolean result = userService.purchaseFactory(
+                userService.findByUsername(principal.getName()).getId(), FactoryType.fromId(factoryId),amount);
         JSONObject j = new JSONObject();
         j.put("result",result);
         j.put("type", "purchaseFactory");

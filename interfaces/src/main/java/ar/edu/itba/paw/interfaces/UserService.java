@@ -24,7 +24,8 @@ public interface UserService {
     Wealth calculateUserWealth(long userid);
 
 
-    boolean purchaseFactory(long userid, FactoryType type);
+    boolean purchaseFactory(long userid, FactoryType type,long amount);
+
     boolean purchaseUpgrade(long userid, FactoryType type);
     boolean purchaseResourceType(long userid, ResourceType resourceType, double amount);
     boolean sellResourceType(long userid, ResourceType resourceType, double amount);

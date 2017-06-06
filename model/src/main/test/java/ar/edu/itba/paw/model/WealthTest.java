@@ -145,7 +145,7 @@ public class WealthTest {
         Storage storage = storageBuilder.buildPackage();
         Wealth basicWealth = new Wealth(userId,storage,productions);
 
-        assertNull(basicWealth.purchaseResult(factory));
+        assertNull(basicWealth.purchaseResult(factory,1));
     }
 
     @Test
@@ -159,7 +159,7 @@ public class WealthTest {
         );
 
         Wealth newWealth = new Wealth(userId,storageBuilder.buildPackage(),productionsBuilder.buildPackage());
-        Wealth afterPurchase = newWealth.purchaseResult(factory);
+        Wealth afterPurchase = newWealth.purchaseResult(factory,1);
         assertNotNull(afterPurchase);
 
         assertTrue(afterPurchase.getStorage().rawMap().size()>0);
