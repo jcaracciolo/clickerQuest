@@ -11,8 +11,8 @@ import java.util.Map;
  * Created by juanfra on 08/04/17.
  */
 public class Productions extends ResourcePackage {
-    public final static Validator<Double> VALIDATOR = (d) -> d >= 0;
-    public final static Creator<Productions> CREATOR = (pb) -> new Productions(pb.getResources());
+    private final static Validator<Double> VALIDATOR = (d) -> d >= 0;
+    private final static Creator<Productions> CREATOR = (pb) -> new Productions(pb.getResources());
 
     private Productions(Map<ResourceType, Double> map) {
         resources = super.generate(map, VALIDATOR);

@@ -291,7 +291,7 @@ function upgradeFactory(factId) {
 function abbreviateNumber(value,decimals) {
     var newValue = value;
     var suffixNum =0;
-    var suffixes = ["", "K", "M", "B","T"];
+    var suffixes = ["", "K", "M", "B", "T", "P", "X", "Y"];
     if(! decimals || value>=10000) {
         newValue = truncate(value);
     }
@@ -323,6 +323,7 @@ document.getElementById("market.buy").addEventListener("click", function() {
             case "M": multiplier = 1000000; break;
             case "B": multiplier = 1000000000; break;
             case "T": multiplier = 1000000000000; break;
+            case "P": multiplier = 1000000000000000; break;
             case "none":
             default: multiplier = 1; break
         }
@@ -384,6 +385,7 @@ document.getElementById("market.sell").addEventListener("click", function() {
                 case "M": multiplier = 1000000; break;
                 case "B": multiplier = 1000000000; break;
                 case "T": multiplier = 1000000000000; break;
+                case "P": multiplier = 1000000000000000; break;
                 case "none":
                 default: multiplier = 1; break
             }

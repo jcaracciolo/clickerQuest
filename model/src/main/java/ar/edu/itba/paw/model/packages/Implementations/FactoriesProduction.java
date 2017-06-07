@@ -13,8 +13,8 @@ import java.util.Map;
  */
 public class FactoriesProduction extends ResourcePackage {
 
-    public final static Validator<Double> VALIDATOR = (d) -> d!=0;
-    public final static Creator<FactoriesProduction> CREATOR = (pb) -> new FactoriesProduction(pb.getResources());
+    private final static Validator<Double> VALIDATOR = (d) -> d!=0;
+    private final static Creator<FactoriesProduction> CREATOR = (pb) -> new FactoriesProduction(pb.getResources());
 
     private FactoriesProduction(Map<ResourceType, Double> map) {
         resources = super.generate(map,VALIDATOR);

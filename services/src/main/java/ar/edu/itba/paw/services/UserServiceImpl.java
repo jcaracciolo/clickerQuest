@@ -12,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -157,6 +158,7 @@ public class UserServiceImpl implements UserService {
 
         for (Factory f: factories){
             long max=0;
+            BuyLimits bl = f.getLimits(w);
             if(f.isBuyable(w,100)) max = 100;
             else if(f.isBuyable(w,50)) max = 50;
             else if(f.isBuyable(w,25)) max = 25;
@@ -321,4 +323,6 @@ public class UserServiceImpl implements UserService {
         users.sort((u1,u2)->u1.getScore()<u2.getScore()?1:-1);
         return users;
     }
+
+
 }

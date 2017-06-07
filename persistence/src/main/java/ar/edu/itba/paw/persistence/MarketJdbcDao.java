@@ -12,6 +12,9 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Repository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
 import javax.sql.DataSource;
 import java.util.Collections;
 import java.util.HashMap;
@@ -22,7 +25,6 @@ import java.util.stream.Stream;
 @Repository
 public class MarketJdbcDao implements MarketDao {
 
-    private static final long refreshTime = 2*60*1000;
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert jdbcInsertStockMakert;
     private static final Logger LOGGER = LoggerFactory.getLogger(MarketJdbcDao.class);
@@ -120,11 +122,7 @@ public class MarketJdbcDao implements MarketDao {
         return popularities;
     }
 
-    @Scheduled(fixedDelay=refreshTime)
-    public void updatePrices(){
-        Map<ResourceType,Double> popularities = getPopularities();
-        popularities.forEach(ResourceType::setPopularity);
-    }
+
 
     public double popularityCalculator(double puchases, double totalAmount, double totalSum) {
         return popularityExponential(puchases * totalAmount / totalSum);
