@@ -21,11 +21,11 @@ import java.util.*;
 public class UserJdbcDao implements UserDao {
 
     private static class RowWealth {
-        long userid;
-        ResourceType resourceType;
-        double production;
-        double storage;
-        long lastUpdated;
+        private long userid;
+        private ResourceType resourceType;
+        private double production;
+        private double storage;
+        private long lastUpdated;
 
         public RowWealth(long userid, ResourceType resourceType, double production, double storage, long lastUpdated) {
             this.userid = userid;

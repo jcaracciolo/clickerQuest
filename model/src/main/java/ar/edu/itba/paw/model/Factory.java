@@ -4,9 +4,10 @@ import ar.edu.itba.paw.model.packages.Implementations.*;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
+import java.util.logging.Logger;
+import java.util.regex.Matcher;
 
 public class Factory implements Comparable<Factory> {
-
     private final long userid;
     private final FactoryType type;
     private final double amount;
@@ -108,6 +109,41 @@ public class Factory implements Comparable<Factory> {
         }
 
         return true;
+    }
+
+    public BuyLimits getLimits(Wealth w){
+        BuyLimits buyLimits = new BuyLimits(this.getType());
+
+
+        Map<ResourceType,Double> need = type.getBaseRecipe().getInputs();
+        Productions productions = w.getProductions();
+        for (ResourceType r:need.keySet()){
+            Double limit = productions.getValue(r)/need.get(r);
+            buyLimits.addProductionDeficit(r,limit);
+        }
+
+        Storage storage = w.getStorage();
+        for (ResourceType r:type.getBaseCost().getResources()){
+            Double a = 1D;
+            Double b = 1+2*getAmount();
+            Double c = -2*(storage.getValue(r))/(type.getBaseCost().getValue(r)*getCostReduction());
+            Double sol=0D;
+            double sol1 = (-b + Math.sqrt(b*b - 4*a*c) ) / (2*a);
+            double sol2 = (-b - Math.sqrt(b*b - 4*a*c) ) / (2*a);
+            if (sol1 < 0){
+                if(sol2 < 0) {
+                    System.out.println("error");
+                } else sol = sol2;
+            } else {
+                if(sol2<0){
+                    sol = sol1;
+                } else {
+                    System.out.println("error");
+                }
+            }
+            buyLimits.addStorageDeficit(r,sol);
+        }
+        return buyLimits;
     }
 
     public Upgrade getNextUpgrade() {

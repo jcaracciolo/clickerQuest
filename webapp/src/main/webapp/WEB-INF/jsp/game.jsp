@@ -70,7 +70,7 @@
                     </select>
                 </div>
                 <div class="col s2">
-                    <input type="text" name="quantity" id="market.buy.quantity" placeholder="<spring:message code="game.market.quantity"/>">
+                    <input maxlength="5" type="text" name="quantity" id="market.buy.quantity" placeholder="<spring:message code="game.market.quantity"/>">
                 </div>
                 <div id="market-buy-unit-wrapper" class="col s3 dropdown-wrapper">
                     <select name="unit" id="market.buy.unit">
@@ -105,7 +105,7 @@
                     </select>
                 </div>
                 <div class="col s2">
-                    <input type="text" name="quantity" id="market.sell.quantity" placeholder="<spring:message code="game.market.quantity"/>">
+                    <input maxlength="5" type="text" name="quantity" id="market.sell.quantity" placeholder="<spring:message code="game.market.quantity"/>">
                 </div>
                 <div id="market-sell-unit-wrapper" class="col s3 dropdown-wrapper">
                     <select name="unit" id="market.sell.unit">

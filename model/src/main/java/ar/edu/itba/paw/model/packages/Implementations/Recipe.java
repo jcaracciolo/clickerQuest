@@ -13,8 +13,8 @@ import java.util.Map;
  */
 public class Recipe extends ResourcePackage{
 
-    public final static Validator<Double> VALIDATOR = (d) -> d!=0;
-    public final static Creator<Recipe> CREATOR = (pb) -> new Recipe(pb.getResources());
+    private final static Validator<Double> VALIDATOR = (d) -> d!=0;
+    private final static Creator<Recipe> CREATOR = (pb) -> new Recipe(pb.getResources());
 
     private Recipe(Map<ResourceType, Double> map) {
         resources = super.generate(map,VALIDATOR);

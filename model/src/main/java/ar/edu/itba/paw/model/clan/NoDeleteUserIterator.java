@@ -8,7 +8,7 @@ import java.util.Iterator;
  * Created by juanfra on 17/05/17.
  */
 public class NoDeleteUserIterator implements Iterator<User>{
-    Iterator<User> it;
+    private Iterator<User> it;
     NoDeleteUserIterator(Iterator<User> it){
         this.it = it;
     }
