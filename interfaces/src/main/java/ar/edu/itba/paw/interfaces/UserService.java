@@ -6,6 +6,7 @@ import ar.edu.itba.paw.model.packages.Implementations.Storage;
 import ar.edu.itba.paw.model.packages.Paginating;
 
 import java.util.Collection;
+import java.util.Map;
 
 
 public interface UserService {
@@ -25,6 +26,7 @@ public interface UserService {
 
 
     boolean purchaseFactory(long userid, FactoryType type,long amount);
+    Map<FactoryType, Long> canPurchaseFactory(long userid);
 
     boolean purchaseUpgrade(long userid, FactoryType type);
     boolean purchaseResourceType(long userid, ResourceType resourceType, double amount);
