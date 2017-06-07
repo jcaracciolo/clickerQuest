@@ -128,34 +128,62 @@ function refreshUpgradesBuyability() {
 }
 
 function refreshFactoriesBuyability() {
-    var notBuyable = []
-    for (var factId in factoriesCost) {
-        for (var res in factoriesCost[factId]) {
-            if (factoriesCost[factId][res] > storagesMap[res]) {
-                notBuyable.push(factId)
-                break;
-            }
+
+    for (var factName in factInOrder) {
+        var maxBuyable = factoryBuyability[factName];
+        maxBuyable = maxBuyable;
+        if (maxBuyable >= 1) {
+            document.getElementById("factory1Disabler" + factInOrder[factName]).classList.add("canBuy");
+        } else {
+            document.getElementById("factory1Disabler" + factInOrder[factName]).classList.remove("canBuy");
         }
-        for (var res in factoriesRecipe[factId]) {
-            if (factoriesRecipe[factId][res] < 0
-                && Math.abs(factoriesRecipe[factId][res]) > productionsMap[res]) {
-                notBuyable.push(factId)
-                break;
-            }
+        if (maxBuyable >= 10) {
+            document.getElementById("factory10Disabler" + factInOrder[factName]).classList.add("canBuy");
+        } else {
+            document.getElementById("factory10Disabler" + factInOrder[factName]).classList.remove("canBuy");
         }
-        if (notBuyable.includes(factId)) {
-            document.getElementById("factoryDisabler" + factId).classList.remove("canBuy");
-        }
-        else {
-            document.getElementById("factoryDisabler" + factId).classList.remove("canBuy");
-            document.getElementById("factoryDisabler" + factId).classList.add("canBuy");
+        if (maxBuyable >= 100) {
+            document.getElementById("factory100Disabler" + factInOrder[factName]).classList.add("canBuy");
+        } else {
+            document.getElementById("factory100Disabler" + factInOrder[factName]).classList.remove("canBuy");
         }
     }
+
+    // DEPRECATE THIS IF THE UPPER CODE IS WORKING
+    // var notBuyable = []
+    // for (var factId in factoriesCost) {
+    //     for (var res in factoriesCost[factId]) {
+    //         if (factoriesCost[factId][res] > storagesMap[res]) {
+    //             notBuyable.push(factId)
+    //             break;
+    //         }
+    //     }
+    //     for (var res in factoriesRecipe[factId]) {
+    //         if (factoriesRecipe[factId][res] < 0
+    //             && Math.abs(factoriesRecipe[factId][res]) > productionsMap[res]) {
+    //             notBuyable.push(factId)
+    //             break;
+    //         }
+    //     }
+    //     if (notBuyable.includes(factId)) {
+    //         document.getElementById("factoryDisabler" + factId).classList.remove("canBuy");
+    //     }
+    //     else {
+    //         document.getElementById("factoryDisabler" + factId).classList.remove("canBuy");
+    //         document.getElementById("factoryDisabler" + factId).classList.add("canBuy");
+    //     }
+    // }
 }
 setInterval(function(){
     refreshValues(true);
     refreshView();
-    refreshFactoriesBuyability();
+    $.post(contextPath + "/canBuyFactory",
+        {}, function (data) {
+            var resp = JSON.parse(data);
+
+            factoryBuyability = resp.maxBuy;
+            refreshFactoriesBuyability();
+        });
     refreshUpgradesBuyability();
 }, 1000);
 

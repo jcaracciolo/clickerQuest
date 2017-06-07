@@ -305,7 +305,6 @@
                     <div class="section">
                         <!-- BEGINING OF FACTORY CARD -->
                         <div class="factory-card-container">
-                            <div id="factoryDisabler${factory.getType()}" class="box black buyDisability canBuy"></div>
                             <div class="row factory-card">
                                 <div class="col s4 buyFactorySection">
                                     <div class="card-image factory-icon">
@@ -415,8 +414,11 @@
                             </div>
                             </div>
                             <div class="buyButtonsContainer">
+                                <div id="factory1Disabler${factory.getType()}" class="box black buy1Disability canBuy"></div>
                                 <img id="buyOne${factory.getType()}" data-amount="1" data-factoryid="${factory.getType().getId()}" class="buyFactory" src="<c:url value="/resources/${buttonsFolder}/buy1.png"/>"/>
+                                <div id="factory10Disabler${factory.getType()}" class="box black buy10Disability canBuy"></div>
                                 <img id="buyTen${factory.getType()}" data-amount="10" data-factoryid="${factory.getType().getId()}" class="buyFactory" src="<c:url value="/resources/${buttonsFolder}/buy10.png"/>"/>
+                                <div id="factory100Disabler${factory.getType()}" class="box black buy100Disability canBuy"></div>
                                 <img id="buyHundred${factory.getType()}" data-amount="100" data-factoryid="${factory.getType().getId()}" class="buyFactory" src="<c:url value="/resources/${buttonsFolder}/buy100.png"/>"/>
                             </div>
                         <!-- END OF FACTORY CARD -->
@@ -434,6 +436,12 @@
 <!--Import jQuery before materialize.js-->
 <script type="text/javascript">
     contextPath = '<%=request.getContextPath()%>';
+
+    factInOrder = [
+        <c:forEach items="${factories}" var="factory">
+        "${factory.type}",
+        </c:forEach> ];
+
     storagesMap = { // resource -> cant
         <c:forEach items="${storage.resources}" var="resource">
         "${resource.id}" : ${storage.getValue(resource)},
@@ -479,12 +487,12 @@
     messages = ${messages.toJSONString()};
 
 </script>
-<script type="text/javascript" src="<c:url value="https://code.jquery.com/jquery-2.1.1.min.js"/>"></script>
-<script type="text/javascript" src="<c:url value="/resources/js/materialize.min.js"/>"></script>
-<script type="text/javascript" src="<c:url value="/resources/js/clickspark.min.js"/>"></script>
-<script type="text/javascript" src="<c:url value="/resources/js/autocomplete.js"/>"></script>
-<script type="text/javascript" src="<c:url value="/resources/js/game.js"/>"></script>
-<script type="text/javascript" src="<c:url value="/resources/js/jquery-validator-framework/jquery.validate.js"/>"></script>
-<script type="text/javascript" src="<c:url value="/resources/js/jquery-validator-framework/additional-methods.js"/>"></script>
+<script type="text/javascript" src="<c:url value='https://code.jquery.com/jquery-2.1.1.min.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/resources/js/materialize.min.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/resources/js/clickspark.min.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/resources/js/autocomplete.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/resources/js/game.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/resources/js/jquery-validator-framework/jquery.validate.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/resources/js/jquery-validator-framework/additional-methods.js'/>"></script>
 
 </html>

@@ -150,13 +150,33 @@ div.box.black.upgradeDisability {
 	z-index: 2;
 }
 
-div.box.black.buyDisability {
+div.box.black.buy1Disability {
 	position: absolute;
 	width: 33%;
 	height: 100%;
 	color: black;
-	opacity: 0.25;
+	opacity: 0.4;
 	z-index: 2;
+}
+
+div.box.black.buy10Disability {
+	position: absolute;
+	width: 33%;
+	height: 100%;
+	color: black;
+	opacity: 0.4;
+	z-index: 2;
+	left: 33%;
+}
+
+div.box.black.buy100Disability {
+	position: absolute;
+	width: 33%;
+	height: 100%;
+	color: black;
+	opacity: 0.4;
+	z-index: 2;
+	left: 66%;
 }
 
 div.box.black.canBuy {
@@ -264,6 +284,7 @@ img.upgradeImage {
 	display: flex;
 	flex-direction: row;
 	align-content: space-around;
+	position: relative;
 }
 
 .buyFactory {
