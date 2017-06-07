@@ -68,4 +68,7 @@ nav .button.last {
 #clanNameInput {
     background-color: white;
     color: black;
+    width: 16rem;
+    padding-right: 0.5rem;
+    padding-left: 0.5rem;
 }
