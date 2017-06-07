@@ -173,11 +173,6 @@ div.buyFactorySection.col {
 	padding-top: 0.5em;
 }
 
-div.buyFactorySection:hover {
-	background-color: rgba(0, 0, 0, 0.18);
-	cursor: pointer;
-}
-
 .main-frame.row {
 	margin: 0;
 }
@@ -268,11 +263,16 @@ img.upgradeImage {
 .buyButtonsContainer {
 	display: flex;
 	flex-direction: row;
-	align-content: space-between;
+	align-content: space-around;
 }
 
-.multipleBuyBtn {
-	color: black;
+.buyFactory {
+	width: 100%;
+	height: auto;
+}
+
+.buyFactory:hover {
+	cursor: pointer;
 }
 
 #createClanSend:hover {

@@ -307,7 +307,7 @@
                         <div class="factory-card-container">
                             <div id="factoryDisabler${factory.getType()}" class="box black buyDisability canBuy"></div>
                             <div class="row factory-card">
-                                <div id="buy${factory.getType()}" data-factoryid="${factory.getType().getId()}" class="buyFactory col s4 buyFactorySection">
+                                <div class="col s4 buyFactorySection">
                                     <div class="card-image factory-icon">
                                         <p class="center-align"><spring:message code="${factory.type.nameCode}"/></p>
                                         <img src="<c:url value="/resources/factory_images/${factory.getImage()}"/>" alt="factory_icon"/>
@@ -413,12 +413,12 @@
                                     </c:if>
                                 </div>
                             </div>
-                                <div class="buyButtonsContainer">
-                                    <button id="buyOne${factory.getType()}" data-amount="1" data-factoryid="${factory.getType().getId()}" class="buyFactory multipleBuyBtn"><spring:message code="game.buyOne"/></button>
-                                    <button id="buyTen${factory.getType()}" data-amount="10" data-factoryid="${factory.getType().getId()}" class="buyFactory multipleBuyBtn"><spring:message code="game.buyTen"/></button>
-                                    <button id="buyHundred${factory.getType()}" data-amount="100" data-factoryid="${factory.getType().getId()}" class="buyFactory multipleBuyBtn"><spring:message code="game.buyHundred"/></button>
-                                </div>
-                        </div>
+                            </div>
+                            <div class="buyButtonsContainer">
+                                <img id="buyOne${factory.getType()}" data-amount="1" data-factoryid="${factory.getType().getId()}" class="buyFactory" src="<c:url value="/resources/${buttonsFolder}/buy1.png"/>"/>
+                                <img id="buyTen${factory.getType()}" data-amount="10" data-factoryid="${factory.getType().getId()}" class="buyFactory" src="<c:url value="/resources/${buttonsFolder}/buy10.png"/>"/>
+                                <img id="buyHundred${factory.getType()}" data-amount="100" data-factoryid="${factory.getType().getId()}" class="buyFactory" src="<c:url value="/resources/${buttonsFolder}/buy100.png"/>"/>
+                            </div>
                         <!-- END OF FACTORY CARD -->
                     </div>
                 </c:forEach>
