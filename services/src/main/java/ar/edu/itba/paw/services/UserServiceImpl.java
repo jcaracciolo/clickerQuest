@@ -150,6 +150,26 @@ public class UserServiceImpl implements UserService {
         return false;    }
 
     @Override
+    public Map<FactoryType,Long> canPurchaseFactory(long userid) {
+        Wealth w = getUserWealth(userid);
+        Map<FactoryType,Long> maxBuyable = new HashMap<>();
+        Collection<Factory> factories = userDao.getUserFactories(userid);
+
+        for (Factory f: factories){
+            long max=0;
+            if(f.isBuyable(w,100)) max = 100;
+            else if(f.isBuyable(w,50)) max = 50;
+            else if(f.isBuyable(w,25)) max = 25;
+            else if(f.isBuyable(w,10)) max = 10;
+            else if(f.isBuyable(w,5)) max = 5;
+            else if(f.isBuyable(w,1)) max = 1;
+            maxBuyable.put(f.getType(),max);
+        }
+
+        return maxBuyable;
+    }
+
+    @Override
     @Transactional(propagation = Propagation.NESTED)
     public Collection<Factory> getUserFactories(long userid) {
         final Collection<Factory> factories = userDao.getUserFactories(userid);

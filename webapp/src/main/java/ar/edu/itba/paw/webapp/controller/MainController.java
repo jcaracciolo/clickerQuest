@@ -290,6 +290,21 @@ public class MainController {
         return j.toJSONString();
     }
 
+    @RequestMapping(value = "/canBuyFactory", method = { RequestMethod.POST })
+    @ResponseBody
+    public String canPurchaseFactory(Principal principal){
+        long userID = userService.findByUsername(principal.getName()).getId();
+        Map<FactoryType,Long> maxBuy = userService.canPurchaseFactory(userID);
+        JSONObject maxBuyJson = new JSONObject();
+        for (FactoryType f:maxBuy.keySet()){
+            maxBuyJson.put(f.getId(),maxBuy.get(f));
+        }
+        JSONObject j = new JSONObject();
+        j.put("maxBuy",maxBuyJson);
+        j.put("type", "canPurchaseFactory");
+        return j.toJSONString();
+    }
+
     @RequestMapping(value = "/upgradeFactory", method = { RequestMethod.POST })
     @ResponseBody
     public String upgradeFactory(Principal principal, @RequestParam("factoryId") final int factoryId){

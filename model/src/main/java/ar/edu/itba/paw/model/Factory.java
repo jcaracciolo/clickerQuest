@@ -88,9 +88,6 @@ public class Factory implements Comparable<Factory> {
     }
 
 
-    public boolean isBuyable(Wealth w) {
-        return isBuyable(w,1);
-    }
     public boolean isBuyable(Wealth w, long amountToBuy) {
         FactoryCost cost = getCost(amountToBuy);
         Storage storage = w.getStorage();
