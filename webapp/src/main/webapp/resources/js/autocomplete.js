@@ -1,6 +1,6 @@
 
-var clanImageSrc = "https://carlaspeaks.files.wordpress.com/2012/07/c1.png";
-var userImageSrc = "http://www.drodd.com/images14/u27.jpg";
+var clanImageSrc = "http://simpleicon.com/wp-content/uploads/multy-user.png";
+var userImageSrc = "https://www.bosserpropiedades.com/wp-content/uploads/2016/03/foto-perfil-2.png";
 var autocomplete_id;
 
 
