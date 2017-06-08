@@ -150,16 +150,23 @@ public class UserServiceImpl implements UserService {
         }
         return false;    }
 
+
+    @Override
+    public Collection<BuyLimits> getPurchaseableFactory(long userid) {
+        Wealth w = getUserWealth(userid);
+        Collection<Factory> factories = userDao.getUserFactories(userid);
+        return factories.stream().map(f->f.getLimits(w)).collect(Collectors.toList());
+    }
+
     @Override
     public Map<FactoryType,Long> canPurchaseFactory(long userid) {
         Wealth w = getUserWealth(userid);
         Map<FactoryType,Long> maxBuyable = new HashMap<>();
         Collection<Factory> factories = userDao.getUserFactories(userid);
-
         for (Factory f: factories){
             long max=0;
             BuyLimits bl = f.getLimits(w);
-            if(f.isBuyable(w,100)) max = 100;
+                if(f.isBuyable(w,100)) max = 100;
             else if(f.isBuyable(w,50)) max = 50;
             else if(f.isBuyable(w,25)) max = 25;
             else if(f.isBuyable(w,10)) max = 10;

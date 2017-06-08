@@ -294,13 +294,27 @@ public class MainController {
     @ResponseBody
     public String canPurchaseFactory(Principal principal){
         long userID = userService.findByUsername(principal.getName()).getId();
-        Map<FactoryType,Long> maxBuy = userService.canPurchaseFactory(userID);
-        JSONObject maxBuyJson = new JSONObject();
-        for (FactoryType f:maxBuy.keySet()){
-            maxBuyJson.put(f.getId(),maxBuy.get(f));
+        Collection<BuyLimits> purchaseableFactory= userService.getPurchaseableFactory(userID);
+        JSONObject buyLimitArray = new JSONObject();
+
+        for (BuyLimits bl : purchaseableFactory){
+            JSONObject buyLimitJson = new JSONObject();
+            JSONObject productionsObject = new JSONObject();
+            bl.getProductionsDeficit().forEach((rt,decimal)-> {
+                productionsObject.put(rt.getId(),decimal);
+            });
+            buyLimitJson.put("prod",productionsObject);
+
+            JSONObject storageObject = new JSONObject();
+            bl.getStorageDeficits().forEach((rt,decimal)-> storageObject.put(rt.getId(),decimal));
+            buyLimitJson.put("storage",storageObject);
+            buyLimitJson.put("maxBuy",bl.getMaxFactories());
+            buyLimitJson.put("limitant",bl.getLimitant().getId());
+            buyLimitJson.put("isProduction",bl.isProduction());
+            buyLimitArray.put(bl.getFactoryType().getId(),buyLimitJson);
         }
         JSONObject j = new JSONObject();
-        j.put("maxBuy",maxBuyJson);
+        j.put("buyables",buyLimitArray);
         j.put("type", "canPurchaseFactory");
         return j.toJSONString();
     }

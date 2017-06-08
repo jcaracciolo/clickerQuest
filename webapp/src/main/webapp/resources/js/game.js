@@ -2,7 +2,8 @@ var url=window.location.href.split("/")
 var userId =url[url.length - 2];
 sessionStorage.removeItem("user");
 
-var factoryBuyability;
+var factoryBuyability = [];
+var limitantResources = [];
 
 $(document).ready(function(){
     $('.modal').modal();
@@ -34,7 +35,7 @@ $.post(contextPath + "/canBuyFactory",
     {}, function (data) {
         var resp = JSON.parse(data);
 
-        factoryBuyability = resp.maxBuy;
+        factoryBuyability = resp.buyables;
         refreshFactoriesBuyability();
     });
 refreshUpgradesBuyability();

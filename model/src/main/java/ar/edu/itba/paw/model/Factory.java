@@ -132,13 +132,13 @@ public class Factory implements Comparable<Factory> {
             double sol2 = (-b - Math.sqrt(b*b - 4*a*c) ) / (2*a);
             if (sol1 < 0){
                 if(sol2 < 0) {
-                    System.out.println("error");
+//                    System.out.println("error");
                 } else sol = sol2;
             } else {
                 if(sol2<0){
                     sol = sol1;
                 } else {
-                    System.out.println("error");
+//                    System.out.println("error");
                 }
             }
             buyLimits.addStorageDeficit(r,sol);

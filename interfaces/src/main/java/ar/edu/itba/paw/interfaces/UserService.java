@@ -27,6 +27,7 @@ public interface UserService {
 
     boolean purchaseFactory(long userid, FactoryType type,long amount);
     Map<FactoryType, Long> canPurchaseFactory(long userid);
+    Collection<BuyLimits> getPurchaseableFactory(long userid);
 
     boolean purchaseUpgrade(long userid, FactoryType type);
     boolean purchaseResourceType(long userid, ResourceType resourceType, double amount);

@@ -9,6 +9,8 @@ import java.util.Map;
  */
 public class BuyLimits {
     private FactoryType factoryType;
+    private ResourceType limitant;
+    private Boolean isProduction;
     //The max amount of factories of FactoryType that the user could buy if the productions stayed the same
     private Long maxBuyable=Long.MAX_VALUE;
     //This is the max amount of factories the user could buy if the resource in question is the only limit
@@ -22,13 +24,29 @@ public class BuyLimits {
     }
 
     public void addProductionDeficit(ResourceType resourceType, Double deficit){
-        maxBuyable = Math.round(Math.floor(Math.min(deficit,maxBuyable*1.0)));
+        if(Math.round(Math.floor(deficit)) < maxBuyable){
+            maxBuyable = Math.round(Math.floor(deficit));
+            limitant = resourceType;
+            isProduction = true;
+        }
         productionDeficits.put(resourceType,BigDecimal.valueOf(deficit));
     }
 
     public void addStorageDeficit(ResourceType resourceType, Double deficit){
-        maxBuyable = Math.round(Math.floor(Math.min(deficit,maxBuyable*1.0)));
+        if(Math.round(Math.floor(deficit)) < maxBuyable){
+            maxBuyable = Math.round(Math.floor(deficit));
+            limitant = resourceType;
+            isProduction = false;
+        }
         storageDeficits.put(resourceType,BigDecimal.valueOf(deficit));
+    }
+
+    public ResourceType getLimitant() {
+        return limitant;
+    }
+
+    public Boolean isProduction() {
+        return isProduction;
     }
 
     public Map<ResourceType, BigDecimal> getProductionsDeficit(){
@@ -41,5 +59,9 @@ public class BuyLimits {
 
     public Long getMaxFactories(){
         return maxBuyable;
+    }
+
+    public FactoryType getFactoryType() {
+        return factoryType;
     }
 }
