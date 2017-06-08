@@ -3,12 +3,14 @@ package ar.edu.itba.paw.model;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Created by Julian Benitez on 6/7/2017.
  */
 public class BuyLimits {
     private FactoryType factoryType;
+    private Factory factory;
     private ResourceType limitant;
     private Boolean isProduction;
     //The max amount of factories of FactoryType that the user could buy if the productions stayed the same
@@ -17,8 +19,10 @@ public class BuyLimits {
     private Map<ResourceType, BigDecimal> productionDeficits;
     private Map<ResourceType, BigDecimal> storageDeficits;
 
-    public BuyLimits(FactoryType factoryType) {
-        this.factoryType = factoryType;
+
+    public BuyLimits(Factory factory) {
+        this.factory = factory;
+        this.factoryType = factory.getType();
         productionDeficits = new HashMap<>();
         storageDeficits = new HashMap<>();
     }
@@ -56,6 +60,18 @@ public class BuyLimits {
     public Map<ResourceType, BigDecimal> getStorageDeficits() {
         return storageDeficits;
     }
+
+    public Map<Integer, Double> getStorageCost(long amountToBuy){
+        Map<ResourceType,Double> map = factory.getCost(amountToBuy).getCost();
+        return map.keySet().stream().collect(Collectors.toMap(ResourceType::getId, map::get));
+    }
+
+    public Map<Integer, Double> getProductionCost(long amountToBuy){
+        Map<ResourceType, Double> map =factory.getRecipe().getInputs();
+
+        return map.keySet().stream().collect(Collectors.toMap(ResourceType::getId, r->map.get(r)*(amountToBuy)));
+    }
+
 
     public Long getMaxFactories(){
         return maxBuyable;

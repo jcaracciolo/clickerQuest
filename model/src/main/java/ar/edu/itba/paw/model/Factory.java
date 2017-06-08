@@ -112,7 +112,7 @@ public class Factory implements Comparable<Factory> {
     }
 
     public BuyLimits getLimits(Wealth w){
-        BuyLimits buyLimits = new BuyLimits(this.getType());
+        BuyLimits buyLimits = new BuyLimits(this);
 
 
         Map<ResourceType,Double> need = type.getBaseRecipe().getInputs();
@@ -130,17 +130,7 @@ public class Factory implements Comparable<Factory> {
             Double sol=0D;
             double sol1 = (-b + Math.sqrt(b*b - 4*a*c) ) / (2*a);
             double sol2 = (-b - Math.sqrt(b*b - 4*a*c) ) / (2*a);
-            if (sol1 < 0){
-                if(sol2 < 0) {
-//                    System.out.println("error");
-                } else sol = sol2;
-            } else {
-                if(sol2<0){
-                    sol = sol1;
-                } else {
-//                    System.out.println("error");
-                }
-            }
+            sol = sol1<sol2?sol2:sol1;
             buyLimits.addStorageDeficit(r,sol);
         }
         return buyLimits;

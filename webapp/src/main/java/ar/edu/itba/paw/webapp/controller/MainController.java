@@ -27,6 +27,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Controller
@@ -296,28 +297,39 @@ public class MainController {
         long userID = userService.findByUsername(principal.getName()).getId();
         Collection<BuyLimits> purchaseableFactory= userService.getPurchaseableFactory(userID);
         JSONObject buyLimitArray = new JSONObject();
-
         for (BuyLimits bl : purchaseableFactory){
-            JSONObject buyLimitJson = new JSONObject();
-            JSONObject productionsObject = new JSONObject();
-            bl.getProductionsDeficit().forEach((rt,decimal)-> {
-                productionsObject.put(rt.getId(),decimal);
-            });
-            buyLimitJson.put("prod",productionsObject);
-
-            JSONObject storageObject = new JSONObject();
-            bl.getStorageDeficits().forEach((rt,decimal)-> storageObject.put(rt.getId(),decimal));
-            buyLimitJson.put("storage",storageObject);
-            buyLimitJson.put("maxBuy",bl.getMaxFactories());
-            buyLimitJson.put("limitant",bl.getLimitant().getId());
-            buyLimitJson.put("isProduction",bl.isProduction());
-            buyLimitArray.put(bl.getFactoryType().getId(),buyLimitJson);
+            buyLimitArray.put(bl.getFactoryType().getId(),buyLimitToJson(bl));
         }
         JSONObject j = new JSONObject();
         j.put("buyables",buyLimitArray);
         j.put("type", "canPurchaseFactory");
         return j.toJSONString();
     }
+
+    private JSONObject buyLimitToJson(BuyLimits buyLimits){
+        Long max = buyLimits.getMaxFactories();
+        JSONObject main = new JSONObject();
+        main.put("1",amountToJson(buyLimits,1));
+        main.put("10",amountToJson(buyLimits,10));
+        main.put("100",amountToJson(buyLimits,100));
+        main.put("max",amountToJson(buyLimits, Math.toIntExact(max)));
+        main.put("nextMax",amountToJson(buyLimits, Math.toIntExact(max+1)));
+        main.put("maxBuy",max);
+        return main;
+    }
+
+    private JSONObject amountToJson(BuyLimits buyLimits, Integer amount){
+        JSONObject main = new JSONObject();
+        JSONObject productions = new JSONObject();
+        productions.putAll(buyLimits.getProductionCost(amount));
+        JSONObject storage = new JSONObject();
+        storage.putAll(buyLimits.getStorageCost(amount));
+        main.put("prod",productions);
+        main.put("storage",storage);
+        return main;
+
+    }
+
 
     @RequestMapping(value = "/upgradeFactory", method = { RequestMethod.POST })
     @ResponseBody
