@@ -17,16 +17,16 @@ public class TestConfig {
      */
     @Bean
     public UserDao mockUserDao() {
-        return new MockUserDao();
+        return new ar.edu.itba.paw.services.MockUserDao();
     }
 
     @Bean
     public PasswordEncoder mockPasswordEncoder(){
-        return new MockPasswordEncoder();
+        return new ar.edu.itba.paw.services.MockPasswordEncoder();
     }
 
     @Bean
     public MarketDao mockMarketDao(){
-        return new MockMarketDao();
+        return new ar.edu.itba.paw.services.MockMarketDao();
     }
 }

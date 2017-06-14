@@ -10,6 +10,10 @@ import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 import org.springframework.jdbc.datasource.init.DataSourceInitializer;
 import org.springframework.jdbc.datasource.init.DatabasePopulator;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
+import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.orm.jpa.JpaVendorAdapter;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -18,8 +22,10 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 
+import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 import java.nio.charset.StandardCharsets;
+import java.util.Properties;
 
 @EnableWebMvc
 @ComponentScan({ "ar.edu.itba.paw.webapp.controller, ar.edu.itba.paw.services, ar.edu.itba.paw.persistence" })
@@ -47,22 +53,29 @@ public class WebConfig {
 
     // ---------- PERSISTENCE
 
-    /**
-     * DataSource which indicates how the application should access the database. Sets up
-     * the port, address, database name, user and password for it, as well as the driver.
-     */
     @Bean
-    @Profile("default")
-    public DataSource devDataSource() {
-
-        final SimpleDriverDataSource ds = new SimpleDriverDataSource();
-        ds.setDriverClass(org.postgresql.Driver.class);
-        ds.setUrl("jdbc:postgresql://localhost/clickerQuest");
-        ds.setUsername("root");
-        ds.setPassword("root");
-        return ds;
-
+    @Autowired
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory (DataSource datasource) {
+        final LocalContainerEntityManagerFactoryBean factoryBean = new LocalContainerEntityManagerFactoryBean();
+        factoryBean.setPackagesToScan( "ar.edu.itba.model" );
+        factoryBean.setDataSource(datasource);
+        final JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+        factoryBean.setJpaVendorAdapter(vendorAdapter);
+        final Properties properties = new Properties();
+        properties.setProperty( "hibernate.hbm2ddl.auto" , "update" );
+//        properties.setProperty( "hibernate.dialect" , "org. hibernate.dialect.PostgreSQL92Dialect" );
+        // Si ponen esto en prod, hay tabla!!!
+        properties.setProperty( "hibernate.show_sql" , "true" );
+        properties.setProperty( "format_sql" , "true" );
+        factoryBean.setJpaProperties(properties);
+        return factoryBean;
     }
+
+    @Bean
+    public PlatformTransactionManager transactionManager(final EntityManagerFactory emf){
+        return new JpaTransactionManager(emf);
+    }
+
 
     /**
      * DataSource which indicates how the application should access the database. Sets up
@@ -77,6 +90,22 @@ public class WebConfig {
         ds.setUrl("jdbc:postgresql://10.16.1.110/paw-2017a-4");
         ds.setUsername("paw-2017a-4");
         ds.setPassword("ooc4Choo");
+        return ds;
+
+    }
+    /**
+     * DataSource which indicates how the application should access the database. Sets up
+     * the port, address, database name, user and password for it, as well as the driver.
+     */
+    @Bean
+    @Profile("default")
+    public DataSource devDataSource() {
+
+        final SimpleDriverDataSource ds = new SimpleDriverDataSource();
+        ds.setDriverClass(org.postgresql.Driver.class);
+        ds.setUrl("jdbc:postgresql://localhost/clickerQuest");
+        ds.setUsername("root");
+        ds.setPassword("root");
         return ds;
 
     }
@@ -117,12 +146,5 @@ public class WebConfig {
         return messageSource;
     }
 
-    @Autowired
-    DataSource s;
-
-    @Bean
-    public PlatformTransactionManager txManager() {
-        return new DataSourceTransactionManager(s);
-    }
 
 }

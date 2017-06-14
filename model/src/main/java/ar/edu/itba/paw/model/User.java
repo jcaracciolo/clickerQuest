@@ -3,16 +3,37 @@ package ar.edu.itba.paw.model;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "users")
 public class User {
 
-    private final long id;
-    private final String username;
-    private final String password;
-    private final String profileImage;
-    private final double score;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "users_userid_seq")
+    @SequenceGenerator(sequenceName = "users_userid_seq",name = "users_userid_seq",allocationSize = 1)
+    @Column(name = "userid")
+    private  long id;
 
+    @Column(length = 100, nullable = false, unique = true)
+    private  String username;
+
+    @Column(length = 100, nullable = false)
+    private  String password;
+
+    @Column(name = "profileimage",length = 100, nullable = false)
+    private  String profileImage;
+
+    @Column(nullable = false)
+    private  double score;
+
+    @Column(name = "clanid")
     @Nullable
     private Integer clanId;
+
+    public User(){
+        //Just for hibernate :D
+    }
 
     public User(long id,  @NotNull String username, @NotNull String password, @NotNull String profileImage) {
         this.id = id;
@@ -23,13 +44,21 @@ public class User {
         this.score = 0;
     }
 
-    public User(long id,  @NotNull String username,  @NotNull String password,  @NotNull String profileImage,
+    public User(@NotNull String username,  @NotNull String password,  @NotNull String profileImage,
                 double score, @Nullable Integer clanId) {
-        this.id = id;
         this.username = username;
         this.password = password;
         this.profileImage = profileImage;
         this.clanId = clanId;
+        this.score = score;
+    }
+
+    public User(long id, String username, String password, String profileImage, double score, Integer id1) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.profileImage = profileImage;
+        this.clanId =id1;
         this.score = score;
     }
 
@@ -76,5 +105,16 @@ public class User {
     @Override
     public int hashCode() {
         return (int) (id ^ (id >>> 32));
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", profileImage='" + profileImage + '\'' +
+                ", score=" + score +
+                ", clanId=" + clanId +
+                '}';
     }
 }
