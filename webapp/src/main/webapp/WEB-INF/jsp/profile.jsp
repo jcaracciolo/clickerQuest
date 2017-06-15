@@ -87,9 +87,9 @@
         <div id="world-ranking">
             <p><spring:message code="profile.worldRanking" arguments="${globalRanking}"/> </p>
         </div>
-        <c:if test="${user.clanIdentifier != null}">
+        <c:if test="${user.clanId != null}">
             <div id="group-info">
-                <c:if test="${user.clanIdentifier != null}">
+                <c:if test="${user.clanId != null}">
                     <p class="subtitle"><spring:message code="profile.clan"/> </p>
                     <br>
                     <p href='<c:url value="/clan/${clan.name}"/>' id="clanLink" data-clanName="${clan.name}">${clan.name}</p>

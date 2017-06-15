@@ -18,7 +18,7 @@ import javax.sql.DataSource;
 import java.security.Principal;
 import java.util.Properties;
 
-@ComponentScan({ "ar.edu.itba.paw.persistence","ar.edu.itba.paw.webapp" })
+@ComponentScan({ "ar.edu.itba.paw.persistence" })
 @Configuration
 public class TestConfig {
 
@@ -41,6 +41,7 @@ public class TestConfig {
     }
 
     @Bean
+    @Autowired
     public PlatformTransactionManager transactionManager(final EntityManagerFactory emf){
         return new JpaTransactionManager(emf);
     }
@@ -49,7 +50,7 @@ public class TestConfig {
     public DataSource dataSource() {
         final SimpleDriverDataSource ds = new SimpleDriverDataSource();
         ds.setDriverClass(JDBCDriver.class);
-        ds.setUrl("jdbc:hsqldb:mem:paw");
+        ds.setUrl("jdbc:hsqldb:mem:paw;");
         ds.setUsername("ha");
         ds.setPassword("");
         return ds;

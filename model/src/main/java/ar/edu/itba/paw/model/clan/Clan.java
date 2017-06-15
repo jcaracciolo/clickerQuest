@@ -3,6 +3,7 @@ package ar.edu.itba.paw.model.clan;
 import ar.edu.itba.paw.model.User;
 import org.jetbrains.annotations.NotNull;
 
+import javax.persistence.*;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
@@ -10,15 +11,27 @@ import java.util.stream.Stream;
 /**
  * Created by juanfra on 17/05/17.
  */
+@Entity
+@Table(name = "clans")
 public class Clan implements Iterable<User> {
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "clanid")
     private final Set<User> users = new TreeSet<User>((u1,u2) ->  u1.getScore()<u2.getScore()?1:-1 );
 
-    private final int id;
-    private final String name;
+    @Id
+    @Column(name = "clanid")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "clans_clanid_seq")
+    @SequenceGenerator(sequenceName = "clans_clanid_seq",name = "clans_clanid_seq",allocationSize = 1)
+    private int id;
+
+    @Column(name = "name")
+    private String name;
 
     public String getName() {
         return name;
     }
+
+    Clan(){}
 
     Clan(@NotNull Collection<User> users, int id,@NotNull String name) {
         this.name = name;

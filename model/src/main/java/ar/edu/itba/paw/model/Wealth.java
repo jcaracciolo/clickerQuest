@@ -4,18 +4,59 @@ import ar.edu.itba.paw.model.packages.Implementations.*;
 import ar.edu.itba.paw.model.packages.PackageBuilder;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Map;
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.*;
 
 /**
  * Created by juanfra on 03/04/17.
  */
+@Table(name = "wealths")
+@Entity
 public class Wealth {
 
-    private final long userid;
-    private final Storage storage;
-    private final Productions productions;
+    @Id
+    @Column(name = "userid")
+    private long userid;
+
+    @Transient
+    private Storage storage;
+
+    @Transient
+    private Productions productions;
+
+    @ElementCollection
+    @MapKeyColumn(name="resourceType")
+    @Column(name="production")
+    private Map<Integer,Double> _productions = new HashMap<>();
+
+    @ElementCollection
+    @MapKeyColumn(name="resourceType")
+    @Column(name="lastUpdated")
+    private Map<Integer,Long> _lastUpdated = new HashMap<>();
+
+    @ElementCollection
+    @MapKeyColumn(name="resourceType")
+    @Column(name="storage")
+    private Map<Integer,Double> _storage = new HashMap<>();
+
+
+    @PostLoad
+    private void postLoad(){
+        PackageBuilder<Storage> sb = Storage.packageBuilder();
+        PackageBuilder<Productions> pb = Productions.packageBuilder();
+        _storage.forEach((i,d)->sb.putItem(ResourceType.fromId(i),d));
+        _lastUpdated.forEach((i,l)-> {
+            Calendar time = Calendar.getInstance();
+            time.setTimeInMillis(l);
+            sb.setLastUpdated(ResourceType.fromId(i),time);
+        });
+        _productions.forEach((i,d)->pb.putItem(ResourceType.fromId(i),d));
+        productions = pb.buildPackage();
+        storage = sb.buildPackage();
+    }
+
+    Wealth(){}
 
     public Wealth(long userid, @NotNull  Storage storage, @NotNull Productions productions) {
         if ( !storage.getResources().equals(productions.getResources()) ) {
@@ -24,6 +65,10 @@ public class Wealth {
         this.userid = userid;
         this.storage = storage;
         this.productions = productions;
+
+        this.storage.rawMap().forEach((r,d)->_storage.put(r.getId(),d));
+        this.productions.rawMap().forEach((r,d)->_productions.put(r.getId(),d));
+        this.storage.getLastUpdated().forEach((r,c)->_lastUpdated.put(r.getId(),c.getTimeInMillis()));
     }
 
     public long getUserid() {

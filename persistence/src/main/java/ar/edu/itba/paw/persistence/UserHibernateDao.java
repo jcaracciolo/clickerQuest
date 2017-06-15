@@ -2,6 +2,7 @@ package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.UserDao;
 import ar.edu.itba.paw.model.Factory;
+import ar.edu.itba.paw.model.ResourceType;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.Wealth;
 import ar.edu.itba.paw.model.packages.Implementations.Productions;
@@ -56,52 +57,65 @@ public class UserHibernateDao implements UserDao{
 
     @Override
     public Factory create(Factory factory) {
-        return null;
+        User u = findById(factory.getUserid());
+        u.getFactories().add(factory);
+        update(u);
+        return factory;
     }
 
     @Override
     public Wealth create(Wealth wealth) {
-        return null;
+        return update(wealth);
     }
 
     @Override
     public String getProfileImage(long userid) {
-        return null;
+        return findById(userid).getProfileImage();
     }
 
     @Override
     public Productions getUserProductions(long userid) {
-        return null;
+        return getUserWealth(userid).getProductions();
     }
 
     @Override
     public Storage getUserStorage(long userid) {
-        return null;
+        return getUserWealth(userid).getStorage();
     }
 
     @Override
     public User update(User u) {
-        return null;
+        em.persist(u);
+        return u;
     }
 
     @Override
     public Collection<Factory> getUserFactories(long userid) {
-        return null;
+        return findById(userid).getFactories();
     }
 
     @Override
     public Factory update(Factory f) {
-        return null;
+        User u = findById(f.getUserid());
+        u.getFactories().remove(f);
+        u.getFactories().add(f);
+        return f;
     }
 
     @Override
     public Wealth getUserWealth(long userid) {
-        return null;
+        return findById(userid).getWealth();
     }
 
     @Override
     public Wealth update(Wealth w) {
-        return null;
+        if(w.getStorage().rawMap().isEmpty() || w.getProductions().rawMap().isEmpty()) {
+            return null;
+        }
+        User u = findById(w.getUserid());
+        u.setWealth(w);
+        update(u);
+        return w;
     }
 
     @Override

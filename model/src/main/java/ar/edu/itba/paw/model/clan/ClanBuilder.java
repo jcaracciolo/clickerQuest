@@ -36,7 +36,7 @@ public class ClanBuilder implements Iterable<User> {
     }
 
     public boolean add(User user) {
-        if( user.getClanIdentifier() != id ) {
+        if( user.getClanId() != id ) {
             return false;
         }
 

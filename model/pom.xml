@@ -31,5 +31,6 @@
       <artifactId>hibernate-jpa-2.1-api</artifactId>
     </dependency>
 
+
   </dependencies>
 </project>

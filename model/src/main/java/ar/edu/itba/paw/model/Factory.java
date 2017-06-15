@@ -3,18 +3,74 @@ package ar.edu.itba.paw.model;
 import ar.edu.itba.paw.model.packages.Implementations.*;
 import org.jetbrains.annotations.NotNull;
 
+import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Map;
-import java.util.logging.Logger;
-import java.util.regex.Matcher;
 
+@Entity
+@Table(name = "factories")
 public class Factory implements Comparable<Factory> {
-    private final long userid;
-    private final FactoryType type;
-    private final double amount;
-    private final double inputReduction;
-    private final double outputMultiplier;
-    private final double costReduction;
-    private final long level;
+
+    @Transient
+    private long userid;
+    @Transient
+    private FactoryType type;
+
+    @Column(name = "amount", nullable = false)
+    private double amount;
+
+    @Column(name = "inputReduction", nullable = false)
+    private double inputReduction;
+
+    @Column(name = "outputMultiplier", nullable = false)
+    private double outputMultiplier;
+
+    @Column(name = "costReduction", nullable = false)
+    private double costReduction;
+
+    @Column(name = "level", nullable = false)
+    private long level;
+
+    @PostLoad
+    private void postLoad(){
+        type = FactoryType.fromId(_id.type);
+        userid = _id.userid;
+    }
+
+    public Factory(){}
+
+    @EmbeddedId
+    private UserAndFactory _id;
+
+    @Embeddable
+    class UserAndFactory implements Serializable{
+        @Column(name = "userid", nullable = false)
+        private long userid;
+        @Column(name = "type", nullable = false)
+        private int type;
+        UserAndFactory(){};
+        UserAndFactory(long userid,int _type){
+            this.userid = userid;
+            this.type = _type;
+        }
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            UserAndFactory that = (UserAndFactory) o;
+
+            if (userid != that.userid) return false;
+            return type == that.type;
+
+        }
+        @Override
+        public int hashCode() {
+            int result = (int) (userid ^ (userid >>> 32));
+            result = 31 * result + type;
+            return result;
+        }
+    }
 
     public Factory(long userid, @NotNull FactoryType type, double amount, double inputReduction,
                    double outputMultiplier, double costReduction, long level) {
@@ -25,6 +81,7 @@ public class Factory implements Comparable<Factory> {
         this.outputMultiplier = outputMultiplier;
         this.costReduction = costReduction;
         this.level = level;
+        this._id = new UserAndFactory(userid,type.getId());
     }
 
     public long getUserid() {

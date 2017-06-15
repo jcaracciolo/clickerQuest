@@ -157,7 +157,7 @@
                     </ul>
                 </div>
                 <c:choose>
-                    <c:when test="${user.clanIdentifier == null}">
+                    <c:when test="${user.clanId == null}">
                         <div id="createClan" class="button">
                             <ul>
                                 <li>

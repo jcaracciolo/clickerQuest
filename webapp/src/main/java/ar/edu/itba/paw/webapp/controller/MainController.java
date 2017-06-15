@@ -27,7 +27,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.*;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Controller
@@ -99,7 +98,7 @@ public class MainController {
             return mav;
         }
 
-        Integer clanid = u.getClanIdentifier();
+        Integer clanid = u.getClanId();
         if (clanid != null) {
             mav.addObject("clan", clanService.getClanById(clanid));
         }
@@ -186,7 +185,7 @@ public class MainController {
         if(u == null){
             return;
         }
-        if(u.getClanIdentifier() == null) {
+        if(u.getClanId() == null) {
             return;
         }
 
@@ -209,7 +208,7 @@ public class MainController {
         if(u == null){
             return;
         }
-        if(u.getClanIdentifier() != null) {
+        if(u.getClanId() != null) {
             return;
         }
 
@@ -263,7 +262,7 @@ public class MainController {
             return mav;
         }
 
-        Integer clanId = u.getClanIdentifier();
+        Integer clanId = u.getClanId();
         if (clanId != null) {
             mav.addObject("clan", clanService.getClanById(clanId));
         }

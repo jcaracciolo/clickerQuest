@@ -13,6 +13,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.jdbc.JdbcTestUtils;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
 import java.util.Calendar;
@@ -24,22 +25,21 @@ import static org.junit.Assert.*;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestConfig.class)
 @Sql("classpath:schema.sql")
-public class UserJdbcDaoTest {
+@Transactional
+public class UserDaoTest {
     private static final String PASSWORD = "Password";
     private static final String USERNAME = "Username";
     private static final String IMAGE = "asda.png";
     @Autowired
     private DataSource ds;
     @Autowired
-    private UserJdbcDao userDao;
+    private UserHibernateDao userDao;
     private JdbcTemplate jdbcTemplate;
 
     @Before
     public void setUp() {
         jdbcTemplate = new JdbcTemplate(ds);
-        jdbcTemplate.execute("TRUNCATE TABLE users RESTART IDENTITY AND COMMIT NO CHECK");
-        jdbcTemplate.execute("TRUNCATE TABLE factories RESTART IDENTITY AND COMMIT NO CHECK");
-        jdbcTemplate.execute("TRUNCATE TABLE wealths RESTART IDENTITY AND COMMIT NO CHECK");
+        jdbcTemplate.execute("TRUNCATE SCHEMA PUBLIC RESTART IDENTITY AND COMMIT NO CHECK");
     }
 
     @Test
@@ -48,8 +48,7 @@ public class UserJdbcDaoTest {
         assertNotNull(user);
         assertEquals(USERNAME, user.getUsername());
         assertEquals(PASSWORD, user.getPassword());
-        assertEquals(0,user.getId());
-        assertEquals(1, JdbcTestUtils.countRowsInTable(jdbcTemplate, "users"));
+        assertEquals(1,user.getId());
     }
 
     @Test
@@ -64,10 +63,9 @@ public class UserJdbcDaoTest {
         assertNotNull(user1);
         assertNotNull(user2);
         assertNotNull(user3);
-        assertEquals(3, JdbcTestUtils.countRowsInTable(jdbcTemplate, "users"));
-        assertEquals(0,user1.getId());
-        assertEquals(1,user2.getId());
-        assertEquals(2,user3.getId());
+        assertEquals(1,user1.getId());
+        assertEquals(2,user2.getId());
+        assertEquals(3,user3.getId());
 
     }
 
@@ -76,7 +74,6 @@ public class UserJdbcDaoTest {
         final User user = userDao.create(USERNAME, PASSWORD,IMAGE);
         Wealth nullWealth = userDao.getUserWealth(user.getId());
         assertNull(nullWealth);
-        assertEquals(0, JdbcTestUtils.countRowsInTable(jdbcTemplate, "wealths"));
 
     }
 
@@ -87,7 +84,6 @@ public class UserJdbcDaoTest {
         userDao.create(wealth);
         Wealth receivedWealth = userDao.getUserWealth(user.getId());
         assertNull(receivedWealth);
-        assertEquals(0, JdbcTestUtils.countRowsInTable(jdbcTemplate, "wealths"));
 
     }
 
@@ -103,7 +99,6 @@ public class UserJdbcDaoTest {
         userDao.create(wealth);
         Wealth receivedWealth = userDao.getUserWealth(user.getId());
         assertEquals(wealth,receivedWealth);
-        assertEquals(1, JdbcTestUtils.countRowsInTable(jdbcTemplate, "wealths"));
 
     }
 
@@ -133,7 +128,6 @@ public class UserJdbcDaoTest {
         final User user = userDao.create(USERNAME, PASSWORD,IMAGE);
         Collection<Factory> factories = userDao.getUserFactories(user.getId());
         assertTrue(factories.isEmpty());
-        assertEquals(0, JdbcTestUtils.countRowsInTable(jdbcTemplate, "factories"));
 
     }
     @Test
@@ -148,7 +142,6 @@ public class UserJdbcDaoTest {
         userDao.create(factory3);
 
         Collection<Factory> factories = userDao.getUserFactories(user.getId());
-        assertEquals(3, JdbcTestUtils.countRowsInTable(jdbcTemplate, "factories"));
         assertTrue(factories.contains(factory1));
         assertTrue(factories.contains(factory2));
         assertTrue(factories.contains(factory3));
@@ -168,7 +161,6 @@ public class UserJdbcDaoTest {
         userDao.update(newFactory);
 
         Collection<Factory> factories = userDao.getUserFactories(user.getId());
-        assertEquals(2, JdbcTestUtils.countRowsInTable(jdbcTemplate, "factories"));
         assertTrue(factories.contains(newFactory));
         assertTrue(factories.contains(factory2));
 

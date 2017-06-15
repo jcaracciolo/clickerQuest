@@ -1,9 +1,9 @@
 package ar.edu.itba.paw.model;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.persistence.*;
+import java.util.*;
 
 @Entity
 @Table(name = "users")
@@ -27,9 +27,17 @@ public class User {
     @Column(nullable = false)
     private  double score;
 
-    @Column(name = "clanid")
     @Nullable
+    @Column(name = "clanid")
     private Integer clanId;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "userid")
+    private Set<Factory> factories = new HashSet<>();
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "userid")
+    private Wealth wealth;
 
     public User(){
         //Just for hibernate :D
@@ -62,6 +70,14 @@ public class User {
         this.score = score;
     }
 
+    public Wealth getWealth() {
+        return wealth;
+    }
+
+    public void setWealth(Wealth wealth) {
+        this.wealth = wealth;
+    }
+
     public String getProfileImage() {
         return profileImage;
     }
@@ -82,8 +98,16 @@ public class User {
         return score;
     }
 
-    public Integer getClanIdentifier() {
+    public Integer getClanId() {
         return clanId;
+    }
+
+    public Collection<Factory> getFactories() {
+        return factories;
+    }
+
+    public void setClanId(@Nullable Integer clanId) {
+        this.clanId = clanId;
     }
 
     @Override
@@ -93,13 +117,7 @@ public class User {
 
         User user = (User) o;
 
-        if (id != user.id) return false;
-        if (Double.compare(user.score, score) != 0) return false;
-        if (!username.equals(user.username)) return false;
-        if (!password.equals(user.password)) return false;
-        if (!profileImage.equals(user.profileImage)) return false;
-        return clanId != null ? clanId.equals(user.clanId) : user.clanId == null;
-
+        return id == user.id;
     }
 
     @Override
