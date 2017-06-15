@@ -5,14 +5,13 @@ import ar.edu.itba.paw.model.packages.PackageBuilder;
 import org.jetbrains.annotations.NotNull;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.*;
 
 /**
  * Created by juanfra on 03/04/17.
  */
-@Table(name = "wealths")
 @Entity
+@Table(name = "users")
 public class Wealth {
 
     @Id
@@ -25,33 +24,25 @@ public class Wealth {
     @Transient
     private Productions productions;
 
-    @ElementCollection
-    @MapKeyColumn(name="resourceType")
-    @Column(name="production")
-    private Map<Integer,Double> _productions = new HashMap<>();
-
-    @ElementCollection
-    @MapKeyColumn(name="resourceType")
-    @Column(name="lastUpdated")
-    private Map<Integer,Long> _lastUpdated = new HashMap<>();
-
-    @ElementCollection
-    @MapKeyColumn(name="resourceType")
-    @Column(name="storage")
-    private Map<Integer,Double> _storage = new HashMap<>();
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "userid")
+    @Transient
+    private Set<UserWealth> wealths = new HashSet<>();
 
 
     @PostLoad
     private void postLoad(){
         PackageBuilder<Storage> sb = Storage.packageBuilder();
         PackageBuilder<Productions> pb = Productions.packageBuilder();
-        _storage.forEach((i,d)->sb.putItem(ResourceType.fromId(i),d));
-        _lastUpdated.forEach((i,l)-> {
-            Calendar time = Calendar.getInstance();
-            time.setTimeInMillis(l);
-            sb.setLastUpdated(ResourceType.fromId(i),time);
+        wealths.forEach((w) -> {
+            ResourceType r = w.getResourceType();
+            Calendar lu = Calendar.getInstance();
+            lu.setTimeInMillis(w.getLastupdated());
+            sb.putItemWithDate(r,w.getStorage(),lu);
+            pb.putItem(r,w.getProduction());
+
         });
-        _productions.forEach((i,d)->pb.putItem(ResourceType.fromId(i),d));
+
         productions = pb.buildPackage();
         storage = sb.buildPackage();
     }
@@ -66,9 +57,19 @@ public class Wealth {
         this.storage = storage;
         this.productions = productions;
 
-        this.storage.rawMap().forEach((r,d)->_storage.put(r.getId(),d));
-        this.productions.rawMap().forEach((r,d)->_productions.put(r.getId(),d));
-        this.storage.getLastUpdated().forEach((r,c)->_lastUpdated.put(r.getId(),c.getTimeInMillis()));
+        wealths = new HashSet<>();
+        for(ResourceType r: ResourceType.values()){
+            if(!productions.contains(r)) {
+                //TODO fix it here
+                continue;
+            }
+            UserWealth uw = new UserWealth();
+            uw.setId(userid,r.getId());
+            uw.setProduction(productions.getValue(r));
+            uw.setStorage(storage.getValue(r));
+            uw.setLastupdated(storage.getLastUpdated(r).getTimeInMillis());
+            wealths.add(uw);
+        }
     }
 
     public long getUserid() {
@@ -198,15 +199,6 @@ public class Wealth {
         if (o == null || getClass() != o.getClass()) return false;
 
         Wealth wealth = (Wealth) o;
-
-        if( !getStorage().equals(wealth.getStorage())) {
-            return false;
-        }
-
-        if ( !productions.equals(wealth.getProductions())) {
-            return false;
-        }
-
         return userid == wealth.userid;
 
     }

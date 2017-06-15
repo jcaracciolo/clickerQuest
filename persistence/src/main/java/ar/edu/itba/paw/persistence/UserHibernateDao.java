@@ -2,7 +2,6 @@ package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.UserDao;
 import ar.edu.itba.paw.model.Factory;
-import ar.edu.itba.paw.model.ResourceType;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.Wealth;
 import ar.edu.itba.paw.model.packages.Implementations.Productions;
@@ -85,8 +84,7 @@ public class UserHibernateDao implements UserDao{
 
     @Override
     public User update(User u) {
-        em.persist(u);
-        return u;
+        return em.merge(u);
     }
 
     @Override

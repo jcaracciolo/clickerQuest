@@ -57,13 +57,13 @@ public class WebConfig {
     @Autowired
     public LocalContainerEntityManagerFactoryBean entityManagerFactory (DataSource datasource) {
         final LocalContainerEntityManagerFactoryBean factoryBean = new LocalContainerEntityManagerFactoryBean();
-        factoryBean.setPackagesToScan( "ar.edu.itba.model" );
+        factoryBean.setPackagesToScan( "ar.edu.itba.paw.model" );
         factoryBean.setDataSource(datasource);
         final JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         factoryBean.setJpaVendorAdapter(vendorAdapter);
         final Properties properties = new Properties();
         properties.setProperty( "hibernate.hbm2ddl.auto" , "update" );
-//        properties.setProperty( "hibernate.dialect" , "org. hibernate.dialect.PostgreSQL92Dialect" );
+        properties.setProperty( "hibernate.dialect" , "org.hibernate.dialect.PostgreSQL92Dialect" );
         // Si ponen esto en prod, hay tabla!!!
         properties.setProperty( "hibernate.show_sql" , "true" );
         properties.setProperty( "format_sql" , "true" );
@@ -108,33 +108,6 @@ public class WebConfig {
         ds.setPassword("root");
         return ds;
 
-    }
-
-    /**
-     * Initializer for the database, creates a new DataSource in which {@see DatabasePopulator}
-     * will be in charge of populating it at the beginning of the process
-     */
-    @Bean
-    public DataSourceInitializer dataSourceInitializer(final DataSource ds) {
-        final DataSourceInitializer dsi = new DataSourceInitializer();
-        dsi.setDataSource(ds);
-        dsi.setDatabasePopulator(databasePopulator());
-        return dsi;
-    }
-
-    /**
-     * Schema to be executed at the start of the WebApp to setup the project's database
-     */
-    @Value("classpath:schema.sql")
-    private Resource schemaSql;
-    /**
-     * DatabasePopulator that loads the corresponding script, in charge of populating
-     * the database.
-     */
-    private DatabasePopulator databasePopulator() {
-        final ResourceDatabasePopulator dbp = new ResourceDatabasePopulator();
-        dbp.addScript(schemaSql);
-        return dbp;
     }
 
     @Bean

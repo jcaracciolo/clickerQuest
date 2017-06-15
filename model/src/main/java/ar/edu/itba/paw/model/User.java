@@ -33,6 +33,7 @@ public class User {
 
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "userid")
+    @Transient
     private Set<Factory> factories = new HashSet<>();
 
     @OneToOne(fetch = FetchType.LAZY)

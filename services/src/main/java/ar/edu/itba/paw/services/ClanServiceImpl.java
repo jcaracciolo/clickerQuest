@@ -16,11 +16,11 @@ import java.util.Collections;
  * Created by juanfra on 17/05/17.
  */
 @Service
-@Lazy
+@Transactional
 public class ClanServiceImpl implements ClanService {
 
     @Autowired
-    ClanDao clanDao;
+   private ClanDao clanDao;
 
     @Override
     public Clan createClan(String name) {
@@ -28,19 +28,16 @@ public class ClanServiceImpl implements ClanService {
     }
 
     @Override
-    @Transactional(propagation = Propagation.NESTED)
     public Clan getClanByName(String name) {
         return clanDao.getClanByName(name);
     }
 
     @Override
-    @Transactional(propagation = Propagation.NESTED)
     public Clan getClanById(int clanId) {
         return clanDao.getClanById(clanId);
     }
 
     @Override
-    @Transactional(propagation = Propagation.NESTED)
     public Collection<String> findByKeyword(String search) {
         if(!search.matches("^[a-zA-Z0-9]+$")) return Collections.emptyList();
         Collection<String> asd = clanDao.findByKeyword(search);
@@ -48,7 +45,6 @@ public class ClanServiceImpl implements ClanService {
     }
 
     @Override
-    @Transactional(propagation = Propagation.NESTED)
     public Clan addUserToClan(int clanId, long userId) {
         if( clanDao.addToClan(clanId,userId) ) {
             return getClanById(clanId);
