@@ -414,11 +414,14 @@
                             </div>
                             </div>
                             <div class="buyButtonsContainer">
-                                <div id="factory1Disabler${factory.getType()}" class="box black buy1Disability canBuy"></div>
+                                <div id="factory1Disabler${factory.getType()}" data-position="top" data-delay="50"
+                                     data-tooltip="asdasd1" class="tooltipped box black buy1Disability canBuy"></div>
                                 <img id="buyOne${factory.getType()}" data-amount="1" data-factoryid="${factory.getType().getId()}" class="buyFactory" src="<c:url value="/resources/${buttonsFolder}/buy1.png"/>"/>
-                                <div id="factory10Disabler${factory.getType()}" class="box black buy10Disability canBuy"></div>
+                                <div id="factory10Disabler${factory.getType()}"data-position="top" data-delay="50"
+                                     data-tooltip="asdasd10" class="tooltipped box black buy10Disability canBuy"></div>
                                 <img id="buyTen${factory.getType()}" data-amount="10" data-factoryid="${factory.getType().getId()}" class="buyFactory" src="<c:url value="/resources/${buttonsFolder}/buy10.png"/>"/>
-                                <div id="factory100Disabler${factory.getType()}" class="box black buy100Disability canBuy"></div>
+                                <div id="factory100Disabler${factory.getType()}" data-position="top" data-delay="50"
+                                     data-tooltip="asdasd100" class="tooltipped box black buy100Disability canBuy"></div>
                                 <img id="buyHundred${factory.getType()}" data-amount="100" data-factoryid="${factory.getType().getId()}" class="buyFactory" src="<c:url value="/resources/${buttonsFolder}/buy100.png"/>"/>
                             </div>
                         <!-- END OF FACTORY CARD -->
@@ -442,6 +445,21 @@
         "${factory.type}",
         </c:forEach> ];
 
+    factNameToId = { // factName -> factId
+        <c:forEach items="${factories}" var="factory">
+        "${factory.type}" : "${factory.type.id}",
+        </c:forEach>};
+
+    factIdToName = { // factId -> factName
+        <c:forEach items="${factories}" var="factory">
+        "${factory.type.id}" : "${factory.type}",
+        </c:forEach>};
+
+    resIdToName = { // resId -> resName
+        <c:forEach items="${storage.resources}" var="resource">
+            "${resource.id}" : "${resource}",
+        </c:forEach> };
+
     storagesMap = { // resource -> cant
         <c:forEach items="${storage.resources}" var="resource">
         "${resource.id}" : ${storage.getValue(resource)},
@@ -457,7 +475,7 @@
         "${resource.id}" : ${resource.price},
         </c:forEach>};
 
-    factoriesCost = { // factoryId -> (resourceId -> cant)
+    factoriesCost = { // factoryName -> (resourceId -> cant)
     <c:forEach items="${factories}" var="factory"> ${factory.type} : {
         <c:set var="cost" value="${factory.cost}"/>
         <c:forEach items="${cost.resources}" var="resource">
@@ -466,13 +484,13 @@
     },</c:forEach>
     };
 
-    upgradesCost = { // factoryId -> cost
+    upgradesCost = { // factoryName -> cost
         <c:forEach items="${factories}" var="factory">
         "${factory.type}" : ${factory.getNextUpgrade().cost},
         </c:forEach>
     };
 
-    factoriesRecipe = { // factoryId -> (resource -> rate)
+    factoriesRecipe = { // factoryName -> (resource -> rate)
     <c:forEach items="${factories}" var="factory">
     ${factory.type} : {
         <c:set var="recipe" value="${factory.recipe}"/>

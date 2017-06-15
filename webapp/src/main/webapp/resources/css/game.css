@@ -330,3 +330,8 @@ img.marketButton:hover {
     height: 4rem;
     display: inline-block;
 }
+
+.material-tooltip {
+	white-space: pre;
+	text-align: left !important;
+}
