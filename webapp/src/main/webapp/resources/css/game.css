@@ -76,7 +76,7 @@ img.resource-icon {
 
 body {
 	font-family: Fixedsys;
-	overflow-y: hidden;
+	overflow-y: hidden!important;
 	height: 100vh;
 	min-width: 1200px;
 	background-color: #DEDEDE;
