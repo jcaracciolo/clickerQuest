@@ -4,6 +4,7 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.persistence.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "users")
@@ -33,8 +34,7 @@ public class User {
 
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "userid")
-    @Transient
-    private Set<Factory> factories = new HashSet<>();
+    private List<Factory> factories = new ArrayList<>();
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userid")
@@ -105,6 +105,10 @@ public class User {
 
     public Collection<Factory> getFactories() {
         return factories;
+    }
+
+    public void setFactories(Collection<Factory> factories) {
+        this.factories = factories.stream().collect(Collectors.toList());
     }
 
     public void setClanId(@Nullable Integer clanId) {

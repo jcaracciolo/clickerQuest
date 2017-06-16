@@ -24,11 +24,9 @@ public class Wealth {
     @Transient
     private Productions productions;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "userid")
-    @Transient
     private Set<UserWealth> wealths = new HashSet<>();
-
 
     @PostLoad
     private void postLoad(){

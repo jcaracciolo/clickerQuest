@@ -20,7 +20,7 @@ class UserWealth {
     UserAndResource _id;
 
     @Embeddable
-    private class UserAndResource implements Serializable {
+    private static class UserAndResource implements Serializable {
         @Column(name = "userid", nullable = false)
         long userid;
         @Column(name = "resourcetype", nullable = false)

@@ -21,7 +21,7 @@ import java.util.Map;
  * Created by juanfra on 17/05/17.
  */
 @Service
-@Lazy
+@Transactional
 public class MarketServiceImpl implements MarketService {
     private static final long refreshTime = 2*60*1000;
 
@@ -29,7 +29,6 @@ public class MarketServiceImpl implements MarketService {
     MarketDao marketDao;
 
     @Scheduled(fixedDelay=refreshTime)
-    @Transactional(propagation = Propagation.NESTED)
     public void updatePrices(){
         Map<ResourceType,Double> popularities = marketDao.getPopularities();
         popularities.forEach(ResourceType::setPopularity);

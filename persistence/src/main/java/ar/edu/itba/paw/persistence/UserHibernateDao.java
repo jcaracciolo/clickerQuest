@@ -8,6 +8,8 @@ import ar.edu.itba.paw.model.packages.Implementations.Productions;
 import ar.edu.itba.paw.model.packages.Implementations.Storage;
 import ar.edu.itba.paw.model.packages.Paginating;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
@@ -57,14 +59,20 @@ public class UserHibernateDao implements UserDao{
     @Override
     public Factory create(Factory factory) {
         User u = findById(factory.getUserid());
+        em.persist(factory);
         u.getFactories().add(factory);
         update(u);
         return factory;
     }
 
     @Override
-    public Wealth create(Wealth wealth) {
-        return update(wealth);
+    public Wealth create(Wealth w) {
+        if(w.getStorage().rawMap().isEmpty() || w.getProductions().rawMap().isEmpty()) {
+            return null;
+        }
+        em.persist(w);
+        update(w);
+        return w;
     }
 
     @Override
@@ -84,11 +92,16 @@ public class UserHibernateDao implements UserDao{
 
     @Override
     public User update(User u) {
+        if(u.getFactories().isEmpty()){
+            u.setFactories(getUserFactories(u.getId()));
+        }
         return em.merge(u);
     }
 
     @Override
     public Collection<Factory> getUserFactories(long userid) {
+        User u =  findById(userid);
+        Collection<Factory> f = u.getFactories();
         return findById(userid).getFactories();
     }
 
@@ -112,7 +125,7 @@ public class UserHibernateDao implements UserDao{
         }
         User u = findById(w.getUserid());
         u.setWealth(w);
-        update(u);
+        em.merge(w);
         return w;
     }
 

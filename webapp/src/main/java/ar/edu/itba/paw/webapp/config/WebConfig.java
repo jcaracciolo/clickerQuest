@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.*;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.core.env.Environment;
 import org.springframework.core.io.Resource;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
@@ -34,7 +35,8 @@ import java.util.Properties;
 @Import(value = { WebAuthConfig.class })
 @EnableScheduling
 public class WebConfig {
-
+    @Autowired
+    private Environment environment;
     // --------- WEBAPP
     /**
      * ViewResolver for the Webapp. JSP files located in WEB-INF/jsp/ will composed
@@ -63,10 +65,13 @@ public class WebConfig {
         factoryBean.setJpaVendorAdapter(vendorAdapter);
         final Properties properties = new Properties();
         properties.setProperty( "hibernate.hbm2ddl.auto" , "update" );
-        properties.setProperty( "hibernate.dialect" , "org.hibernate.dialect.PostgreSQL92Dialect" );
-        // Si ponen esto en prod, hay tabla!!!
-        properties.setProperty( "hibernate.show_sql" , "true" );
-        properties.setProperty( "format_sql" , "true" );
+            properties.setProperty( "hibernate.dialect" , "org.hibernate.dialect.PostgreSQL92Dialect" );
+
+        if(environment.acceptsProfiles("!production")) {
+            properties.setProperty("hibernate.show_sql", "true");
+            properties.setProperty("format_sql", "true");
+        }
+
         factoryBean.setJpaProperties(properties);
         return factoryBean;
     }

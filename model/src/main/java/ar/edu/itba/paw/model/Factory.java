@@ -9,71 +9,87 @@ import java.util.Map;
 
 @Entity
 @Table(name = "factories")
+@IdClass(Factory.FactoryID.class)
 public class Factory implements Comparable<Factory> {
 
-    @Transient
+    @Id
     private long userid;
+
+    @Id
+    @Column(name = "type", nullable = false)
+    private int _type;
+
     @Transient
     private FactoryType type;
 
-    @Column(name = "amount", nullable = false)
+    @Column(name = "amount")
     private double amount;
 
-    @Column(name = "inputReduction", nullable = false)
+    @Column(name = "inputreduction")
     private double inputReduction;
 
-    @Column(name = "outputMultiplier", nullable = false)
+    @Column(name = "outputmultiplier")
     private double outputMultiplier;
 
-    @Column(name = "costReduction", nullable = false)
+    @Column(name = "costreduction")
     private double costReduction;
 
-    @Column(name = "level", nullable = false)
-    private long level;
+    @Column(name = "level")
+    private int level;
 
     @PostLoad
     private void postLoad(){
-        type = FactoryType.fromId(_id.type);
-        userid = _id.userid;
+        type = FactoryType.fromId(_type);
     }
 
     public Factory(){}
 
-    @EmbeddedId
-    private UserAndFactory _id;
-
-    @Embeddable
-    class UserAndFactory implements Serializable{
-        @Column(name = "userid", nullable = false)
+    static class FactoryID implements Serializable {
         private long userid;
         @Column(name = "type", nullable = false)
-        private int type;
-        UserAndFactory(){};
-        UserAndFactory(long userid,int _type){
+        private int _type;
+        FactoryID(){};
+        FactoryID(long userid,int _type){
             this.userid = userid;
-            this.type = _type;
+            this._type = _type;
         }
         @Override
         public boolean equals(Object o) {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
 
-            UserAndFactory that = (UserAndFactory) o;
+            FactoryID that = (FactoryID) o;
 
-            if (userid != that.userid) return false;
-            return type == that.type;
+            if (getUserid() != that.getUserid()) return false;
+            return getType() == that.getType()  ;
 
         }
         @Override
         public int hashCode() {
-            int result = (int) (userid ^ (userid >>> 32));
-            result = 31 * result + type;
+            int result = (int) (getUserid() ^ (getUserid() >>> 32));
+            result = 31 * result + getType();
             return result;
+        }
+
+        public long getUserid() {
+            return userid;
+        }
+
+        public void setUserid(long userid) {
+            this.userid = userid;
+        }
+
+        public int getType() {
+            return _type;
+        }
+
+        public void setType(int type) {
+            this._type = type;
         }
     }
 
     public Factory(long userid, @NotNull FactoryType type, double amount, double inputReduction,
-                   double outputMultiplier, double costReduction, long level) {
+                   double outputMultiplier, double costReduction, int level) {
         this.userid = userid;
         this.type = type;
         this.amount = amount;
@@ -81,7 +97,7 @@ public class Factory implements Comparable<Factory> {
         this.outputMultiplier = outputMultiplier;
         this.costReduction = costReduction;
         this.level = level;
-        this._id = new UserAndFactory(userid,type.getId());
+        this._type = type.getId();
     }
 
     public long getUserid() {
@@ -194,7 +210,7 @@ public class Factory implements Comparable<Factory> {
     }
 
     public Upgrade getNextUpgrade() {
-        return Upgrade.getUpgrade(type,level + 1);
+        return Upgrade.getUpgrade(getType(),getLevel() + 1);
     }
 
     public int compareTo(Factory f) {
@@ -207,23 +223,25 @@ public class Factory implements Comparable<Factory> {
         if (o == null || getClass() != o.getClass()) return false;
 
         Factory factory = (Factory) o;
-        return userid == factory.userid && type == factory.type;
+
+        if (userid != factory.userid) return false;
+        return type == factory.type;
 
     }
 
     @Override
     public int hashCode() {
         int result = (int) (userid ^ (userid >>> 32));
-        result = 31 * result + type.hashCode();
+        result = 31 * result + (type != null ? type.hashCode() : 0);
         return result;
     }
 
-    public long getLevel() {
+    public int getLevel() {
         return level;
     }
 
     public boolean isUpgreadable(Wealth w) {
-        if(amount>0) {
+        if(getAmount()>0) {
             return getNextUpgrade().isBuyable(w);
         }
 

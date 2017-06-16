@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
+@Transactional
 public class UserServiceImpl implements UserService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
@@ -38,7 +39,6 @@ public class UserServiceImpl implements UserService {
         return userDao.findById(userid);
     }
 
-    @Transactional(propagation = Propagation.NESTED)
     @Override
     public User findByUsername(String username) {
         return userDao.findByUsername(username);
@@ -51,7 +51,6 @@ public class UserServiceImpl implements UserService {
     }
 
 
-    @Transactional(propagation = Propagation.NESTED)
     @Override
     public Wealth getUserWealth(long userid) {
         Wealth w = userDao.getUserWealth(userid);
@@ -78,7 +77,6 @@ public class UserServiceImpl implements UserService {
         return w;
     }
 
-    @Transactional(propagation = Propagation.NESTED)
     public Wealth calculateUserWealth(long userid){
         User u = findById(userid);
         Wealth oldWealth = getUserWealth(userid);
@@ -90,7 +88,6 @@ public class UserServiceImpl implements UserService {
         return newWealth;
     }
 
-    @Transactional(propagation = Propagation.NESTED)
     public User create(String username, String password, String img) {
         User user = userDao.create(username,passwordEncoder.encode(password),img);
         if(user != null){
@@ -120,11 +117,7 @@ public class UserServiceImpl implements UserService {
         return userDao.getUserStorage(id);
     }
 
-
-
-
     @Override
-    @Transactional(propagation = Propagation.NESTED)
     public boolean purchaseFactory(long userid,@NotNull FactoryType type, long amountToBuy) {
         Wealth w = getUserWealth(userid);
         Optional<Factory> maybeFactory = userDao.getUserFactories(userid).stream()
@@ -178,7 +171,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional(propagation = Propagation.NESTED)
     public Collection<Factory> getUserFactories(long userid) {
         final Collection<Factory> factories = userDao.getUserFactories(userid);
         if(factories.size() < FactoryType.values().length){
@@ -207,7 +199,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional(propagation = Propagation.NESTED)
     public boolean purchaseUpgrade(long userid, FactoryType type) {
         Collection<Factory> factories = getUserFactories(userid);
         Factory factory = factories.stream()
@@ -237,7 +228,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional(propagation = Propagation.NESTED)
     public boolean sellResourceType(long userid, ResourceType resourceType, double amount) {
         if(resourceType == ResourceType.MONEY) {
             return false;
@@ -265,7 +255,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional(propagation = Propagation.NESTED)
     public boolean purchaseResourceType(long userid, ResourceType resourceType,double amount){
         Wealth wealth = getUserWealth(userid);
         double cost = (resourceType.getPrice()) * amount;
@@ -301,7 +290,6 @@ public class UserServiceImpl implements UserService {
         return new Wealth(userId,storageBuilder.buildPackage(),productionsBuilder.buildPackage());
     }
 
-    @Transactional(propagation = Propagation.NESTED)
     private Wealth updateWealth(Wealth wealth){
         long userId = wealth.getUserid();
         User oldUser = findById(userId);

@@ -7,9 +7,10 @@ USERNAME="paw-2017a-4"
 PASSWORD="ooc4Choo"
 PAWSERVER="10.16.1.110"
 WEBAPP="webapp"
-
+DEVELOPMENT=default
+PRODUCTION=production
 # This script will automatically change your spring profile on the web.xml file
-# Make Sure you have set the spring.profiles.active param to either default or production in your web.xml
+# Make Sure you have set the spring.profiles.active param to either DEVELOPMENT or PRODUCTION in your web.xml
 # If all you want is to deploy as if, the run the -no-pck flag
 # This script must be placed on the root of your project
 #
@@ -28,16 +29,15 @@ LINENUMBER=$((LINENUMBER + 1))
 F_READ_RET=""
 function readFile {
     F_READ_RET=""
-    F_READ_RET=$(cat ${WEBXML} | sed -n ${LINENUMBER},${LINENUMBER}p | egrep -o "default|production")
+    F_READ_RET=$(cat ${WEBXML} | sed -n ${LINENUMBER},${LINENUMBER}p | egrep -o "${DEVELOPMENT}|${PRODUCTION}")
       if [ ${F_READ_RET} == "" ]
       then
-           echo "Error reading ${WEBXML} , Make Sure you have set the spring.profiles.active param to either default or production in your web.xml"
+           echo "Error reading ${WEBXML} , Make Sure you have set the spring.profiles.active param to either ${DEVELOPMENT} or ${PRODUCTION} in your web.xml"
            exit 0
       fi
 }
 readFile
 LASTCONF=${F_READ_RET}
-
 
 function replace {
            readFile
@@ -77,7 +77,11 @@ done
 
 if [ ${LOCALF} -eq 1 ]
 then
-    replace default
+    echo "Building with ${DEVELOPMENT} profile"
+    replace ${DEVELOPMENT}
+else
+    echo "Building with ${PRODUCTION} profile"
+    replace ${PRODUCTION}
 fi
 
 if [ ${PKGF} -eq 0 ]
@@ -92,13 +96,6 @@ fi
 
 if [ ${PKGF} -eq 1 ]
 then
-    if [ ${DEPLOYF} -eq 1 ]
-    then
-        replace production
-    else
-        replace default
-    fi
-
     echo "Building package......"
     MATCH="ERROR"
     if [ ${WARNF} -eq 1 ]
