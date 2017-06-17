@@ -1,14 +1,11 @@
 package ar.edu.itba.paw.model.packages.Implementations;
 
-import ar.edu.itba.paw.model.BuyLimits;
 import ar.edu.itba.paw.model.ResourceType;
-import ar.edu.itba.paw.model.Wealth;
 import ar.edu.itba.paw.model.packages.Creator;
 import ar.edu.itba.paw.model.packages.PackageBuilder;
 import ar.edu.itba.paw.model.packages.ResourcePackage;
 import ar.edu.itba.paw.model.packages.Validator;
 
-import java.math.BigDecimal;
 import java.util.Map;
 
 /**
