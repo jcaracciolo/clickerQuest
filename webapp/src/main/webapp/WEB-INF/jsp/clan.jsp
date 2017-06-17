@@ -64,32 +64,60 @@
                     </ul>
                 </div>
                 <div id="logout" class="button">
-                <ul id="nav-mobile">
-                    <li><a href="<c:url value='/logout'/>"><spring:message code='logout'/> </a></li>
-                </ul>
-            </div>
+                    <ul id="nav-mobile">
+                        <li><a href="<c:url value='/logout'/>"><spring:message code='logout'/> </a></li>
+                    </ul>
+                </div>
             </div>
         </nav>
     </div>
 </div>
 
 <div class="main-container">
-    <div class="ranking-table">
-        <div class="title">${clan.name}</div>
-        <div class="header">
-            <div><spring:message code="ranking.rank"/></div>
-            <div><spring:message code="ranking.user"/></div>
-            <div><spring:message code='ranking.score'/></div>
+    <div class="left-section">
+        <div>
+            <img id="clanImg" src="<c:url value="/resources/group_icons/1.jpg"/>"/>
         </div>
-        <c:set var="pos" value="1"/>
-        <c:forEach items="${clan.users}" var="u">
-            <div class="table-row">
-                <p><c:out value="${pos}"></c:out></p>
-                <p class="username-link" data-username="${u.username}">${u.username}</p>
-                <p><fmt:formatNumber pattern="#" value="${u.score}"/></p>
-                <c:set var="pos" value="${pos + 1}"/>
+        <div class="clanName">${clan.name}</div>
+        <div class="clanPoints">
+            <div><spring:message code="clan.pointsdoubledot"/> </div>
+            <div class="clanPointsNumber">53210</div>
+        </div>
+    </div>
+    <div class="right-section">
+        <div class="subtitle"><spring:message code="clan.battleOfTheDay"/></div>
+        <div class="clanBattle">
+            <div class="vsClanImage">
+                <img id="vsMyClan" src="<c:url value="/resources/group_icons/1.jpg"/>"/>
+                <div class="vsClanName">poipoi</div>
+                <div class="vsClanPoints">5456 <spring:message code="clan.points"/></div>
             </div>
-        </c:forEach>
+            <div class="vsIcon">
+                <img id="vsIcon" src="<c:url value="/resources/group_icons/swords.png"/>"/>
+            </div>
+            <div class="vsClanImage">
+                <img id="vsOtherClan" src="<c:url value="/resources/group_icons/2.jpg"/>"/>
+                <div class="vsClanName">poipoi</div>
+                <div class="vsClanPoints">5456 <spring:message code="clan.points"/></div>
+            </div>
+        </div>
+        <div class="ranking-table">
+            <div class="subtitle"><spring:message code="clan.ranking"/></div>
+            <div class="header">
+                <div><spring:message code="ranking.rank"/></div>
+                <div><spring:message code="ranking.user"/></div>
+                <div><spring:message code='ranking.score'/></div>
+            </div>
+            <c:set var="pos" value="1"/>
+            <c:forEach items="${clan.users}" var="u">
+                <div class="table-row">
+                    <p><c:out value="${pos}"></c:out></p>
+                    <p class="username-link" data-username="${u.username}">${u.username}</p>
+                    <p><fmt:formatNumber pattern="#" value="${u.score}"/></p>
+                    <c:set var="pos" value="${pos + 1}"/>
+                </div>
+            </c:forEach>
+        </div>
     </div>
 </div>
 
