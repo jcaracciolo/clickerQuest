@@ -1,12 +1,19 @@
 package ar.edu.itba.paw.services;
 
+import ar.edu.itba.paw.interfaces.MarketDao;
+import ar.edu.itba.paw.interfaces.UserDao;
 import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.model.*;
+import ar.edu.itba.paw.model.packages.Implementations.Storage;
 import ar.edu.itba.paw.model.packages.Paginating;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Matchers;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -26,11 +33,20 @@ public class UserServiceImplTest {
 
     // For reset purposes
     @Autowired
-    MockUserDao mockUserDao;
+    ar.edu.itba.paw.services.MockUserDao mockUserDao;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
+    @Autowired
+    MarketDao marketDao;
 
     private String username = "Daniel";
     private String password = "l0b0--";
     private String img = "1.img";
+    private int id = 0;
+
+//    private Wealth w = new Wealth(0,null,null);
 
     private double initialMoneyProduction = FactoryType.STOCK_INVESTMENT_BASE.getBaseRecipe().getValue(ResourceType.MONEY);
     private double initialPeopleProduction = FactoryType.PEOPLE_RECRUITING_BASE.getBaseRecipe().getValue(ResourceType.PEOPLE);
@@ -40,7 +56,14 @@ public class UserServiceImplTest {
 
     @Before
     public void setup(){
+        Mockito.when(passwordEncoder.encode(password)).thenReturn(password);
+        Mockito.when(marketDao.registerPurchase(Matchers.any(StockMarketEntry.class))).thenReturn(true);
+
+        //Setup userdao mock
+//        Mockito.when(userDao.create(username,password,img)).thenReturn(new User(id,username,password,img,id,null));
+//        Mockito.when(userDao.getUserWealth(0)).thenReturn(w);
         mockUserDao.clear();
+
     }
 
     @Test
