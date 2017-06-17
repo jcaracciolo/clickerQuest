@@ -76,7 +76,7 @@ img.resource-icon {
 
 body {
 	font-family: Fixedsys;
-	overflow-y: hidden;
+	overflow-y: hidden!important;
 	height: 100vh;
 	min-width: 1200px;
 	background-color: #DEDEDE;
@@ -329,4 +329,9 @@ img.marketButton:hover {
 .divider.last {
     height: 4rem;
     display: inline-block;
+}
+
+.material-tooltip {
+	white-space: pre;
+	text-align: left !important;
 }
