@@ -53,7 +53,7 @@ public class HibernateClanDao implements ClanDao {
     @Override
     public Collection<String> findByKeyword(String search) {
         StringBuilder s = new StringBuilder(search.toLowerCase()).append("%").insert(0,"%");
-        final TypedQuery<Clan> query = em.createQuery( "from Clan as u where lower(c.name) like lower(:name)" , Clan.class);
+        final TypedQuery<Clan> query = em.createQuery( "from Clan as c where lower(c.name) like lower(:name)" , Clan.class);
         query.setParameter( "name" , s.toString());
         final List<Clan> list = query.getResultList();
         return list.stream().map(Clan::getName).collect(Collectors.toList());

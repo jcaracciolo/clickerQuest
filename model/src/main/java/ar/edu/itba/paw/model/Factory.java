@@ -13,6 +13,7 @@ import java.util.Map;
 public class Factory implements Comparable<Factory> {
 
     @Id
+    @Column(nullable = false)
     private long userid;
 
     @Id
@@ -45,6 +46,7 @@ public class Factory implements Comparable<Factory> {
     public Factory(){}
 
     static class FactoryID implements Serializable {
+        @Column(nullable = false)
         private long userid;
         @Column(name = "type", nullable = false)
         private int _type;

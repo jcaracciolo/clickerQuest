@@ -14,7 +14,7 @@ import java.util.stream.Stream;
 @Entity
 @Table(name = "clans")
 public class Clan implements Iterable<User> {
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "clanid")
     private final Set<User> users = new TreeSet<User>((u1,u2) ->  u1.getScore()<u2.getScore()?1:-1 );
 

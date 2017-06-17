@@ -7,14 +7,20 @@ import ar.edu.itba.paw.model.Wealth;
 import ar.edu.itba.paw.model.packages.Implementations.Productions;
 import ar.edu.itba.paw.model.packages.Implementations.Storage;
 import ar.edu.itba.paw.model.packages.Paginating;
+import org.hibernate.SQLQuery;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Repository
 public class UserHibernateDao implements UserDao{
@@ -41,7 +47,13 @@ public class UserHibernateDao implements UserDao{
 
     @Override
     public Integer getGlobalRanking(long userId) {
-        return null;
+        Query query = em.createNativeQuery("SELECT row_number FROM " +
+                                                    "(SELECT ROW_NUMBER() OVER(ORDER BY score DESC),* FROM users) as u " +
+                                                    "WHERE userid = :userid");
+
+        query.setParameter("userid",userId);
+        Number n = (Number)query.getSingleResult();
+        return n.intValue();
     }
 
     @Override
@@ -53,15 +65,17 @@ public class UserHibernateDao implements UserDao{
     public User create(String username, String password, String profileImage) {
         final User user = new User(username, password,profileImage,0,null);
         em.persist(user);
+        em.flush();
         return user;
     }
 
     @Override
     public Factory create(Factory factory) {
-        User u = findById(factory.getUserid());
         em.persist(factory);
+        User u = findById(factory.getUserid());
         u.getFactories().add(factory);
         update(u);
+        em.flush();
         return factory;
     }
 
@@ -70,8 +84,10 @@ public class UserHibernateDao implements UserDao{
         if(w.getStorage().rawMap().isEmpty() || w.getProductions().rawMap().isEmpty()) {
             return null;
         }
-        em.persist(w);
-        update(w);
+        User u = findById(w.getUserid());
+        u.setWealth(w);
+        update(u);
+        em.flush();
         return w;
     }
 
@@ -100,17 +116,13 @@ public class UserHibernateDao implements UserDao{
 
     @Override
     public Collection<Factory> getUserFactories(long userid) {
-        User u =  findById(userid);
-        Collection<Factory> f = u.getFactories();
         return findById(userid).getFactories();
     }
 
     @Override
-    public Factory update(Factory f) {
-        User u = findById(f.getUserid());
-        u.getFactories().remove(f);
-        u.getFactories().add(f);
-        return f;
+    public Factory update(Factory factory) {
+        em.merge(factory);
+        return factory;
     }
 
     @Override
@@ -130,8 +142,29 @@ public class UserHibernateDao implements UserDao{
     }
 
     @Override
-    public Paginating<User> globalUsers(int pag, int userPerPage) {
-        return null;
+    public Paginating<User> globalUsers(int page, int userPerPage) {
+        if(page<=0 || userPerPage<=0) {
+            throw new IllegalArgumentException("Page and maxPage must be an positive integer");
+        }
+
+        int min = (page -1) * userPerPage + 1;
+        int max = page * userPerPage;
+
+        final TypedQuery<User> query = em.createQuery( "from User as u order by u.score" , User.class);
+        query.setFirstResult(min);
+        query.setMaxResults(max);
+        List<User> users = query.getResultList();
+
+
+        Number amount = (Number)em.createQuery("SELECT COUNT(*) FROM User",Number.class).getSingleResult();
+
+        if(users.isEmpty()) {
+            return null;
+        } else {
+            int totalUsers = amount.intValue();
+            int totalPages = (int)Math.ceil(totalUsers/((double)userPerPage));
+            return new Paginating<>(page,userPerPage,amount.intValue(),totalPages,users);
+        }
     }
 
 }

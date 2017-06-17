@@ -91,18 +91,15 @@ public class UserServiceImpl implements UserService {
     public User create(String username, String password, String img) {
         User user = userDao.create(username,passwordEncoder.encode(password),img);
         if(user != null){
-
+            userDao.create(createWealth(user.getId()));
             for (FactoryType type: FactoryType.values()){
                 Factory factory = type.defaultFactory(user.getId());
                 create(factory.getType(),user.getId());
             }
-
-            userDao.create(createWealth(user.getId()));
-
             purchaseFactory(user.getId(),FactoryType.PEOPLE_RECRUITING_BASE,1);
             purchaseFactory(user.getId(),FactoryType.STOCK_INVESTMENT_BASE,1);
 
-            return findById(user.getId());
+            return userDao.findById(user.getId());
         }
         return null;
     }
