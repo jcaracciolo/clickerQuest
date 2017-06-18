@@ -2,6 +2,7 @@ package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.interfaces.MarketDao;
 import ar.edu.itba.paw.interfaces.UserDao;
+import org.mockito.Mockito;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -22,11 +23,11 @@ public class TestConfig {
 
     @Bean
     public PasswordEncoder mockPasswordEncoder(){
-        return new ar.edu.itba.paw.services.MockPasswordEncoder();
+        return Mockito.mock(PasswordEncoder.class);
     }
 
     @Bean
     public MarketDao mockMarketDao(){
-        return new ar.edu.itba.paw.services.MockMarketDao();
+        return Mockito.mock(MarketDao.class);
     }
 }
