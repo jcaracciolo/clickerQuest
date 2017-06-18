@@ -143,4 +143,8 @@ public class User {
                 ", clanId=" + clanId +
                 '}';
     }
+
+    public void setProfileImage(String profileImage) {
+        this.profileImage = profileImage;
+    }
 }

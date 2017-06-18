@@ -36,6 +36,9 @@ public class Clan implements Iterable<User> {
     @Column(name = "battles",nullable = false)
     private int battles = 0;
 
+    @Column(name = "image",length = 100, nullable = false)
+    private String image = "1.jpg";
+
     public String getName() {
         return name;
     }
@@ -130,5 +133,13 @@ public class Clan implements Iterable<User> {
 
     public void addWin(){
         wins++;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }

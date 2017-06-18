@@ -1,9 +1,13 @@
 package ar.edu.itba.paw.webapp.config;
 
+import ar.edu.itba.paw.webapp.controller.ClanController;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.*;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.core.env.Environment;
+import org.springframework.core.io.Resource;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
@@ -19,8 +23,10 @@ import org.springframework.web.servlet.view.JstlView;
 
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 @EnableWebMvc
 @ComponentScan({ "ar.edu.itba.paw.webapp.controller, ar.edu.itba.paw.services, ar.edu.itba.paw.persistence" })
@@ -29,6 +35,8 @@ import java.util.Properties;
 @Import(value = { WebAuthConfig.class })
 @EnableScheduling
 public class WebConfig {
+    private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(WebConfig.class);
+
     @Autowired
     private Environment environment;
     // --------- WEBAPP
@@ -49,6 +57,9 @@ public class WebConfig {
 
     // ---------- PERSISTENCE
 
+    @Value("classpath:schema.sql")
+    private Resource schemaSql;
+
     @Bean
     @Autowired
     public LocalContainerEntityManagerFactoryBean entityManagerFactory (DataSource datasource) {
@@ -59,7 +70,14 @@ public class WebConfig {
         factoryBean.setJpaVendorAdapter(vendorAdapter);
         final Properties properties = new Properties();
         properties.setProperty( "hibernate.hbm2ddl.auto" , "update" );
-            properties.setProperty( "hibernate.dialect" , "org.hibernate.dialect.PostgreSQL92Dialect" );
+        properties.setProperty( "hibernate.dialect" , "org.hibernate.dialect.PostgreSQL92Dialect" );
+        try {
+            properties.setProperty("javax.persistence.schema-generation.create-script-source",schemaSql.getURL().getPath().toString());
+            properties.setProperty("javax.persistence.schema-generation.create-source","script");
+            properties.setProperty("javax.persistence.schema-generation.database.action","create");
+        }catch (IOException e){
+            LOGGER.error("Fail to load initialization script");
+        }
 
         if(environment.acceptsProfiles("!production")) {
             properties.setProperty("hibernate.show_sql", "true");
@@ -102,7 +120,7 @@ public class WebConfig {
 
         final SimpleDriverDataSource ds = new SimpleDriverDataSource();
         ds.setDriverClass(org.postgresql.Driver.class);
-        ds.setUrl("jdbc:postgresql://localhost/clickerQuest");
+        ds.setUrl("jdbc:postgresql://localhost/test");
         ds.setUsername("root");
         ds.setPassword("root");
         return ds;
