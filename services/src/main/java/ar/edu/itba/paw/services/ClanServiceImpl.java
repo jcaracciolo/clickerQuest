@@ -6,6 +6,7 @@ import ar.edu.itba.paw.model.clan.Clan;
 import ar.edu.itba.paw.model.clan.ClanBattle;
 import ar.edu.itba.paw.model.packages.Paginating;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -72,5 +73,10 @@ public class ClanServiceImpl implements ClanService {
     @Override
     public ClanBattle getClanBattle(int clanid) {
         return clanDao.getClanBattle(clanid);
+    }
+
+    @Scheduled(fixedDelay = 1*60*1000,initialDelay = 0)
+    protected void calculateNextBattles(){
+        clanDao.calculateNextBattles();
     }
 }

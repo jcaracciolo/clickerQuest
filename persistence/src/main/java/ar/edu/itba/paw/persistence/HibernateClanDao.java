@@ -113,22 +113,24 @@ public class HibernateClanDao implements ClanDao {
         if(page<=0 || clansPerPage<=0) {
             throw new IllegalArgumentException("Page and maxPage must be an positive integer");
         }
-        int min = (page -1) * clansPerPage;
-        int max = page * clansPerPage;
+        Number amount = (Number) em.createQuery("SELECT COUNT(*) FROM Clan", Number.class).getSingleResult();
+        int min = (page - 1) * clansPerPage;
 
-        final TypedQuery<Clan> query = em.createQuery( "from Clan as c order by c.score desc" , Clan.class);
-        query.setFirstResult(min);
-        query.setMaxResults(max);
-        List<Clan> clans = query.getResultList();
-        Number amount = (Number)em.createQuery("SELECT COUNT(*) FROM Clan",Number.class).getSingleResult();
+            final TypedQuery<Clan> query = em.createQuery("from Clan as c order by c.score desc", Clan.class);
+            query.setFirstResult(min);
+            query.setMaxResults(clansPerPage);
 
-        if(!clans.isEmpty()) {
-            int totalClans = amount.intValue();
-            int totalPages = (int)Math.ceil(totalClans/((double)clansPerPage));
-            return new Paginating<>(page,clansPerPage,amount.intValue(),totalPages,clans);
-        } else {
-            return null;
-        }
+            List<Clan> clans = query.getResultList();
+
+
+            if (!clans.isEmpty()) {
+                int totalClans = amount.intValue();
+                int totalPages = (int) Math.ceil(totalClans / ((double) clansPerPage));
+                return new Paginating<>(page, clansPerPage, amount.intValue(), totalPages, clans);
+            } else {
+                return null;
+            }
+
     }
 
     @Override
@@ -147,15 +149,19 @@ public class HibernateClanDao implements ClanDao {
         Query query = em.createQuery("from ClanBattle as c where c.clanid = :clanid",ClanBattle.class);
         query.setParameter("clanid",clanid);
         List<ClanBattle> clanBattle = query.getResultList();
-        return clanBattle.size()!=1?null:clanBattle.get(0);;
+        return clanBattle.size()!=1?null:clanBattle.get(0);
     }
 
-    @Scheduled(fixedDelay = 2*60*1000,initialDelay = 0)
     @Transactional
-    private void createBattles(){
+    public void calculateNextBattles(){
+        calculateWins();
+        em.flush();
         Query query = em.createNativeQuery("truncate TABLE clansbattle");
         query.executeUpdate();
         Paginating<Clan> pagClan = globalClan(1,2);
+        if(pagClan==null){
+            return;
+        }
         for(int i=1;i<=pagClan.getTotalPages();i++) {
             Paginating<Clan> clan = globalClan(i,2);
             List<Clan> clans = clan.getItems();
@@ -169,6 +175,46 @@ public class HibernateClanDao implements ClanDao {
             em.persist(clanBattle);
             ClanBattle clanBattleV = new ClanBattle(clan2,clan1,clan2.getClanScore());
             em.persist(clanBattleV);
+        }
+    }
+
+    private void calculateWins() {
+        Query query = em.createQuery("from ClanBattle as c order by c.initialScore", ClanBattle.class);
+        List<ClanBattle> cbs = query.getResultList();
+        Iterator<ClanBattle> it = cbs.iterator();
+        while (it.hasNext()) {
+            ClanBattle cb1 = it.next();
+            if (cb1.getVersus() == null) {
+                cb1.getClan().addWin();
+                cb1.getClan().addBattle();
+                em.merge(cb1.getClan());
+                em.remove(cb1);
+            } else {
+                if (!it.hasNext()) {
+                    //TODO LOG ERROR
+                    System.err.println("WHATT NO FOLLOWING IDS");
+                }
+                ClanBattle cb2 = it.next();
+                if (cb1.getVersus().getId() != cb2.getClan().getId()) {
+                    //TODO LOG ERROR
+                    System.err.println("WHATT NO MATCHING IDS");
+                }
+
+                Clan c1 = cb1.getClan();
+                Clan c2 = cb2.getClan();
+                c1.addBattle();
+                c2.addBattle();
+                if (c1.getScore() - cb1.getInitialScore() > c2.getScore() - cb2.getInitialScore()) {
+                    c1.addWin();
+                } else if (c1.getScore() - cb1.getInitialScore() < c2.getScore() - cb2.getInitialScore()) {
+                    c2.addWin();
+                }
+                em.merge(c1);
+                em.merge(c2);
+                em.remove(cb1);
+                em.remove(cb2);
+
+            }
         }
     }
 

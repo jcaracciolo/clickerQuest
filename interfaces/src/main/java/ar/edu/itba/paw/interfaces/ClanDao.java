@@ -21,4 +21,5 @@ public interface ClanDao {
     Paginating<Clan> globalClan(int page, int clansPerPage);
     Integer getGlobalRanking(int clanid);
     ClanBattle getClanBattle(int clanid);
+    void calculateNextBattles();
 }

@@ -30,6 +30,12 @@ public class Clan implements Iterable<User> {
     @Column(name = "score", nullable = false)
     private double score;
 
+    @Column(name = "wins", nullable = false)
+    private int wins = 0;
+
+    @Column(name = "battles",nullable = false)
+    private int battles = 0;
+
     public String getName() {
         return name;
     }
@@ -104,5 +110,25 @@ public class Clan implements Iterable<User> {
 
     public int getId() {
         return id;
+    }
+
+    public double getScore() {
+        return score;
+    }
+
+    public int getWins() {
+        return wins;
+    }
+
+    public int getBattles() {
+        return battles;
+    }
+
+    public void addBattle() {
+        battles++;
+    }
+
+    public void addWin(){
+        wins++;
     }
 }

@@ -32,6 +32,18 @@ public class ClanBattle implements Serializable {
         this.initialScore = initialScore;
     }
 
+    public Clan getClan() {
+        return clan;
+    }
+
+    public Clan getVersus() {
+        return versus;
+    }
+
+    public double getInitialScore() {
+        return initialScore;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -39,7 +51,6 @@ public class ClanBattle implements Serializable {
 
         ClanBattle that = (ClanBattle) o;
 
-        if (Double.compare(that.initialScore, initialScore) != 0) return false;
         if (clan != null ? !clan.equals(that.clan) : that.clan != null) return false;
         return versus != null ? versus.equals(that.versus) : that.versus == null;
 
@@ -47,12 +58,8 @@ public class ClanBattle implements Serializable {
 
     @Override
     public int hashCode() {
-        int result;
-        long temp;
-        result = clan != null ? clan.hashCode() : 0;
+        int result = clan != null ? clan.hashCode() : 0;
         result = 31 * result + (versus != null ? versus.hashCode() : 0);
-        temp = Double.doubleToLongBits(initialScore);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
         return result;
     }
 }

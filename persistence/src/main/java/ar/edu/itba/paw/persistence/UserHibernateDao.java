@@ -149,11 +149,10 @@ public class UserHibernateDao implements UserDao{
         }
 
         int min = (page -1) * userPerPage;
-        int max = page * userPerPage;
 
         final TypedQuery<User> query = em.createQuery( "from User as u order by u.score desc" , User.class);
         query.setFirstResult(min);
-        query.setMaxResults(max);
+        query.setMaxResults(userPerPage);
         List<User> users = query.getResultList();
 
 
