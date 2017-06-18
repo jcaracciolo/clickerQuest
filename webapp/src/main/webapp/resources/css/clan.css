@@ -71,10 +71,6 @@ body {
     font-size: 1.25rem;
 }
 
-.clanPointsNumber {
-    margin-left: 1rem;
-}
-
 .vsClanPointsTxt {
     font-size: 1.25rem;
 }
@@ -140,6 +136,11 @@ body {
 
     color: black;
     font-size: 1.1rem;
+}
+
+.nobattletext {
+    color: grey;
+    font-size: 1.25rem;
 }
 
 p.username-link:hover {

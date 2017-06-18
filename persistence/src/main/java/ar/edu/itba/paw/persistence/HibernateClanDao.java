@@ -146,7 +146,7 @@ public class HibernateClanDao implements ClanDao {
 
     @Override
     public ClanBattle getClanBattle(int clanid) {
-        Query query = em.createQuery("from ClanBattle as c where c.clanid = :clanid",ClanBattle.class);
+        Query query = em.createQuery("from ClanBattle as c where c.clan.id = :clanid",ClanBattle.class);
         query.setParameter("clanid",clanid);
         List<ClanBattle> clanBattle = query.getResultList();
         return clanBattle.size()!=1?null:clanBattle.get(0);

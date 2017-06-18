@@ -80,27 +80,33 @@
         </div>
         <div class="clanName">${clan.name}</div>
         <div class="clanPoints">
-            <div><spring:message code="clan.pointsdoubledot"/> </div>
-            <div class="clanPointsNumber">53210</div>
+            <div><spring:message code="clan.pointsdoubledot"/> ${clan.clanScore}</div>
         </div>
     </div>
     <div class="right-section">
         <div class="subtitle"><spring:message code="clan.battleOfTheDay"/></div>
-        <div class="clanBattle">
-            <div class="vsClanImage">
-                <img id="vsMyClan" src="<c:url value="/resources/group_icons/1.jpg"/>"/>
-                <div class="vsClanName">poipoi</div>
-                <div class="vsClanPoints">5456 <spring:message code="clan.points"/></div>
-            </div>
-            <div class="vsIcon">
-                <img id="vsIcon" src="<c:url value="/resources/group_icons/swords.png"/>"/>
-            </div>
-            <div class="vsClanImage">
-                <img id="vsOtherClan" src="<c:url value="/resources/group_icons/2.jpg"/>"/>
-                <div class="vsClanName">poipoi</div>
-                <div class="vsClanPoints">5456 <spring:message code="clan.points"/></div>
-            </div>
-        </div>
+        <c:choose>
+            <c:when test="${clanBattle1 != null}">
+                <div class="clanBattle">
+                    <div class="vsClanImage">
+                        <img id="vsMyClan" src="<c:url value="/resources/group_icons/${clan.image}"/>"/>
+                        <div class="vsClanName">${clan.name}</div>
+                        <div class="vsClanPoints">${clan.clanScore} <spring:message code="clan.points"/></div>
+                    </div>
+                    <div class="vsIcon">
+                        <img id="vsIcon" src="<c:url value="/resources/group_icons/swords.png"/>"/>
+                    </div>
+                    <div class="vsClanImage">
+                        <img id="vsOtherClan" src="<c:url value="/resources/group_icons/${clanBattle2.clan.image}"/>"/>
+                        <div class="vsClanName">${clanBattle2.clan.name}</div>
+                        <div class="vsClanPoints">${clanBattle2.clan.clanScore} <spring:message code="clan.points"/></div>
+                    </div>
+                </div>
+            </c:when>
+            <c:when test="${clanBattle1 == null}">
+                <div class="noBattleText"><spring:message code="clan.noBattleToday"/></div>
+            </c:when>
+        </c:choose>
         <div class="ranking-table">
             <div class="subtitle"><spring:message code="clan.ranking"/></div>
             <div class="header">

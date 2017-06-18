@@ -43,11 +43,17 @@ public class Clan implements Iterable<User> {
         return name;
     }
 
-    @PostLoad
-    private void calculateScore(){
-        this.score = users.stream().map(User::getScore).reduce((a,b)->a+b).orElse(0D);
-    }
     Clan(){}
+
+
+    @PostLoad
+    private void postLoad() {
+        this.score = users.stream().map(User::getScore).reduce((a,b)->a+b).orElse(0D);
+        if (image.equals("null")) {
+            Random r = new Random();
+            image = r.nextInt()%2 + 1 + ".jpg";
+        }
+    }
 
     Clan(@NotNull Collection<User> users, int id,@NotNull String name) {
         this.name = name;

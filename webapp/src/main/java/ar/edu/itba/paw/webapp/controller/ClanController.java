@@ -4,6 +4,7 @@ import ar.edu.itba.paw.interfaces.ClanService;
 import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.clan.Clan;
+import ar.edu.itba.paw.model.clan.ClanBattle;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,6 +51,15 @@ public class ClanController {
             return mav;
         }
 
+        ClanBattle clanBattle1 = clanService.getClanBattle(clan.getId());
+
+        if (clanBattle1 != null) {
+            ClanBattle clanBattle2 = clanService.getClanBattle(clanBattle1.getVersus().getId());
+            mav.addObject("clanBattle2", clanBattle2);
+        }
+
+        mav.addObject("ranking", clanService.getGlobalRanking(clan.getId()));
+        mav.addObject("clanBattle1", clanBattle1);
         mav.addObject("user", u);
         mav.addObject("clan", clan);
         return mav;
