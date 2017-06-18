@@ -1,6 +1,8 @@
 package ar.edu.itba.paw.interfaces;
 
 import ar.edu.itba.paw.model.clan.Clan;
+import ar.edu.itba.paw.model.clan.ClanBattle;
+import ar.edu.itba.paw.model.packages.Paginating;
 
 import java.util.Collection;
 
@@ -15,4 +17,8 @@ public interface ClanDao {
     boolean addToClan(int clanId, long userdId);
 
     boolean removeFromClan(long userId);
+
+    Paginating<Clan> globalClan(int page, int clansPerPage);
+    Integer getGlobalRanking(int clanid);
+    ClanBattle getClanBattle(int clanid);
 }

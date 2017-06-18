@@ -24,19 +24,27 @@ public class Clan implements Iterable<User> {
     @SequenceGenerator(sequenceName = "clans_clanid_seq",name = "clans_clanid_seq",allocationSize = 1)
     private int id;
 
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     private String name;
+
+    @Column(name = "score", nullable = false)
+    private double score;
 
     public String getName() {
         return name;
     }
 
+    @PostLoad
+    private void calculateScore(){
+        this.score = users.stream().map(User::getScore).reduce((a,b)->a+b).orElse(0D);
+    }
     Clan(){}
 
     Clan(@NotNull Collection<User> users, int id,@NotNull String name) {
         this.name = name;
         this.id = id;
         this.users.addAll(users);
+        this.score = users.stream().map(User::getScore).reduce((a,b)->a+b).orElse(0D);
     }
 
     public User getUser(long userId) {

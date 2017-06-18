@@ -83,7 +83,7 @@ public class MarketHibernateDao implements MarketDao {
     }
 
     private double popularityExponential(double x) {
-        double slope = 0.3;
+        double slope = 0.15;
         double max = 3D;
         return ( (1+1/max) - Math.exp(-(x-1) * slope) ) * max;
     }

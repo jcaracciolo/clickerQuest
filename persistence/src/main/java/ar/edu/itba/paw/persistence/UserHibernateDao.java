@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.persistence;
 
+import ar.edu.itba.paw.interfaces.ClanDao;
 import ar.edu.itba.paw.interfaces.UserDao;
 import ar.edu.itba.paw.model.Factory;
 import ar.edu.itba.paw.model.User;
@@ -7,6 +8,7 @@ import ar.edu.itba.paw.model.Wealth;
 import ar.edu.itba.paw.model.packages.Implementations.Productions;
 import ar.edu.itba.paw.model.packages.Implementations.Storage;
 import ar.edu.itba.paw.model.packages.Paginating;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -21,6 +23,8 @@ public class UserHibernateDao implements UserDao{
     @PersistenceContext
     private EntityManager em;
 
+    @Autowired
+    ClanDao clanDao;
 
     @Override
     public User findByUsername (final String username) {
@@ -105,6 +109,9 @@ public class UserHibernateDao implements UserDao{
         if(u.getFactories().isEmpty()){
             u.setFactories(getUserFactories(u.getId()));
         }
+        if(u.getClanId() != null){
+            clanDao.getClanById(u.getClanId());
+        }
         return em.merge(u);
     }
 
@@ -141,10 +148,10 @@ public class UserHibernateDao implements UserDao{
             throw new IllegalArgumentException("Page and maxPage must be an positive integer");
         }
 
-        int min = (page -1) * userPerPage + 1;
+        int min = (page -1) * userPerPage;
         int max = page * userPerPage;
 
-        final TypedQuery<User> query = em.createQuery( "from User as u order by u.score" , User.class);
+        final TypedQuery<User> query = em.createQuery( "from User as u order by u.score desc" , User.class);
         query.setFirstResult(min);
         query.setMaxResults(max);
         List<User> users = query.getResultList();

@@ -39,3 +39,5 @@ CREATE TABLE IF NOT EXISTS stockMarket (
   resourceType INT PRIMARY KEY,
   amount DOUBLE PRECISION
 );
+
+CREATE TABLE clansbattle(clanid INT PRIMARY KEY,versusid INT NOT NULL,initialscore DOUBLE PRECISION NOT NULL, FOREIGN KEY(clanid) REFERENCES clans,FOREIGN KEY(versusid) REFERENCES clans);

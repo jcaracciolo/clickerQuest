@@ -4,12 +4,18 @@ import ar.edu.itba.paw.interfaces.ClanDao;
 import ar.edu.itba.paw.interfaces.UserDao;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.clan.Clan;
+import ar.edu.itba.paw.model.clan.ClanBattle;
 import ar.edu.itba.paw.model.clan.ClanBuilder;
+import ar.edu.itba.paw.model.packages.Paginating;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.util.Collection;
 import java.util.Iterator;
@@ -20,6 +26,7 @@ import java.util.stream.Collectors;
  * Created by juanfra on 14/06/17.
  */
 @Repository
+@EnableTransactionManagement(proxyTargetClass = true)
 public class HibernateClanDao implements ClanDao {
     @PersistenceContext
     private EntityManager em;
@@ -100,4 +107,69 @@ public class HibernateClanDao implements ClanDao {
 
         return true;
     }
+
+    @Override
+    public Paginating<Clan> globalClan(int page, int clansPerPage) {
+        if(page<=0 || clansPerPage<=0) {
+            throw new IllegalArgumentException("Page and maxPage must be an positive integer");
+        }
+        int min = (page -1) * clansPerPage;
+        int max = page * clansPerPage;
+
+        final TypedQuery<Clan> query = em.createQuery( "from Clan as c order by c.score desc" , Clan.class);
+        query.setFirstResult(min);
+        query.setMaxResults(max);
+        List<Clan> clans = query.getResultList();
+        Number amount = (Number)em.createQuery("SELECT COUNT(*) FROM Clan",Number.class).getSingleResult();
+
+        if(!clans.isEmpty()) {
+            int totalClans = amount.intValue();
+            int totalPages = (int)Math.ceil(totalClans/((double)clansPerPage));
+            return new Paginating<>(page,clansPerPage,amount.intValue(),totalPages,clans);
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public Integer getGlobalRanking(int clanid) {
+        Query query = em.createNativeQuery("SELECT row_number FROM " +
+                "(SELECT ROW_NUMBER() OVER(ORDER BY score DESC),* FROM clans) as c " +
+                "WHERE c.clanid = :clanid");
+
+        query.setParameter("clanid",clanid);
+        Number n = (Number)query.getSingleResult();
+        return n.intValue();
+    }
+
+    @Override
+    public ClanBattle getClanBattle(int clanid) {
+        Query query = em.createQuery("from ClanBattle as c where c.clanid = :clanid",ClanBattle.class);
+        query.setParameter("clanid",clanid);
+        List<ClanBattle> clanBattle = query.getResultList();
+        return clanBattle.size()!=1?null:clanBattle.get(0);;
+    }
+
+    @Scheduled(fixedDelay = 2*60*1000,initialDelay = 0)
+    @Transactional
+    private void createBattles(){
+        Query query = em.createNativeQuery("truncate TABLE clansbattle");
+        query.executeUpdate();
+        Paginating<Clan> pagClan = globalClan(1,2);
+        for(int i=1;i<=pagClan.getTotalPages();i++) {
+            Paginating<Clan> clan = globalClan(i,2);
+            List<Clan> clans = clan.getItems();
+            if(clans.size()<2) {
+                return;
+            }
+
+            Clan clan1 = clans.get(0);
+            Clan clan2 = clans.get(1);
+            ClanBattle clanBattle = new ClanBattle(clan1,clan2,clan1.getClanScore());
+            em.persist(clanBattle);
+            ClanBattle clanBattleV = new ClanBattle(clan2,clan1,clan2.getClanScore());
+            em.persist(clanBattleV);
+        }
+    }
+
 }

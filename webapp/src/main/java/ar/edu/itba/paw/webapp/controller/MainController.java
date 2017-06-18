@@ -99,6 +99,7 @@ public class MainController {
         }
 
         Integer clanid = u.getClanId();
+        Clan c =clanService.getClanById(clanid);
         if (clanid != null) {
             mav.addObject("clan", clanService.getClanById(clanid));
         }
@@ -115,12 +116,6 @@ public class MainController {
 
     @RequestMapping(value = "/myProfile", method = { RequestMethod.GET })
     public ModelAndView myProfile(Principal principal) {
-        return profile(principal, principal.getName());
-    }
-
-    @RequestMapping(value = "/recalculatechanchan", method = { RequestMethod.GET })
-    public ModelAndView recalculateEverything(Principal principal) {
-        userService.globalUsers(0,29990);
         return profile(principal, principal.getName());
     }
 

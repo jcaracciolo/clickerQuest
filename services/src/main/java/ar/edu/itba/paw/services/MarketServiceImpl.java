@@ -16,7 +16,7 @@ import java.util.Map;
 @Service
 @Transactional
 public class MarketServiceImpl implements MarketService {
-    private static final long refreshTime = 2*1000;
+    private static final long refreshTime = 2*60*1000;
 
     @Autowired
     MarketDao marketDao;

@@ -3,6 +3,8 @@ package ar.edu.itba.paw.services;
 import ar.edu.itba.paw.interfaces.ClanDao;
 import ar.edu.itba.paw.interfaces.ClanService;
 import ar.edu.itba.paw.model.clan.Clan;
+import ar.edu.itba.paw.model.clan.ClanBattle;
+import ar.edu.itba.paw.model.packages.Paginating;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -39,8 +41,7 @@ public class ClanServiceImpl implements ClanService {
     @Override
     public Collection<String> findByKeyword(String search) {
         if(!search.matches("^[a-zA-Z0-9]+$")) return Collections.emptyList();
-        Collection<String> asd = clanDao.findByKeyword(search);
-        return asd;
+        return clanDao.findByKeyword(search);
     }
 
     @Override
@@ -58,5 +59,18 @@ public class ClanServiceImpl implements ClanService {
         return clanDao.removeFromClan(userId);
     }
 
+    @Override
+    public Paginating<Clan> globalClans(int page, int clansPerPage) {
+        return clanDao.globalClan(page,clansPerPage);
+    }
 
+    @Override
+    public Integer getGlobalRanking(int clanid) {
+        return clanDao.getGlobalRanking(clanid);
+    }
+
+    @Override
+    public ClanBattle getClanBattle(int clanid) {
+        return clanDao.getClanBattle(clanid);
+    }
 }
