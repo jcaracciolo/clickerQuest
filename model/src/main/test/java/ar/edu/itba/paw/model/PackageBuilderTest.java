@@ -1,13 +1,17 @@
 package ar.edu.itba.paw.model;
 
+import ar.edu.itba.paw.model.Exception.ValidatorException;
 import ar.edu.itba.paw.model.packages.Creator;
 import ar.edu.itba.paw.model.packages.PackageBuilder;
 import ar.edu.itba.paw.model.packages.ResourcePackage;
 import ar.edu.itba.paw.model.packages.Validator;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
-import static ar.edu.itba.paw.model.MyAssert.assertThrows;
+import javax.management.openmbean.KeyAlreadyExistsException;
+
 import static org.junit.Assert.assertEquals;
 
 public class PackageBuilderTest {
@@ -31,40 +35,31 @@ public class PackageBuilderTest {
         pb = new PackageBuilder<>(VALIDATOR,CREATOR);
     }
 
-    @Test
-    public void testValidatorPut() {
-        assertThrows(RuntimeException.class,
-                () -> pb.putItem(people,2D)
-        );
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
 
-        assertThrows(RuntimeException.class,
-                () -> pb.putItem(people,-3D)
-        );
-
-        assertEquals(pb.getResources().size(),0);
+    @Test(expected = ValidatorException.class)
+    public void testValidatorPutLess() {
+        pb.putItem(people, 2D);
     }
 
     @Test
-    public void testValidatorAdd(){
-        pb.putItem(people,5D);
-        assertThrows(RuntimeException.class,
-                () -> pb.addItem(people,10D)
-        );
-        assertThrows(RuntimeException.class,
-                () -> pb.addItem(people,-10D)
-        );
-        pb.addItem(people,3D);
-        assertEquals(pb.getResources().get(people),8D,0D);
+    public void testValidatorAddMore() {
+        pb.putItem(people, 5D);
+        thrown.expect(ValidatorException.class);
+        pb.addItem(people, 10D);
+    }
 
+    @Test
+    public void testValidatorAddLess() {
+        pb.putItem(people, 5D);
+        thrown.expect(ValidatorException.class);
+        pb.addItem(people, -10D);
     }
 
     @Test
     public void testCreator() {
-
         pb.putItem(people,5D);
-        assertThrows(RuntimeException.class,
-                () -> pb.addItem(people,10D)
-        );
         pb.addItem(people,3D);
 
         TestPackage testPackage = pb.buildPackage();
@@ -83,16 +78,8 @@ public class PackageBuilderTest {
 
         pb.putItem(people,5D);
         pb.putItem(cardboard,6D);
-
-        assertThrows(RuntimeException.class,
-                () -> pb.putItem(cardboard,6D)
-                );
-        assertThrows(RuntimeException.class,
-                () -> pb.putItem(people,5D)
-        );
-
-        TestPackage testPackage = pb.buildPackage();
-        assertEquals(testPackage.getResources().size(),2);
+        thrown.expect(KeyAlreadyExistsException.class);
+        pb.putItem(cardboard,6D);
     }
 
     @Test

@@ -82,8 +82,9 @@ public class UserDaoTest {
         Wealth wealth = new Wealth(user.getId(), Storage.packageBuilder().buildPackage(), Productions.packageBuilder().buildPackage());
         userDao.create(wealth);
         Wealth receivedWealth = userDao.getUserWealth(user.getId());
-        assertNull(receivedWealth);
-
+        assertEquals(ResourceType.values().length,receivedWealth.getStorage().getResources().size());
+        receivedWealth.getProductions().rawMap().forEach((r,d) -> assertEquals(0D,d,0D));
+        receivedWealth.getStorage().rawMap().forEach((r,d) -> assertEquals(0D,d,0D));
     }
 
     @Test

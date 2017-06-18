@@ -5,14 +5,15 @@ import ar.edu.itba.paw.model.packages.Implementations.Storage;
 import ar.edu.itba.paw.model.packages.PackageBuilder;
 import ar.edu.itba.paw.model.packages.UpgradeType;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import java.util.Calendar;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static ar.edu.itba.paw.model.MyAssert.assertThrows;
 import static junit.framework.TestCase.assertNotNull;
 import static org.junit.Assert.*;
 
@@ -27,6 +28,9 @@ public class WealthTest {
     private PackageBuilder<Storage> storageBuilder;
     private Factory factory = new Factory(userId,FactoryType.BOILER_BASE,1,1,1,1,0);
     private Upgrade nextUpgrade = factory.getNextUpgrade();
+
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
 
     static {
         Calendar now = Calendar.getInstance();
@@ -80,10 +84,8 @@ public class WealthTest {
         pb.putItem(ResourceType.PEOPLE,1D);
         pb.putItem(ResourceType.MONEY,1D);
 
-        assertThrows(IllegalArgumentException.class,
-                () -> new Wealth(1,sb.buildPackage(),pb.buildPackage())
-                );
-
+        thrown.expect(IllegalArgumentException.class);
+        new Wealth(1,sb.buildPackage(),pb.buildPackage());
     }
 
     @Test
@@ -93,11 +95,8 @@ public class WealthTest {
         sb.putItemWithDate(ResourceType.PEOPLE,1D,Calendar.getInstance());
         sb.putItemWithDate(ResourceType.MONEY,1D,Calendar.getInstance());
         pb.putItem(ResourceType.MONEY,1D);
-
-        assertThrows(IllegalArgumentException.class,
-                () -> new Wealth(1,sb.buildPackage(),pb.buildPackage())
-        );
-
+        thrown.expect(IllegalArgumentException.class);
+        new Wealth(1,sb.buildPackage(),pb.buildPackage());
     }
 
     @Test
@@ -106,11 +105,8 @@ public class WealthTest {
         PackageBuilder<Productions> pb = Productions.packageBuilder();
         sb.putItemWithDate(ResourceType.PEOPLE,1D,Calendar.getInstance());
         pb.putItem(ResourceType.MONEY,1D);
-
-        assertThrows(IllegalArgumentException.class,
-                () -> new Wealth(1,sb.buildPackage(),pb.buildPackage())
-        );
-
+        thrown.expect(IllegalArgumentException.class);
+        new Wealth(1,sb.buildPackage(),pb.buildPackage());
     }
 
     @Test
