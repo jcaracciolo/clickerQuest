@@ -81,6 +81,7 @@
         <div class="clanName">${clan.name}</div>
         <div class="clanPoints">
             <div><spring:message code="clan.pointsdoubledot"/> ${clan.clanScore}</div>
+            <div><spring:message code="clan.rank"/> ${ranking}</div>
             <div><spring:message code="clan.wins"/> ${clan.wins}</div>
         </div>
     </div>
@@ -92,7 +93,7 @@
                     <div class="vsClanImage">
                         <img id="vsMyClan" src="<c:url value="/resources/group_icons/${clan.image}"/>"/>
                         <div class="vsClanName">${clan.name}</div>
-                        <div class="vsClanPoints">${clan.score - clanBattle1.initialScore} <spring:message code="clan.points"/></div>
+                        <div class="vsClanPoints"><spring:message code="clan.pointsToday"/> ${clan.score - clanBattle1.initialScore}</div>
                     </div>
                     <div class="vsIcon">
                         <img id="vsIcon" src="<c:url value="/resources/group_icons/swords.png"/>"/>
@@ -100,7 +101,7 @@
                     <div class="vsClanImage">
                         <img id="vsOtherClan" src="<c:url value="/resources/group_icons/${clanBattle2.clan.image}"/>"/>
                         <div class="vsClanName">${clanBattle2.clan.name}</div>
-                        <div class="vsClanPoints">${clanBattle2.clan.score - clanBattle2.initialScore} <spring:message code="clan.points"/></div>
+                        <div class="vsClanPoints"><spring:message code="clan.pointsToday"/>${clanBattle2.clan.score - clanBattle2.initialScore}</div>
                     </div>
                 </div>
             </c:when>
