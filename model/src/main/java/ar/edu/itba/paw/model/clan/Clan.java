@@ -60,7 +60,7 @@ public class Clan implements Iterable<User> {
         this.id = id;
         this.users.addAll(users);
         this.score = users.stream().map(User::getScore).reduce((a,b)->a+b).orElse(0D);
-        this.image = image = (Math.abs(new Random().nextInt()%7) + 1) + ".jpg";;
+        this.image = (Math.abs(new Random().nextInt()%7) + 1) + ".jpg";;
     }
 
     public User getUser(long userId) {
