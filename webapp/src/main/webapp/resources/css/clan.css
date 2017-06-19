@@ -144,7 +144,7 @@ body {
     font-size: 1.25rem;
 }
 
-p.username-link:hover {
+p.username-link:hover, p.clanname-link:hover {
     color: white;
     cursor: pointer;
 }

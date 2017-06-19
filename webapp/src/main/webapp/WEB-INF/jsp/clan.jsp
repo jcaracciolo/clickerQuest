@@ -63,6 +63,9 @@
                                 <c:when test="${clan.containsUser(userid)}">
                                     <a id="clan-action" data-action="leave"><spring:message code="clan.leave"/></a>
                                 </c:when>
+                                <c:when test="${user.clanId != null}">
+                                    <a href="<c:url value='/clan/${userClan.name}'/>"><spring:message code='game.seeMyClan'/></a>
+                                </c:when>
                                 <c:otherwise>
                                     <a id="clan-action" data-action="join"><spring:message code="clan.join"/></a>
                                 </c:otherwise>
@@ -102,7 +105,9 @@
                 <div class="clanBattle">
                     <div class="vsClanImage">
                         <img id="vsMyClan" src="<c:url value="/resources/group_icons/${clan.image}"/>"/>
-                        <div class="vsClanName">${clan.name}</div>
+                        <div class="vsClanName">
+                            <p class="clanname-link" data-clanname="${clan.name}">${clan.name}</p>
+                        </div>
                         <div class="vsClanPoints"><spring:message code="clan.pointsToday"/> <script>document.write(abbreviateNumber(parseFloat(${clan.score - clanBattle1.initialScore}), false));</script></div>
                     </div>
                     <div class="vsIcon">
@@ -110,7 +115,9 @@
                     </div>
                     <div class="vsClanImage">
                         <img id="vsOtherClan" src="<c:url value="/resources/group_icons/${clanBattle2.clan.image}"/>"/>
-                        <div class="vsClanName">${clanBattle2.clan.name}</div>
+                        <div class="vsClanName">
+                            <p class="clanname-link" data-clanname="${clanBattle2.clan.name}">${clanBattle2.clan.name}</p>
+                        </div>
                         <div class="vsClanPoints"><spring:message code="clan.pointsToday"/><script>document.write(abbreviateNumber(parseFloat(${clanBattle2.clan.score - clanBattle2.initialScore}), false));</script></div>
                     </div>
                 </div>
@@ -132,7 +139,7 @@
                     <p><c:out value="${pos}"></c:out></p>
                     <p class="username-link" data-username="${u.username}">${u.username}</p>
                     <p>
-                        <%--<fmt:formatNumber pattern="#" value="${u.score}"/>--%>
+                            <%--<fmt:formatNumber pattern="#" value="${u.score}"/>--%>
                         <script>document.write(abbreviateNumber(parseFloat(${u.score}), false));</script>
                     </p>
                     <c:set var="pos" value="${pos + 1}"/>
