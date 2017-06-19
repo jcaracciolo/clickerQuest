@@ -61,7 +61,9 @@ public class ClanController {
         mav.addObject("ranking", clanService.getGlobalRanking(clan.getId()));
         mav.addObject("clanBattle1", clanBattle1);
         mav.addObject("user", u);
-        mav.addObject("userClan", clanService.getClanById(u.getClanId()));
+        if (u.getClanId() != null) {
+            mav.addObject("userClan", clanService.getClanById(u.getClanId()));
+        }
         mav.addObject("clan", clan);
         return mav;
     }

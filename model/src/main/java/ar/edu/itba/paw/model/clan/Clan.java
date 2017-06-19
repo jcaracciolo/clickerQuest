@@ -37,7 +37,7 @@ public class Clan implements Iterable<User> {
     private int battles = 0;
 
     @Column(name = "image",length = 100, nullable = false)
-    private String image = "1.jpg";
+    private String image = null;
 
     public String getName() {
         return name;
@@ -51,7 +51,7 @@ public class Clan implements Iterable<User> {
         this.score = users.stream().map(User::getScore).reduce((a,b)->a+b).orElse(0D);
         if (image.equals("null")) {
             Random r = new Random();
-            image = r.nextInt()%2 + 1 + ".jpg";
+            image = (Math.abs(r.nextInt()%7) + 1) + ".jpg";
         }
     }
 
@@ -60,6 +60,7 @@ public class Clan implements Iterable<User> {
         this.id = id;
         this.users.addAll(users);
         this.score = users.stream().map(User::getScore).reduce((a,b)->a+b).orElse(0D);
+        this.image = image = (Math.abs(new Random().nextInt()%7) + 1) + ".jpg";;
     }
 
     public User getUser(long userId) {

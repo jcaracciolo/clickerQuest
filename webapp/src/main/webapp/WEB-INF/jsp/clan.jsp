@@ -86,7 +86,7 @@
 <div class="main-container">
     <div class="left-section">
         <div>
-            <img id="clanImg" src="<c:url value="/resources/group_icons/1.jpg"/>"/>
+            <img id="clanImg" src="<c:url value="/resources/group_icons/${clan.image}"/>"/>
         </div>
         <div class="clanName">${clan.name}</div>
         <div class="clanPoints">
@@ -118,7 +118,7 @@
                         <div class="vsClanName">
                             <p class="clanname-link" data-clanname="${clanBattle2.clan.name}">${clanBattle2.clan.name}</p>
                         </div>
-                        <div class="vsClanPoints"><spring:message code="clan.pointsToday"/><script>document.write(abbreviateNumber(parseFloat(${clanBattle2.clan.score - clanBattle2.initialScore}), false));</script></div>
+                        <div class="vsClanPoints"><spring:message code="clan.pointsToday"/> <script>document.write(abbreviateNumber(parseFloat(${clanBattle2.clan.score - clanBattle2.initialScore}), false));</script></div>
                     </div>
                 </div>
             </c:when>
