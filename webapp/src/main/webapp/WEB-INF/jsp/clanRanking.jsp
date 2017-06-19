@@ -88,7 +88,10 @@
         <c:forEach items="${globalRanking.items}" var="c">
             <div class="table-row">
                 <p><c:out value="${pos + (page-1)*10}"></c:out></p>
-                <p class="username-link" data-username="${c.name}">${c.name}</p>
+                <div class="nameAndImage">
+                    <img class="itemImg" src="<c:url value="/resources/group_icons/${c.image}"/>"/>
+                    <p class="username-link" data-username="${c.name}">${c.name}</p>
+                </div>
                 <p>
                         <%--<fmt:formatNumber pattern="#" value="${c.clanScore}"/>--%>
                     <script>document.write(abbreviateNumber(parseFloat(${c.clanScore}), false));</script>

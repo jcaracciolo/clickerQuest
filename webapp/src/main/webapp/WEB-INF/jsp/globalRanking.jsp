@@ -88,7 +88,10 @@
         <c:forEach items="${globalRanking.items}" var="u">
             <div class="table-row">
                 <p><c:out value="${pos + (page-1)*10}"></c:out></p>
-                <p class="username-link" data-username="${u.username}">${u.username}</p>
+                <div class="nameAndImage">
+                    <img class="itemImg" src="<c:url value="/resources/profile_images/${u.profileImage}"/>"/>
+                    <p class="username-link" data-username="${u.username}">${u.username}</p>
+                </div>
                 <p><fmt:formatNumber pattern="#" value="${u.score}"/></p>
                 <c:set var="pos" value="${pos + 1}"/>
             </div>

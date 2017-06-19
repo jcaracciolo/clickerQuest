@@ -11,6 +11,8 @@
           media="screen,projection"/>
     <link type="text/css" rel="stylesheet" href='<c:url value="/resources/css/clan.css"/>'
           media="screen,projection"/>
+    <link type="text/css" rel="stylesheet" href='<c:url value="/resources/css/globalRanking.css"/>'
+          media="screen,projection"/>
     <link type="text/css" rel="stylesheet" href='<c:url value="/resources/css/materialize.min.css"/>'
           media="screen,projection"/>
     <script type="text/javascript" src="<c:url value='/resources/js/numberFormatter.js'/>"></script>
@@ -138,7 +140,10 @@
             <c:forEach items="${clan.users}" var="u">
                 <div class="table-row">
                     <p><c:out value="${pos}"></c:out></p>
-                    <p class="username-link" data-username="${u.username}">${u.username}</p>
+                    <div class="nameAndImage">
+                        <img class="itemImg" src="<c:url value="/resources/profile_images/${u.profileImage}"/>"/>
+                        <p class="username-link" data-username="${u.username}">${u.username}</p>
+                    </div>
                     <p>
                             <%--<fmt:formatNumber pattern="#" value="${u.score}"/>--%>
                         <script>document.write(abbreviateNumber(parseFloat(${u.score}), false));</script>

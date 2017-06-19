@@ -19,6 +19,18 @@
     min-height: 100%;
 }
 
+.nameAndImage {
+    display: flex;
+    flex-direction: row;
+}
+
+.itemImg {
+    align-self: center;
+    height: 2.5rem;
+    width: 2.5rem;
+    margin-right: 0.75rem;
+}
+
 .title {
     font-size: 2rem;
 }
