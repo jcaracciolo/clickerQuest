@@ -129,15 +129,23 @@ function refreshUpgradesBuyability() {
 }
 
 function getRemainingResourcesTooltipMsg(storagesLimitant, productionsLimitant) {
-    var tooltipTxt = messages["game.storageRemaining"];
+    var storageTxt = messages["game.storageRemaining"];
+    var cant = 0;
     for (var resourceLimitant in storagesLimitant) {
-        tooltipTxt += "  " + messages[resIdToName[resourceLimitant].toLowerCase()] + ": " + storagesLimitant[resourceLimitant] + "\n";
+        cant++;
+        storageTxt += "  " + messages[resIdToName[resourceLimitant].toLowerCase()] + ": " + abbreviateNumber(storagesLimitant[resourceLimitant]) + "\n";
     }
-    tooltipTxt += messages["game.productionRemaining"]
+    if (cant == 0) storageTxt = "";
+
+    var productionTxt = messages["game.productionRemaining"]
+    cant = 0;
     for (var resourceLimitant in productionsLimitant) {
-        tooltipTxt += "  " + messages[resIdToName[resourceLimitant].toLowerCase()] + ": " + productionsLimitant[resourceLimitant] + "/s\n";
+        cant++;
+        productionTxt += "  " + messages[resIdToName[resourceLimitant].toLowerCase()] + ": " + abbreviateNumber(productionsLimitant[resourceLimitant]) + "/s\n";
     }
-    return tooltipTxt;
+    if (cant == 0) productionTxt = "";
+
+    return storageTxt + productionTxt;
 }
 
 function refreshFactoriesBuyability() {
