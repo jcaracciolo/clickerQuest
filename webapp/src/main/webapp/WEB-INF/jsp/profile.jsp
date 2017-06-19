@@ -18,7 +18,7 @@
           media="screen,projection"/>
     <link type="text/css" rel="stylesheet" href="<c:url value="/resources/css/materialize.min.css"/>"
           media="screen,projection"/>
-
+    <script type="text/javascript" src="<c:url value='/resources/js/numberFormatter.js'/>"></script>
     <!--Import Google Icon Font-->
     <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
@@ -54,7 +54,14 @@
                         </div>
                     </form>
                 </div>
-                <div id="globalRanking" class="button last">
+                <div id="clanRanking" class="button last">
+                    <ul>
+                        <li>
+                            <a href="<c:url value='/clanRanking/1'/>"><spring:message code='game.seeClanRanking'/></a>
+                        </li>
+                    </ul>
+                </div>
+                <div id="globalRanking" class="button">
                     <ul>
                         <li>
                             <a href="<c:url value='/worldRanking/1'/>"><spring:message code='game.seeGlobalRanking'/></a>
@@ -81,7 +88,7 @@
                 <img class="profile-img" src="<c:url value="/resources/profile_images/${user.profileImage}"/>"/>
             </div>
             <div>
-                <p id="score"><spring:message code="score"/> <fmt:formatNumber pattern="#">${user.score}</fmt:formatNumber></p>
+                <p id="score"><spring:message code="score"/> <script>document.write(abbreviateNumber(parseFloat(${user.score}), false));</script></p>
             </div>
         </div>
         <div id="world-ranking">
@@ -111,7 +118,7 @@
                                 <img class="factory-image" src="<c:url value="/resources/factory_images/${factory.image}"/>"/>
                             </div>
                             <div>
-                                <p class="cant-factory no-margins">x<fmt:formatNumber pattern="#" value="${factory.amount}"/></p>
+                                <p class="cant-factory no-margins">x<script>document.write(abbreviateNumber(parseFloat(${factory.amount}), false));</script></p>
                             </div>
                         </div>
                     </c:if>
@@ -129,7 +136,7 @@
                                  data-tooltip='<spring:message code="${res.nameCode}"/>' src="<c:url value="/resources/resources_icon/${res.id}.png"/>"/>
                         </div>
                         <div class="flex-left-text">
-                            <p><fmt:formatNumber pattern="#.##" value="${storage.getValue(res)}"/> + <fmt:formatNumber pattern="#.##" value="${productions.getValue(res)}"/>/s</p>
+                            <p><script>document.write(abbreviateNumber(parseFloat(${storage.getValue(res)}), false));</script> + <script>document.write(abbreviateNumber(parseFloat(${productions.getValue(res)}), false));</script>/s</p>
                         </div>
                     </div>
                 </c:forEach>

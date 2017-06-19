@@ -13,7 +13,7 @@
           media="screen,projection"/>
     <link type="text/css" rel="stylesheet" href='<c:url value="/resources/css/materialize.min.css"/>'
           media="screen,projection"/>
-
+    <script type="text/javascript" src="<c:url value='/resources/js/numberFormatter.js'/>"></script>
     <!--Import Google Icon Font-->
     <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
@@ -41,7 +41,14 @@
                         </div>
                     </form>
                 </div>
-                <div id="globalRanking" class="button last">
+                <div id="clanRanking" class="button last">
+                    <ul>
+                        <li>
+                            <a href="<c:url value='/clanRanking/1'/>"><spring:message code='game.seeClanRanking'/></a>
+                        </li>
+                    </ul>
+                </div>
+                <div id="globalRanking" class="button">
                     <ul>
                         <li>
                             <a href="<c:url value='/worldRanking/1'/>"><spring:message code='game.seeGlobalRanking'/></a>
@@ -80,9 +87,9 @@
         </div>
         <div class="clanName">${clan.name}</div>
         <div class="clanPoints">
-            <div><spring:message code="clan.pointsdoubledot"/> ${clan.clanScore}</div>
-            <div><spring:message code="clan.rank"/> ${ranking}</div>
-            <div><spring:message code="clan.wins"/> ${clan.wins}</div>
+            <div><spring:message code="clan.pointsdoubledot"/> <script>document.write(abbreviateNumber(parseFloat(${clan.score}), false));</script></div>
+            <div><spring:message code="clan.rank"/> <script>document.write(abbreviateNumber(parseFloat(${ranking}), false));</script></div>
+            <div><spring:message code="clan.wins"/> <script>document.write(abbreviateNumber(parseFloat(${clan.wins}), false));</script></div>
         </div>
     </div>
     <div class="right-section">
@@ -96,7 +103,7 @@
                     <div class="vsClanImage">
                         <img id="vsMyClan" src="<c:url value="/resources/group_icons/${clan.image}"/>"/>
                         <div class="vsClanName">${clan.name}</div>
-                        <div class="vsClanPoints"><spring:message code="clan.pointsToday"/> ${clan.score - clanBattle1.initialScore}</div>
+                        <div class="vsClanPoints"><spring:message code="clan.pointsToday"/> <script>document.write(abbreviateNumber(parseFloat(${clan.score - clanBattle1.initialScore}), false));</script></div>
                     </div>
                     <div class="vsIcon">
                         <img id="vsIcon" src="<c:url value="/resources/group_icons/swords.png"/>"/>
@@ -104,7 +111,7 @@
                     <div class="vsClanImage">
                         <img id="vsOtherClan" src="<c:url value="/resources/group_icons/${clanBattle2.clan.image}"/>"/>
                         <div class="vsClanName">${clanBattle2.clan.name}</div>
-                        <div class="vsClanPoints"><spring:message code="clan.pointsToday"/>${clanBattle2.clan.score - clanBattle2.initialScore}</div>
+                        <div class="vsClanPoints"><spring:message code="clan.pointsToday"/><script>document.write(abbreviateNumber(parseFloat(${clanBattle2.clan.score - clanBattle2.initialScore}), false));</script></div>
                     </div>
                 </div>
             </c:when>
@@ -124,7 +131,10 @@
                 <div class="table-row">
                     <p><c:out value="${pos}"></c:out></p>
                     <p class="username-link" data-username="${u.username}">${u.username}</p>
-                    <p><fmt:formatNumber pattern="#" value="${u.score}"/></p>
+                    <p>
+                        <%--<fmt:formatNumber pattern="#" value="${u.score}"/>--%>
+                        <script>document.write(abbreviateNumber(parseFloat(${u.score}), false));</script>
+                    </p>
                     <c:set var="pos" value="${pos + 1}"/>
                 </div>
             </c:forEach>

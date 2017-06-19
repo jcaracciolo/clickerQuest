@@ -22,6 +22,7 @@
           media="screen,projection"/>
     <link type="text/css" rel="stylesheet" href="<c:url value="/resources/css/materialize.min.css"/>"
           media="screen,projection"/>
+    <script type="text/javascript" src="<c:url value='/resources/js/numberFormatter.js'/>"></script>
     <!--Import Google Icon Font-->
     <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!--Let browser know website is optimized for mobile-->
@@ -149,19 +150,20 @@
                         </div>
                     </form>
                 </div>
-                <div id="globalRanking" class="button last">
+                <div id="clanRanking" class="button last">
                     <ul>
                         <li>
                             <a href="<c:url value='/clanRanking/1'/>"><spring:message code='game.seeClanRanking'/></a>
                         </li>
                     </ul>
-                </div><div id="globalRanking" class="button">
-                <ul>
-                    <li>
-                        <a href="<c:url value='/worldRanking/1'/>"><spring:message code='game.seeGlobalRanking'/></a>
-                    </li>
-                </ul>
-            </div>
+                </div>
+                <div id="globalRanking" class="button">
+                    <ul>
+                        <li>
+                            <a href="<c:url value='/worldRanking/1'/>"><spring:message code='game.seeGlobalRanking'/></a>
+                        </li>
+                    </ul>
+                </div>
                 <c:choose>
                     <c:when test="${user.clanId == null}">
                         <div id="createClan" class="button">
@@ -202,7 +204,10 @@
                     <div class="card-image profile-picture">
                         <img class="profile" src="<c:url value="/resources/profile_images/${user.profileImage}"/>"/>
                     </div>
-                    <p id="score"><spring:message code="score"/> <fmt:formatNumber pattern="#">${user.score}</fmt:formatNumber></p>
+                    <p id="score"><spring:message code="score"/>
+                        <%--<fmt:formatNumber pattern="#">${user.score}</fmt:formatNumber>--%>
+                        <script>document.write(abbreviateNumber(parseFloat(${user.score}), false));</script>
+                    </p>
                 </div>
             </div>
             <div class="divider"></div>
@@ -254,7 +259,8 @@
                                             </div>
                                             <div class="col">
                                                 <p>
-                                                    <fmt:formatNumber pattern="#.##/s " value="${inputMap.get(res)}"/>
+                                                        <%--<fmt:formatNumber pattern="#.##/s " value="${inputMap.get(res)}"/>--%>
+                                                    <script>document.write(abbreviateNumber(parseFloat(${inputMap.get(res)}), true)+"/s");</script>
                                                 </p>
                                             </div>
                                         </div>
@@ -277,7 +283,8 @@
                                         </div>
                                         <div class="col">
                                             <p>
-                                                <fmt:formatNumber pattern="#.##/s " value="${outputMap.get(res)}"/>
+                                                    <%--<fmt:formatNumber pattern="#.##/s " value="${outputMap.get(res)}"/>--%>
+                                                <script>document.write(abbreviateNumber(parseFloat(${outputMap.get(res)}), true)+"/s");</script>
                                             </p>
                                         </div>
                                     </div>
@@ -292,7 +299,7 @@
         <div class="row factory-row">
             </c:if>
             </c:forEach>
-                <div class="divider last"></div>
+            <div class="divider last"></div>
         </div>
     </div>
     <!-- RIGHT PANEL -->
@@ -307,117 +314,121 @@
                     <div><spring:message code="game.upgrade"/></div>
                 </div>
                 <c:forEach items="${factories}" var="factory" varStatus="loop">
-                    <div class="divider"></div>
-                    <div class="section">
-                        <!-- BEGINING OF FACTORY CARD -->
-                        <div class="factory-card-container">
-                            <div class="row factory-card">
-                                <div class="col s4 buyFactorySection">
-                                    <div class="card-image factory-icon">
-                                        <p class="center-align"><spring:message code="${factory.type.nameCode}"/></p>
-                                        <img src="<c:url value="/resources/factory_images/${factory.getImage()}"/>" alt="factory_icon"/>
-                                    </div>
-                                    <p><spring:message code="game.cost"/></p>
-                                    <c:set var="factoryCost" value="${factory.getCost()}"/>
-                                    <div>
-                                        <c:forEach items="${factoryCost.resources}" var="res">
-                                            <c:set var="costMap" value="${factoryCost.getCost()}"/>
-                                            <div class="row no-margins">
-                                                <div class="col no-padding">
-                                                    <img class="resource-icon tooltipped" data-position="top" data-delay="50"
-                                                         data-tooltip='<spring:message code="${res.nameCode}"/>' src="<c:url value="/resources/resources_icon/${res.id}.png"/>"/>
-                                                </div>
-                                                <div class="col">
-                                                    <p>
-                                                        <fmt:formatNumber pattern="#.##" value="${costMap.get(res)}"/>
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </c:forEach>
-                                    </div>
+                <div class="divider"></div>
+                <div class="section">
+                    <!-- BEGINING OF FACTORY CARD -->
+                    <div class="factory-card-container">
+                        <div class="row factory-card">
+                            <div class="col s4 buyFactorySection">
+                                <div class="card-image factory-icon">
+                                    <p class="center-align"><spring:message code="${factory.type.nameCode}"/></p>
+                                    <img src="<c:url value="/resources/factory_images/${factory.getImage()}"/>" alt="factory_icon"/>
                                 </div>
-                                <div class="col s4">
-                                    <c:set var="factoriesProduction" value="${factory.recipe}"/>
-                                    <c:set var="inputMap" value="${factoriesProduction.getInputs()}"/>
-                                    <c:forEach items="${inputMap.keySet()}" var="res">
+                                <p><spring:message code="game.cost"/></p>
+                                <c:set var="factoryCost" value="${factory.getCost()}"/>
+                                <div>
+                                    <c:forEach items="${factoryCost.resources}" var="res">
+                                        <c:set var="costMap" value="${factoryCost.getCost()}"/>
                                         <div class="row no-margins">
                                             <div class="col no-padding">
                                                 <img class="resource-icon tooltipped" data-position="top" data-delay="50"
                                                      data-tooltip='<spring:message code="${res.nameCode}"/>' src="<c:url value="/resources/resources_icon/${res.id}.png"/>"/>
                                             </div>
-                                            <div class="col no-padding">
+                                            <div class="col">
                                                 <p>
-                                                    <fmt:formatNumber pattern="#.##/s " value="${inputMap.get(res)}"/>
+                                                        <%--<fmt:formatNumber pattern="#.##" value="${costMap.get(res)}"/>--%>
+                                                    <script>document.write(abbreviateNumber(parseFloat(${costMap.get(res)}), false));</script>
                                                 </p>
                                             </div>
                                         </div>
                                     </c:forEach>
-                                    <div class="card-image col s12">
-                                        <img src="<c:url value="/resources/arrow_ingredients.png"/>" alt="embudo"/>
-                                    </div>
-                                    <c:set var="outputMap" value="${factoriesProduction.getOutputs()}"/>
-                                    <c:forEach items="${outputMap.keySet()}" var="res">
-                                        <div class="row no-margins">
-                                            <div class="col no-padding">
-                                                <img class="resource-icon tooltipped" data-position="top" data-delay="50"
-                                                     data-tooltip='<spring:message code="${res.nameCode}"/>' src="<c:url value="/resources/resources_icon/${res.id}.png"/>"/>
-                                            </div>
-                                            <div class="col no-padding">
-                                                <p>
-                                                    <fmt:formatNumber pattern="#.##/s " value="${outputMap.get(res)}"/>
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </c:forEach>
-                                </div>
-                                <div class="col s4 button-container">
-                                    <div id="upgradeDisabler${factory.getType()}" class="box black upgradeDisability canBuy"></div>
-                                    <c:if test="${factory.amount != 0}">
-                                        <div class="upgrade-button-container">
-                                                    <c:choose>
-                                                        <c:when test='${factory.getNextUpgrade().getType().toString().equals("OUTPUT_INCREASE")}'>
-                                                        <button type="button" id="upgrade${factory.getType()}" data-factoryid="${factory.getType().getId()}"
-                                                                class="waves-effect waves-light upgradeButton btn ${factory.getNextUpgrade().getType()} tooltipped"
-                                                                data-position="down" data-delay="50"
-                                                                data-tooltip='<spring:message code="upgrade.outputIncrease"/>'>
-                                                            <div class="card-image"><img class="upgradeImage"
-                                                                 src="<c:url value='/resources/upgrade_icons/increase.png'/>" alt="upgrade_icon"/>
-                                                        </c:when>
-                                                        <c:when test='${factory.getNextUpgrade().getType().toString().equals("INPUT_REDUCTION")}'>
-                                                                <button type="button" id="upgrade${factory.getType()}" data-factoryid="${factory.getType().getId()}"
-                                                                        class="waves-effect waves-light upgradeButton btn ${factory.getNextUpgrade().getType()} tooltipped"
-                                                                        data-position="down" data-delay="50"
-                                                                        data-tooltip='<spring:message code="upgrade.inputReduction"/>'>
-                                                                    <div class="card-image"><img class="upgradeImage"
-                                                            src="<c:url value='/resources/upgrade_icons/reduce.png'/>" alt="upgrade_icon"/>
-                                                        </c:when>
-                                                        <c:otherwise>
-                                                                        <button type="button" id="upgrade${factory.getType()}" data-factoryid="${factory.getType().getId()}"
-                                                                                class="waves-effect waves-light upgradeButton btn ${factory.getNextUpgrade().getType()} tooltipped"
-                                                                                data-position="down" data-delay="50"
-                                                                                data-tooltip='<spring:message code="upgrade.costReduction"/>'>
-                                                                            <div class="card-image"><img class="upgradeImage"
-                                                                 src="<c:url value='/resources/upgrade_icons/cost_reduction.png'/>" alt="upgrade_icon"/>
-                                                        </c:otherwise>
-                                                    </c:choose>
-                                                </div>
-                                                <div class="row no-margins">
-                                                    <div class="col no-padding">
-                                                        <img class="resource-icon tooltipped" data-position="top" data-delay="50"
-                                                             data-tooltip='<spring:message code="money-type"/>'
-                                                             src="<c:url value="/resources/resources_icon/3.png"/>"/>
-                                                    </div>
-                                                    <div class="col">
-                                                        <p class="no-margins">
-                                                            <fmt:formatNumber pattern="#" value="${factory.getNextUpgrade().cost}"/>
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                            </button>
-                                        </div>
-                                    </c:if>
                                 </div>
                             </div>
+                            <div class="col s4">
+                                <c:set var="factoriesProduction" value="${factory.recipe}"/>
+                                <c:set var="inputMap" value="${factoriesProduction.getInputs()}"/>
+                                <c:forEach items="${inputMap.keySet()}" var="res">
+                                    <div class="row no-margins">
+                                        <div class="col no-padding">
+                                            <img class="resource-icon tooltipped" data-position="top" data-delay="50"
+                                                 data-tooltip='<spring:message code="${res.nameCode}"/>' src="<c:url value="/resources/resources_icon/${res.id}.png"/>"/>
+                                        </div>
+                                        <div class="col no-padding">
+                                            <p>
+                                                    <%--<fmt:formatNumber pattern="#.##/s " value="${inputMap.get(res)}"/>--%>
+                                                <script>document.write(abbreviateNumber(${inputMap.get(res)}, true) + "/s");</script>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </c:forEach>
+                                <div class="card-image col s12">
+                                    <img src="<c:url value="/resources/arrow_ingredients.png"/>" alt="embudo"/>
+                                </div>
+                                <c:set var="outputMap" value="${factoriesProduction.getOutputs()}"/>
+                                <c:forEach items="${outputMap.keySet()}" var="res">
+                                    <div class="row no-margins">
+                                        <div class="col no-padding">
+                                            <img class="resource-icon tooltipped" data-position="top" data-delay="50"
+                                                 data-tooltip='<spring:message code="${res.nameCode}"/>' src="<c:url value="/resources/resources_icon/${res.id}.png"/>"/>
+                                        </div>
+                                        <div class="col no-padding">
+                                            <p>
+                                                    <%--<fmt:formatNumber pattern="#.##/s " value="${outputMap.get(res)}"/>--%>
+                                                <script>document.write(abbreviateNumber(${outputMap.get(res)}, true) + "/s");</script>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </c:forEach>
+                            </div>
+                            <div class="col s4 button-container">
+                                <div id="upgradeDisabler${factory.getType()}" class="box black upgradeDisability canBuy"></div>
+                                <c:if test="${factory.amount != 0}">
+                                <div class="upgrade-button-container">
+                                    <c:choose>
+                                    <c:when test='${factory.getNextUpgrade().getType().toString().equals("OUTPUT_INCREASE")}'>
+                                    <button type="button" id="upgrade${factory.getType()}" data-factoryid="${factory.getType().getId()}"
+                                            class="waves-effect waves-light upgradeButton btn ${factory.getNextUpgrade().getType()} tooltipped"
+                                            data-position="down" data-delay="50"
+                                            data-tooltip='<spring:message code="upgrade.outputIncrease"/>'>
+                                        <div class="card-image"><img class="upgradeImage"
+                                                                     src="<c:url value='/resources/upgrade_icons/increase.png'/>" alt="upgrade_icon"/>
+                                            </c:when>
+                                            <c:when test='${factory.getNextUpgrade().getType().toString().equals("INPUT_REDUCTION")}'>
+                                            <button type="button" id="upgrade${factory.getType()}" data-factoryid="${factory.getType().getId()}"
+                                                    class="waves-effect waves-light upgradeButton btn ${factory.getNextUpgrade().getType()} tooltipped"
+                                                    data-position="down" data-delay="50"
+                                                    data-tooltip='<spring:message code="upgrade.inputReduction"/>'>
+                                                <div class="card-image"><img class="upgradeImage"
+                                                                             src="<c:url value='/resources/upgrade_icons/reduce.png'/>" alt="upgrade_icon"/>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                    <button type="button" id="upgrade${factory.getType()}" data-factoryid="${factory.getType().getId()}"
+                                                            class="waves-effect waves-light upgradeButton btn ${factory.getNextUpgrade().getType()} tooltipped"
+                                                            data-position="down" data-delay="50"
+                                                            data-tooltip='<spring:message code="upgrade.costReduction"/>'>
+                                                        <div class="card-image"><img class="upgradeImage"
+                                                                                     src="<c:url value='/resources/upgrade_icons/cost_reduction.png'/>" alt="upgrade_icon"/>
+                                                            </c:otherwise>
+                                                            </c:choose>
+                                                        </div>
+                                                        <div class="row no-margins">
+                                                            <div class="col no-padding">
+                                                                <img class="resource-icon tooltipped" data-position="top" data-delay="50"
+                                                                     data-tooltip='<spring:message code="money-type"/>'
+                                                                     src="<c:url value="/resources/resources_icon/3.png"/>"/>
+                                                            </div>
+                                                            <div class="col">
+                                                                <p class="no-margins">
+                                                                        <%--<fmt:formatNumber pattern="#" value="${factory.getNextUpgrade().cost}"/>--%>
+                                                                    <script>document.write(abbreviateNumber(parseFloat(${factory.getNextUpgrade().cost}), false));</script>
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    </button>
+                                                </div>
+                                                </c:if>
+                                        </div>
+                                </div>
                             </div>
                             <div class="buyButtonsContainer">
                                 <div>
@@ -436,14 +447,14 @@
                                     <img id="buyHundred${factory.getType()}" data-amount="100" data-factoryid="${factory.getType().getId()}" class="buyFactory" src="<c:url value="/resources/${buttonsFolder}/buy100.png"/>"/>
                                 </div>
                             </div>
-                        <!-- END OF FACTORY CARD -->
+                            <!-- END OF FACTORY CARD -->
+                        </div>
+                        </c:forEach>
+                        <div class="divider last"></div>
                     </div>
-                </c:forEach>
-                <div class="divider last"></div>
+                </div>
             </div>
         </div>
-    </div>
-</div>
 
 </body>
 
@@ -469,7 +480,7 @@
 
     resIdToName = { // resId -> resName
         <c:forEach items="${storage.resources}" var="resource">
-            "${resource.id}" : "${resource}",
+        "${resource.id}" : "${resource}",
         </c:forEach> };
 
     storagesMap = { // resource -> cant
