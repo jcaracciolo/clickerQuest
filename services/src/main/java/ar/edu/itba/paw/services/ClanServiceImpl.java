@@ -75,7 +75,7 @@ public class ClanServiceImpl implements ClanService {
         return clanDao.getClanBattle(clanid);
     }
 
-    @Scheduled(fixedDelay = 1*60*1000,initialDelay = 0)
+    @Scheduled(fixedDelay = 1*60*1000)
     protected void calculateNextBattles(){
         clanDao.calculateNextBattles();
     }

@@ -99,7 +99,6 @@ public class MainController {
         }
 
         Integer clanid = u.getClanId();
-        Clan c =clanService.getClanById(clanid);
         if (clanid != null) {
             mav.addObject("clan", clanService.getClanById(clanid));
         }

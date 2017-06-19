@@ -169,8 +169,8 @@ function refreshFactoriesBuyability() {
             document.getElementById("factory10Disabler" + factIdToName[factId]).classList.add("canBuy");
         } else {
             document.getElementById("factory10Disabler" + factIdToName[factId]).classList.remove("canBuy");
-            var productionsLimitant = factBuyability[100].prod;
-            var storagesLimitant = factBuyability[100].storage;
+            var productionsLimitant = factBuyability[10].prod;
+            var storagesLimitant = factBuyability[10].storage;
 
             var tooltipTxt = getRemainingResourcesTooltipMsg(storagesLimitant, productionsLimitant);
             document.getElementById("factory10Disabler" + factIdToName[factId]).setAttribute("data-tooltip", tooltipTxt);
@@ -269,6 +269,7 @@ var createClanFunction = function () {
                 location.reload();
             } else if(resp.result == "noUser") {
             } else {
+                window.sessionStorage.setItem("message",messages["clan.created"]);
                 window.location = contextPath + "/clan/" + clanName;
             }
         });

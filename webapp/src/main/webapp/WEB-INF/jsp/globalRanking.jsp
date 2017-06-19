@@ -43,7 +43,30 @@
                         </div>
                     </form>
                 </div>
-                <div id="logout" class="button last">
+                <div id="clanRanking" class="button last">
+                    <ul>
+                        <li>
+                            <a href="<c:url value='/clanRanking/1'/>"><spring:message code='game.seeClanRanking'/></a>
+                        </li>
+                    </ul>
+                </div>
+                <div id="globalRanking" class="button">
+                    <ul>
+                        <li>
+                            <a href="<c:url value='/worldRanking/1'/>"><spring:message code='game.seeGlobalRanking'/></a>
+                        </li>
+                    </ul>
+                </div>
+                <c:if test="${user.clanId != null}">
+                    <div id="createClan" class="button">
+                        <ul>
+                            <li>
+                                <a href="<c:url value='/clan/${clan.name}'/>"><spring:message code='game.seeMyClan'/></a>
+                            </li>
+                        </ul>
+                    </div>
+                </c:if>
+                <div id="logout" class="button">
                 <ul id="nav-mobile">
                     <li><a href="<c:url value='/logout'/>"><spring:message code='logout'/> </a></li>
                 </ul>

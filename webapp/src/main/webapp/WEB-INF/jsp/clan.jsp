@@ -93,6 +93,7 @@
             <div><spring:message code="clan.pointsdoubledot"/> <script>document.write(abbreviateNumber(parseFloat(${clan.score}), false));</script></div>
             <div><spring:message code="clan.rank"/> <script>document.write(abbreviateNumber(parseFloat(${ranking}), false));</script></div>
             <div><spring:message code="clan.wins"/> <script>document.write(abbreviateNumber(parseFloat(${clan.wins}), false));</script></div>
+            <div><spring:message code="clan.battles"/> <script>document.write(abbreviateNumber(parseFloat(${clan.battles}), false));</script></div>
         </div>
     </div>
     <div class="right-section">
@@ -127,7 +128,7 @@
             </c:when>
         </c:choose>
         <div class="ranking-table">
-            <div class="subtitle"><spring:message code="clan.ranking"/></div>
+            <div class="subtitle"><spring:message code="clan.members"/></div>
             <div class="header">
                 <div><spring:message code="ranking.rank"/></div>
                 <div><spring:message code="ranking.user"/></div>

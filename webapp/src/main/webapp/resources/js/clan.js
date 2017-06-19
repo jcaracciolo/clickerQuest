@@ -1,4 +1,11 @@
 
+var toPrint = window.sessionStorage.getItem("message");
+
+if(toPrint !== null){
+    sessionStorage.removeItem("message");
+    Materialize.toast(toPrint,4000);
+}
+
 if (document.getElementById("clan-action") != null) {
     document.getElementById("clan-action").addEventListener("click", function () {
         switch (document.getElementById("clan-action").dataset.action) {
