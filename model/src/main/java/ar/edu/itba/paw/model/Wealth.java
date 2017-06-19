@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.persistence.*;
 import java.util.*;
+import java.util.stream.Stream;
 
 /**
  * Created by juanfra on 03/04/17.
@@ -56,16 +57,29 @@ public class Wealth {
         this.productions = productions;
 
         wealths = new HashSet<>();
+        if(productions.getResources().size() != ResourceType.values().length){
+            PackageBuilder<Productions> pb = Productions.packageBuilder();
+            PackageBuilder<Storage> sb = Storage.packageBuilder();
+            pb.putItems(productions);
+            sb.putItems(storage);
+            Calendar now = Calendar.getInstance();
+            storage.getLastUpdated().forEach(sb::setLastUpdated);
+            Stream.of(ResourceType.values()).filter((r)->!pb.getResources().containsKey(r))
+                    .forEach((r)->{
+                        pb.putItem(r,0D);
+                        sb.putItemWithDate(r,0D,now);
+                    });
+
+            this.productions = pb.buildPackage();
+            this.storage = sb.buildPackage();
+        }
+
         for(ResourceType r: ResourceType.values()){
-            if(!productions.contains(r)) {
-                //TODO fix it here
-                continue;
-            }
             UserWealth uw = new UserWealth();
             uw.setId(userid,r.getId());
-            uw.setProduction(productions.getValue(r));
-            uw.setStorage(storage.getValue(r));
-            uw.setLastupdated(storage.getLastUpdated(r).getTimeInMillis());
+            uw.setProduction(this.productions.getValue(r));
+            uw.setStorage(this.storage.getValue(r));
+            uw.setLastupdated(this.storage.getLastUpdated(r).getTimeInMillis());
             wealths.add(uw);
         }
     }

@@ -1,8 +1,10 @@
 package ar.edu.itba.paw.model.packages;
 
 import ar.edu.itba.paw.model.ResourceType;
+import ar.edu.itba.paw.model.Exception.ValidatorException;
 import ar.edu.itba.paw.model.packages.Implementations.Storage;
 
+import javax.management.openmbean.KeyAlreadyExistsException;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
@@ -26,9 +28,9 @@ public class PackageBuilder<T extends ResourcePackage> {
 
     public PackageBuilder<T> putItem(ResourceType resource, Double amount){
         if(!validator.validates(amount)) {
-            throw new RuntimeException("Validator invalid " + amount);
+            throw new ValidatorException("Validator invalid " + amount);
         }else if(resources.containsKey(resource)) {
-            throw new RuntimeException("Key already put " + resource);
+            throw new KeyAlreadyExistsException("Key already put " + resource);
         } else {
             resources.put(resource,amount);
             return this;
@@ -44,7 +46,7 @@ public class PackageBuilder<T extends ResourcePackage> {
         }
 
         if(!validator.validates(toAdd)) {
-            throw new RuntimeException("Validator invalid " + amount);
+            throw new ValidatorException("Validator invalid " + amount);
         }else {
             resources.put(resource, toAdd);
             return this;
