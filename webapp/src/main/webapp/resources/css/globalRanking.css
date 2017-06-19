@@ -12,6 +12,17 @@
     margin-right: 2rem;
 }
 
+.ranking-container {
+    display: flex;
+    flex-direction: column;
+    min-width: 100%;
+    min-height: 100%;
+}
+
+.title {
+    font-size: 2rem;
+}
+
 #nextPage:hover, #prevPage:hover {
     cursor: pointer;
     color: black;

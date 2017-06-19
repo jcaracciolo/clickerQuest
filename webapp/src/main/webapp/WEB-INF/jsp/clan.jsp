@@ -88,6 +88,9 @@
     <div class="right-section">
         <div class="subtitle"><spring:message code="clan.battleOfTheDay"/></div>
         <c:choose>
+            <c:when test="${clanBattle1 != null && clanBattle1.versus == null}">
+                <div class="noBattleText"><spring:message code="clan.abandon"/></div>
+            </c:when>
             <c:when test="${clanBattle1 != null}">
                 <div class="clanBattle">
                     <div class="vsClanImage">

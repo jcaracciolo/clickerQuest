@@ -55,18 +55,18 @@
 
 <div class="ranking-container">
     <div class="ranking-table">
-        <div class="title"><spring:message code="globalRanking.title"/></div>
+        <div class="title"><spring:message code="clanRanking.title"/></div>
         <div class="header">
             <div><spring:message code="ranking.rank"/></div>
-            <div><spring:message code="ranking.user"/></div>
+            <div><spring:message code="ranking.clan"/></div>
             <div><spring:message code="ranking.score"/></div>
         </div>
         <c:set var="pos" value="1"/>
-        <c:forEach items="${globalRanking.items}" var="u">
+        <c:forEach items="${globalRanking.items}" var="c">
             <div class="table-row">
                 <p><c:out value="${pos + (page-1)*10}"></c:out></p>
-                <p class="username-link" data-username="${u.username}">${u.username}</p>
-                <p><fmt:formatNumber pattern="#" value="${u.score}"/></p>
+                <p class="username-link" data-username="${c.name}">${c.name}</p>
+                <p><fmt:formatNumber pattern="#" value="${c.clanScore}"/></p>
                 <c:set var="pos" value="${pos + 1}"/>
             </div>
         </c:forEach>
@@ -94,6 +94,6 @@
 
 <script type="text/javascript" src='<c:url value="https://code.jquery.com/jquery-2.1.1.min.js"/>'></script>
 <script type="text/javascript" src='<c:url value="/resources/js/materialize.min.js"/>'></script>
-<script type="text/javascript" src='<c:url value="/resources/js/globalRanking.js"/>'></script>
+<script type="text/javascript" src='<c:url value="/resources/js/clanRanking.js"/>'></script>
 <script type="text/javascript" src='<c:url value="/resources/js/autocomplete.js"/>'></script>
 </html>

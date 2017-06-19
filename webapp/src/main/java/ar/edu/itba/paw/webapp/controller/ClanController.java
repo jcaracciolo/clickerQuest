@@ -53,7 +53,7 @@ public class ClanController {
 
         ClanBattle clanBattle1 = clanService.getClanBattle(clan.getId());
 
-        if (clanBattle1 != null) {
+        if (clanBattle1 != null && clanBattle1.getVersus() != null) {
             ClanBattle clanBattle2 = clanService.getClanBattle(clanBattle1.getVersus().getId());
             mav.addObject("clanBattle2", clanBattle2);
         }

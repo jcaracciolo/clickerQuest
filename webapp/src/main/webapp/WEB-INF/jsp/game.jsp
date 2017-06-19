@@ -152,10 +152,16 @@
                 <div id="globalRanking" class="button last">
                     <ul>
                         <li>
-                            <a href="<c:url value='/worldRanking/1'/>"><spring:message code='game.seeGlobalRanking'/></a>
+                            <a href="<c:url value='/clanRanking/1'/>"><spring:message code='game.seeClanRanking'/></a>
                         </li>
                     </ul>
-                </div>
+                </div><div id="globalRanking" class="button">
+                <ul>
+                    <li>
+                        <a href="<c:url value='/worldRanking/1'/>"><spring:message code='game.seeGlobalRanking'/></a>
+                    </li>
+                </ul>
+            </div>
                 <c:choose>
                     <c:when test="${user.clanId == null}">
                         <div id="createClan" class="button">
