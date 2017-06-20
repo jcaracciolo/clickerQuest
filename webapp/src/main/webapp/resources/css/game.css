@@ -176,6 +176,13 @@ div.box.black.buy100Disability {
 	position: relative;
 }
 
+.maxText {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	text-align: center;
+}
+
 div.box.black.buyMaxDisability {
 	position: absolute;
 	width: 100%;
