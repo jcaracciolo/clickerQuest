@@ -150,10 +150,10 @@ function refreshFactoriesBuyability() {
 
         if (maxBuy <= 0) {
             document.getElementById("factoryMaxDisabler" + factIdToName[factId]).classList.remove("canBuy")
-            document.getElementById("maxBuy" + factId).innerHTML = 0;
+            document.getElementById("maxBuy" + factId).innerHTML = messages["game.max"] + " " + 0;
         } else {
             document.getElementById("factoryMaxDisabler" + factIdToName[factId]).classList.add("canBuy")
-            document.getElementById("maxBuy" + factId).innerHTML = maxBuy;
+            document.getElementById("maxBuy" + factId).innerHTML = messages["game.max"] + " " + maxBuy;
         }
         if (maxBuy >= 1) {
             document.getElementById("factory1Disabler" + factIdToName[factId]).classList.add("canBuy");
@@ -236,7 +236,7 @@ function refreshFactoriesBuyability() {
 setInterval(function(){
     refreshValues(true);
     refreshView();
-
+    buyabilityPOST();
     refreshUpgradesBuyability();
 }, 1000);
 

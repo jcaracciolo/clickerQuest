@@ -178,9 +178,12 @@ div.box.black.buy100Disability {
 
 .maxText {
 	position: absolute;
-	width: 100%;
-	height: 100%;
-	text-align: center;
+	top: 40%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	font-size: 1.3em;
+	font-weight: 800;
+	text-shadow: -2px 0 black, 0 2px black, 2px 0 black, 0 -2px black;
 }
 
 div.box.black.buyMaxDisability {

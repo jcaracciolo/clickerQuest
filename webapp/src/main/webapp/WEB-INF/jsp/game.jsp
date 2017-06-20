@@ -451,7 +451,7 @@
                                 <div id="maxButtonContainer">
                                     <div id="factoryMaxDisabler${factory.getType()}" class="box black buyMaxDisability canBuy"></div>
                                     <img id="buyMax${factory.getType()}" data-amount="max" data-factoryid="${factory.getType().getId()}" class="buyFactory" src="<c:url value="/resources/bigButton.png"/>"/>
-                                    <p id="maxBuy${factory.type.id}" class="maxText"></p>
+                                    <p id="maxBuy${factory.type.id}" class="maxText"><spring:message code="game.maximum"/></p>
                                 </div>
                             </div>
                             <!-- END OF FACTORY CARD -->
