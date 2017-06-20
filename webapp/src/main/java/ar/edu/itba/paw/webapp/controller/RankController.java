@@ -48,6 +48,13 @@ public class RankController {
             LOGGER.warn("Not logged in watching global ranking");
             return mav;
         }
+
+
+        Integer clanId = u.getClanId();
+        if (clanId != null) {
+            mav.addObject("clan", clanService.getClanById(clanId));
+        }
+
         mav.addObject("pageNumber", page);
         mav.addObject("user", u);
         mav.addObject("globalRanking", userService.globalUsers(page,10));
@@ -70,6 +77,11 @@ public class RankController {
             mav = new ModelAndView("errorPage");
             mav.addObject("errorMsg", "401");
             return mav;
+        }
+
+        Integer clanId = u.getClanId();
+        if (clanId != null) {
+            mav.addObject("clan", clanService.getClanById(clanId));
         }
 
         mav.addObject("pageNumber", page);
