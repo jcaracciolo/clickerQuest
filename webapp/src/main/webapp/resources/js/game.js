@@ -153,7 +153,7 @@ function refreshFactoriesBuyability() {
             document.getElementById("maxBuy" + factId).innerHTML = messages["game.max"] + " " + 0;
         } else {
             document.getElementById("factoryMaxDisabler" + factIdToName[factId]).classList.add("canBuy")
-            document.getElementById("maxBuy" + factId).innerHTML = messages["game.max"] + " " + maxBuy;
+            document.getElementById("maxBuy" + factId).innerHTML = messages["game.max"] + " " + abbreviateNumber(maxBuy);
         }
         if (maxBuy >= 1) {
             document.getElementById("factory1Disabler" + factIdToName[factId]).classList.add("canBuy");

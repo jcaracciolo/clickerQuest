@@ -271,7 +271,7 @@
                                 <img class="factory-image" src="<c:url value="/resources/factory_images/${factory.getImage()}"/>"/>
                             </div>
                             <p id="factoryCant${factory.getType().getId()}" class="centered-text">
-                                <spring:message code="game.amount"/> <fmt:formatNumber value="${factory.amount}" pattern="#" minFractionDigits="0" maxFractionDigits="0"/></p>
+                                <spring:message code="game.amount"/> <script>document.write(abbreviateNumber(parseFloat(${factory.amount}), true));</script></p>
                             <div class="factory-producing">
                                 <p><spring:message code="game.producing"/></p>
                                 <c:set var="outputMap" value="${factoriesProduction.getOutputs()}"/>
