@@ -17,11 +17,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import javax.jws.soap.SOAPBinding;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+import static ar.edu.itba.paw.model.FactoryType.CABLE_MAKER_BASE;
+import static ar.edu.itba.paw.model.FactoryType.PEOPLE_RECRUITING_BASE;
+import static ar.edu.itba.paw.model.FactoryType.STOCK_INVESTMENT_BASE;
 import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -32,8 +35,8 @@ public class UserServiceImplTest {
     UserService userService;
 
     // For reset purposes
-    @Autowired
-    ar.edu.itba.paw.services.MockUserDao mockUserDao;
+//    @Autowired
+//    ar.edu.itba.paw.services.MockUserDao mockUserDao;
 
     @Autowired
     PasswordEncoder passwordEncoder;
@@ -41,48 +44,50 @@ public class UserServiceImplTest {
     @Autowired
     MarketDao marketDao;
 
+    @Autowired
+    UserDao userDao;
+
+
+
     private String username = "Daniel";
     private String password = "l0b0--";
     private String img = "1.img";
     private int id = 0;
 
-//    private Wealth w = new Wealth(0,null,null);
+    private Wealth w = Wealth.createWealth(id);
 
-    private double initialMoneyProduction = FactoryType.STOCK_INVESTMENT_BASE.getBaseRecipe().getValue(ResourceType.MONEY);
-    private double initialPeopleProduction = FactoryType.PEOPLE_RECRUITING_BASE.getBaseRecipe().getValue(ResourceType.PEOPLE);
-    private double initialMoney = ResourceType.initialMoney()
-            - FactoryType.STOCK_INVESTMENT_BASE.getBaseCost().getValue(ResourceType.MONEY)
-            - FactoryType.PEOPLE_RECRUITING_BASE.getBaseCost().getValue(ResourceType.MONEY);
+    private double initialMoneyProduction = STOCK_INVESTMENT_BASE.getBaseRecipe().getValue(ResourceType.MONEY);
+    private double initialPeopleProduction = PEOPLE_RECRUITING_BASE.getBaseRecipe().getValue(ResourceType.PEOPLE);
+    private double initialMoney = ResourceType.initialMoney();
 
     @Before
     public void setup(){
+        Mockito.reset(userDao);
+
         Mockito.when(passwordEncoder.encode(password)).thenReturn(password);
         Mockito.when(marketDao.registerPurchase(Matchers.any(StockMarketEntry.class))).thenReturn(true);
 
         //Setup userdao mock
-//        Mockito.when(userDao.create(username,password,img)).thenReturn(new User(id,username,password,img,id,null));
-//        Mockito.when(userDao.getUserWealth(0)).thenReturn(w);
-        mockUserDao.clear();
+        Mockito.when(userDao.create(username,password,img)).thenReturn(new User(id,username,password,img,id,null));
+        Mockito.when(userDao.getUserWealth(id)).thenReturn(w);
+        Mockito.when(userDao.findById(id)).thenReturn(new User(id,username,password,img,id,null));
 
     }
 
     @Test
     public void testCreateUser(){
+        mockCreateUser(id,username);
 
         User user = userService.create(username,password,img);
         assertNotNull(user);
         assertEquals(user.getUsername(),username);
         assertEquals(user.getPassword(),password);
         assertEquals(user.getProfileImage(),img);
-
-        User u1 = userService.findById(user.getId());
-        assertEquals(user,u1);
-        User u2 = userService.findByUsername(username);
-        assertEquals(user,u2);
     }
 
     @Test
     public void testGetUserById(){
+        mockCreateUser(id,username);
         User user = userService.create(username,password,img);
         User u1 = userService.findById(user.getId());
         assertEquals(user,u1);
@@ -90,42 +95,26 @@ public class UserServiceImplTest {
 
     @Test
     public void testGetUserByUsername(){
+        mockCreateUser(id,username);
+        Mockito.when(userDao.findByUsername(username)).thenReturn(new User(id,username,password,img,id,null));
+
         User user = userService.create(username,password,img);
         User u1 = userService.findByUsername(user.getUsername());
         assertEquals(user,u1);
     }
 
-    public void testFindByKeywordAll(){
-        User user = userService.create(username,password,img);
-        User user2 = userService.create(username + "2",password,img);
-        Collection<User> users = userService.findByKeyword(username);
-        assertEquals(users.size(),2);
-        assertTrue(users.contains(user));
-        assertTrue(users.contains(user2));
 
-    }
 
-    @Test
-    public void testFindByKeywordSome(){
-        User user = userService.create(username,password,img);
-        User user2 = userService.create("test",password,img);
-        Collection<User> users = userService.findByKeyword("est");
-        assertEquals(users.size(),1);
-        assertFalse(users.contains(user));
-        assertTrue(users.contains(user2));
 
-    }
-
-    @Test
     public void testGlobalRanking(){
         User user = userService.create(username,password,img);
         User user2 = userService.create(username + "2",password,img);
         User user3 = userService.create(username + "3",password,img);
 
-        assertTrue(userService.purchaseFactory(user2.getId(),FactoryType.PEOPLE_RECRUITING_BASE,1));
+        assertTrue(userService.purchaseFactory(user2.getId(), PEOPLE_RECRUITING_BASE,1));
 
-        assertTrue(userService.purchaseFactory(user3.getId(),FactoryType.PEOPLE_RECRUITING_BASE,1));
-        assertTrue(userService.purchaseFactory(user3.getId(),FactoryType.PEOPLE_RECRUITING_BASE,1));
+        assertTrue(userService.purchaseFactory(user3.getId(), PEOPLE_RECRUITING_BASE,1));
+        assertTrue(userService.purchaseFactory(user3.getId(), PEOPLE_RECRUITING_BASE,1));
 
         int rank1 = userService.getGlobalRanking(user.getId());
         int rank2 = userService.getGlobalRanking(user2.getId());
@@ -133,14 +122,13 @@ public class UserServiceImplTest {
         assertEquals(rank3,1);
         assertEquals(rank2,2);
         assertEquals(rank1,3);
-
     }
 
 
     @Test
     public void testGetUserWealth() {
-        User user = userService.create(username,password,img);
-        Wealth wealth = userService.getUserWealth(user.getId());
+        Mockito.when(userDao.getUserWealth(id)).thenReturn(Wealth.createWealth(id));
+        Wealth wealth = userService.getUserWealth(id);
 
         assertNotNull(wealth);
         Map<ResourceType,Double> storageMap = wealth.getStorage().rawMap();
@@ -162,172 +150,229 @@ public class UserServiceImplTest {
 
        productionsMap.forEach(
                 (r,d) -> {
-                    switch (r){
-                        case MONEY:
-                            assertEquals(d,initialMoneyProduction,0D); break;
-                        case PEOPLE:
-                            assertEquals(d,initialPeopleProduction,0D); break;
-                        default:
                             assertEquals(d,0D,0D);
-                    }
                 }
         );
     }
 
     @Test
-    public void testGetUserFactories(){
-        User user = userService.create(username,password,img);
-        Collection<Factory> factories = userService.getUserFactories(user.getId());
-        assertEquals(factories.size(),FactoryType.values().length);
-        assertTrue(factories.contains(FactoryType.STOCK_INVESTMENT_BASE.defaultFactory(user.getId())));
-        assertTrue(factories.contains(FactoryType.PEOPLE_RECRUITING_BASE.defaultFactory(user.getId())));
-        factories.forEach((f)->{
-            switch (f.getType()){
-                case PEOPLE_RECRUITING_BASE:
-                case STOCK_INVESTMENT_BASE:
-                    assertEquals(1D,f.getAmount(),0D);
-                    break;
-                default:
-                    assertEquals(0D,f.getAmount(),0D);
-            }
-        });
+    public void testGetUserFactoriesGood(){
+        Mockito.when(userDao.getUserWealth(id)).thenReturn(Wealth.createWealth(id));
+        Collection<Factory> mockFactories = Stream.of(FactoryType.values()).filter(factoryType -> factoryType != FactoryType.CABLE_MAKER_BASE)
+                .map(factoryType -> {
+                    switch (factoryType){
+                        case PEOPLE_RECRUITING_BASE:
+                        case STOCK_INVESTMENT_BASE:
+                            return new Factory(id,factoryType,1,1,1,1,1);
+                    }
+                    return factoryType.defaultFactory(id);
+                }).collect(Collectors.toList());
+        Mockito.when(userDao.getUserFactories(id)).thenReturn(mockFactories);
 
+        Collection<Factory> factories = userService.getUserFactories(id);
+
+        assertEquals(FactoryType.values().length, factories.size());
+        assertTrue(factories.containsAll(mockFactories));
+        assertTrue(factories.contains(FactoryType.CABLE_MAKER_BASE.defaultFactory(id)));
     }
 
     @Test
     public void testPurchaseFactorySuccess(){
-        User user = userService.create(username,password,img);
-        assertTrue(userService.purchaseFactory(user.getId(),FactoryType.PEOPLE_RECRUITING_BASE,1));
-        Collection<Factory> factories = userService.getUserFactories(user.getId());
-        assertEquals(factories.size(),FactoryType.values().length);
-        factories.forEach((f)->{
-            switch (f.getType()){
-                case STOCK_INVESTMENT_BASE:
-                    assertEquals(1D,f.getAmount(),0D);
-                    break;
-                case PEOPLE_RECRUITING_BASE:
-                    assertEquals(2D,f.getAmount(),0D);
-                    break;
-                default:
-                    assertEquals(0D,f.getAmount(),0D);
-                    break;
-            }
-        });
+        Mockito.when(userDao.getUserWealth(id)).thenReturn(Wealth.createWealth(id));
+
+        Factory origFactory = FactoryType.PEOPLE_RECRUITING_BASE.defaultFactory(id);
+        Factory resultFactory = new Factory(id,FactoryType.PEOPLE_RECRUITING_BASE,2,1,1,1,1);
+
+        Wealth resultWealth = Wealth.createWealth(id).purchaseResult(origFactory,1);
+
+        User origUser = new User(id,username,password,img);
+        User resultUser = new User(id,username,password,img,resultWealth.calculateScore(),null);
+
+        Collection<Factory> mockFactories = new ArrayList<>();
+        mockFactories.add(origFactory);
+
+        Mockito.when(userDao.getUserFactories(id)).thenReturn(mockFactories);
+        Mockito.when(userDao.update(origFactory)).thenReturn(resultFactory);
+        Mockito.when(userDao.update(origUser)).thenReturn(resultUser);
+        Mockito.when(userDao.update(resultWealth)).thenReturn(resultWealth);
+
+        assertTrue(userService.purchaseFactory(id, PEOPLE_RECRUITING_BASE,1));
+
+//        Mockito.verify(userDao,Mockito.times(1)).update(resultWealth);
+//        Mockito.verify(userDao,Mockito.times(1)).update(resultFactory);
+//        Mockito.verify(userDao,Mockito.times(1)).update(resultUser);
     }
 
     @Test
     public void testPurchaseFactoryFail(){
-        User user = userService.create(username,password,img);
-        assertFalse(userService.purchaseFactory(user.getId(),FactoryType.CABLE_MAKER_BASE,1));
-        Collection<Factory> factories = userService.getUserFactories(user.getId());
-        assertEquals(factories.size(),FactoryType.values().length);
-        factories.forEach((f)->{
-            switch (f.getType()){
-                case STOCK_INVESTMENT_BASE:
-                case PEOPLE_RECRUITING_BASE:
-                    assertEquals(1D,f.getAmount(),0D);
-                    break;
-                default:
-                    assertEquals(0D,f.getAmount(),0D);
-            }
-        });
+        Mockito.when(userDao.getUserWealth(id)).thenReturn(Wealth.createWealth(id));
+        Collection<Factory> mockFactories = Stream.of(FactoryType.values())
+                .map(factoryType -> {
+                    switch (factoryType){
+                        case PEOPLE_RECRUITING_BASE:
+                        case STOCK_INVESTMENT_BASE:
+                            return new Factory(id,factoryType,1,1,1,1,1);
+                    }
+                    return factoryType.defaultFactory(id);
+                }).collect(Collectors.toList());
+
+        Mockito.when(userDao.getUserFactories(id)).thenReturn(mockFactories);
+//        Mockito.verify(userDao,Mockito.times(0)).update(Matchers.any(Wealth.class));
+//        Mockito.verify(userDao,Mockito.times(0)).update(Matchers.any(Factory.class));
+//        Mockito.verify(userDao,Mockito.times(0)).update(Matchers.any(User.class));
+
+        assertFalse(userService.purchaseFactory(id, CABLE_MAKER_BASE,1));
     }
 
-    @Test
-    public void purchaseFactoryUpdateWealthTest(){
-        User user = userService.create(username,password,img);
-        assertTrue(userService.purchaseFactory(user.getId(),FactoryType.PEOPLE_RECRUITING_BASE,1));
-        Factory factory = new Factory(user.getId(),FactoryType.PEOPLE_RECRUITING_BASE,1D,1,1,1,0);
-        Wealth wealth = userService.getUserWealth(user.getId());
-        assertEquals(wealth.getStorage().getValue(ResourceType.MONEY),
-                initialMoney - factory.getCost().getValue(ResourceType.MONEY),
-                0D);
-    }
 
-    @Test
+
+    // This test doesnt test anything we dont test in other tests
     public void purchaseMultipleFactoriesUpdateWealthTest(){
         User user = userService.create(username,password,img);
-        assertTrue(userService.purchaseFactory(user.getId(),FactoryType.PEOPLE_RECRUITING_BASE,1));
-        assertTrue(userService.purchaseFactory(user.getId(),FactoryType.PEOPLE_RECRUITING_BASE,1));
-        assertTrue(userService.purchaseFactory(user.getId(),FactoryType.PEOPLE_RECRUITING_BASE,1));
-        double factory1Cost = new Factory(user.getId(),FactoryType.PEOPLE_RECRUITING_BASE,1D,1,1,1,0)
+        assertTrue(userService.purchaseFactory(user.getId(), PEOPLE_RECRUITING_BASE,1));
+        assertTrue(userService.purchaseFactory(user.getId(), PEOPLE_RECRUITING_BASE,1));
+        assertTrue(userService.purchaseFactory(user.getId(), PEOPLE_RECRUITING_BASE,1));
+        double factory1Cost = new Factory(user.getId(), PEOPLE_RECRUITING_BASE,1D,1,1,1,0)
                 .getCost().getValue(ResourceType.MONEY);
-        double factory2Cost = new Factory(user.getId(),FactoryType.PEOPLE_RECRUITING_BASE,2D,1,1,1,0)
+        double factory2Cost = new Factory(user.getId(), PEOPLE_RECRUITING_BASE,2D,1,1,1,0)
                 .getCost().getValue(ResourceType.MONEY);
-        double factory3Cost = new Factory(user.getId(),FactoryType.PEOPLE_RECRUITING_BASE,3D,1,1,1,0)
-                .getCost().getValue(ResourceType.MONEY);;
+        double factory3Cost = new Factory(user.getId(), PEOPLE_RECRUITING_BASE,3D,1,1,1,0)
+                .getCost().getValue(ResourceType.MONEY);
         Wealth wealth = userService.getUserWealth(user.getId());
         assertEquals(wealth.getStorage().getValue(ResourceType.MONEY),
                 initialMoney - (factory1Cost + factory2Cost + factory3Cost),
                 0D);
+
+
     }
 
     @Test
     public void testPurchaseUpgradeSuccess(){
-        User user = userService.create(username,password,img);
-        assertTrue(userService.purchaseUpgrade(user.getId(),FactoryType.PEOPLE_RECRUITING_BASE));
-        Collection<Factory> factories = userService.getUserFactories(user.getId());
-        factories.forEach((f)->{
-            switch (f.getType()){
-                case PEOPLE_RECRUITING_BASE:
-                    assertEquals(1,f.getLevel());
-                    break;
-                default:
-                    assertEquals(0,f.getLevel());
-            }
-        });
+        Mockito.when(userDao.getUserWealth(id)).thenReturn(Wealth.createWealth(id));
+
+        Factory origFactory = new Factory(id,FactoryType.PEOPLE_RECRUITING_BASE,1,1,1,1,1);
+        Factory resultFactory = new Factory(id,FactoryType.PEOPLE_RECRUITING_BASE,1,1,1,1,2);
+
+        Wealth resultWealth = Wealth.createWealth(id).upgradeResult(origFactory);
+
+        User origUser = new User(id,username,password,img);
+        User resultUser = new User(id,username,password,img,resultWealth.calculateScore(),null);
+
+        Collection<Factory> mockFactories = new ArrayList<>();
+        mockFactories.add(origFactory);
+
+        Mockito.when(userDao.getUserFactories(id)).thenReturn(mockFactories);
+        Mockito.when(userDao.update(origFactory)).thenReturn(resultFactory);
+        Mockito.when(userDao.update(origUser)).thenReturn(resultUser);
+        Mockito.when(userDao.update(resultWealth)).thenReturn(resultWealth);
+
+        assertTrue(userService.purchaseUpgrade(id, PEOPLE_RECRUITING_BASE));
+
+//        Mockito.verify(userDao,Mockito.times(1)).update(resultWealth);
+//        Mockito.verify(userDao,Mockito.times(1)).update(resultFactory);
+//        Mockito.verify(userDao,Mockito.times(1)).update(resultUser);
     }
 
     @Test
     public void testPurchaseUpgradeFail(){
-        User user = userService.create(username,password,img);
-        assertFalse(userService.purchaseUpgrade(user.getId(),FactoryType.CABLE_MAKER_BASE));
-        Collection<Factory> factories = userService.getUserFactories(user.getId());
-        factories.forEach((f)-> assertEquals(0,f.getLevel()));
+        Mockito.when(userDao.getUserWealth(id)).thenReturn(Wealth.createWealth(id));
+
+        Factory origFactory = new Factory(id,FactoryType.PEOPLE_RECRUITING_BASE,1,1,1,1,1);
+        Factory resultFactory = new Factory(id,FactoryType.PEOPLE_RECRUITING_BASE,1,1,1,1,2);
+
+        Wealth resultWealth = Wealth.createWealth(id).upgradeResult(origFactory);
+
+        User origUser = new User(id,username,password,img);
+        User resultUser = new User(id,username,password,img,resultWealth.calculateScore(),null);
+
+        Collection<Factory> mockFactories = new ArrayList<>();
+        mockFactories.add(origFactory);
+
+        Mockito.when(userDao.getUserFactories(id)).thenReturn(mockFactories);
+        Mockito.when(userDao.update(origFactory)).thenReturn(resultFactory);
+        Mockito.when(userDao.update(origUser)).thenReturn(resultUser);
+        Mockito.when(userDao.update(resultWealth)).thenReturn(resultWealth);
+
+        assertFalse(userService.purchaseUpgrade(id, CABLE_MAKER_BASE));
+
+//        Mockito.verify(userDao,Mockito.times(0)).update(resultWealth);
+//        Mockito.verify(userDao,Mockito.times(0)).update(resultFactory);
+//        Mockito.verify(userDao,Mockito.times(0)).update(resultUser);
     }
 
     @Test
-    public void testPurchaseResource() {
-        User user = userService.create(username,password,img);
-        userService.purchaseResourceType(user.getId(),ResourceType.CARDBOARD,1D);
-        Wealth w = userService.getUserWealth(user.getId());
-        w.getStorage().rawMap().forEach( (r,d)-> {
-                    switch (r){
-                        case CARDBOARD:
-                            assertEquals(d,1D,0D);
-                            break;
-                        case MONEY:
-                            assertEquals(d,initialMoney - ResourceType.CARDBOARD.getBasePrice(),0D);
-                            break;
-                        default:
-                            assertEquals(d,0D,0D);
-                    }
-                }
-        );
+    public void testPurchaseResourceSuccess() {
+        Mockito.when(userDao.getUserWealth(id)).thenReturn(Wealth.createWealth(id));
+
+        Double amount = 1D;
+        Wealth resultWealth = Wealth.createWealth(id).addResource(ResourceType.CARDBOARD,amount);
+
+        User origUser = new User(id,username,password,img);
+        User resultUser = new User(id,username,password,img,resultWealth.calculateScore(),null);
+
+        Mockito.when(userDao.update(origUser)).thenReturn(resultUser);
+        Mockito.when(userDao.update(resultWealth)).thenReturn(resultWealth);
+
+        assertTrue(userService.purchaseResourceType(id, ResourceType.CARDBOARD,amount));
+
+//        Mockito.verify(userDao,Mockito.times(1)).update(resultWealth);
+//        Mockito.verify(userDao,Mockito.times(1)).update(resultUser);
     }
 
     @Test
-    public void testSellResource() {
-        User user = userService.create(username,password,img);
-        double cardboard = 3;
-        userService.purchaseResourceType(user.getId(),ResourceType.CARDBOARD,cardboard);
-        double money = initialMoney - cardboard*ResourceType.CARDBOARD.getBasePrice();
+    public void testBuyResourceFail() {
 
-        userService.sellResourceType(user.getId(),ResourceType.CARDBOARD,1D);
-        Wealth w = userService.getUserWealth(user.getId());
-        w.getStorage().rawMap().forEach( (r,d)-> {
-                    switch (r){
-                        case CARDBOARD:
-                            assertEquals(d,cardboard - 1,0D);
-                            break;
-                        case MONEY:
-                            assertEquals(d,money + ResourceType.CARDBOARD.getBasePrice(),0D);
-                            break;
-                        default:
-                            assertEquals(d,0D,0D);
-                    }
-                }
-        );
+        Double amount = 20000D;
+        Wealth origWealth = Wealth.createWealth(id);
+
+        User origUser = new User(id,username,password,img);
+
+        Mockito.when(userDao.getUserWealth(id)).thenReturn(origWealth);
+        Mockito.when(userDao.update(origUser)).thenReturn(origUser);
+        Mockito.when(userDao.update(origWealth)).thenReturn(origWealth);
+
+        assertFalse(userService.purchaseResourceType(id, ResourceType.CARDBOARD,amount));
+
+//        Mockito.verify(userDao,Mockito.times(0)).update(origWealth);
+//        Mockito.verify(userDao,Mockito.times(0)).update(origUser);
+    }
+
+    @Test
+    public void testSellResourceSuccess() {
+
+        Double amount = 1D;
+        Wealth origWealth = Wealth.createWealth(id).addResource(ResourceType.CARDBOARD,amount);
+        Wealth resultWealth = origWealth.addResource(ResourceType.CARDBOARD,-amount);
+
+        User origUser = new User(id,username,password,img);
+        User resultUser = new User(id,username,password,img,resultWealth.calculateScore(),null);
+
+        Mockito.when(userDao.getUserWealth(id)).thenReturn(origWealth);
+        Mockito.when(userDao.update(origUser)).thenReturn(resultUser);
+        Mockito.when(userDao.update(resultWealth)).thenReturn(resultWealth);
+
+        assertTrue(userService.sellResourceType(id, ResourceType.CARDBOARD,amount));
+
+//        Mockito.verify(userDao,Mockito.times(1)).update(resultWealth);
+//        Mockito.verify(userDao,Mockito.times(1)).update(resultUser);
+    }
+
+    @Test
+    public void testSellResourceFail() {
+
+        Double amount = 2D;
+        Wealth origWealth = Wealth.createWealth(id).addResource(ResourceType.CARDBOARD,amount-1);
+
+        User origUser = new User(id,username,password,img);
+
+        Mockito.when(userDao.getUserWealth(id)).thenReturn(origWealth);
+        Mockito.when(userDao.update(origUser)).thenReturn(origUser);
+        Mockito.when(userDao.update(origWealth)).thenReturn(origWealth);
+
+        assertFalse(userService.sellResourceType(id, ResourceType.CARDBOARD,amount));
+
+//        Mockito.verify(userDao,Mockito.times(0)).update(origWealth);
+//        Mockito.verify(userDao,Mockito.times(0)).update(origUser);
     }
 
     @Test
@@ -336,10 +381,11 @@ public class UserServiceImplTest {
         int perPage = 5;
         int firstPage = 1;
         int pages = (int)Math.ceil(totalUsers/(double)perPage);
-        for(int i = 0;i<totalUsers;i++){
-            userService.create(username + i,password,img);
+        List<User> list = new ArrayList<>();
+        for(int i = 0;i<perPage;i++){
+            list.add(new User(i+1,username+i,password,img,500+i,null));
         }
-
+        Mockito.when(userDao.globalUsers(firstPage,perPage)).thenReturn(new Paginating<User>(firstPage,perPage,totalUsers,pages,list));
         Paginating<User> users = userService.globalUsers(firstPage,perPage);
         assertEquals(users.getPage(),firstPage);
         assertEquals(users.getItemsPerPage(),perPage);
@@ -349,6 +395,17 @@ public class UserServiceImplTest {
         assertEquals(users.getItems().size(),perPage);
         Set<User> uniqueUsers = new HashSet<>();
         users.getItems().forEach((u)->assertTrue(uniqueUsers.add(u)));
+        Double score = 500D+perPage;
+        for(User u : users.getItems()){
+            assertTrue(u.getScore()<score);
+            score = u.getScore();
+        }
     }
 
+    private void mockCreateUser(int id, String usr){
+        Mockito.when(userDao.create(usr,password,img)).thenReturn(new User(id,usr,password,img,id,null));
+        Mockito.when(userDao.getUserWealth(id)).thenReturn(w);
+        Mockito.when(userDao.findById(id)).thenReturn(new User(id,usr,password,img,id,null));
+
+    }
 }
