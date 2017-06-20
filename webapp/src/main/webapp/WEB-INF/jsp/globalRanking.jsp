@@ -15,7 +15,7 @@
           media="screen,projection"/>
     <link type="text/css" rel="stylesheet" href='<c:url value="/resources/css/materialize.min.css"/>'
           media="screen,projection"/>
-
+    <script type="text/javascript" src="<c:url value='/resources/js/numberFormatter.js'/>"></script>
     <!--Import Google Icon Font-->
     <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
@@ -92,7 +92,10 @@
                     <img class="itemImg" src="<c:url value="/resources/profile_images/${u.profileImage}"/>"/>
                     <p class="username-link" data-username="${u.username}">${u.username}</p>
                 </div>
-                <p><fmt:formatNumber pattern="#" value="${u.score}"/></p>
+                <p>
+                    <%--<fmt:formatNumber pattern="#" value="${u.score}"/>--%>
+                    <script>document.write(abbreviateNumber(parseFloat(${u.score}), false));</script>
+                </p>
                 <c:set var="pos" value="${pos + 1}"/>
             </div>
         </c:forEach>
