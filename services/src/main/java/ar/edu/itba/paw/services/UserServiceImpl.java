@@ -90,7 +90,7 @@ public class UserServiceImpl implements UserService {
     public User create(String username, String password, String img) {
         User user = userDao.create(username,passwordEncoder.encode(password),img);
         if(user != null){
-            userDao.create(createWealth(user.getId()));
+            userDao.create(Wealth.createWealth(user.getId()));
             for (FactoryType type: FactoryType.values()){
                 Factory factory = type.defaultFactory(user.getId());
                 create(factory.getType(),user.getId());
@@ -136,7 +136,8 @@ public class UserServiceImpl implements UserService {
 
             return factory != null && wealth != null;
         }
-        return false;    }
+        return false;
+    }
 
 
     @Override
@@ -273,18 +274,7 @@ public class UserServiceImpl implements UserService {
         return true;
     }
 
-    private Wealth createWealth(long userId) {
-        PackageBuilder<Storage> storageBuilder = Storage.packageBuilder();
-        PackageBuilder<Productions> productionsBuilder = Productions.packageBuilder();
-        Calendar now = Calendar.getInstance();
 
-        Arrays.stream(ResourceType.values()).forEach((r) ->  {
-            storageBuilder.putItemWithDate(r,0D,now);
-            productionsBuilder.putItem(r,0D);
-        });
-        storageBuilder.addItem(ResourceType.MONEY,ResourceType.initialMoney());
-        return new Wealth(userId,storageBuilder.buildPackage(),productionsBuilder.buildPackage());
-    }
 
     private Wealth updateWealth(Wealth wealth){
         long userId = wealth.getUserid();

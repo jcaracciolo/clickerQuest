@@ -15,6 +15,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 
@@ -165,5 +166,44 @@ public class UserDaoTest {
         assertTrue(factories.contains(factory2));
 
     }
+    @Test
+    public void testFindByKeywordAll(){
+        User user = userDao.create(USERNAME,PASSWORD,IMAGE);
+        User user2 = userDao.create(USERNAME+"2",PASSWORD,IMAGE);
 
+        Collection<User> users = userDao.findByKeyword(USERNAME);
+        assertEquals(users.size(),2);
+        assertTrue(users.contains(user));
+        assertTrue(users.contains(user2));
+    }
+
+    @Test
+    public void testFindByKeywordSome(){
+        User user = userDao.create(USERNAME,PASSWORD,IMAGE);
+        User user2 = userDao.create("test",PASSWORD,IMAGE);
+
+        Collection<User> users = userDao.findByKeyword("est");
+        assertEquals(users.size(),1);
+        assertFalse(users.contains(user));
+        assertTrue(users.contains(user2));
+    }
+
+
+    public void testGlobalRanking(){
+        User user = userDao.create(USERNAME,PASSWORD,IMAGE);
+        User user2 = userDao.create(USERNAME + "2",PASSWORD,IMAGE);
+        User user3 = userDao.create(USERNAME + "3",PASSWORD,IMAGE);
+
+
+        userDao.update(new Factory(1,FactoryType.PEOPLE_RECRUITING_BASE,3,1,1,1,1));
+        userDao.update(new Factory(2,FactoryType.PEOPLE_RECRUITING_BASE,2,1,1,1,1));
+
+        int rank1 = userDao.getGlobalRanking(user.getId());
+        int rank2 = userDao.getGlobalRanking(user2.getId());
+        int rank3 = userDao.getGlobalRanking(user3.getId());
+        assertEquals(rank3,1);
+        assertEquals(rank2,2);
+        assertEquals(rank1,3);
+
+    }
 }

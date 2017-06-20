@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.services;
 
+import ar.edu.itba.paw.interfaces.ClanDao;
 import ar.edu.itba.paw.interfaces.MarketDao;
 import ar.edu.itba.paw.interfaces.UserDao;
 import org.mockito.Mockito;
@@ -18,7 +19,8 @@ public class TestConfig {
      */
     @Bean
     public UserDao mockUserDao() {
-        return new ar.edu.itba.paw.services.MockUserDao();
+        return Mockito.mock(UserDao.class);
+//        return new ar.edu.itba.paw.services.MockUserDao();
     }
 
     @Bean
@@ -29,5 +31,10 @@ public class TestConfig {
     @Bean
     public MarketDao mockMarketDao(){
         return Mockito.mock(MarketDao.class);
+    }
+
+    @Bean
+    public ClanDao mockClanDao(){
+        return Mockito.mock(ClanDao.class);
     }
 }

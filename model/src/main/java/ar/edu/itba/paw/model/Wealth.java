@@ -158,8 +158,8 @@ public class Wealth {
         if (u.getOutputMultiplier() != 1) {
             factoriesProduction.getOutputs().forEach(
                     (r, d) -> {
-                        productionsBuilder.addItem(r, -d);
                         productionsBuilder.addItem(r,  factoryOutputs.get(r) * u.getOutputMultiplier());
+                        productionsBuilder.addItem(r, -d);
                     }
             );
         }
@@ -203,6 +203,19 @@ public class Wealth {
                 .orElse(0D);
 
         return score;
+    }
+
+    public static Wealth createWealth(long userId) {
+        PackageBuilder<Storage> storageBuilder = Storage.packageBuilder();
+        PackageBuilder<Productions> productionsBuilder = Productions.packageBuilder();
+        Calendar now = Calendar.getInstance();
+
+        Arrays.stream(ResourceType.values()).forEach((r) ->  {
+            storageBuilder.putItemWithDate(r,0D,now);
+            productionsBuilder.putItem(r,0D);
+        });
+        storageBuilder.addItem(ResourceType.MONEY,ResourceType.initialMoney());
+        return new Wealth(userId,storageBuilder.buildPackage(),productionsBuilder.buildPackage());
     }
 
     @Override
