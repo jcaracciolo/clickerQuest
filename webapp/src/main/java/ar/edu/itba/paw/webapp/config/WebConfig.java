@@ -71,14 +71,6 @@ public class WebConfig {
         final Properties properties = new Properties();
         properties.setProperty( "hibernate.hbm2ddl.auto" , "update" );
         properties.setProperty( "hibernate.dialect" , "org.hibernate.dialect.PostgreSQL92Dialect" );
-        try {
-            properties.setProperty("javax.persistence.schema-generation.create-script-source",schemaSql.getURL().getPath().toString());
-            properties.setProperty("javax.persistence.schema-generation.create-source","script");
-            properties.setProperty("javax.persistence.schema-generation.database.action","create");
-        }catch (IOException e){
-            LOGGER.error("Fail to load initialization script");
-        }
-
         if(environment.acceptsProfiles("!production")) {
             properties.setProperty("hibernate.show_sql", "true");
             properties.setProperty("format_sql", "true");

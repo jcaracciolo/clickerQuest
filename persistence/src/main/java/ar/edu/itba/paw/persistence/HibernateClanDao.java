@@ -7,6 +7,8 @@ import ar.edu.itba.paw.model.clan.Clan;
 import ar.edu.itba.paw.model.clan.ClanBattle;
 import ar.edu.itba.paw.model.clan.ClanBuilder;
 import ar.edu.itba.paw.model.packages.Paginating;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Repository;
@@ -28,6 +30,9 @@ import java.util.stream.Collectors;
 @Repository
 @EnableTransactionManagement(proxyTargetClass = true)
 public class HibernateClanDao implements ClanDao {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(HibernateClanDao.class);
+
     @PersistenceContext
     private EntityManager em;
 
@@ -191,13 +196,13 @@ public class HibernateClanDao implements ClanDao {
                 em.remove(cb1);
             } else {
                 if (!it.hasNext()) {
-                    //TODO LOG ERROR
-                    System.err.println("WHATT NO FOLLOWING IDS");
+                    LOGGER.error("Versus clan not found");
+                    return;
                 }
                 ClanBattle cb2 = it.next();
                 if (cb1.getVersus().getId() != cb2.getClan().getId()) {
-                    //TODO LOG ERROR
-                    System.err.println("WHATT NO MATCHING IDS");
+                    LOGGER.error("Versus clans id does not match");
+                    return;
                 }
 
                 Clan c1 = cb1.getClan();

@@ -3,9 +3,9 @@
 #   Configure your variables on the following lines
 #   All rights reserved - PawGroup4
 
-USERNAME="paw-2017a-4"
-PASSWORD="ooc4Choo"
-PAWSERVER="10.16.1.110"
+USERNAME=paw-2017a-4
+PASSWORD=ooc4Choo
+PAWSERVER=10.16.1.110
 WEBAPP="webapp"
 DEVELOPMENT=default
 PRODUCTION=production
@@ -126,9 +126,8 @@ then
     echo "Enter password"
     read -s pass
     filename=app.war
-    cmd="echo -ne \"cd web/ \n put $filename \n \" | sshpass -p ${PASSWORD} sftp -oStrictHostKeyChecking=no ${USERNAME}@${PAWSERVER}"
+    cmd=" echo -ne \"cd web/ \n put $filename \n \" | sshpass -p ${PASSWORD} sftp -oStrictHostKeyChecking=no ${USERNAME}@${PAWSERVER} "
     echo $cmd
-    echo -ne "pwd\n put $filename\n" | sshpass -p $pass sftp $username@pampero.itba.edu.ar &&
-    echo -ne $cmd | sshpass -p $pass ssh $username@pampero.itba.edu.ar
+    echo -ne "pwd\n put $filename\n" | sshpass -p $pass sftp $username@pampero.itba.edu.ar && echo -ne $cmd | sshpass -p $pass ssh $username@pampero.itba.edu.ar
     echo "Deployed"
 fi
