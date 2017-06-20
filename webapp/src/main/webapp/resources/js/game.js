@@ -31,13 +31,7 @@ if(toPrint !== null){
 
 refreshValues(false);
 refreshView();
-$.post(contextPath + "/canBuyFactory",
-    {}, function (data) {
-        var resp = JSON.parse(data);
-
-        buyabilityJSON = resp.buyables;
-        refreshFactoriesBuyability();
-    });
+buyabilityPOST();
 refreshUpgradesBuyability();
 
 function refreshValues(update){
@@ -154,7 +148,13 @@ function refreshFactoriesBuyability() {
         var factBuyability = buyabilityJSON[factId]
         var maxBuy = factBuyability.maxBuy
 
-
+        if (maxBuy <= 0) {
+            document.getElementById("factoryMaxDisabler" + factIdToName[factId]).classList.remove("canBuy")
+            document.getElementById("maxBuy" + factId).innerHTML = 0;
+        } else {
+            document.getElementById("factoryMaxDisabler" + factIdToName[factId]).classList.add("canBuy")
+            document.getElementById("maxBuy" + factId).innerHTML = maxBuy;
+        }
         if (maxBuy >= 1) {
             document.getElementById("factory1Disabler" + factIdToName[factId]).classList.add("canBuy");
         } else {
@@ -236,6 +236,11 @@ function refreshFactoriesBuyability() {
 setInterval(function(){
     refreshValues(true);
     refreshView();
+
+    refreshUpgradesBuyability();
+}, 1000);
+
+function buyabilityPOST() {
     $.post(contextPath + "/canBuyFactory",
         {}, function (data) {
             var resp = JSON.parse(data);
@@ -243,8 +248,7 @@ setInterval(function(){
             buyabilityJSON = resp.buyables;
             refreshFactoriesBuyability();
         });
-    refreshUpgradesBuyability();
-}, 1000);
+}
 
 // Create clan listener
 var createClanFunction = function () {
@@ -287,8 +291,12 @@ $.each($(".buyFactory"),function (i,element){
         animationType:'explosion',
         callback: function() {
             document.getElementById("loading").classList.remove("hidden");
-            document.getElementById("loading-disabler").classList.remove("hidden");
-            buyFactory($("#"+element.id).data("factoryid"),$("#"+element.id).data("amount"));
+            document.getElementById("loading-disabler").classList.remove("hidden")
+
+            var amount = $("#"+element.id).data("amount");
+            var factoryId = $("#"+element.id).data("factoryid")
+            if (amount == "max") amount = buyabilityJSON[factoryId]["maxBuy"]
+            buyFactory(factoryId,amount);
         }
     })
 });
