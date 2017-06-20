@@ -29,6 +29,9 @@
     height: 2.5rem;
     width: 2.5rem;
     margin-right: 0.75rem;
+    border-style: solid;
+    border-color: #5c4a3a;
+    border-width: 2px;
 }
 
 .title {
