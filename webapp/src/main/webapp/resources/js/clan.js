@@ -1,8 +1,8 @@
 
-var toPrint = window.sessionStorage.getItem("message");
+var toPrint = window.sessionStorage.getItem("asdasd");
 
 if(toPrint !== null){
-    sessionStorage.removeItem("message");
+    sessionStorage.removeItem("asdasd");
     Materialize.toast(toPrint,4000);
 }
 

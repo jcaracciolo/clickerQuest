@@ -39,7 +39,6 @@ nav .button.last {
 
 #search-user {
     margin-right: 0;
-    margin-left: auto;
 }
 
 .input-field.search-user {
@@ -55,14 +54,18 @@ nav .button.last {
 }
 
 #toast-container {
-    top: auto !important;
-    bottom: 5%;
-    position: absolute;
-    left: 0;
-    right: 0;
-    margin-left: auto;
-    margin-right: auto;
-    width: 30rem; /* Need a specific value to work */
+    position: absolute !important;
+    top: 90% !important;
+    left: 40% !important;
+    transform: translate(-50%, -50%) !important;
+    /*top: auto !important;*/
+    /*bottom: 5%;*/
+    /*position: absolute;*/
+    /*left: 0;*/
+    /*right: 0;*/
+    /*margin-left: auto;*/
+    /*margin-right: auto;*/
+    /*width: 30rem; !* Need a specific value to work *!*/
 }
 
 #clanModal {

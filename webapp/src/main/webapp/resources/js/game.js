@@ -273,7 +273,7 @@ var createClanFunction = function () {
                 location.reload();
             } else if(resp.result == "noUser") {
             } else {
-                window.sessionStorage.setItem("message",messages["clan.created"]);
+                window.sessionStorage.setItem("asdasd",messages["clan.created"]);
                 window.location = contextPath + "/clan/" + clanName;
             }
         });
@@ -300,6 +300,16 @@ $.each($(".buyFactory"),function (i,element){
         }
     })
 });
+
+// $.each($(".maxText"), function (i, element) {
+//     document.getElementById(element.id).addEventListener("click", function () {
+//         document.getElementById($("#"+element.id).data("refersto")).click();
+//     })
+// });
+
+function buyEffect() {
+
+}
 
 
 // Upgrade listener

@@ -184,6 +184,7 @@ div.box.black.buy100Disability {
 	font-size: 1.3em;
 	font-weight: 800;
 	text-shadow: -2px 0 black, 0 2px black, 2px 0 black, 0 -2px black;
+	pointer-events: none;
 }
 
 div.box.black.buyMaxDisability {
