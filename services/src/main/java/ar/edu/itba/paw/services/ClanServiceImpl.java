@@ -78,9 +78,9 @@ public class ClanServiceImpl implements ClanService {
         return clanDao.getClanBattle(clanid);
     }
 
-    @Scheduled(cron = "0 0 13 * * *")
+    @Scheduled(cron = "59 59 23 * * *")
     protected void calculateNextBattles(){
-        LOGGER.info("End of the day, resetting battles");
+        LOGGER.info("Refreshing Battles");
         clanDao.calculateNextBattles();
     }
 }

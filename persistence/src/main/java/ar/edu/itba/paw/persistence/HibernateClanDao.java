@@ -163,6 +163,7 @@ public class HibernateClanDao implements ClanDao {
         em.flush();
         Query query = em.createNativeQuery("truncate TABLE clansbattle");
         query.executeUpdate();
+        em.flush();
         Paginating<Clan> pagClan = globalClan(1,2);
         if(pagClan==null){
             return;
@@ -184,7 +185,7 @@ public class HibernateClanDao implements ClanDao {
     }
 
     private void calculateWins() {
-        Query query = em.createQuery("from ClanBattle as c order by c.initialScore", ClanBattle.class);
+        Query query = em.createQuery("from ClanBattle as c order by c.initialScore desc", ClanBattle.class);
         List<ClanBattle> cbs = query.getResultList();
         Iterator<ClanBattle> it = cbs.iterator();
         while (it.hasNext()) {
