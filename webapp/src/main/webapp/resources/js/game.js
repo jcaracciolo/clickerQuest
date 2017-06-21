@@ -123,7 +123,7 @@ function refreshUpgradesBuyability() {
 }
 
 function getRemainingResourcesTooltipMsg(storagesLimitant, productionsLimitant) {
-    var storageTxt = messages["game.storageRemaining"];
+    var storageTxt = messages["game.storageRemaining"] + '\n';
     var cant = 0;
     for (var resourceLimitant in storagesLimitant) {
         cant++;
@@ -131,7 +131,7 @@ function getRemainingResourcesTooltipMsg(storagesLimitant, productionsLimitant) 
     }
     if (cant == 0) storageTxt = "";
 
-    var productionTxt = messages["game.productionRemaining"]
+    var productionTxt = messages["game.productionRemaining"] + '\n';
     cant = 0;
     for (var resourceLimitant in productionsLimitant) {
         cant++;
@@ -163,7 +163,7 @@ function refreshFactoriesBuyability() {
             var storagesLimitant = factBuyability[1].storage;
 
             var tooltipTxt = getRemainingResourcesTooltipMsg(storagesLimitant, productionsLimitant);
-            document.getElementById("factory1Disabler" + factIdToName[factId]).setAttribute("data-tooltip", tooltipTxt);
+            replaceTooltip("factory1Disabler" +  factIdToName[factId],tooltipTxt)
         }
         if (maxBuy >= 10) {
             document.getElementById("factory10Disabler" + factIdToName[factId]).classList.add("canBuy");
@@ -173,7 +173,7 @@ function refreshFactoriesBuyability() {
             var storagesLimitant = factBuyability[10].storage;
 
             var tooltipTxt = getRemainingResourcesTooltipMsg(storagesLimitant, productionsLimitant);
-            document.getElementById("factory10Disabler" + factIdToName[factId]).setAttribute("data-tooltip", tooltipTxt);
+            replaceTooltip("factory10Disabler" +  factIdToName[factId],tooltipTxt)
         }
         if (maxBuy >= 100) {
             document.getElementById("factory100Disabler" + factIdToName[factId]).classList.add("canBuy");
@@ -183,55 +183,19 @@ function refreshFactoriesBuyability() {
             var storagesLimitant = factBuyability[100].storage;
 
             var tooltipTxt = getRemainingResourcesTooltipMsg(storagesLimitant, productionsLimitant);
-            document.getElementById("factory100Disabler" + factIdToName[factId]).setAttribute("data-tooltip", tooltipTxt);
+            replaceTooltip("factory100Disabler" +  factIdToName[factId],tooltipTxt)
         }
 
     }
 
-    // for (var factName in factInOrder) {
-    //     var maxBuyable = factoryBuyability[factName];
-    //     maxBuyable = maxBuyable;
-    //     if (maxBuyable >= 1) {
-    //         document.getElementById("factory1Disabler" + factInOrder[factName]).classList.add("canBuy");
-    //     } else {
-    //         document.getElementById("factory1Disabler" + factInOrder[factName]).classList.remove("canBuy");
-    //     }
-    //     if (maxBuyable >= 10) {
-    //         document.getElementById("factory10Disabler" + factInOrder[factName]).classList.add("canBuy");
-    //     } else {
-    //         document.getElementById("factory10Disabler" + factInOrder[factName]).classList.remove("canBuy");
-    //     }
-    //     if (maxBuyable >= 100) {
-    //         document.getElementById("factory100Disabler" + factInOrder[factName]).classList.add("canBuy");
-    //     } else {
-    //         document.getElementById("factory100Disabler" + factInOrder[factName]).classList.remove("canBuy");
-    //     }
-    // }
-
-    // DEPRECATE THIS IF THE UPPER CODE IS WORKING
-    // var notBuyable = []
-    // for (var factId in factoriesCost) {
-    //     for (var res in factoriesCost[factId]) {
-    //         if (factoriesCost[factId][res] > storagesMap[res]) {
-    //             notBuyable.push(factId)
-    //             break;
-    //         }
-    //     }
-    //     for (var res in factoriesRecipe[factId]) {
-    //         if (factoriesRecipe[factId][res] < 0
-    //             && Math.abs(factoriesRecipe[factId][res]) > productionsMap[res]) {
-    //             notBuyable.push(factId)
-    //             break;
-    //         }
-    //     }
-    //     if (notBuyable.includes(factId)) {
-    //         document.getElementById("factoryDisabler" + factId).classList.remove("canBuy");
-    //     }
-    //     else {
-    //         document.getElementById("factoryDisabler" + factId).classList.remove("canBuy");
-    //         document.getElementById("factoryDisabler" + factId).classList.add("canBuy");
-    //     }
-    // }
+    function replaceTooltip(id,tooltipTxt) {
+        var element = $("#" + id);
+        var lastTooltip = element.attr("data-tooltip")
+        if(tooltipTxt != lastTooltip) {
+            element.attr("data-tooltip", tooltipTxt)
+            element.tooltip();
+        }
+    }
 }
 setInterval(function(){
     refreshValues(true);
