@@ -68,6 +68,7 @@ p.subtitle {
     display: flex;
     align-items: center;
     flex-direction: column;
+    flex-basis: 100%;
 }
 
 .unlocked-factory-cards {
