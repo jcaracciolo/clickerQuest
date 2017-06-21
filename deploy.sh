@@ -119,8 +119,12 @@ fi
 if [ ${DEPLOYF} -eq 1 ]
 then
     echo "Deploying..."
-    rm app.war
-    mv ${WEBAPP}/target/webapp.war app.war
+    if [ ${PKGF} -eq 1 ]
+    then
+        echo removing old pkg
+        rm app.war
+        mv ${WEBAPP}/target/webapp.war app.war
+    fi
     echo "Enter username"
     read username
     echo "Enter password"
