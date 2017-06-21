@@ -5,6 +5,8 @@ import ar.edu.itba.paw.interfaces.ClanService;
 import ar.edu.itba.paw.model.clan.Clan;
 import ar.edu.itba.paw.model.clan.ClanBattle;
 import ar.edu.itba.paw.model.packages.Paginating;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -20,6 +22,7 @@ import java.util.Collections;
 @Service
 @Transactional
 public class ClanServiceImpl implements ClanService {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ClanServiceImpl.class);
 
     @Autowired
    private ClanDao clanDao;
@@ -75,8 +78,9 @@ public class ClanServiceImpl implements ClanService {
         return clanDao.getClanBattle(clanid);
     }
 
-    @Scheduled(cron = "* * 12 * * *")
+    @Scheduled(cron = "0 0 13 * * *")
     protected void calculateNextBattles(){
+        LOGGER.info("End of the day, resetting battles");
         clanDao.calculateNextBattles();
     }
 }
