@@ -35,11 +35,11 @@ public class User {
     @Column(name = "clanid")
     private Integer clanId;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "userid")
     private List<Factory> factories = new ArrayList<>();
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "userid")
     private Wealth wealth;
 
