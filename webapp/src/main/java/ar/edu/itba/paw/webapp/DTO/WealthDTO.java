@@ -14,23 +14,23 @@ import java.util.Map;
 public class WealthDTO {
 
     @XmlElement(name = "storage")
-    private Map<ResourceType,Double> storage;
+    private MapDTO<ResourceType,Double> storage;
 
     @XmlElement(name = "productions")
-    private Map<ResourceType,Double> productions;
+    private MapDTO<ResourceType,Double> productions;
 
     public WealthDTO(){}
 
     public WealthDTO(Wealth wealth) {
-        storage = wealth.getStorage().rawMap();
-        productions = wealth.getProductions().rawMap();
+        storage = new MapDTO<>(wealth.getStorage().rawMap());
+        productions = new MapDTO<>(wealth.getProductions().rawMap());
     }
 
-    public Map<ResourceType, Double> getStorage() {
+    public MapDTO<ResourceType, Double> getStorage() {
         return storage;
     }
 
-    public Map<ResourceType, Double> getProductions() {
+    public MapDTO<ResourceType, Double> getProductions() {
         return productions;
     }
 }
