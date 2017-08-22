@@ -5,6 +5,7 @@ import org.glassfish.jersey.server.Uri;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -13,6 +14,7 @@ import java.util.stream.Collectors;
  * Created by juanfra on 08/08/17.
  */
 @XmlRootElement
+@XmlType(name = "User")
 public class UserDTO {
 
     @XmlElement(name = "id")

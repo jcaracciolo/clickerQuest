@@ -1,8 +1,12 @@
 package ar.edu.itba.paw.webapp.controller;
 
+import ar.edu.itba.paw.interfaces.ClanService;
 import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.model.clan.Clan;
 import ar.edu.itba.paw.model.packages.Paginating;
+import ar.edu.itba.paw.webapp.DTO.ClanDTO;
+import ar.edu.itba.paw.webapp.DTO.PaginantingDTO;
 import ar.edu.itba.paw.webapp.DTO.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -23,14 +27,30 @@ public class UserController {
     @Qualifier("userServiceImpl")
     @Autowired
     private UserService us;
+    @Autowired
+    private ClanService cs;
     @Context
     private UriInfo uriInfo;
     @GET
     @Path("/")
     @Produces(value = { MediaType.APPLICATION_JSON, })
     public Response listUsers() {
-        final Paginating<User> allUsers = us.globalUsers(1,20);
-        return Response.ok(new UserDTO(allUsers.getItems().get(0),uriInfo.getBaseUri())).build();
+//        final Paginating<User> allUsers = us.globalUsers(1,20);
+//        return Response.ok(
+//                new PaginantingDTO<>(allUsers, (u) -> new UserDTO(u,uriInfo.getBaseUri()))
+//
+//        ).build();
+
+        final Paginating<Clan> allUsers = cs.globalClans(1,20);
+        return Response.ok(
+                new PaginantingDTO<>(allUsers, (u) -> new ClanDTO(u,uriInfo.getBaseUri()))
+
+        ).build();
+
+//        final Clan clan = cs.globalClans(1,20).getItems().get(0);
+//        return Response.ok(
+//new ClanDTO(clan, uriInfo.getBaseUri())
+//        ).build();
     }
 
 //    @POST
