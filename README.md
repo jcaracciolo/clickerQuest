@@ -135,71 +135,39 @@ The following routes need authentication:
   * Where `yyyy-mm-dd` is the day you are searching for. Example: `2017-05-24`
 
 
-## Current DB schemas
+## Generator notes and installation
 
-```
 
-                      Table users
-    Column    |          Type          |             Modifiers
---------------+------------------------+--------------------------------------
- userid       | bigint                 | not null default 
-              |                        | nextval('users_userid_seq'::regclass)
- username     | character varying(100) |
- password     | character varying(100) |
- profileimage | character varying(100) |
+Source for project organization (option 2):
+	https://stackoverflow.com/questions/21449550/where-do-you-put-client-side-source-files-when-using-grunt-and-maven
 
-Indexes:
-    "users_pkey" PRIMARY KEY, btree (userid)
-    "users_username_key" UNIQUE CONSTRAINT, btree (username)
+AngularJS/Yeoman/Grunt/Bower tutorial:
+	https://www.sitepoint.com/kickstart-your-angularjs-development-with-yeoman-grunt-and-bower/
+
+Migrate Spring MVC from JSP to AngularJS:
+	https://spring.io/blog/2015/08/19/migrating-a-spring-web-mvc-application-from-jsp-to-angularjs
+
+AngularJS controller tutorial:
+	https://docs.angularjs.org/guide/controller
+
+1) Create folder for front-end (AngularJS) on root
+
+	`mkdir UI-generator`
+2) Run generator, bower and grunt
+	
+	```
+	cd UI-generator
+	sudo gem install compass
+	npm -g install grunt-cli
+	sudo npm -g install bower
+	bower install
+	```
+
+    ```
+	npm install -g generator-angular-require-fullstack
+	yo angular-require-fullstack (and then follow instructions)
+    ```
     
- ```
- 
- ```
- 
-                     Table factories
-             
-       Column      |       Type       | Modifiers
- ------------------+------------------+-----------
-  userid           | bigint           | not null
-  type             | integer          | not null
-  amount           | double precision |
-  inputreduction   | double precision |
-  outputmultiplier | double precision |
-  costreduction    | double precision |
-  level            | integer          |
- 
- Indexes:
-     "factories_pkey" PRIMARY KEY, btree (userid, type)
-     
- ```
- 
- ```
- 
-                 Table stockmarket
-     Column    |       Type       | Modifiers
- --------------+------------------+-----------
-  time         | bigint           | not null
-  userid       | bigint           | not null
-  resourcetype | integer          | not null
-  amount       | double precision |
- 
- Indexes:
-     "stockmarket_pkey" PRIMARY KEY, btree ("time", userid, resourcetype)
-     
- ```
- 
- ```
- 
-                   Table wealths
-     Column    |       Type       | Modifiers
- --------------+------------------+-----------
-  userid       | bigint           | not null
-  resourcetype | integer          | not null
-  production   | double precision |
-  storage      | double precision |
-  lastupdated  | bigint           |
- 
- Indexes:
-     "wealths_pkey" PRIMARY KEY, btree (userid, resourcetype)
-     
- ```
+3) Test:
+
+	`grunt serve`
