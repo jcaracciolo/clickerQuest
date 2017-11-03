@@ -1,17 +1,19 @@
-package ar.edu.itba.paw.webapp.DTO;
+package ar.edu.itba.paw.webapp.DTO.users;
 
 import ar.edu.itba.paw.model.ResourceType;
 import ar.edu.itba.paw.model.Wealth;
+import ar.edu.itba.paw.webapp.DTO.MapDTO;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import java.util.Map;
 
 /**
  * Created by juanfra on 08/08/17.
  */
 @XmlRootElement
 public class WealthDTO {
+
+    static String url = "users/%s/wealth";
 
     @XmlElement(name = "storage")
     private MapDTO<ResourceType,Double> storage;

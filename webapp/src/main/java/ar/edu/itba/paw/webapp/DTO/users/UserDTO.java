@@ -1,14 +1,12 @@
-package ar.edu.itba.paw.webapp.DTO;
+package ar.edu.itba.paw.webapp.DTO.users;
 
 import ar.edu.itba.paw.model.User;
-import org.glassfish.jersey.server.Uri;
+import ar.edu.itba.paw.webapp.DTO.clans.ClanDTO;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 import java.net.URI;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Created by juanfra on 08/08/17.
@@ -16,6 +14,8 @@ import java.util.stream.Collectors;
 @XmlRootElement
 @XmlType(name = "User")
 public class UserDTO {
+
+    public static String url = "users/%s";
 
     @XmlElement(name = "id")
     private  long id;
@@ -32,11 +32,14 @@ public class UserDTO {
     @XmlElement(name = "clan_id")
     private Integer clanId;
 
-    @XmlElement(name = "factories")
-    private List<FactoryDTO> factories;
+    @XmlElement(name = "clan_url")
+    private URI clanUrl;
 
-    @XmlElement(name = "wealth")
-    private WealthDTO wealth;
+    @XmlElement(name = "factories_url")
+    private URI factoriesUrl;
+
+    @XmlElement(name = "wealth_url")
+    private URI wealthUrl;
 
     public UserDTO(){}
 
@@ -46,9 +49,10 @@ public class UserDTO {
         profileImageUrl = baseUri.resolve("resources/" + "profile_images/" + user.getProfileImage());
         score = user.getScore();
         clanId = user.getClanId();
-        factories = user.getFactories().stream()
-                    .map(FactoryDTO::new).collect(Collectors.toList());
-        wealth = new WealthDTO(user.getWealth());
+        clanUrl = baseUri.resolve(String.format(ClanDTO.url, clanId));
+        factoriesUrl = baseUri.resolve(String.format(FactoriesDTO.url, user.getId()));
+        wealthUrl = baseUri.resolve(String.format(WealthDTO.url, user.getId()));
+
     }
 
     public long getId() {
@@ -71,11 +75,15 @@ public class UserDTO {
         return clanId;
     }
 
-    public List<FactoryDTO> getFactories() {
-        return factories;
+    public URI getClanUrl() {
+        return clanUrl;
     }
 
-    public WealthDTO getWealth() {
-        return wealth;
+    public URI getFactoriesUrl() {
+        return factoriesUrl;
+    }
+
+    public URI getWealthUrl() {
+        return wealthUrl;
     }
 }

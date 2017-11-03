@@ -1,17 +1,11 @@
-package ar.edu.itba.paw.webapp.DTO;
+package ar.edu.itba.paw.webapp.DTO.clans;
 
-import ar.edu.itba.paw.interfaces.ClanDao;
 import ar.edu.itba.paw.model.clan.Clan;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
-import java.util.stream.Collectors;
 
 /**
  * Created by juanfra on 22/08/17.
@@ -20,8 +14,7 @@ import java.util.stream.Collectors;
 @XmlType(name = "Clan")
 public class ClanDTO {
 
-    @XmlElement(name = "users")
-    private List<UserDTO> users = new ArrayList<>();
+    public static String url = "clans/%s";
 
     @XmlElement(name = "id")
     private int id;
@@ -31,6 +24,9 @@ public class ClanDTO {
 
     @XmlElement(name = "score")
     private double score;
+
+    @XmlElement(name = "users_url")
+    private URI usersURL;
 
     @XmlElement(name = "wins")
     private int wins = 0;
@@ -51,7 +47,7 @@ public class ClanDTO {
         this.battles = clan.getBattles();
         //TODO change this grou_icons
         this.image = baseUri.resolve("resources/" + "group_icons/" + clan.getImage());
-        clan.getUsers().forEach((u) -> users.add(new UserDTO(u,baseUri)));
+        this.usersURL = baseUri.resolve(String.format(ClanUsersDTO.url, clan.getId()));
     }
 
 

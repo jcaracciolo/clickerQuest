@@ -1,6 +1,5 @@
 package ar.edu.itba.paw.webapp.controller;
 
-import ar.edu.itba.paw.interfaces.ClanService;
 import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.model.BuyLimits;
 import ar.edu.itba.paw.model.FactoryType;

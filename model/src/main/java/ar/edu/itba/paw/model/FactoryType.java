@@ -6,7 +6,7 @@ import ar.edu.itba.paw.model.packages.PackageBuilder;
 
 
 public enum FactoryType {
-    STOCK_INVESTMENT_BASE(0,"stock-investment-base"){
+    STOCK_INVESTMENT_BASE(0,"STOCK_INVESTOR"){
         public BaseCost getBaseCost(){
             PackageBuilder<BaseCost> costBuilder = BaseCost.packageBuilder();
             costBuilder.putItem(ResourceType.MONEY,1000D);
@@ -18,7 +18,7 @@ public enum FactoryType {
             return recipeBuilder.buildPackage();
         }},
 
-    PEOPLE_RECRUITING_BASE(1,"people-recruiting-base"){
+    PEOPLE_RECRUITING_BASE(1,"PEOPLE_RECRUITER"){
         public BaseCost getBaseCost(){
             PackageBuilder<BaseCost> costBuilder = BaseCost.packageBuilder();
             costBuilder.putItem(ResourceType.MONEY,200D);
@@ -30,7 +30,7 @@ public enum FactoryType {
             return recipeBuilder.buildPackage();
         }},
 
-    JUNK_COLLECTOR_BASE(2,"junk-collector-base"){
+    JUNK_COLLECTOR_BASE(2,"JUNK_COLLECTOR"){
         public BaseCost getBaseCost(){
             PackageBuilder<BaseCost> costBuilder = BaseCost.packageBuilder();
             costBuilder.putItem(ResourceType.PEOPLE,5D);
@@ -44,7 +44,7 @@ public enum FactoryType {
             return recipeBuilder.buildPackage();
         }},
 
-    METAL_SEPARATOR_BASE(3,"metal-separator-base"){
+    METAL_SEPARATOR_BASE(3,"METAL_SEPARATOR"){
         public BaseCost getBaseCost(){
             PackageBuilder<BaseCost> costBuilder = BaseCost.packageBuilder();
             costBuilder.putItem(ResourceType.PEOPLE,2D);
@@ -58,7 +58,7 @@ public enum FactoryType {
             return recipeBuilder.buildPackage();
         }},
 
-    RUBBER_SHREDDER_BASE(4,"rubber-shredder-base"){
+    RUBBER_SHREDDER_BASE(4,"RUBBER_SHREDDER"){
         public BaseCost getBaseCost(){
             PackageBuilder<BaseCost> costBuilder = BaseCost.packageBuilder();
             costBuilder.putItem(ResourceType.PEOPLE,2D);
@@ -72,7 +72,7 @@ public enum FactoryType {
             return recipeBuilder.buildPackage();
         }},
 
-    CABLE_MAKER_BASE(5,"cable-maker-base"){
+    CABLE_MAKER_BASE(5,"CABLE_MAKER"){
         public BaseCost getBaseCost(){
             PackageBuilder<BaseCost> costBuilder = BaseCost.packageBuilder();
             costBuilder.putItem(ResourceType.PEOPLE,5D);
@@ -87,7 +87,7 @@ public enum FactoryType {
             return recipeBuilder.buildPackage();
         }},
 
-    BOILER_BASE(6,"boiler-base"){
+    BOILER_BASE(6,"BOILER"){
         public BaseCost getBaseCost(){
             PackageBuilder<BaseCost> costBuilder = BaseCost.packageBuilder();
             costBuilder.putItem(ResourceType.PEOPLE,20D);
@@ -102,7 +102,7 @@ public enum FactoryType {
             return recipeBuilder.buildPackage();
         }},
 
-    CIRCUIT_MAKER_BASE(7,"circuit-maker-base"){
+    CIRCUIT_MAKER_BASE(7,"CIRCUIT_MAKER"){
         public BaseCost getBaseCost(){
             PackageBuilder<BaseCost> costBuilder = BaseCost.packageBuilder();
             costBuilder.putItem(ResourceType.PEOPLE,250D);

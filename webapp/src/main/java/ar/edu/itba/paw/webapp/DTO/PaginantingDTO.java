@@ -1,7 +1,8 @@
 package ar.edu.itba.paw.webapp.DTO;
 
-import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.packages.Paginating;
+import ar.edu.itba.paw.webapp.DTO.clans.ClanDTO;
+import ar.edu.itba.paw.webapp.DTO.users.UserDTO;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
