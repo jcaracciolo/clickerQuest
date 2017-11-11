@@ -7,6 +7,10 @@ define([], function() {
             '/': {
                 templateUrl: '/views/home.html',
                 controller: 'SpicyController'
+            },
+            '/game': {
+                templateUrl: '/views/game/mainScreenCtrl.html',
+                controller: 'mainScreenCtrl'
             }
             /* ===== yeoman hook ===== */
             /* Do not remove these commented lines! Needed for auto-generation */
