@@ -17,6 +17,27 @@ define(['clickerQuest'], function(clickerQuest) {
         {name:'Plastic', id:'1'},
         {name:'Power', id:'0'}
       ];
+
+      $scope.activeFactories = [
+        {name:'Stock Investment',
+          id:'0',
+          amount:'XXX',
+          consuming:[ ],
+          producing:[ {name:'Money', id:'3', cant:'987654321'} ]
+        },
+        {name:'People Recruiting Base',
+          id:'1',
+          amount:'XXX',
+          consuming:[ {name:'Circuits', id:'12', cant:'123456789'} ],
+          producing:[ {name:'Money', id:'3', cant:'987654321'} ]
+        },
+        {name:'Stock Investment',
+          id:'0',
+          amount:'XXX',
+          consuming:[ {name:'Circuits', id:'12', cant:'123456789'} ],
+          producing:[ {name:'Money', id:'3', cant:'987654321'} ]
+        }
+      ];
     });
 
 });
