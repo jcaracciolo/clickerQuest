@@ -46,10 +46,11 @@
   <div class="scrollable-y col no-padding s7">
 
     <div class="row factory-row">
-      <div ng-repeat="fact in activeFactories">
+      <div ng-repeat="fact in factories">
 
-        <!-- Factory Card -->
-        <div class="col s3 factory-main">
+        <div ng-if="fact.cantActive != 0">
+          <!-- Factory Card -->
+          <div class="col s3 factory-main">
           <div class="card factory-central-card">
             <div class="card-content">
               <div class="center-card-title">
@@ -58,9 +59,9 @@
 
               <!-- Consuming Resources -->
               <div class="factory-consuming">
-                <div ng-if="fact.consuming.length != 0">
+                <div ng-if="fact.recipe.input.length != 0">
                   <p>CONSUMING:</p>
-                  <div ng-repeat="res in fact.consuming">
+                  <div ng-repeat="res in fact.recipe.input">
                     <div class="row no-margins">
                       <div class="col no-padding">
                         <img class="resource-icon tooltipped" data-position="top" data-delay="50"
@@ -68,7 +69,7 @@
                       </div>
                       <div class="col">
                         <p>
-                          {{res.cant}}/s
+                          {{res.cant * fact.cantActive}}/s
                           <!--<fmt:formatNumber pattern="#.##/s " value="${inputMap.get(res)}"/>-->
                           <!--<script>document.write(abbreviateNumber(parseFloat(${inputMap.get(res)}), true)+"/s");</script>-->
                         </p>
@@ -89,9 +90,9 @@
 
               <!-- Producing Resources -->
               <div class="factory-producing">
-                <div ng-if="fact.producing.length != 0">
+                <div ng-if="fact.recipe.output.length != 0">
                   <p>PRODUCING:</p>
-                  <div ng-repeat="res in fact.producing">
+                  <div ng-repeat="res in fact.recipe.output">
                     <div class="row no-margins">
                       <div class="col no-padding">
                         <img class="resource-icon tooltipped" data-position="top" data-delay="50"
@@ -99,7 +100,7 @@
                       </div>
                       <div class="col">
                         <p>
-                          {{res.cant}}/s
+                          {{res.cant * fact.cantActive}}/s
                           <!--<fmt:formatNumber pattern="#.##/s " value="${inputMap.get(res)}"/>-->
                           <!--<script>document.write(abbreviateNumber(parseFloat(${inputMap.get(res)}), true)+"/s");</script>-->
                         </p>
@@ -110,6 +111,7 @@
               </div>
             </div>
           </div>
+        </div>
         </div>
       </div>
       <!--<c:forEach items="${factories}" var="factory" varStatus="loop">-->
@@ -180,157 +182,165 @@
   <div class="col no-padding s3">
     <div class="scrollable-y card darken-1">
       <div class="card-content white-text">
-        <span class="card-title"><spring:message code="game.factories"/></span>
+        <span class="card-title">FACTORIES</span>
         <div class="divider"></div>
         <div class="right-description">
-          <div><spring:message code="game.factory"/></div>
-          <div><spring:message code="game.recipe"/></div>
-          <div><spring:message code="game.upgrade"/></div>
+          <div>FACTORY</div>
+          <div>RECIPE</div>
+          <div>UPGRADE</div>
         </div>
-        <c:forEach items="${factories}" var="factory" varStatus="loop">
+
+        <div ng-repeat="fact in factories">
           <div class="divider"></div>
+          <!-- BEGINING OF FACTORY CARD -->
           <div class="section">
-            <!-- BEGINING OF FACTORY CARD -->
             <div class="factory-card-container">
               <div class="row factory-card">
+                <!-- Factory Column -->
                 <div class="col s4 buyFactorySection">
                   <div class="card-image factory-icon">
-                    <p class="center-align"><spring:message code="${factory.type.nameCode}"/></p>
-                    <img src="<c:url value="/resources/factory_images/${factory.getImage()}"/>" alt="factory_icon"/>
+                    <p class="center-align">{{fact.name}}</p>
+                    <img src="../../images/factory_images/{{fact.id}}.jpg" alt="factory_icon"/>
                   </div>
-                  <p><spring:message code="game.cost"/></p>
-                  <c:set var="factoryCost" value="${factory.getCost()}"/>
+                  <p>COST</p>
                   <div>
-                    <c:forEach items="${factoryCost.resources}" var="res">
-                      <c:set var="costMap" value="${factoryCost.getCost()}"/>
+                    <div ng-repeat="res in fact.cost">
                       <div class="row no-margins">
                         <div class="col no-padding">
                           <img class="resource-icon tooltipped" data-position="top" data-delay="50"
-                               data-tooltip='<spring:message code="${res.nameCode}"/>' src="<c:url value="/resources/resources_icon/${res.id}.png"/>"/>
+                               data-tooltip='RESNAME' src="../../images/resources_icon/{{res.id}}.png"/>
                         </div>
                         <div class="col">
                           <p>
-                            <%--<fmt:formatNumber pattern="#.##" value="${costMap.get(res)}"/>--%>
-                            <script>document.write(abbreviateNumber(parseFloat(${costMap.get(res)}), false));</script>
+                            {{res.cant}}
+                            <!--<fmt:formatNumber pattern="#.##" value="${costMap.get(res)}"/>-->
+                            <!--<script>document.write(abbreviateNumber(parseFloat(${costMap.get(res)}), false));</script>-->
                           </p>
                         </div>
                       </div>
-                    </c:forEach>
+                    </div>
                   </div>
                 </div>
+                <!-- Recipe Column -->
                 <div class="col s4">
-                  <c:set var="factoriesProduction" value="${factory.recipe}"/>
-                  <c:set var="inputMap" value="${factoriesProduction.getInputs()}"/>
-                  <c:forEach items="${inputMap.keySet()}" var="res">
+                  <div ng-repeat="res in fact.recipe.input">
                     <div class="row no-margins">
                       <div class="col no-padding">
                         <img class="resource-icon tooltipped" data-position="top" data-delay="50"
-                             data-tooltip='<spring:message code="${res.nameCode}"/>' src="<c:url value="/resources/resources_icon/${res.id}.png"/>"/>
+                             data-tooltip='RESNAME' src="../../images/resources_icon/{{res.id}}.png"/>
                       </div>
                       <div class="col no-padding">
                         <p>
-                          <%--<fmt:formatNumber pattern="#.##/s " value="${inputMap.get(res)}"/>--%>
-                          <script>document.write(abbreviateNumber(${inputMap.get(res)}, true) + "/s");</script>
+                          {{res.cant}}/s
+                          <!--<fmt:formatNumber pattern="#.##/s " value="${inputMap.get(res)}"/>-->
+                          <!--<script>document.write(abbreviateNumber(${inputMap.get(res)}, true) + "/s");</script>-->
                         </p>
                       </div>
                     </div>
-                  </c:forEach>
-                  <div class="card-image col s12">
-                    <img src="<c:url value="/resources/arrow_ingredients.png"/>" alt="embudo"/>
                   </div>
-                  <c:set var="outputMap" value="${factoriesProduction.getOutputs()}"/>
-                  <c:forEach items="${outputMap.keySet()}" var="res">
+                  <div class="card-image col s12">
+                    <img src="../../images/arrow_ingredients.png" alt="embudo"/>
+                  </div>
+                  <div ng-repeat="res in fact.recipe.output">
                     <div class="row no-margins">
                       <div class="col no-padding">
                         <img class="resource-icon tooltipped" data-position="top" data-delay="50"
-                             data-tooltip='<spring:message code="${res.nameCode}"/>' src="<c:url value="/resources/resources_icon/${res.id}.png"/>"/>
+                             data-tooltip='RESNAME' src="../../images/resources_icon/{{res.id}}.png"/>
                       </div>
                       <div class="col no-padding">
                         <p>
-                          <%--<fmt:formatNumber pattern="#.##/s " value="${outputMap.get(res)}"/>--%>
-                          <script>document.write(abbreviateNumber(${outputMap.get(res)}, true) + "/s");</script>
+                          {{res.cant}}/s
+                          <!--<fmt:formatNumber pattern="#.##/s " value="${inputMap.get(res)}"/>-->
+                          <!--<script>document.write(abbreviateNumber(${inputMap.get(res)}, true) + "/s");</script>-->
                         </p>
                       </div>
                     </div>
-                  </c:forEach>
+                  </div>
                 </div>
+                <!-- Upgrade Column (NEED FIX) -->
                 <div class="col s4 button-container">
                   <div id="upgradeDisabler${factory.getType()}" class="box black upgradeDisability canBuy"></div>
-                  <c:if test="${factory.amount != 0}">
+                  <div ng-if="fact.cantActive != 0">
                     <div class="upgrade-button-container">
-                      <c:choose>
-                        <c:when test='${factory.getNextUpgrade().getType().toString().equals("OUTPUT_INCREASE")}'>
+                      <div ng-switch="fact.upgrade.type">
+                        <div ng-switch-when="0">
                           <button type="button" id="upgrade${factory.getType()}" data-factoryid="${factory.getType().getId()}"
                                   class="waves-effect waves-light upgradeButton btn ${factory.getNextUpgrade().getType()} tooltipped"
                                   data-position="down" data-delay="50"
-                                  data-tooltip='<spring:message code="upgrade.outputIncrease"/>'>
-                            <div class="card-image"><img class="upgradeImage"
-                                                         src="<c:url value='/resources/upgrade_icons/increase.png'/>" alt="upgrade_icon"/>
-                        </c:when>
-                        <c:when test='${factory.getNextUpgrade().getType().toString().equals("INPUT_REDUCTION")}'>
+                                  data-tooltip='OUTPUR INCREASE'>
+                            <div class="card-image">
+                              <img class="upgradeImage" src="../../images/upgrade_icons/increase.png" alt="upgrade_icon"/>
+                            </div>
+                          </button>
+                        </div>
+                        <div ng-switch-when="1">
                           <button type="button" id="upgrade${factory.getType()}" data-factoryid="${factory.getType().getId()}"
                                   class="waves-effect waves-light upgradeButton btn ${factory.getNextUpgrade().getType()} tooltipped"
                                   data-position="down" data-delay="50"
-                                  data-tooltip='<spring:message code="upgrade.inputReduction"/>'>
-                            <div class="card-image"><img class="upgradeImage"
-                                                         src="<c:url value='/resources/upgrade_icons/reduce.png'/>" alt="upgrade_icon"/>
-                        </c:when>
-                        <c:otherwise>
+                                  data-tooltip='INPUT REDUCTION'>
+                            <div class="card-image">
+                              <img class="upgradeImage" src="../../images/upgrade_icons/reduce.png" alt="upgrade_icon"/>
+                            </div>
+                          </button>
+                        </div>
+                        <div ng-switch-otherwise>
                           <button type="button" id="upgrade${factory.getType()}" data-factoryid="${factory.getType().getId()}"
                                   class="waves-effect waves-light upgradeButton btn ${factory.getNextUpgrade().getType()} tooltipped"
                                   data-position="down" data-delay="50"
-                                  data-tooltip='<spring:message code="upgrade.costReduction"/>'>
-                            <div class="card-image"><img class="upgradeImage"
-                                                         src="<c:url value='/resources/upgrade_icons/cost_reduction.png'/>" alt="upgrade_icon"/>
-                        </c:otherwise>
-                      </c:choose>
+                                  data-tooltip='COST REDUCTION'>
+                            <div class="card-image">
+                              <img class="upgradeImage" src="../../images/upgrade_icons/cost_reduction.png'/>" alt="upgrade_icon"/>
+                            </div>
+                          </button>
+                            </div>
+                      </div>
                     </div>
                     <div class="row no-margins">
                       <div class="col no-padding">
                         <img class="resource-icon tooltipped" data-position="top" data-delay="50"
                              data-tooltip='<spring:message code="money-type"/>'
-                             src="<c:url value="/resources/resources_icon/3.png"/>"/>
+                             src="../../images/resources_icon/3.png"/>
                       </div>
                       <div class="col">
                         <p class="no-margins">
-                          <%--<fmt:formatNumber pattern="#" value="${factory.getNextUpgrade().cost}"/>--%>
-                          <script>document.write(abbreviateNumber(parseFloat(${factory.getNextUpgrade().cost}), false));</script>
+                          29.99
+                          <!--<fmt:formatNumber pattern="#" value="${factory.getNextUpgrade().cost}"/>-->
+                          <!--<script>document.write(abbreviateNumber(parseFloat(${factory.getNextUpgrade().cost}), false));</script>-->
                         </p>
                       </div>
                     </div>
-                    </button>
-                </div>
-                </c:if>
+                  </div>
+              </div>
               </div>
             </div>
           </div>
+          <!-- Buy Buttons-->
           <div class="allBuyButtonsContainer">
             <div class="buyButtonsContainer">
               <div>
                 <div id="factory1Disabler${factory.getType()}" data-position="top" data-delay="50"
-                     data-tooltip="<spring:message code='game.cantBuy'/>" class="tooltipped box black buy1Disability canBuy"></div>
-                <img id="buyOne${factory.getType()}" data-amount="1" data-factoryid="${factory.getType().getId()}" class="buyFactory" src="<c:url value="/resources/${buttonsFolder}/buy1.png"/>"/>
+                     data-tooltip="CANTBUY" class="tooltipped box black buy1Disability canBuy"></div>
+                <img id="buyOne${factory.getType()}" data-amount="1" data-factoryid="${factory.getType().getId()}" class="buyFactory" src="../../images/buttons/buy1.png"/>
               </div>
               <div>
                 <div id="factory10Disabler${factory.getType()}"data-position="top" data-delay="50"
                      data-tooltip="<spring:message code='game.cantBuy'/>" class="tooltipped box black buy10Disability canBuy"></div>
-                <img id="buyTen${factory.getType()}" data-amount="10" data-factoryid="${factory.getType().getId()}" class="buyFactory" src="<c:url value="/resources/${buttonsFolder}/buy10.png"/>"/>
+                <img id="buyTen${factory.getType()}" data-amount="10" data-factoryid="${factory.getType().getId()}" class="buyFactory" src="../../images/buttons/buy10.png"/>
               </div>
               <div>
                 <div id="factory100Disabler${factory.getType()}" data-position="top" data-delay="50"
                      data-tooltip="<spring:message code='game.cantBuy'/>" class="tooltipped box black buy100Disability canBuy"></div>
-                <img id="buyHundred${factory.getType()}" data-amount="100" data-factoryid="${factory.getType().getId()}" class="buyFactory" src="<c:url value="/resources/${buttonsFolder}/buy100.png"/>"/>
+                <img id="buyHundred${factory.getType()}" data-amount="100" data-factoryid="${factory.getType().getId()}" class="buyFactory" src="../../images/buttons/buy100.png"/>
               </div>
             </div>
             <div id="maxButtonContainer">
               <div id="factoryMaxDisabler${factory.getType()}" class="box black buyMaxDisability canBuy"></div>
-              <img id="buyMax${factory.getType()}" data-amount="max" data-factoryid="${factory.getType().getId()}" class="buyFactory" src="<c:url value="/resources/bigButton.png"/>"/>
-              <p id="maxBuy${factory.type.id}" data-refersto="buyMax${factory.getType()}" class="maxText"><spring:message code="game.maximum"/></p>
+              <img id="buyMax${factory.getType()}" data-amount="max" data-factoryid="${factory.getType().getId()}" class="buyFactory" src="../../images/bigButton.png"/>
+              <p id="maxBuy${factory.type.id}" data-refersto="buyMax${factory.getType()}" class="maxText">MAX</p>
             </div>
           </div>
           <!-- END OF FACTORY CARD -->
-      </div>
-      </c:forEach>
+        </div>
       <div class="divider last"></div>
     </div>
   </div>
