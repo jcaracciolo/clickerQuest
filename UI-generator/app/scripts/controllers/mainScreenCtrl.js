@@ -31,11 +31,12 @@ define(['clickerQuest'], function(clickerQuest) {
           consuming:[ {name:'Circuits', id:'12', cant:'123456789'} ],
           producing:[ {name:'Money', id:'3', cant:'987654321'} ]
         },
-        {name:'Stock Investment',
-          id:'0',
+        {name:'Junk Collector',
+          id:'2',
           amount:'XXX',
-          consuming:[ {name:'Circuits', id:'12', cant:'123456789'} ],
-          producing:[ {name:'Money', id:'3', cant:'987654321'} ]
+          consuming:[ {name:'Gold', id:'2', cant:'123456789'} ],
+          producing:[ {name:'Money', id:'3', cant:'987654321'},
+                      {name:'Power', id:'0', cant:'987654321'} ]
         }
       ];
     });
