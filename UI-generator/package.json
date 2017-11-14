@@ -1,5 +1,5 @@
 {
-  "name": "clickerQuest",
+  "name": "clickerquest",
   "version": "0.0.0",
   "dependencies": {
     "karma": "^1.7.1"
