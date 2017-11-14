@@ -48,8 +48,10 @@ public class UserDTO {
         username = user.getUsername();
         profileImageUrl = baseUri.resolve("resources/" + "profile_images/" + user.getProfileImage());
         score = user.getScore();
-        clanId = user.getClanId();
-        clanUrl = baseUri.resolve(String.format(ClanDTO.url, clanId));
+        if(user.getClanId() != null) {
+            clanId = user.getClanId();
+            clanUrl = baseUri.resolve(String.format(ClanDTO.url, clanId));
+        }
         factoriesUrl = baseUri.resolve(String.format(FactoriesDTO.url, user.getId()));
         wealthUrl = baseUri.resolve(String.format(WealthDTO.url, user.getId()));
 

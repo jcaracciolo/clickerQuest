@@ -19,7 +19,6 @@ import javax.ws.rs.core.UriInfo;
 @Component
 public class MarketController {
 
-    @Autowired
     @Context
     private UriInfo uriInfo;
 
