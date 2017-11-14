@@ -15,6 +15,8 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
 @Path("market")
 @Component
@@ -28,27 +30,30 @@ public class MarketController {
     private int userID = 1;
 
     @GET
-    @Path("/")
+    @Path("/prices")
     @Produces(value = {MediaType.APPLICATION_JSON,})
     public Response listPrices() {
         return Response.ok(new MarketDTO()).build();
 
     }
 
+    private static class MarketQuery {
+        @XmlElement(name = "resource_type")
+        public Integer resourceType;
+        public Double amount;
+    }
+
     //Money can't be purchased
     @POST
     @Path("/purchase")
     @Consumes(value = {MediaType.APPLICATION_JSON,})
-    public Response purchaseResource(
-            @FormParam("resource_type") final Integer resourceType,
-            @FormParam("amount") final Double amount
-    ) {
-        if(resourceType == null || amount == null) return Response.status(Response.Status.BAD_REQUEST).build();
+    public Response purchaseResource(MarketQuery query) {
+        if(query == null || query.resourceType == null || query.amount == null) return Response.status(Response.Status.BAD_REQUEST).build();
 
         if(us.findById(userID) == null) return Response.status(Response.Status.UNAUTHORIZED).build();
-        if(amount<0 || ResourceType.fromId(resourceType) == null) return Response.status(Response.Status.BAD_REQUEST).build();
+        if(query.amount<0 || ResourceType.fromId(query.resourceType) == null) return Response.status(Response.Status.BAD_REQUEST).build();
 
-        if (us.purchaseResourceType(userID,ResourceType.fromId(resourceType),amount)) {
+        if (us.purchaseResourceType(userID,ResourceType.fromId(query.resourceType),query.amount)) {
             return Response.ok().build();
         } else {
             return Response.status(Response.Status.CONFLICT).build();
@@ -59,11 +64,10 @@ public class MarketController {
     @POST
     @Path("/sell")
     @Consumes(value = {MediaType.APPLICATION_JSON,})
-    public Response sellResource(
-            @FormParam("resource_type") final Integer resourceType,
-            @FormParam("amount") final Double amount
-    ) {
-        if(resourceType == null || amount == null) return Response.status(Response.Status.BAD_REQUEST).build();
+    public Response sellResource(MarketQuery query) {
+        if(query == null || query.resourceType == null || query.amount == null) return Response.status(Response.Status.BAD_REQUEST).build();
+        Double amount = query.amount;
+        Integer resourceType = query.resourceType;
 
         if(us.findById(userID) == null) return Response.status(Response.Status.UNAUTHORIZED).build();
         if(amount<0 || ResourceType.fromId(resourceType) == null) return Response.status(Response.Status.BAD_REQUEST).build();

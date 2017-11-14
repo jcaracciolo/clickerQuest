@@ -10,7 +10,6 @@ import ar.edu.itba.paw.model.packages.BuyLimits;
 import ar.edu.itba.paw.model.packages.Paginating;
 import ar.edu.itba.paw.webapp.DTO.PaginantingDTO;
 import ar.edu.itba.paw.webapp.DTO.factories.BuyLimitsDTO;
-import ar.edu.itba.paw.webapp.DTO.post.SearchQuery;
 import ar.edu.itba.paw.webapp.DTO.search.SearchDTO;
 import ar.edu.itba.paw.webapp.DTO.search.SearchResultDTO;
 import ar.edu.itba.paw.webapp.DTO.users.FactoriesDTO;
@@ -26,6 +25,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import javax.xml.bind.annotation.XmlElement;
 import java.util.Collection;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -61,17 +61,20 @@ public class FactoryController {
         return Response.status(Response.Status.NOT_FOUND).build();
     }
 
+    private static class PurchaseFactoryQuery {
+        Integer factoryId;
+        Integer amount;
+    }
+
     @POST
     @Consumes(value = {MediaType.APPLICATION_JSON,})
     @Path("/{factoryId}/purchase")
-    public Response purchaseFactory(
-            @PathParam("factoryId") final int factoryId,
-            @FormParam("amount") final int amount) {
+    public Response purchaseFactory(PurchaseFactoryQuery query) {
 
-        if(amount<=0) return Response.status(Response.Status.BAD_REQUEST).build();
+        if(query==null || query.amount<=0) return Response.status(Response.Status.BAD_REQUEST).build();
 
-        if (FactoryType.fromId(factoryId) != null) {
-            if(us.purchaseFactory(userID,FactoryType.fromId(factoryId),amount)) {
+        if (FactoryType.fromId(query.factoryId) != null) {
+            if(us.purchaseFactory(userID,FactoryType.fromId(query.factoryId),query.amount)) {
                 Response.ok();
             } else {
                 Response.status(Response.Status.CONFLICT).build();
@@ -80,12 +83,18 @@ public class FactoryController {
         return Response.status(Response.Status.NOT_FOUND).build();
     }
 
+    private static class UpgradeFactoryQuery {
+        Integer factoryId;
+    }
+
     @POST
     @Consumes(value = {MediaType.APPLICATION_JSON,})
     @Path("/{factoryId}/upgrade")
-    public Response upgradeFactory(@PathParam("factoryId") final int factoryId) {
-        if (FactoryType.fromId(factoryId) != null) {
-            if (us.purchaseUpgrade(userID, FactoryType.fromId(factoryId))) {
+    public Response upgradeFactory(UpgradeFactoryQuery query) {
+        if(query==null) return Response.status(Response.Status.BAD_REQUEST).build();
+
+        if (FactoryType.fromId(query.factoryId) != null) {
+            if (us.purchaseUpgrade(userID, FactoryType.fromId(query.factoryId))) {
                 Response.ok();
             } else {
                 Response.status(Response.Status.CONFLICT).build();

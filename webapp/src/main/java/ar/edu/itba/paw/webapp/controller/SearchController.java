@@ -7,7 +7,6 @@ import ar.edu.itba.paw.model.packages.BuyLimits;
 import ar.edu.itba.paw.model.packages.Paginating;
 import ar.edu.itba.paw.webapp.DTO.PaginantingDTO;
 import ar.edu.itba.paw.webapp.DTO.factories.BuyLimitsDTO;
-import ar.edu.itba.paw.webapp.DTO.post.SearchQuery;
 import ar.edu.itba.paw.webapp.DTO.search.SearchDTO;
 import ar.edu.itba.paw.webapp.DTO.search.SearchResultDTO;
 import ar.edu.itba.paw.webapp.DTO.search.SearchResultType;
@@ -21,6 +20,8 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -42,23 +43,20 @@ public class SearchController {
     @Context
     private UriInfo uriInfo;
 
-    @POST
-    @Consumes(value = {MediaType.APPLICATION_JSON,})
+    @GET
     @Produces(value = {MediaType.APPLICATION_JSON,})
     @Path("/")
-    public Response searchQuery(final SearchQuery query) {
-        if (query != null) {
-            Collection<User> users = us.findByKeyword(query.query);
-            Collection<String> clans = cs.findByKeyword(query.query);
+    public Response searchQuery(@QueryParam("query") final String query) {
+        if (query == null || query.equals("")) return Response.status(Response.Status.BAD_REQUEST).build();
 
-            Collection<SearchResultDTO> results = Stream.concat(
-                    users.stream().map((u) -> new SearchResultDTO(USER, u.getUsername())),
-                    clans.stream().map((c) -> new SearchResultDTO(CLAN, c))
-            ).collect(Collectors.toList());
+        Collection<User> users = us.findByKeyword(query);
+        Collection<String> clans = cs.findByKeyword(query);
 
-            return Response.ok(new SearchDTO(results)).build();
-        } else {
-            return Response.status(Response.Status.BAD_REQUEST).build();
-        }
+        Collection<SearchResultDTO> results = Stream.concat(
+                users.stream().map((u) -> new SearchResultDTO(USER, u.getUsername())),
+                clans.stream().map((c) -> new SearchResultDTO(CLAN, c))
+        ).collect(Collectors.toList());
+
+        return Response.ok(new SearchDTO(results)).build();
     }
 }

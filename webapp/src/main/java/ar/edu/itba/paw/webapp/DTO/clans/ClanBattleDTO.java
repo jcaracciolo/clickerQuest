@@ -22,10 +22,10 @@ public class ClanBattleDTO {
     private URI opposingClanURL;
 
     @XmlElement(name = "initial_score")
-    private double initialScore;
+    private Double initialScore;
 
     @XmlElement(name = "opponent_initial_score")
-    private double opponentInitialScore;
+    private Double opponentInitialScore;
 
     @XmlElement(name = "opponent_clan_battl_url")
     private URI opponentClanBattleURL;
