@@ -56,32 +56,4 @@ public class FactoryDTO {
         buyLimitsURL = baseUri.resolve(String.format(BuyLimitsDTO.url, factory.getType().getId()));
 
     }
-
-    public String getType() {
-        return type;
-    }
-
-    public double getAmount() {
-        return amount;
-    }
-
-    public double getInputReduction() {
-        return inputReduction;
-    }
-
-    public double getOutputMultiplier() {
-        return outputMultiplier;
-    }
-
-    public double getCostReduction() {
-        return costReduction;
-    }
-
-    public int getLevel() {
-        return level;
-    }
-
-    public Integer getTypeID() {
-        return typeID;
-    }
 }

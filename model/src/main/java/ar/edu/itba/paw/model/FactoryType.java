@@ -149,7 +149,7 @@ public enum FactoryType {
                 return f;
             }
         }
-        throw new IllegalArgumentException("id does not represent any FactoryType");
+        return null;
     }
 
 }

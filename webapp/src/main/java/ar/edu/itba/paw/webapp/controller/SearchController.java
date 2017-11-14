@@ -47,7 +47,7 @@ public class SearchController {
     @Produces(value = {MediaType.APPLICATION_JSON,})
     @Path("/")
     public Response searchQuery(final SearchQuery query) {
-        if (query.query != null) {
+        if (query != null) {
             Collection<User> users = us.findByKeyword(query.query);
             Collection<String> clans = cs.findByKeyword(query.query);
 

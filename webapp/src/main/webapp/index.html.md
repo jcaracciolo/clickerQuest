@@ -4,12 +4,8 @@ title: API Reference
 language_tabs: # must be one of https://git.io/vQNgJ
   - javascript
   - shell
-  - ruby
-  - python
-
 
 toc_footers:
-  - <a href='#'>Sign Up for a Developer Key</a>
   - <a href='https://github.com/lord/slate'>Documentation Powered by Slate</a>
 
 includes:
@@ -111,23 +107,9 @@ This endpoint retrieves all kittens.
 Parameter | Default | Description
 --------- | ------- | -----------
 page | 1 | Number of page of user to be provided.
-itemsPerPage | 20 | Number of users per page.
+pageSize | 20 | Number of users per page.
 
-## Get a Specific Kitten
-
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get(2)
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.get(2)
-```
+## Get a Specific User
 
 ```shell
 curl "http://example.com/api/kittens/2"
@@ -145,17 +127,18 @@ let max = api.kittens.get(2);
 
 ```json
 {
-  "id": 2,
-  "name": "Max",
-  "breed": "unknown",
-  "fluffiness": 5,
-  "cuteness": 10
+    "id": 1,
+    "username": "Wololo",
+    "profile_image_url": "http://localhost:8080/resources/profile_images/10.jpg",
+    "score": 86035162.84607725,
+    "clan_id": 20,
+    "clan_url": "http://localhost:8080/clans/20",
+    "factories_url": "http://localhost:8080/users/1/factories",
+    "wealth_url": "http://localhost:8080/users/1/wealth"
 }
 ```
 
-This endpoint retrieves a specific kitten.
-
-<aside class="warning">Inside HTML code blocks like this one, you can't use Markdown, so use <code>&lt;code&gt;</code> blocks to denote code.</aside>
+This endpoint retrieves a specific user.
 
 ### HTTP Request
 

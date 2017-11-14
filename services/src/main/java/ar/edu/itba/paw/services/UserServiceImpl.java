@@ -254,6 +254,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean purchaseResourceType(long userid, ResourceType resourceType,double amount){
+        if(resourceType == ResourceType.MONEY) {
+            return false;
+        }
         Wealth wealth = getUserWealth(userid);
         double cost = (resourceType.getPrice()) * amount;
         if( wealth.getStorage().getValue(ResourceType.MONEY) <  cost ) {

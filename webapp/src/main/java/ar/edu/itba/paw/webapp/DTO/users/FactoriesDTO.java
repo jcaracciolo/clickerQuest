@@ -22,8 +22,4 @@ public class FactoriesDTO {
     public FactoriesDTO(Collection<Factory> factories, URI baseUri) {
         this.factories = factories.stream().map(f -> new FactoryDTO(f,baseUri)).collect(Collectors.toList());
     }
-
-    public List<FactoryDTO> getFactories() {
-        return factories;
-    }
 }

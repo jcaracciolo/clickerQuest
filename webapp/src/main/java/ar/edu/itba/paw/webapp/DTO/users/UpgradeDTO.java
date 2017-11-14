@@ -9,6 +9,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class UpgradeDTO {
     static String url = "users/%s/factories/%s/upgrade";
 
+    @XmlElement(name = "type")
+    private Integer type;
+
     @XmlElement(name = "factory_type_id")
     private Integer factoryTypeID;
 
@@ -32,25 +35,6 @@ public class UpgradeDTO {
         level = upgrade.getLevel();
         description = upgrade.getDescription();
         cost = upgrade.getCost();
-    }
-
-    public Integer getFactoryTypeID() {
-        return factoryTypeID;
-    }
-
-    public String getFactoryType() {
-        return factoryType;
-    }
-
-    public long getLevel() {
-        return level;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public double getCost() {
-        return cost;
+        type = upgrade.getType().ordinal();
     }
 }

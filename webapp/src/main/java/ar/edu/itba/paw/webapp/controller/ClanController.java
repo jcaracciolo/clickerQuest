@@ -1,18 +1,19 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.ClanService;
+import ar.edu.itba.paw.interfaces.UserService;
+import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.clan.Clan;
+import ar.edu.itba.paw.model.clan.ClanBattle;
 import ar.edu.itba.paw.model.packages.Paginating;
 import ar.edu.itba.paw.webapp.DTO.PaginantingDTO;
+import ar.edu.itba.paw.webapp.DTO.clans.ClanBattleDTO;
 import ar.edu.itba.paw.webapp.DTO.clans.ClanDTO;
 import ar.edu.itba.paw.webapp.DTO.clans.ClanUsersDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -26,18 +27,33 @@ import javax.ws.rs.core.UriInfo;
 public class ClanController {
 
     @Autowired
+    private UserService us;
+    @Autowired
     private ClanService cs;
     @Context
     private UriInfo uriInfo;
 
+    static int userID = 1;
+
     @GET
     @Path("/all")
     @Produces(value = {MediaType.APPLICATION_JSON,})
-    public Response listClans() {
-        final Paginating<Clan> allUsers = cs.globalClans(1, 20);
-        return Response.ok(
-                new PaginantingDTO<>(allUsers, (c) -> new ClanDTO(c, uriInfo.getBaseUri()))
-        ).build();
+    public Response listClans(
+            @QueryParam("page") @DefaultValue("1") final int page,
+            @QueryParam("pageSize") @DefaultValue("20") final int pageSize) {
+
+        if(page<=0 || pageSize<=0) {
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+
+        final Paginating<Clan> allClans = cs.globalClans(page, pageSize);
+        if(allClans!=null) {
+            return Response.ok(
+                    new PaginantingDTO<>(allClans, (c) -> new ClanDTO(c, cs.getClanBattle(c.getId()), uriInfo.getBaseUri()))
+            ).build();
+        }else {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
     }
 
     @GET
@@ -46,7 +62,7 @@ public class ClanController {
     public Response getById(@PathParam("id") final int id) {
         final Clan clan = cs.getClanById(id);
         if (clan != null) {
-            return Response.ok(new ClanDTO(clan, uriInfo.getBaseUri())).build();
+            return Response.ok(new ClanDTO(clan, cs.getClanBattle(clan.getId()), uriInfo.getBaseUri())).build();
         } else {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
@@ -55,7 +71,7 @@ public class ClanController {
     @GET
     @Path("/{id}/users")
     @Produces(value = { MediaType.APPLICATION_JSON, })
-    public Response getUsersById(@PathParam("id") final int id) {
+    public Response getClanById(@PathParam("id") final int id) {
         final Clan clan = cs.getClanById(id);
         if (clan != null) {
             return Response.ok(new ClanUsersDTO(clan, uriInfo.getBaseUri())).build();
@@ -64,7 +80,71 @@ public class ClanController {
         }
     }
 
+    @GET
+    @Path("/{id}/battle")
+    @Produces(value = { MediaType.APPLICATION_JSON, })
+    public Response getClanBattleById(@PathParam("id") final int id) {
+        final Clan clan = cs.getClanById(id);
+        if (clan != null) {
+            ClanBattle battle = cs.getClanBattle(id);
+            if(battle!=null) {
+                ClanBattle opponent = cs.getClanBattle(battle.getVersus().getId());
+                return Response.ok(new ClanBattleDTO(battle,opponent,uriInfo.getBaseUri())).build();
+            }
+        }
 
+        return Response.status(Response.Status.NOT_FOUND).build();
+    }
+
+    @POST
+    @Path("/{id}/join")
+    @Consumes(value = {MediaType.APPLICATION_JSON,})
+    public Response joinClan(@PathParam("id") final int id) {
+        User user = us.findById(userID);
+        if(us.findById(userID) == null) return Response.status(Response.Status.UNAUTHORIZED).build();
+        if(user.getClanId()!=null) return Response.status(Response.Status.CONFLICT).entity("User is already part of a clan.").build();
+
+        final Clan clan = cs.addUserToClan(id,userID);
+        if (clan != null) {
+            return Response.ok(new ClanUsersDTO(clan, uriInfo.getBaseUri())).build();
+        } else {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+    }
+
+    @POST
+    @Path("/create")
+    @Consumes(value = {MediaType.APPLICATION_JSON,})
+    public Response joinClan(@FormParam("name") final String name) {
+        if(name==null) return Response.status(Response.Status.BAD_REQUEST).build();
+
+        User user = us.findById(userID);
+        if(us.findById(userID) == null) return Response.status(Response.Status.UNAUTHORIZED).build();
+        if(user.getClanId()!=null) return Response.status(Response.Status.CONFLICT).entity("User is already part of a clan.").build();
+        if(cs.getClanByName(name)!=null) return Response.status(Response.Status.CONFLICT).entity("Clan with name " + name + " already exists").build();
+
+        final Clan clan = cs.createClan(name);
+        if (clan != null) {
+            return Response.ok(new ClanUsersDTO(clan, uriInfo.getBaseUri())).build();
+        } else {
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+    }
+
+    @POST
+    @Path("/leave")
+    @Consumes(value = {MediaType.APPLICATION_JSON,})
+    public Response leaveClan() {
+        User user = us.findById(userID);
+        if(us.findById(userID) == null) return Response.status(Response.Status.UNAUTHORIZED).build();
+        if(user.getClanId() == null) return Response.status(Response.Status.CONFLICT).entity("User is no part of a clan.").build();
+
+        if (cs.deleteFromClan(userID)) {
+            return Response.ok().build();
+        } else {
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+    }
 
 }
 

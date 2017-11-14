@@ -28,11 +28,4 @@ public class WealthDTO {
         productions = new MapDTO<>(wealth.getProductions().rawMap());
     }
 
-    public MapDTO<ResourceType, Double> getStorage() {
-        return storage;
-    }
-
-    public MapDTO<ResourceType, Double> getProductions() {
-        return productions;
-    }
 }

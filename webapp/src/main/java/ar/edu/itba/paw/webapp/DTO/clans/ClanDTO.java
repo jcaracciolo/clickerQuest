@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.webapp.DTO.clans;
 
 import ar.edu.itba.paw.model.clan.Clan;
+import ar.edu.itba.paw.model.clan.ClanBattle;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -37,18 +38,21 @@ public class ClanDTO {
     @XmlElement(name = "image")
     private URI image;
 
+    @XmlElement(name = "battle_url")
+    private URI battleURL;
+
     public ClanDTO(){}
 
-    public ClanDTO(Clan clan, URI baseUri){
+    public ClanDTO(Clan clan, ClanBattle clanBattle, URI baseUri){
         this.id = clan.getId();
         this.name = clan.getName();
         this.score = clan.getScore();
         this.wins = clan.getWins();
         this.battles = clan.getBattles();
-        //TODO change this grou_icons
         this.image = baseUri.resolve("resources/" + "group_icons/" + clan.getImage());
         this.usersURL = baseUri.resolve(String.format(ClanUsersDTO.url, clan.getId()));
+        if(clanBattle != null) {
+            this.battleURL = baseUri.resolve(String.format(ClanBattleDTO.url, clan.getId()));
+        }
     }
-
-
 }

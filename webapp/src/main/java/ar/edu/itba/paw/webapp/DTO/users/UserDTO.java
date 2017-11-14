@@ -56,36 +56,4 @@ public class UserDTO {
         wealthUrl = baseUri.resolve(String.format(WealthDTO.url, user.getId()));
 
     }
-
-    public long getId() {
-        return id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public URI getProfileImageUrl() {
-        return profileImageUrl;
-    }
-
-    public double getScore() {
-        return score;
-    }
-
-    public Integer getClanId() {
-        return clanId;
-    }
-
-    public URI getClanUrl() {
-        return clanUrl;
-    }
-
-    public URI getFactoriesUrl() {
-        return factoriesUrl;
-    }
-
-    public URI getWealthUrl() {
-        return wealthUrl;
-    }
 }
