@@ -1,6 +1,8 @@
 package ar.edu.itba.paw.model.packages.Implementations;
 
+import ar.edu.itba.paw.model.Factory;
 import ar.edu.itba.paw.model.ResourceType;
+import ar.edu.itba.paw.model.Wealth;
 import ar.edu.itba.paw.model.packages.Creator;
 import ar.edu.itba.paw.model.packages.PackageBuilder;
 import ar.edu.itba.paw.model.packages.ResourcePackage;
@@ -32,10 +34,16 @@ public class BaseCost extends ResourcePackage {
         return builder.buildPackage();
     }
 
-
+    public Map<ResourceType,Double> getBaseCost() {
+        return resources;
+    }
 
     private double gDiff(double start, double end)
     {
-        return ( end* ( end+ 1 ) ) / 2 - ( start* ( start+ 1 ) ) / 2 ;
+        return baseCostOfFactories(end) - baseCostOfFactories(start);
+    }
+
+    public static double baseCostOfFactories(double n) {
+        return (n*(n+1)) /2;
     }
 }

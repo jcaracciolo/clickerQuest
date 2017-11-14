@@ -1,7 +1,6 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.UserService;
-import ar.edu.itba.paw.model.BuyLimits;
 import ar.edu.itba.paw.model.FactoryType;
 import ar.edu.itba.paw.model.ResourceType;
 import ar.edu.itba.paw.model.User;
@@ -17,14 +16,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.security.Principal;
-import java.util.Collection;
 
 /**
  * Created by juanfra on 18/06/17.
  */
 @Controller
-public class PurchaseController {
-    private static final Logger LOGGER = LoggerFactory.getLogger(PurchaseController.class);
+public class PurchaseController2 {
+    private static final Logger LOGGER = LoggerFactory.getLogger(PurchaseController2.class);
 
     @Qualifier("userServiceImpl")
     @Autowired
@@ -43,44 +41,20 @@ public class PurchaseController {
         return j.toJSONString();
     }
 
-    @RequestMapping(value = "/canBuyFactory", method = { RequestMethod.POST })
-    @ResponseBody
-    public String canPurchaseFactory(Principal principal){
-        long userID = userService.findByUsername(principal.getName()).getId();
-        Collection<BuyLimits> purchaseableFactory= userService.getPurchaseableFactory(userID);
-        JSONObject buyLimitArray = new JSONObject();
-        for (BuyLimits bl : purchaseableFactory){
-            buyLimitArray.put(bl.getFactoryType().getId(),buyLimitToJson(bl));
-        }
-        JSONObject j = new JSONObject();
-        j.put("buyables",buyLimitArray);
-        j.put("type", "canPurchaseFactory");
-        return j.toJSONString();
-    }
-
-    private JSONObject buyLimitToJson(BuyLimits buyLimits){
-        Long max = buyLimits.getMaxFactories();
-        JSONObject main = new JSONObject();
-        main.put("1",amountToJson(buyLimits,1));
-        main.put("10",amountToJson(buyLimits,10));
-        main.put("100",amountToJson(buyLimits,100));
-        main.put("max",amountToJson(buyLimits, Math.toIntExact(max)));
-        main.put("nextMax",amountToJson(buyLimits, Math.toIntExact(max+1)));
-        main.put("maxBuy",max);
-        return main;
-    }
-
-    private JSONObject amountToJson(BuyLimits buyLimits, Integer amount){
-        JSONObject main = new JSONObject();
-        JSONObject productions = new JSONObject();
-        productions.putAll(buyLimits.getProductionCost(amount));
-        JSONObject storage = new JSONObject();
-        storage.putAll(buyLimits.getStorageCost(amount));
-        main.put("prod",productions);
-        main.put("storage",storage);
-        return main;
-
-    }
+//    @RequestMapping(value = "/canBuyFactory", method = { RequestMethod.POST })
+//    @ResponseBody
+//    public String canPurchaseFactory(Principal principal){
+//        long userID = userService.findByUsername(principal.getName()).getId();
+//        Collection<BuyLimits> purchaseableFactory= userService.getPurchaseableFactory(userID);
+//        JSONObject buyLimitArray = new JSONObject();
+//        for (BuyLimits bl : purchaseableFactory){
+//            buyLimitArray.put(bl.getFactoryType().getId(),buyLimitToJson(bl));
+//        }
+//        JSONObject j = new JSONObject();
+//        j.put("buyables",buyLimitArray);
+//        j.put("type", "canPurchaseFactory");
+//        return j.toJSONString();
+//    }
 
     @RequestMapping(value = "/upgradeFactory", method = { RequestMethod.POST })
     @ResponseBody

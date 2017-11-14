@@ -4,6 +4,7 @@ import ar.edu.itba.paw.interfaces.MarketDao;
 import ar.edu.itba.paw.interfaces.UserDao;
 import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.model.*;
+import ar.edu.itba.paw.model.packages.BuyLimits;
 import ar.edu.itba.paw.model.packages.Implementations.Productions;
 import ar.edu.itba.paw.model.packages.Implementations.Storage;
 import ar.edu.itba.paw.model.packages.PackageBuilder;
@@ -155,7 +156,7 @@ public class UserServiceImpl implements UserService {
         for (Factory f: factories){
             long max=0;
             BuyLimits bl = f.getLimits(w);
-                if(f.isBuyable(w,100)) max = 100;
+            if(f.isBuyable(w,100)) max = 100;
             else if(f.isBuyable(w,50)) max = 50;
             else if(f.isBuyable(w,25)) max = 25;
             else if(f.isBuyable(w,10)) max = 10;

@@ -19,11 +19,7 @@ import javax.ws.rs.core.UriInfo;
 @Component
 public class MarketController {
 
-    @Qualifier("userServiceImpl")
     @Autowired
-    private UserService us;
-    @Autowired
-    private ClanService cs;
     @Context
     private UriInfo uriInfo;
 

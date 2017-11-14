@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.webapp.DTO.users;
 
 import ar.edu.itba.paw.model.Factory;
+import ar.edu.itba.paw.webapp.DTO.factories.BuyLimitsDTO;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -35,8 +36,11 @@ public class FactoryDTO {
     @XmlElement(name = "level")
     private int level;
 
-    @XmlElement(name = "upgrade_url")
-    private URI upgrade_url;
+    @XmlElement(name = "upgradeURL")
+    private URI upgradeURL;
+
+    @XmlElement(name = "buyLimits_url")
+    private URI buyLimitsURL;
 
     public FactoryDTO(){}
 
@@ -48,7 +52,9 @@ public class FactoryDTO {
         outputMultiplier = factory.getOutputMultiplier();
         costReduction = factory.getCostReduction();
         level = factory.getLevel();
-        upgrade_url = baseUri.resolve(String.format(UpgradeDTO.url, factory.getUserid(), factory.getType().getId()));
+        upgradeURL = baseUri.resolve(String.format(UpgradeDTO.url, factory.getUserid(), factory.getType().getId()));
+        buyLimitsURL = baseUri.resolve(String.format(BuyLimitsDTO.url, factory.getType().getId()));
+
     }
 
     public String getType() {
