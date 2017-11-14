@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.model;
 
+import ar.edu.itba.paw.model.packages.BuyLimits;
 import ar.edu.itba.paw.model.packages.Implementations.*;
 import org.jetbrains.annotations.NotNull;
 
@@ -186,29 +187,24 @@ public class Factory implements Comparable<Factory> {
         return true;
     }
 
+    /**
+     * Given an amount it checks how many factories can be bought for that resource
+     */
+    public double maxFactoriesLimitedBy(ResourceType resource, double price, Wealth wealth) {
+        double resourcesAvailable = wealth.getStorage().getValue(resource);
+        int a = 1;
+        int b = 1;
+        double c = - 2 * (resourcesAvailable/(costReduction * price) + BaseCost.baseCostOfFactories(amount));
+        double sol1 = (-b + Math.sqrt(b*b - 4*a*c) ) / (2*a);
+        double sol2 = (-b - Math.sqrt(b*b - 4*a*c) ) / (2*a);
+        if(Double.isNaN(sol1)) {
+            return 0;
+        }
+        return Math.floor(sol1<sol2?sol2:sol1);
+    }
+
     public BuyLimits getLimits(Wealth w){
-        BuyLimits buyLimits = new BuyLimits(this);
-
-
-        Map<ResourceType,Double> need = type.getBaseRecipe().getInputs();
-        Productions productions = w.getProductions();
-        for (ResourceType r:need.keySet()){
-            Double limit = productions.getValue(r)/need.get(r);
-            buyLimits.addProductionDeficit(r,limit);
-        }
-
-        Storage storage = w.getStorage();
-        for (ResourceType r:type.getBaseCost().getResources()){
-            Double a = 1D;
-            Double b = 1+2*getAmount();
-            Double c = -2*(storage.getValue(r))/(type.getBaseCost().getValue(r)*getCostReduction());
-            Double sol=0D;
-            double sol1 = (-b + Math.sqrt(b*b - 4*a*c) ) / (2*a);
-            double sol2 = (-b - Math.sqrt(b*b - 4*a*c) ) / (2*a);
-            sol = sol1<sol2?sol2:sol1;
-            buyLimits.addStorageDeficit(r,sol);
-        }
-        return buyLimits;
+        return new BuyLimits(w, this);
     }
 
     public Upgrade getNextUpgrade() {
