@@ -70,7 +70,7 @@ public class UserController {
     public Response getWealthById(@PathParam("id") final long id) {
         final Wealth wealth = us.getUserWealth(id);
         if (wealth != null) {
-            return Response.ok(new WealthDTO(wealth)).build();
+            return Response.ok(new WealthDTO(wealth, userID)).build();
         } else {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
@@ -82,7 +82,7 @@ public class UserController {
     public Response getFactoriesById(@PathParam("id") final long id) {
         final Collection<Factory> factories = us.getUserFactories(id);
         if (factories != null) {
-            return Response.ok(new FactoriesDTO(factories, uriInfo.getBaseUri())).build();
+            return Response.ok(new FactoriesDTO(factories, userID, uriInfo.getBaseUri())).build();
         } else {
             return Response.status(Response.Status.NOT_FOUND).build();
         }

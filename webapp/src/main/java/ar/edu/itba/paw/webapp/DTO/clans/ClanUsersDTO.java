@@ -14,12 +14,16 @@ public class ClanUsersDTO {
 
     public static String url = "clans/%s/users";
 
+    @XmlElement(name = "clan_id")
+    private int clanID;
+
     @XmlElement(name = "users")
     private List<UserDTO> users;
 
     ClanUsersDTO(){}
 
     public ClanUsersDTO(Clan clan, URI baseUri) {
+        clanID = clan.getId();
         users = clan.getUsers().stream().map(u -> new UserDTO(u, baseUri)).collect(Collectors.toList());
     }
 

@@ -175,7 +175,7 @@ public class Factory implements Comparable<Factory> {
             }
         }
 
-        Map<ResourceType,Double> need = type.getBaseRecipe().getInputs();
+        Map<ResourceType,Double> need = getRecipe().getInputs();
         Productions productions = w.getProductions();
 
         for (ResourceType r: need.keySet()) {
@@ -190,7 +190,7 @@ public class Factory implements Comparable<Factory> {
     /**
      * Given an amount it checks how many factories can be bought for that resource
      */
-    public double maxFactoriesLimitedBy(ResourceType resource, double price, Wealth wealth) {
+    public double maxFactoriesLimitedByStorage(ResourceType resource, double price, Wealth wealth) {
         double resourcesAvailable = wealth.getStorage().getValue(resource);
         int a = 1;
         int b = 1;
@@ -200,7 +200,12 @@ public class Factory implements Comparable<Factory> {
         if(Double.isNaN(sol1)) {
             return 0;
         }
-        return Math.floor(sol1<sol2?sol2:sol1);
+        return Math.floor(sol1<sol2?sol2:sol1) - amount;
+    }
+
+    public double maxFactoriesLimitedByProduction(ResourceType resource, double productionNeeded, Wealth wealth) {
+        double currentProduction = wealth.getProductions().rawMap().get(resource);
+        return Math.floor(currentProduction/productionNeeded);
     }
 
     public BuyLimits getLimits(Wealth w){

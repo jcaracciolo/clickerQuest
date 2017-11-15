@@ -14,12 +14,16 @@ public class FactoriesDTO {
 
     public static String url = "users/%s/factories";
 
+    @XmlElement(name = "user_id")
+    private long userID;
+
     @XmlElement(name = "factories")
     private List<FactoryDTO> factories;
 
     public FactoriesDTO(){}
 
-    public FactoriesDTO(Collection<Factory> factories, URI baseUri) {
+    public FactoriesDTO(Collection<Factory> factories, long userID, URI baseUri) {
+        this.userID = userID;
         this.factories = factories.stream().map(f -> new FactoryDTO(f,baseUri)).collect(Collectors.toList());
     }
 }

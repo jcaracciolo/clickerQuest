@@ -6,6 +6,7 @@ import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.packages.BuyLimits;
 import ar.edu.itba.paw.model.packages.Paginating;
 import ar.edu.itba.paw.webapp.DTO.PaginantingDTO;
+import ar.edu.itba.paw.webapp.DTO.clans.ClanDTO;
 import ar.edu.itba.paw.webapp.DTO.factories.BuyLimitsDTO;
 import ar.edu.itba.paw.webapp.DTO.search.SearchDTO;
 import ar.edu.itba.paw.webapp.DTO.search.SearchResultDTO;
@@ -53,8 +54,14 @@ public class SearchController {
         Collection<String> clans = cs.findByKeyword(query);
 
         Collection<SearchResultDTO> results = Stream.concat(
-                users.stream().map((u) -> new SearchResultDTO(USER, u.getUsername())),
-                clans.stream().map((c) -> new SearchResultDTO(CLAN, c))
+                users.stream().map((u) -> new SearchResultDTO(
+                        USER,
+                        uriInfo.getBaseUri().resolve(String.format(UserDTO.url, u.getId())),
+                        u.getUsername())),
+                clans.stream().map((c) -> new SearchResultDTO(
+                        CLAN,
+                        uriInfo.getBaseUri().resolve(String.format(ClanDTO.url, cs.getClanByName(c).getId())),
+                        c))
         ).collect(Collectors.toList());
 
         return Response.ok(new SearchDTO(results)).build();

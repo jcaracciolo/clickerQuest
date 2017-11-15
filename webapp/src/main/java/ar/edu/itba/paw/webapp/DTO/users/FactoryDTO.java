@@ -5,6 +5,7 @@ import ar.edu.itba.paw.webapp.DTO.factories.BuyLimitsDTO;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 import java.net.URI;
 
 /**

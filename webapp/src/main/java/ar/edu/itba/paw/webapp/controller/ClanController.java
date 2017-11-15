@@ -100,20 +100,16 @@ public class ClanController {
         return Response.status(Response.Status.NOT_FOUND).build();
     }
 
-    private static class JoinClanQuery {
-        Integer id;
-    }
-
     @POST
     @Path("/{id}/join")
     @Consumes(value = { MediaType.APPLICATION_JSON, })
     @Produces(value = { MediaType.APPLICATION_JSON, })
-    public Response joinClan(JoinClanQuery query) {
+    public Response joinClan(@PathParam("id") final int id) {
         User user = us.findById(userID);
         if(us.findById(userID) == null) return Response.status(Response.Status.UNAUTHORIZED).build();
         if(user.getClanId()!=null) return Response.status(Response.Status.CONFLICT).entity("User is already part of a clan.").build();
 
-        final Clan clan = cs.addUserToClan(query.id,userID);
+        final Clan clan = cs.addUserToClan(id,userID);
         if (clan != null) {
             return Response.ok(new ClanUsersDTO(clan, uriInfo.getBaseUri())).build();
         } else {
@@ -146,7 +142,7 @@ public class ClanController {
         }
     }
 
-    @POST
+    @DELETE
     @Path("/leave")
     @Produces(value = { MediaType.APPLICATION_JSON, })
     public Response leaveClan() {

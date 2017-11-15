@@ -15,6 +15,15 @@ import static java.util.stream.Collectors.toMap;
 public class BuyLimitsDTO {
     public static String url = "factories/%s/buyLimits";
 
+    @XmlElement(name = "user_id")
+    private long userID;
+
+    @XmlElement(name = "factory_id")
+    private int factoryID;
+
+    @XmlElement(name = "max")
+    private long max;
+
     @XmlElement(name = "cost_max")
     private MapDTO<ResourceType,Double> costMax;
 
@@ -27,8 +36,11 @@ public class BuyLimitsDTO {
     @XmlElement(name = "cost_100")
     private MapDTO<ResourceType,Double> cost100;
 
-    public BuyLimitsDTO(BuyLimits buyLimits) {
-        costMax = new MapDTO<>(buyLimits.getCostMax().rawMap());
+    public BuyLimitsDTO(BuyLimits buyLimits, long userID, int factoryID) {
+        this.userID = userID;
+        this.factoryID = factoryID;
+        max = buyLimits.getMaxFactories();
+        if(max>0) costMax = new MapDTO<>(buyLimits.getCostMax().rawMap());
         cost1 = new MapDTO<>(buyLimits.getCost1().rawMap());
         cost10 = new MapDTO<>(buyLimits.getCost10().rawMap());
         cost100 = new MapDTO<>(buyLimits.getCost100().rawMap());

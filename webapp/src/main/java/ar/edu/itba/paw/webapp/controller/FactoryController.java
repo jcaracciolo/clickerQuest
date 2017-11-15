@@ -49,12 +49,12 @@ public class FactoryController {
     @GET
     @Path("/{factoryId}/buyLimits")
     @Produces(value = {MediaType.APPLICATION_JSON,})
-    public Response getFactoriesById(@PathParam("factoryId") final long factoryId) {
+    public Response getFactoriesById(@PathParam("factoryId") final int factoryId) {
         final User user = us.findById(userID);
         if (user != null) {
             final Factory factory = user.getFactories().stream().filter((f) -> f.getType().getId() == factoryId).findFirst().orElse(null);
             if (factory != null) {
-                return Response.ok(new BuyLimitsDTO(new BuyLimits(user.getWealth(), factory))).build();
+                return Response.ok(new BuyLimitsDTO(new BuyLimits(user.getWealth(), factory),userID,factoryId)).build();
             }
         }
 
