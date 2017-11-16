@@ -76,7 +76,7 @@
         <div>Score</div>
       </div>
       <div ng-repeat="member in members" class="table-row">
-        <p>{{member.rank}}</p>
+        <p>{{$index + 1}}</p>
         <div class="nameAndImage">
           <img class="itemImg" src="{{member.image}}"/>
           <p class="username-link" data-username="${u.username}">{{member.name}}</p>

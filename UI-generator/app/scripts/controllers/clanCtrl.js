@@ -63,18 +63,17 @@ define(['clickerQuest', 'services/UserService','services/ClanService'], function
       });
 
 
-    $scope.members = [
-      {name: "USER1", id: 0, ranking: 44, score: 112},
-      {name: "USER2", id: 1, ranking: 4, score: 532},
-      {name: "USER3", id: 2, ranking: 188, score: 52}
-    ];
+    $scope.members = [ ];
 
     ClanService.getClanUsers(80).then(
       function(response) {
         var users = response.data.users;
         users.forEach(function (u) {
-          $scope.members.push({name: u.username, rank: "-", image: u.profile_image_url ,score: u.score});
+          $scope.members.push({name: u.username, image: u.profile_image_url ,score: u.score});
+        });
 
+        $scope.members.sort(function (u1, u2) {
+          return u2.score - u1.score;
         })
       }
     )
