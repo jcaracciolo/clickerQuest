@@ -1,10 +1,19 @@
-define(['clickerQuest'], function(clickerQuest) {
+define(['clickerQuest','services/UserService'], function(clickerQuest) {
 
   'use strict';
-  clickerQuest.controller('mainScreenCtrl', function($scope) {
+  clickerQuest.controller('mainScreenCtrl', function($scope, UserService) {
+    UserService.getUser(1).then(
+      function(response) {
+        $scope.user = response.data
+    },
+      function(response) {
+        //TODO error
+        console.log(response)
+      }
+    );
 
     $scope.user = {
-      name: "Jorgito",
+      username: "Jorgito",
       score: "55.12",
       ranking: 65,
       clan: {

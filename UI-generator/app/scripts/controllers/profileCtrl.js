@@ -3,7 +3,7 @@ define(['clickerQuest'], function(clickerQuest) {
     'use strict';
     clickerQuest.controller('profileCtrl', function($scope) {
       $scope.user = {
-        name: "Jorgito",
+        username: "Jorgito",
         score: "55.12",
         ranking: 65,
         clan: {
