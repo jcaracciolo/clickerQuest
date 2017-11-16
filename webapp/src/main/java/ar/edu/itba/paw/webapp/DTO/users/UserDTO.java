@@ -42,6 +42,9 @@ public class UserDTO {
     @XmlElement(name = "wealth_url")
     private URI wealthUrl;
 
+    @XmlElement(name = "rank_url")
+    private URI rankURL;
+
     public UserDTO(){}
 
     public UserDTO(User user, URI baseUri){
@@ -55,6 +58,6 @@ public class UserDTO {
         }
         factoriesUrl = baseUri.resolve(String.format(FactoriesDTO.url, user.getId()));
         wealthUrl = baseUri.resolve(String.format(WealthDTO.url, user.getId()));
-
+        rankURL = baseUri.resolve(String.format(UserRankDTO.url, user.getId()));
     }
 }

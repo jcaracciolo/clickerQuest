@@ -16,7 +16,7 @@ public interface UserService {
     User findByUsername(String username);
     Collection<User> findByKeyword(String search);
 
-    int getGlobalRanking(long userId);
+    Integer getGlobalRanking(long userId);
 
     User create(String username, String Password, String img);
 

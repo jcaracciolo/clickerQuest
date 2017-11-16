@@ -297,7 +297,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public int getGlobalRanking(long userId) {
+    public Integer getGlobalRanking(long userId) {
         return userDao.getGlobalRanking(userId);
     }
 

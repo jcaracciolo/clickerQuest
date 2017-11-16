@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html>
   <head>
@@ -244,7 +243,13 @@
                     <a href="#get-an-user-39-s-factory" class="toc-h2 toc-link" data-title="Get an User's factory">Get an User's factory</a>
                   </li>
                   <li>
+                    <a href="#get-an-user-39-s-factory-2" class="toc-h2 toc-link" data-title="Get an User's factory">Get an User's factory</a>
+                  </li>
+                  <li>
                     <a href="#get-an-user-39-s-factory-39-s-upgrade" class="toc-h2 toc-link" data-title="Get an User's factory's upgrade">Get an User's factory's upgrade</a>
+                  </li>
+                  <li>
+                    <a href="#get-an-user-39-s-rank" class="toc-h2 toc-link" data-title="Get an User's rank">Get an User's rank</a>
                   </li>
               </ul>
           </li>
@@ -282,6 +287,26 @@
               <ul class="toc-list-h2">
                   <li>
                     <a href="#get-your-buying-limits" class="toc-h2 toc-link" data-title="Get Your buying limits">Get Your buying limits</a>
+                  </li>
+                  <li>
+                    <a href="#purchase-factories" class="toc-h2 toc-link" data-title="Purchase Factories">Purchase Factories</a>
+                  </li>
+                  <li>
+                    <a href="#upgrade-a-factory" class="toc-h2 toc-link" data-title="Upgrade a Factory">Upgrade a Factory</a>
+                  </li>
+              </ul>
+          </li>
+          <li>
+            <a href="#market" class="toc-h1 toc-link" data-title="Market">Market</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#get-the-market-39-s-prices" class="toc-h2 toc-link" data-title="Get the Market's prices">Get the Market's prices</a>
+                  </li>
+                  <li>
+                    <a href="#purchase-resources" class="toc-h2 toc-link" data-title="Purchase Resources">Purchase Resources</a>
+                  </li>
+                  <li>
+                    <a href="#sell-resources" class="toc-h2 toc-link" data-title="Sell Resources">Sell Resources</a>
                   </li>
               </ul>
           </li>
@@ -347,25 +372,27 @@ You must replace <code>meowmeowmeow</code> with your personal API key.
   </span><span class="s2">"total_pages"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
   </span><span class="s2">"total_items"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
   </span><span class="s2">"elements"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-       </span><span class="p">{</span><span class="w">
+    </span><span class="p">{</span><span class="w">
         </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"User"</span><span class="p">,</span><span class="w">
         </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
         </span><span class="s2">"username"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Wololo"</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"profile_image_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:8080/resources/profile_images/10.jpg"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"profile_image_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:8080/api/resources/profile_images/10.jpg"</span><span class="p">,</span><span class="w">
         </span><span class="s2">"score"</span><span class="p">:</span><span class="w"> </span><span class="mf">86035162.84607725</span><span class="p">,</span><span class="w">
         </span><span class="s2">"clan_id"</span><span class="p">:</span><span class="w"> </span><span class="mi">20</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"clan_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:8080/clans/20"</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"factories_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:8080/users/1/factories"</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"wealth_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:8080/users/1/wealth"</span><span class="w">
+        </span><span class="s2">"clan_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:8080/api/v1/clans/20"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"factories_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:8080/api/v1/users/1/factories"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"wealth_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:8080/api/v1/users/1/wealth"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"rank_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:8080/api/v1/users/1/rank"</span><span class="w">
     </span><span class="p">},</span><span class="w">
     </span><span class="p">{</span><span class="w">
         </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"User"</span><span class="p">,</span><span class="w">
         </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
         </span><span class="s2">"username"</span><span class="p">:</span><span class="w"> </span><span class="s2">"aaaa"</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"profile_image_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:8080/resources/profile_images/2.jpg"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"profile_image_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:8080/api/resources/profile_images/2.jpg"</span><span class="p">,</span><span class="w">
         </span><span class="s2">"score"</span><span class="p">:</span><span class="w"> </span><span class="mf">1895.770193289029</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"factories_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:8080/users/2/factories"</span><span class="p">,</span><span class="w">
-        </span><span class="s2">"wealth_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:8080/users/2/wealth"</span><span class="w">
+        </span><span class="s2">"factories_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:8080/api/v1/users/2/factories"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"wealth_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:8080/api/v1/users/2/wealth"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"rank_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:8080/api/v1/users/2/rank"</span><span class="w">
     </span><span class="p">}</span><span class="w">
   </span><span class="p">]</span><span class="w">
  </span><span class="p">}</span><span class="w">
@@ -650,6 +677,48 @@ You must replace <code>meowmeowmeow</code> with your personal API key.
 <td>The ID of the factoryType to retrieve</td>
 </tr>
 </tbody></table>
+<h2 id='get-an-user-39-s-factory-2'>Get an User&#39;s factory</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"http://example.com/api/kittens/2"</span>
+  -X DELETE
+  -H <span class="s2">"Authorization: meowmeowmeow"</span>
+</code></pre><pre class="highlight javascript tab-javascript"><code><span class="kr">const</span> <span class="nx">kittn</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'kittn'</span><span class="p">);</span>
+
+<span class="kd">let</span> <span class="nx">api</span> <span class="o">=</span> <span class="nx">kittn</span><span class="p">.</span><span class="nx">authorize</span><span class="p">(</span><span class="s1">'meowmeowmeow'</span><span class="p">);</span>
+<span class="kd">let</span> <span class="nx">max</span> <span class="o">=</span> <span class="nx">api</span><span class="p">.</span><span class="nx">kittens</span><span class="p">.</span><span class="k">delete</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+</code></pre>
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"type_id"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"STOCK_INVESTOR"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mi">5917259</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"input_reduction"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"output_multiplier"</span><span class="p">:</span><span class="w"> </span><span class="mf">1.45</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"cost_reduction"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.5712090638488149</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"level"</span><span class="p">:</span><span class="w"> </span><span class="mi">17</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"upgradeURL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:8080/api/v1/users/1/factories/0/upgrade"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"buyLimits_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:8080/api/v1/factories/0/buyLimits"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p>This endpoint returns a given user&#39;s specific factory.</p>
+<h3 id='http-request-6'>HTTP Request</h3>
+<p><code>GET http://localhost:8080/api/v1/users/&lt;ID&gt;/factories/&lt;FactoryID&gt;</code></p>
+<h3 id='url-parameters-5'>URL Parameters</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>ID</td>
+<td>The ID of the factory&#39;s user to retrieve</td>
+</tr>
+<tr>
+<td>FactoryID</td>
+<td>The ID of the factoryType to retrieve</td>
+</tr>
+</tbody></table>
 <h2 id='get-an-user-39-s-factory-39-s-upgrade'>Get an User&#39;s factory&#39;s upgrade</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"http://example.com/api/kittens/2"</span>
   -X DELETE
   -H <span class="s2">"Authorization: meowmeowmeow"</span>
@@ -671,9 +740,9 @@ You must replace <code>meowmeowmeow</code> with your personal API key.
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <p>This endpoint returns a given user&#39;s specific factory&#39;s upgrade.</p>
-<h3 id='http-request-6'>HTTP Request</h3>
+<h3 id='http-request-7'>HTTP Request</h3>
 <p><code>GET http://localhost:8080/api/v1/users/&lt;ID&gt;/factories/&lt;FactoryID&gt;/upgrade</code></p>
-<h3 id='url-parameters-5'>URL Parameters</h3>
+<h3 id='url-parameters-6'>URL Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -687,6 +756,38 @@ You must replace <code>meowmeowmeow</code> with your personal API key.
 <tr>
 <td>FactoryID</td>
 <td>The ID of the factoryType to retrieve</td>
+</tr>
+</tbody></table>
+<h2 id='get-an-user-39-s-rank'>Get an User&#39;s rank</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"http://example.com/api/kittens/2"</span>
+  -X DELETE
+  -H <span class="s2">"Authorization: meowmeowmeow"</span>
+</code></pre><pre class="highlight javascript tab-javascript"><code><span class="kr">const</span> <span class="nx">kittn</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'kittn'</span><span class="p">);</span>
+
+<span class="kd">let</span> <span class="nx">api</span> <span class="o">=</span> <span class="nx">kittn</span><span class="p">.</span><span class="nx">authorize</span><span class="p">(</span><span class="s1">'meowmeowmeow'</span><span class="p">);</span>
+<span class="kd">let</span> <span class="nx">max</span> <span class="o">=</span> <span class="nx">api</span><span class="p">.</span><span class="nx">kittens</span><span class="p">.</span><span class="k">delete</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+</code></pre>
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"user_id"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"user_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:8080/api/v1/users/1"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"rank"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p>This endpoint returns a given user&#39;s specific factory.</p>
+<h3 id='http-request-8'>HTTP Request</h3>
+<p><code>GET http://localhost:8080/api/v1/users/&lt;ID&gt;/rank</code></p>
+<h3 id='url-parameters-7'>URL Parameters</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>ID</td>
+<td>The ID of the rank&#39;s user to retrieve</td>
 </tr>
 </tbody></table>
 <h1 id='clans'>Clans</h1><h2 id='get-all-clans'>Get All Clans</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"http://example.com/api/v1/users/all"</span>
@@ -733,7 +834,7 @@ You must replace <code>meowmeowmeow</code> with your personal API key.
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <p>This endpoint retrieves all kittens.</p>
-<h3 id='http-request-7'>HTTP Request</h3>
+<h3 id='http-request-9'>HTTP Request</h3>
 <p><code>GET http://pawserver.it.itba.edu.ar/paw-2017a-4/api/v1/clans/all</code></p>
 <h3 id='query-parameters-2'>Query Parameters</h3>
 <table><thead>
@@ -777,9 +878,9 @@ You must replace <code>meowmeowmeow</code> with your personal API key.
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <p>This endpoint retrieves a specific clan.</p>
-<h3 id='http-request-8'>HTTP Request</h3>
+<h3 id='http-request-10'>HTTP Request</h3>
 <p><code>GET http://localhost:8080/api/v1/clans/&lt;ID&gt;</code></p>
-<h3 id='url-parameters-6'>URL Parameters</h3>
+<h3 id='url-parameters-8'>URL Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -814,15 +915,16 @@ You must replace <code>meowmeowmeow</code> with your personal API key.
             </span><span class="s2">"clan_id"</span><span class="p">:</span><span class="w"> </span><span class="mi">20</span><span class="p">,</span><span class="w">
             </span><span class="s2">"clan_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:8080/api/v1/clans/20"</span><span class="p">,</span><span class="w">
             </span><span class="s2">"factories_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:8080/api/v1/users/1/factories"</span><span class="p">,</span><span class="w">
-            </span><span class="s2">"wealth_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:8080/api/v1/users/1/wealth"</span><span class="w">
+            </span><span class="s2">"wealth_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:8080/api/v1/users/1/wealth"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"rank_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:8080/api/v1/users/1/rank"</span><span class="w">
         </span><span class="p">}</span><span class="w">
     </span><span class="p">]</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <p>This endpoint returns a given clan&#39;s users.</p>
-<h3 id='http-request-9'>HTTP Request</h3>
+<h3 id='http-request-11'>HTTP Request</h3>
 <p><code>GET http://localhost:8080/api/v1/clans/&lt;ID&gt;/users</code></p>
-<h3 id='url-parameters-7'>URL Parameters</h3>
+<h3 id='url-parameters-9'>URL Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -853,9 +955,9 @@ You must replace <code>meowmeowmeow</code> with your personal API key.
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <p>This endpoint returns a given clan&#39;s battle.</p>
-<h3 id='http-request-10'>HTTP Request</h3>
+<h3 id='http-request-12'>HTTP Request</h3>
 <p><code>GET http://localhost:8080/api/v1/clans/&lt;ID&gt;/battle</code></p>
-<h3 id='url-parameters-8'>URL Parameters</h3>
+<h3 id='url-parameters-10'>URL Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -885,9 +987,9 @@ You must replace <code>meowmeowmeow</code> with your personal API key.
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <p>This endpoint returns a given clan&#39;s battle.</p>
-<h3 id='http-request-11'>HTTP Request</h3>
+<h3 id='http-request-13'>HTTP Request</h3>
 <p><code>GET http://localhost:8080/api/v1/clans/&lt;ID&gt;/rank</code></p>
-<h3 id='url-parameters-9'>URL Parameters</h3>
+<h3 id='url-parameters-11'>URL Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -922,9 +1024,9 @@ You must replace <code>meowmeowmeow</code> with your personal API key.
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <p>This endpoint joins the user to a clan.</p>
-<h3 id='http-request-12'>HTTP Request</h3>
+<h3 id='http-request-14'>HTTP Request</h3>
 <p><code>POST http://localhost:8080/api/v1/clans/&lt;ID&gt;/join</code></p>
-<h3 id='url-parameters-10'>URL Parameters</h3>
+<h3 id='url-parameters-12'>URL Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -936,7 +1038,7 @@ You must replace <code>meowmeowmeow</code> with your personal API key.
 <td>The ID of the clan to join.</td>
 </tr>
 </tbody></table>
-<h3 id='errors'>Errors</h3>
+<h3 id='errors-1'>Errors</h3>
 <table><thead>
 <tr>
 <th>Code</th>
@@ -970,9 +1072,9 @@ You must replace <code>meowmeowmeow</code> with your personal API key.
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <p>This endpoint returns a given clan&#39;s battle.</p>
-<h3 id='http-request-13'>HTTP Request</h3>
+<h3 id='http-request-15'>HTTP Request</h3>
 <p><code>POST http://localhost:8080/api/v1/clans/create</code></p>
-<h3 id='post-parameters'>POST Parameters</h3>
+<h3 id='body-parameters'>Body Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -1013,7 +1115,7 @@ You must replace <code>meowmeowmeow</code> with your personal API key.
 </blockquote>
 
 <p>This endpoint removes an user from a clan, deletes de clan if is empty.</p>
-<h3 id='http-request-14'>HTTP Request</h3>
+<h3 id='http-request-16'>HTTP Request</h3>
 <p><code>DELETE http://localhost:8080/api/v1/clans/leave</code></p>
 <h3 id='errors-3'>Errors</h3>
 <table><thead>
@@ -1064,9 +1166,9 @@ You must replace <code>meowmeowmeow</code> with your personal API key.
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <p>This endpoint retrieves the maximun amount of factories of type <factoryID> which the user can buy with the current resources, and whether or no (and the cost) of buying 1, 10 and 100 of the given factory.</p>
-<h3 id='http-request-15'>HTTP Request</h3>
+<h3 id='http-request-17'>HTTP Request</h3>
 <p><code>GET http://localhost:8080/api/v1/factories/&lt;factoryID&gt;/buyLimits</code></p>
-<h3 id='query-parameters-3'>Query Parameters</h3>
+<h3 id='path-parameters'>Path Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -1074,8 +1176,203 @@ You must replace <code>meowmeowmeow</code> with your personal API key.
 </tr>
 </thead><tbody>
 <tr>
-<td>query</td>
-<td>String included in the interested username o clan&#39;s name</td>
+<td>factoryID</td>
+<td>The buylimits&#39; factory Id</td>
+</tr>
+</tbody></table>
+<h2 id='purchase-factories'>Purchase Factories</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"http://example.com/api/kittens/2"</span>
+  -H <span class="s2">"Authorization: meowmeowmeow"</span>
+</code></pre><pre class="highlight javascript tab-javascript"><code><span class="kr">const</span> <span class="nx">kittn</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'kittn'</span><span class="p">);</span>
+
+<span class="kd">let</span> <span class="nx">api</span> <span class="o">=</span> <span class="nx">kittn</span><span class="p">.</span><span class="nx">authorize</span><span class="p">(</span><span class="s1">'meowmeowmeow'</span><span class="p">);</span>
+<span class="kd">let</span> <span class="nx">max</span> <span class="o">=</span> <span class="nx">api</span><span class="p">.</span><span class="nx">kittens</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+</code></pre>
+<blockquote>
+<p>The above command does not return a body</p>
+</blockquote>
+
+<p>This endpoint attempts to purhcase a factory with the </p>
+<h3 id='http-request-18'>HTTP Request</h3>
+<p><code>POST http://localhost:8080/api/v1/factories/purchase</code></p>
+<h3 id='body-parameters-2'>Body Parameters</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>factoryID</td>
+<td>The factory&#39;s ID to be purchased</td>
+</tr>
+<tr>
+<td>amount</td>
+<td>The amount of factories desired to be purchased</td>
+</tr>
+</tbody></table>
+<h3 id='errors-4'>Errors</h3>
+<table><thead>
+<tr>
+<th>Code</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>419</td>
+<td>User does not have either resources or production required to make the purchase.</td>
+</tr>
+</tbody></table>
+<h2 id='upgrade-a-factory'>Upgrade a Factory</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"http://example.com/api/kittens/2"</span>
+  -H <span class="s2">"Authorization: meowmeowmeow"</span>
+</code></pre><pre class="highlight javascript tab-javascript"><code><span class="kr">const</span> <span class="nx">kittn</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'kittn'</span><span class="p">);</span>
+
+<span class="kd">let</span> <span class="nx">api</span> <span class="o">=</span> <span class="nx">kittn</span><span class="p">.</span><span class="nx">authorize</span><span class="p">(</span><span class="s1">'meowmeowmeow'</span><span class="p">);</span>
+<span class="kd">let</span> <span class="nx">max</span> <span class="o">=</span> <span class="nx">api</span><span class="p">.</span><span class="nx">kittens</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+</code></pre>
+<blockquote>
+<p>The above command does not return a body</p>
+</blockquote>
+
+<p>This endpoint attempts to upgrade an user&#39;s factory. </p>
+<h3 id='http-request-19'>HTTP Request</h3>
+<p><code>POST http://localhost:8080/api/v1/factories/purchase</code></p>
+<h3 id='body-parameters-3'>Body Parameters</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>factoryID</td>
+<td>The factory&#39;s ID to be upgraded</td>
+</tr>
+</tbody></table>
+<h3 id='errors-5'>Errors</h3>
+<table><thead>
+<tr>
+<th>Code</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>419</td>
+<td>User does not have the money required to upgrade the factory.</td>
+</tr>
+</tbody></table>
+<h1 id='market'>Market</h1><h2 id='get-the-market-39-s-prices'>Get the Market&#39;s prices</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"http://example.com/api/kittens/2"</span>
+  -H <span class="s2">"Authorization: meowmeowmeow"</span>
+</code></pre><pre class="highlight javascript tab-javascript"><code><span class="kr">const</span> <span class="nx">kittn</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'kittn'</span><span class="p">);</span>
+
+<span class="kd">let</span> <span class="nx">api</span> <span class="o">=</span> <span class="nx">kittn</span><span class="p">.</span><span class="nx">authorize</span><span class="p">(</span><span class="s1">'meowmeowmeow'</span><span class="p">);</span>
+<span class="kd">let</span> <span class="nx">max</span> <span class="o">=</span> <span class="nx">api</span><span class="p">.</span><span class="nx">kittens</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+</code></pre>
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"prices"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"CIRCUITS"</span><span class="p">:</span><span class="w"> </span><span class="mi">52</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"GOLD"</span><span class="p">:</span><span class="w"> </span><span class="mi">21</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"MONEY"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"CARDBOARD"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"METAL_SCRAP"</span><span class="p">:</span><span class="w"> </span><span class="mi">12</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"COPPER_CABLE"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"POWER"</span><span class="p">:</span><span class="w"> </span><span class="mi">46</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"TIRES"</span><span class="p">:</span><span class="w"> </span><span class="mi">9</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"PEOPLE"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"IRON"</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"RUBBER"</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"COPPER"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"PLASTIC"</span><span class="p">:</span><span class="w"> </span><span class="mi">42</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p>This endpoint retrieves the maximun amount of factories of type <factoryID> which the user can buy with the current resources, and whether or no (and the cost) of buying 1, 10 and 100 of the given factory.</p>
+<h3 id='http-request-20'>HTTP Request</h3>
+<p><code>GET http://localhost:8080/api/v1/market/prices</code></p>
+<h2 id='purchase-resources'>Purchase Resources</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"http://example.com/api/kittens/2"</span>
+  -H <span class="s2">"Authorization: meowmeowmeow"</span>
+</code></pre><pre class="highlight javascript tab-javascript"><code><span class="kr">const</span> <span class="nx">kittn</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'kittn'</span><span class="p">);</span>
+
+<span class="kd">let</span> <span class="nx">api</span> <span class="o">=</span> <span class="nx">kittn</span><span class="p">.</span><span class="nx">authorize</span><span class="p">(</span><span class="s1">'meowmeowmeow'</span><span class="p">);</span>
+<span class="kd">let</span> <span class="nx">max</span> <span class="o">=</span> <span class="nx">api</span><span class="p">.</span><span class="nx">kittens</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+</code></pre>
+<blockquote>
+<p>The above command does not return a body</p>
+</blockquote>
+
+<p>This endpoint attempts to upgrade an user&#39;s factory. </p>
+<h3 id='http-request-21'>HTTP Request</h3>
+<p><code>POST http://localhost:8080/api/v1/maket/purchase</code></p>
+<h3 id='body-parameters-4'>Body Parameters</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>resourceType</td>
+<td>The resourceType codeName to be purchased</td>
+</tr>
+<tr>
+<td>amount</td>
+<td>The amount of resources desired to be purchased</td>
+</tr>
+</tbody></table>
+<h3 id='errors-6'>Errors</h3>
+<table><thead>
+<tr>
+<th>Code</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>419</td>
+<td>User does not have the money required to buy that amount of resources.</td>
+</tr>
+</tbody></table>
+<h2 id='sell-resources'>Sell Resources</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"http://example.com/api/kittens/2"</span>
+  -H <span class="s2">"Authorization: meowmeowmeow"</span>
+</code></pre><pre class="highlight javascript tab-javascript"><code><span class="kr">const</span> <span class="nx">kittn</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'kittn'</span><span class="p">);</span>
+
+<span class="kd">let</span> <span class="nx">api</span> <span class="o">=</span> <span class="nx">kittn</span><span class="p">.</span><span class="nx">authorize</span><span class="p">(</span><span class="s1">'meowmeowmeow'</span><span class="p">);</span>
+<span class="kd">let</span> <span class="nx">max</span> <span class="o">=</span> <span class="nx">api</span><span class="p">.</span><span class="nx">kittens</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+</code></pre>
+<blockquote>
+<p>The above command does not return a body</p>
+</blockquote>
+
+<p>This endpoint attempts to upgrade an user&#39;s factory. </p>
+<h3 id='http-request-22'>HTTP Request</h3>
+<p><code>POST http://localhost:8080/api/v1/maket/sell</code></p>
+<h3 id='body-parameters-5'>Body Parameters</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>resourceType</td>
+<td>The resourceType codeName to be sold</td>
+</tr>
+<tr>
+<td>amount</td>
+<td>The amount of resources desired to be sold</td>
+</tr>
+</tbody></table>
+<h3 id='errors-7'>Errors</h3>
+<table><thead>
+<tr>
+<th>Code</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>419</td>
+<td>User does not have that amount of resources to sell.</td>
 </tr>
 </tbody></table>
 <h1 id='search'>Search</h1><h2 id='search-for-by-user-39-s-o-clan-39-s-name'>Search for by user&#39;s o clan&#39;s name</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"http://example.com/api/kittens/2"</span>
@@ -1114,9 +1411,9 @@ You must replace <code>meowmeowmeow</code> with your personal API key.
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <p>This endpoint retrieves a list of users and clans which name contains the query parameter.</p>
-<h3 id='http-request-16'>HTTP Request</h3>
+<h3 id='http-request-23'>HTTP Request</h3>
 <p><code>GET http://localhost:8080/api/v1/search</code></p>
-<h3 id='query-parameters-4'>Query Parameters</h3>
+<h3 id='query-parameters-3'>Query Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>

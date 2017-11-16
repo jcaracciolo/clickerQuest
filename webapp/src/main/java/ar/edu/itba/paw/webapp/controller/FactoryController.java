@@ -62,19 +62,19 @@ public class FactoryController {
     }
 
     private static class PurchaseFactoryQuery {
-        Integer factoryId;
+        Integer factoryID;
         Integer amount;
     }
 
     @POST
     @Consumes(value = {MediaType.APPLICATION_JSON,})
-    @Path("/{factoryId}/purchase")
+    @Path("/purchase")
     public Response purchaseFactory(PurchaseFactoryQuery query) {
 
         if(query==null || query.amount<=0) return Response.status(Response.Status.BAD_REQUEST).build();
 
-        if (FactoryType.fromId(query.factoryId) != null) {
-            if(us.purchaseFactory(userID,FactoryType.fromId(query.factoryId),query.amount)) {
+        if (FactoryType.fromId(query.factoryID) != null) {
+            if(us.purchaseFactory(userID,FactoryType.fromId(query.factoryID),query.amount)) {
                 Response.ok();
             } else {
                 Response.status(Response.Status.CONFLICT).build();
@@ -89,7 +89,7 @@ public class FactoryController {
 
     @POST
     @Consumes(value = {MediaType.APPLICATION_JSON,})
-    @Path("/{factoryId}/upgrade")
+    @Path("/upgrade")
     public Response upgradeFactory(UpgradeFactoryQuery query) {
         if(query==null) return Response.status(Response.Status.BAD_REQUEST).build();
 

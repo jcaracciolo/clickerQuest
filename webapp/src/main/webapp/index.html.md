@@ -72,25 +72,27 @@ let kittens = api.kittens.get();
   "total_pages": 1,
   "total_items": 2,
   "elements": [
-       {
+    {
         "type": "User",
         "id": 1,
         "username": "Wololo",
-        "profile_image_url": "http://localhost:8080/resources/profile_images/10.jpg",
+        "profile_image_url": "http://localhost:8080/api/resources/profile_images/10.jpg",
         "score": 86035162.84607725,
         "clan_id": 20,
-        "clan_url": "http://localhost:8080/clans/20",
-        "factories_url": "http://localhost:8080/users/1/factories",
-        "wealth_url": "http://localhost:8080/users/1/wealth"
+        "clan_url": "http://localhost:8080/api/v1/clans/20",
+        "factories_url": "http://localhost:8080/api/v1/users/1/factories",
+        "wealth_url": "http://localhost:8080/api/v1/users/1/wealth",
+        "rank_url": "http://localhost:8080/api/v1/users/1/rank"
     },
     {
         "type": "User",
         "id": 2,
         "username": "aaaa",
-        "profile_image_url": "http://localhost:8080/resources/profile_images/2.jpg",
+        "profile_image_url": "http://localhost:8080/api/resources/profile_images/2.jpg",
         "score": 1895.770193289029,
-        "factories_url": "http://localhost:8080/users/2/factories",
-        "wealth_url": "http://localhost:8080/users/2/wealth"
+        "factories_url": "http://localhost:8080/api/v1/users/2/factories",
+        "wealth_url": "http://localhost:8080/api/v1/users/2/wealth",
+        "rank_url": "http://localhost:8080/api/v1/users/2/rank"
     }
   ]
  }
@@ -384,6 +386,50 @@ Parameter | Description
 ID | The ID of the factory's user to retrieve
 FactoryID | The ID of the factoryType to retrieve
 
+## Get an User's factory
+
+```shell
+curl "http://example.com/api/kittens/2"
+  -X DELETE
+  -H "Authorization: meowmeowmeow"
+```
+
+```javascript
+const kittn = require('kittn');
+
+let api = kittn.authorize('meowmeowmeow');
+let max = api.kittens.delete(2);
+```
+
+> The above command returns JSON structured like this:
+
+```json
+{
+    "type_id": 0,
+    "type": "STOCK_INVESTOR",
+    "amount": 5917259,
+    "input_reduction": 1,
+    "output_multiplier": 1.45,
+    "cost_reduction": 0.5712090638488149,
+    "level": 17,
+    "upgradeURL": "http://localhost:8080/api/v1/users/1/factories/0/upgrade",
+    "buyLimits_url": "http://localhost:8080/api/v1/factories/0/buyLimits"
+}
+```
+
+This endpoint returns a given user's specific factory.
+
+### HTTP Request
+
+`GET http://localhost:8080/api/v1/users/<ID>/factories/<FactoryID>`
+
+### URL Parameters
+
+Parameter | Description
+--------- | -----------
+ID | The ID of the factory's user to retrieve
+FactoryID | The ID of the factoryType to retrieve
+
 ## Get an User's factory's upgrade
 
 ```shell
@@ -423,6 +469,44 @@ Parameter | Description
 --------- | -----------
 ID | The ID of the factory's user to retrieve
 FactoryID | The ID of the factoryType to retrieve
+
+## Get an User's rank
+
+```shell
+curl "http://example.com/api/kittens/2"
+  -X DELETE
+  -H "Authorization: meowmeowmeow"
+```
+
+```javascript
+const kittn = require('kittn');
+
+let api = kittn.authorize('meowmeowmeow');
+let max = api.kittens.delete(2);
+```
+
+> The above command returns JSON structured like this:
+
+```json
+{
+    "user_id": 1,
+    "user_url": "http://localhost:8080/api/v1/users/1",
+    "rank": 1
+}
+```
+
+This endpoint returns a given user's specific factory.
+
+### HTTP Request
+
+`GET http://localhost:8080/api/v1/users/<ID>/rank`
+
+### URL Parameters
+
+Parameter | Description
+--------- | -----------
+ID | The ID of the rank's user to retrieve
+
 
 # Clans
 
@@ -562,7 +646,8 @@ let max = api.kittens.delete(2);
             "clan_id": 20,
             "clan_url": "http://localhost:8080/api/v1/clans/20",
             "factories_url": "http://localhost:8080/api/v1/users/1/factories",
-            "wealth_url": "http://localhost:8080/api/v1/users/1/wealth"
+            "wealth_url": "http://localhost:8080/api/v1/users/1/wealth",
+            "rank_url": "http://localhost:8080/api/v1/users/1/rank"
         }
     ]
 }
@@ -738,7 +823,7 @@ This endpoint returns a given clan's battle.
 
 `POST http://localhost:8080/api/v1/clans/create`
 
-### POST Parameters
+### Body Parameters
 
 Parameter | Description
 --------- | -----------
@@ -829,12 +914,188 @@ This endpoint retrieves the maximun amount of factories of type <factoryID> whic
 
 `GET http://localhost:8080/api/v1/factories/<factoryID>/buyLimits`
 
-### Query Parameters
+### Path Parameters
 
 Parameter | Description
 --------- | -----------
-query | String included in the interested username o clan's name
+factoryID | The buylimits' factory Id
 
+## Purchase Factories
+
+```shell
+curl "http://example.com/api/kittens/2"
+  -H "Authorization: meowmeowmeow"
+```
+
+```javascript
+const kittn = require('kittn');
+
+let api = kittn.authorize('meowmeowmeow');
+let max = api.kittens.get(2);
+```
+
+> The above command does not return a body
+
+This endpoint attempts to purhcase a factory with the 
+### HTTP Request
+
+`POST http://localhost:8080/api/v1/factories/purchase`
+
+### Body Parameters
+
+Parameter | Description
+--------- | -----------
+factoryID | The factory's ID to be purchased
+amount | The amount of factories desired to be purchased
+
+### Errors
+Code | Description
+--------- | -----------
+419 | User does not have either resources or production required to make the purchase.
+
+
+## Upgrade a Factory
+
+```shell
+curl "http://example.com/api/kittens/2"
+  -H "Authorization: meowmeowmeow"
+```
+
+```javascript
+const kittn = require('kittn');
+
+let api = kittn.authorize('meowmeowmeow');
+let max = api.kittens.get(2);
+```
+
+> The above command does not return a body
+
+This endpoint attempts to upgrade an user's factory. 
+### HTTP Request
+
+`POST http://localhost:8080/api/v1/factories/purchase`
+
+### Body Parameters
+
+Parameter | Description
+--------- | -----------
+factoryID | The factory's ID to be upgraded
+
+### Errors
+Code | Description
+--------- | -----------
+419 | User does not have the money required to upgrade the factory.
+
+# Market
+
+## Get the Market's prices
+
+```shell
+curl "http://example.com/api/kittens/2"
+  -H "Authorization: meowmeowmeow"
+```
+
+```javascript
+const kittn = require('kittn');
+
+let api = kittn.authorize('meowmeowmeow');
+let max = api.kittens.get(2);
+```
+
+> The above command returns JSON structured like this:
+
+```json
+{
+    "prices": {
+        "CIRCUITS": 52,
+        "GOLD": 21,
+        "MONEY": 10,
+        "CARDBOARD": 1,
+        "METAL_SCRAP": 12,
+        "COPPER_CABLE": 10,
+        "POWER": 46,
+        "TIRES": 9,
+        "PEOPLE": 10,
+        "IRON": 6,
+        "RUBBER": 6,
+        "COPPER": 1,
+        "PLASTIC": 42
+    }
+}
+```
+
+This endpoint retrieves the maximun amount of factories of type <factoryID> which the user can buy with the current resources, and whether or no (and the cost) of buying 1, 10 and 100 of the given factory.
+### HTTP Request
+
+`GET http://localhost:8080/api/v1/market/prices`
+
+## Purchase Resources
+
+```shell
+curl "http://example.com/api/kittens/2"
+  -H "Authorization: meowmeowmeow"
+```
+
+```javascript
+const kittn = require('kittn');
+
+let api = kittn.authorize('meowmeowmeow');
+let max = api.kittens.get(2);
+```
+
+> The above command does not return a body
+
+This endpoint attempts to upgrade an user's factory. 
+### HTTP Request
+
+`POST http://localhost:8080/api/v1/maket/purchase`
+
+### Body Parameters
+
+Parameter | Description
+--------- | -----------
+resourceType | The resourceType codeName to be purchased
+amount | The amount of resources desired to be purchased
+
+
+### Errors
+Code | Description
+--------- | -----------
+419 | User does not have the money required to buy that amount of resources.
+
+## Sell Resources
+
+```shell
+curl "http://example.com/api/kittens/2"
+  -H "Authorization: meowmeowmeow"
+```
+
+```javascript
+const kittn = require('kittn');
+
+let api = kittn.authorize('meowmeowmeow');
+let max = api.kittens.get(2);
+```
+
+> The above command does not return a body
+
+This endpoint attempts to upgrade an user's factory. 
+### HTTP Request
+
+`POST http://localhost:8080/api/v1/maket/sell`
+
+### Body Parameters
+
+Parameter | Description
+--------- | -----------
+resourceType | The resourceType codeName to be sold
+amount | The amount of resources desired to be sold
+
+
+### Errors
+Code | Description
+--------- | -----------
+419 | User does not have that amount of resources to sell.
 
 # Search
 

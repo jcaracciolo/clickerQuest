@@ -51,7 +51,8 @@ public class UserHibernateDao implements UserDao{
 
         query.setParameter("userid",userId);
         Number n = (Number)query.getSingleResult();
-        return n.intValue();
+        //TODO CHECK WHAT HAPPENS WHEN THERE IS NO USER
+        return n!=null? n.intValue() : null;
     }
 
     @Override

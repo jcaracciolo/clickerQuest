@@ -39,7 +39,7 @@ public class MarketController {
 
     private static class MarketQuery {
         @XmlElement(name = "resource_type")
-        public Integer resourceType;
+        public String resourceType;
         public Double amount;
     }
 
@@ -51,9 +51,9 @@ public class MarketController {
         if(query == null || query.resourceType == null || query.amount == null) return Response.status(Response.Status.BAD_REQUEST).build();
 
         if(us.findById(userID) == null) return Response.status(Response.Status.UNAUTHORIZED).build();
-        if(query.amount<0 || ResourceType.fromId(query.resourceType) == null) return Response.status(Response.Status.BAD_REQUEST).build();
+        if(query.amount<0 || !ResourceType.fromName(query.resourceType).isPresent()) return Response.status(Response.Status.BAD_REQUEST).build();
 
-        if (us.purchaseResourceType(userID,ResourceType.fromId(query.resourceType),query.amount)) {
+        if (us.purchaseResourceType(userID,ResourceType.fromName(query.resourceType).get(),query.amount)) {
             return Response.ok().build();
         } else {
             return Response.status(Response.Status.CONFLICT).build();
@@ -67,12 +67,12 @@ public class MarketController {
     public Response sellResource(MarketQuery query) {
         if(query == null || query.resourceType == null || query.amount == null) return Response.status(Response.Status.BAD_REQUEST).build();
         Double amount = query.amount;
-        Integer resourceType = query.resourceType;
+        String resourceType = query.resourceType;
 
         if(us.findById(userID) == null) return Response.status(Response.Status.UNAUTHORIZED).build();
-        if(amount<0 || ResourceType.fromId(resourceType) == null) return Response.status(Response.Status.BAD_REQUEST).build();
+        if(amount<0 ||  !ResourceType.fromName(resourceType).isPresent()) return Response.status(Response.Status.BAD_REQUEST).build();
 
-        if (us.sellResourceType(userID,ResourceType.fromId(resourceType),amount)) {
+        if (us.sellResourceType(userID,ResourceType.fromName(resourceType).get(),amount)) {
             return Response.ok().build();
         } else {
             return Response.status(Response.Status.CONFLICT).build();

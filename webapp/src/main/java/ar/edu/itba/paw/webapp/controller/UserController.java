@@ -89,6 +89,18 @@ public class UserController {
     }
 
     @GET
+    @Path("/{id}/rank")
+    @Produces(value = { MediaType.APPLICATION_JSON, })
+    public Response getRankById(@PathParam("id") final long id) {
+        Integer rank = us.getGlobalRanking(id);
+        if (rank != null) {
+            return Response.ok(new UserRankDTO(rank, userID, uriInfo.getBaseUri())).build();
+        } else {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+    }
+
+    @GET
     @Path("/{userId}/factories/{factoryId}")
     @Produces(value = { MediaType.APPLICATION_JSON, })
     public Response getFactoryById(
