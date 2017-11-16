@@ -5,7 +5,7 @@
   <!-- LEFT SECTION -->
   <div class="left-section">
     <div>
-      <img id="clanImg" src="../../images/clan_icons/1.jpg"/>
+      <img id="clanImg" src="{{clan.image}}"/>
     </div>
     <div class="clanName">{{clan.name}}</div>
     <div class="clanPoints">
@@ -13,13 +13,13 @@
         Score: {{clan.score}}
       </div>
       <div>
-        Ranking: {{clan.ranking}}
+        Ranking: {{clan.rank}}
       </div>
       <div>
-        Battles Won: {{clan.cantBattlesWon}}
+        Battles Won: {{clan.wins}}
       </div>
       <div>
-        Total Battles: {{clan.cantBattles}}
+        Total Battles: {{clan.battles}}
       </div>
     </div>
   </div>
@@ -42,7 +42,7 @@
     <div ng-if="battle != null">
       <div class="clanBattle">
         <div class="vsClanImage">
-          <img id="vsMyClan" src="../../images/clan_icons/1.jpg"/>
+          <img id="vsMyClan" src={{clan.image}}/>
           <div class="vsClanName">
             <p class="clanname-link" data-clanname="${clan.name}">{{clan.name}}</p>
           </div>
@@ -54,7 +54,7 @@
           <img id="vsIcon" src="../../images/clan_icons/swords.png"/>
         </div>
         <div class="vsClanImage">
-          <img id="vsOtherClan" src="../../images/clan_icons/5.jpg"/>
+          <img id="vsOtherClan" src={{battle.versus.image}}/>
           <div class="vsClanName">
             <p class="clanname-link" data-clanname="${clanBattle2.clan.name}">{{battle.versus.name}}</p>
           </div>
@@ -76,9 +76,9 @@
         <div>Score</div>
       </div>
       <div ng-repeat="member in members" class="table-row">
-        <p>{{member.ranking}}</p>
+        <p>{{member.rank}}</p>
         <div class="nameAndImage">
-          <img class="itemImg" src="../../images/profile_images/{{member.id}}.jpg"/>
+          <img class="itemImg" src="{{member.image}}"/>
           <p class="username-link" data-username="${u.username}">{{member.name}}</p>
         </div>
         <p>
