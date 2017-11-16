@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.webapp.DTO.users;
 
 import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.webapp.DTO.ResourceManager;
 import ar.edu.itba.paw.webapp.DTO.clans.ClanDTO;
 
 import javax.xml.bind.annotation.XmlElement;
@@ -24,7 +25,7 @@ public class UserDTO {
     private  String username;
 
     @XmlElement(name = "profile_image_url")
-    private URI profileImageUrl;
+    private String profileImageUrl;
 
     @XmlElement(name = "score")
     private  double score;
@@ -46,7 +47,7 @@ public class UserDTO {
     public UserDTO(User user, URI baseUri){
         id = user.getId();
         username = user.getUsername();
-        profileImageUrl = baseUri.resolve("resources/" + "profile_images/" + user.getProfileImage());
+        profileImageUrl = ResourceManager.resolveResource(baseUri,"profile_images/" + user.getProfileImage());
         score = user.getScore();
         if(user.getClanId() != null) {
             clanId = user.getClanId();

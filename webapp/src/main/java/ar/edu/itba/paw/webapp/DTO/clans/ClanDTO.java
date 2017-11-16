@@ -41,6 +41,10 @@ public class ClanDTO {
     @XmlElement(name = "battle_url")
     private URI battleURL;
 
+    @XmlElement(name = "clan_rank_url")
+    private URI clanRankURL;
+
+
     public ClanDTO(){}
 
     public ClanDTO(Clan clan, ClanBattle clanBattle, URI baseUri){
@@ -51,6 +55,7 @@ public class ClanDTO {
         this.battles = clan.getBattles();
         this.image = baseUri.resolve("resources/" + "group_icons/" + clan.getImage());
         this.usersURL = baseUri.resolve(String.format(ClanUsersDTO.url, clan.getId()));
+        this.clanRankURL = baseUri.resolve(String.format(ClanRankDTO.url, clan.getId()));
         if(clanBattle != null) {
             this.battleURL = baseUri.resolve(String.format(ClanBattleDTO.url, clan.getId()));
         }

@@ -458,7 +458,8 @@ let kittens = api.kittens.get();
             "wins": 7,
             "battles": 3646,
             "image": "http://localhost:8080/api/v1/resources/group_icons/1.jpg",
-            "battle_url": "http://localhost:8080/api/v1/clans/20/battle"
+            "battle_url": "http://localhost:8080/api/v1/clans/20/battle",
+            "clan_rank_url": "http://localhost:8080/api/v1/clans/20/rank"
         },
         {
             "type": "Clan",
@@ -469,7 +470,8 @@ let kittens = api.kittens.get();
             "wins": 2,
             "battles": 4133,
             "image": "http://localhost:8080/api/v1/resources/group_icons/1.jpg",
-            "battle_url": "http://localhost:8080/api/v1/clans/13/battle"
+            "battle_url": "http://localhost:8080/api/v1/clans/13/battle",
+            "clan_rank_url": "http://localhost:8080/api/v1/clans/13/rank"
         }
     ]
 }
@@ -513,7 +515,8 @@ let max = api.kittens.get(2);
     "wins": 7,
     "battles": 3646,
     "image": "http://localhost:8080/api/v1/resources/group_icons/1.jpg",
-    "battle_url": "http://localhost:8080/api/v1/clans/20/battle"
+    "battle_url": "http://localhost:8080/api/v1/clans/20/battle",
+    "clan_rank_url": "http://localhost:8080/api/v1/clans/20/rank"
 }
 ```
 
@@ -549,6 +552,7 @@ let max = api.kittens.delete(2);
 ```json
 {
     "clan_id": 20,
+    "members": 1,
     "users": [
         {
             "id": 1,
@@ -613,6 +617,44 @@ This endpoint returns a given clan's battle.
 Parameter | Description
 --------- | -----------
 ID | The ID of the battle's clan to retrieve
+
+## Get a Clan's rank
+
+```shell
+curl "http://example.com/api/kittens/2"
+  -X DELETE
+  -H "Authorization: meowmeowmeow"
+```
+
+```javascript
+const kittn = require('kittn');
+
+let api = kittn.authorize('meowmeowmeow');
+let max = api.kittens.delete(2);
+```
+
+> The above command returns JSON structured like this:
+
+```json
+{
+    "clan_id": 20,
+    "clan_url": "http://localhost:8080/api/v1/clans/20",
+    "rank": 1
+}
+```
+
+This endpoint returns a given clan's battle.
+
+### HTTP Request
+
+`GET http://localhost:8080/api/v1/clans/<ID>/rank`
+
+### URL Parameters
+
+Parameter | Description
+--------- | -----------
+ID | The ID of the rank's clan to retrieve
+
 
 ## Join a Clan
 

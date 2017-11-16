@@ -17,6 +17,9 @@ public class ClanUsersDTO {
     @XmlElement(name = "clan_id")
     private int clanID;
 
+    @XmlElement(name = "members")
+    private int members;
+
     @XmlElement(name = "users")
     private List<UserDTO> users;
 
@@ -24,6 +27,7 @@ public class ClanUsersDTO {
 
     public ClanUsersDTO(Clan clan, URI baseUri) {
         clanID = clan.getId();
+        members = clan.getUsers().size();
         users = clan.getUsers().stream().map(u -> new UserDTO(u, baseUri)).collect(Collectors.toList());
     }
 

@@ -9,6 +9,7 @@ import ar.edu.itba.paw.model.packages.Paginating;
 import ar.edu.itba.paw.webapp.DTO.PaginantingDTO;
 import ar.edu.itba.paw.webapp.DTO.clans.ClanBattleDTO;
 import ar.edu.itba.paw.webapp.DTO.clans.ClanDTO;
+import ar.edu.itba.paw.webapp.DTO.clans.ClanRankDTO;
 import ar.edu.itba.paw.webapp.DTO.clans.ClanUsersDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -95,6 +96,18 @@ public class ClanController {
                 }
                 return Response.ok(new ClanBattleDTO(battle,opponent,uriInfo.getBaseUri())).build();
             }
+        }
+
+        return Response.status(Response.Status.NOT_FOUND).build();
+    }
+
+    @GET
+    @Path("/{id}/rank")
+    @Produces(value = { MediaType.APPLICATION_JSON, })
+    public Response getClanRankById(@PathParam("id") final int id) {
+        final Integer rank = cs.getGlobalRanking(id);
+        if (rank != null) {
+            return Response.ok(new ClanRankDTO(id, rank, uriInfo.getBaseUri())).build();
         }
 
         return Response.status(Response.Status.NOT_FOUND).build();
