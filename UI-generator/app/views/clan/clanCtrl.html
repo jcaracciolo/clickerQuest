@@ -1,0 +1,90 @@
+
+<link rel="stylesheet" href="styles/clan.css">
+<link rel="stylesheet" href="styles/globalRanking.css">
+<div class="main-container">
+  <!-- LEFT SECTION -->
+  <div class="left-section">
+    <div>
+      <img id="clanImg" src="../../images/clan_icons/1.jpg"/>
+    </div>
+    <div class="clanName">{{clan.name}}</div>
+    <div class="clanPoints">
+      <div>
+        Score: {{clan.score}}
+      </div>
+      <div>
+        Ranking: {{clan.ranking}}
+      </div>
+      <div>
+        Battles Won: {{clan.cantBattlesWon}}
+      </div>
+      <div>
+        Total Battles: {{clan.cantBattles}}
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT SECTION -->
+  <div class="right-section">
+    <div class="subtitle">
+      Battle of the Day
+    </div>
+    <div ng-if="battle == null">
+      <div class="noBattleText">
+        NO BATTLES TODAY
+      </div>
+    </div>
+    <div ng-if="battle != null && battle.versus == null">
+      <div class="noBattleText">
+        EL OTRO CLAN TIRÓ GAS Y ABANDONÓ
+      </div>
+    </div>
+    <div ng-if="battle != null">
+      <div class="clanBattle">
+        <div class="vsClanImage">
+          <img id="vsMyClan" src="../../images/clan_icons/1.jpg"/>
+          <div class="vsClanName">
+            <p class="clanname-link" data-clanname="${clan.name}">{{clan.name}}</p>
+          </div>
+          <div class="vsClanPoints">
+            Points Today: {{battle.versusInitialScore - battle.versus.score}}
+          </div>
+        </div>
+        <div class="vsIcon">
+          <img id="vsIcon" src="../../images/clan_icons/swords.png"/>
+        </div>
+        <div class="vsClanImage">
+          <img id="vsOtherClan" src="../../images/clan_icons/5.jpg"/>
+          <div class="vsClanName">
+            <p class="clanname-link" data-clanname="${clanBattle2.clan.name}">{{battle.versus.name}}</p>
+          </div>
+          <div class="vsClanPoints">
+            Points Today: {{battle.myInitialScore - clan.score}}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CLAN MEMBERS -->
+    <div class="ranking-table">
+      <div class="subtitle">
+        Clan Members
+      </div>
+      <div class="header">
+        <div>Ranking</div>
+        <div>User</div>
+        <div>Score</div>
+      </div>
+      <div ng-repeat="member in members" class="table-row">
+        <p>{{member.ranking}}</p>
+        <div class="nameAndImage">
+          <img class="itemImg" src="../../images/profile_images/{{member.id}}.jpg"/>
+          <p class="username-link" data-username="${u.username}">{{member.name}}</p>
+        </div>
+        <p>
+          {{member.score}}
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

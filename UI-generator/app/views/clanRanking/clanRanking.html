@@ -1,0 +1,36 @@
+
+
+<link rel="stylesheet" href="styles/clan.css">
+<link rel="stylesheet" href="styles/globalRanking.css">
+<div class="ranking-container">
+  <div class="ranking-table">
+    <div class="title">CLAN RANKING</div>
+    <div class="header">
+      <div>RANK</div>
+      <div>CLAN</div>
+      <div>SCORE</div>
+    </div>
+    <div ng-repeat="clan in clans" class="table-row">
+        <p>{{clan.ranking}}</p>
+        <div class="nameAndImage">
+          <img class="itemImg" src="../../images/clan_icons/2.jpg"/>
+          <p class="username-link" data-username="${c.name}">{{clan.name}}</p>
+        </div>
+        <p>
+          {{clan.score}}
+        </p>
+    </div>
+    <div id="pagination">
+      <c:if test="${actualPage > 1}">
+        <div>
+          <p id="prevPage"><< Previous</p>
+        </div>
+      </c:if>
+      <c:if test="${globalRanking.totalPages > actualPage}">
+        <div>
+          <p id="nextPage">Next >></p>
+        </div>
+      </c:if>
+    </div>
+  </div>
+</div>

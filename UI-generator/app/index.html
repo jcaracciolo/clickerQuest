@@ -6,31 +6,86 @@
   <meta name="description" content="">
 
   <!-- build:css(.tmp) styles/main.css -->
-  <link rel="stylesheet" href="styles/main.css">
+  <link rel="stylesheet" href="styles/common.css">
   <!-- endbuild -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
 </head>
 <body ng-controller="IndexCtrl">
   <!--[if lt IE 7]>
   <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
   <![endif]-->
-  <!-- Add your site or application content here -->
-  <div class="container">
-    <div class="header">
-      <ul class="nav nav-pills pull-right">
-        <li class="active"><a ng-href="#">Home</a></li>
-        <li><a ng-href="#/about">About</a></li>
-        <li><a ng-href="#">Contact</a></li>
-      </ul>
-      <h3 class="text-muted">clickerQuest</h3>
-    </div>
-    <p>{{greeting}}</p>
-    <div ng-view=""></div>
 
-    <div class="footer">
-      <p><span class="glyphicon glyphicon-heart"></span> from the Yeoman team</p>
+  <!-- NavBar -->
+  <div class="row main-frame no-margins">
+    <div class="navbar-fixed">
+      <nav>
+        <div class="nav-wrapper">
+          <div>
+            <a id="logo-container" ng-href="/#/game" class="brand-logo">
+              <img class="upper-logo" src="images/clickerQuest_logo.png" alt="logo"/>
+            </a>
+          </div>
+          <div id="search-user">
+            <form onSubmit="return false;" autocomplete="off">
+              <div class="input-field search-user">
+                <input id="search" type="search" required>
+                <label class="label-icon" for="search"><i class="material-icons">search</i>
+                </label>
+                <i class="material-icons closed">close</i>
+              </div>
+            </form>
+          </div>
+          <div id="clanRanking" class="button last">
+            <ul>
+              <li>
+                <a href="">CLAN RANKING</a>
+              </li>
+            </ul>
+          </div>
+          <div id="globalRanking" class="button">
+            <ul>
+              <li>
+                <a href="">GLOBAL RANKING</a>
+              </li>
+            </ul>
+          </div>
+
+              <div class="button">
+                <ul>
+                  <li>
+                    <a href="#clanModal">CREATE CLAN</a>
+                  </li>
+                </ul>
+              </div>
+              <div id="createClan" class="button">
+                <ul>
+                  <li>
+                    <a href="">MY CLAN</a>
+                  </li>
+                </ul>
+              </div>
+          <div id="logout">
+            <ul id="nav-mobile">
+              <li><a href="">LOGOUT </a></li>
+            </ul>
+          </div>
+        </div>
+      </nav>
     </div>
   </div>
+
+
+
+    <div ng-view=""></div>
+
+
+
+  <!-- SCRIPTS -->
+
+  <!-- Materialize -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
 
   <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
   <script>

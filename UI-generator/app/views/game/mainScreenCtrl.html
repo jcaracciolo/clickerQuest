@@ -1,0 +1,350 @@
+
+<link rel="stylesheet" href="styles/game.css">
+<div class="row">
+  <!-- LEFT PANEL -->
+  <div class="col no-padding s2">
+    <div class="scrollable-y card darken-1">
+
+      <!-- Player's info -->
+      <div class="card-content white-text">
+        <div class="section">
+          <a ng-href="/#/profile" class="username" data-userid="${user.id}">
+            {{user.name}}
+          </a>
+          <div class="card-image profile-picture">
+            <img class="profile" src="../../images/profile_images/0.jpg"/>
+          </div>
+          <p id="score">SCORE: {{user.score}}
+          </p>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+      <a class="waves-effect waves-light btn marketButton" href="#marketModal">MARKET</a>
+
+      <!-- Resources -->
+      <div class="card-content white-text">
+        <span class="card-title">RESOURCES</span>
+        <div id="storage">
+          <div ng-repeat="res in resources">
+            <div class="row no-margins">
+              <div class="col">
+                <img class="resource-icon tooltipped" data-position="top" data-delay="50"
+                     data-tooltip='{{res.name}}' src="../../images/resources_icon/{{res.id}}.png"/>
+              </div>
+              <div class="col">
+                <p class="resourcesValue" data-resource="${resource.id}">
+                  {{res.stock}} + {{res.production}}/s
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="divider last"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- CENTER PANEL -->
+  <div class="scrollable-y col no-padding s7">
+
+    <div class="row factory-row">
+      <div ng-repeat="fact in factories">
+
+        <div ng-if="fact.cantActive != 0">
+          <!-- Factory Card -->
+          <div class="col s3 factory-main">
+            <div class="card factory-central-card">
+              <div class="card-content">
+                <div class="center-card-title">
+                  <h8 class="centered-text">{{fact.name}}</h8>
+                </div>
+
+                <!-- Consuming Resources -->
+                <div class="factory-consuming">
+                  <div ng-if="fact.recipe.input.length != 0">
+                    <p>CONSUMING:</p>
+                    <div ng-repeat="res in fact.recipe.input">
+                      <div class="row no-margins">
+                        <div class="col no-padding">
+                          <img class="resource-icon tooltipped" data-position="top" data-delay="50"
+                               data-tooltip='res' src="../../images/resources_icon/{{res.id}}.png"/>
+                        </div>
+                        <div class="col">
+                          <p>
+                            {{res.cant * fact.cantActive}}/s
+                            <!--<fmt:formatNumber pattern="#.##/s " value="${inputMap.get(res)}"/>-->
+                            <!--<script>document.write(abbreviateNumber(parseFloat(${inputMap.get(res)}), true)+"/s");</script>-->
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Image and Amount -->
+                <div class="card-image">
+                  <img class="factory-image" src="../../images/factory_images/{{fact.id}}.jpg"/>
+                </div>
+                <p id="factoryCant${factory.getType().getId()}" class="centered-text">
+                  AMOUNT: {{fact.amount}}
+                  <!--<script>document.write(abbreviateNumber(parseFloat(${factory.amount}), true));</script>-->
+                </p>
+
+                <!-- Producing Resources -->
+                <div class="factory-producing">
+                  <div ng-if="fact.recipe.output.length != 0">
+                    <p>PRODUCING:</p>
+                    <div ng-repeat="res in fact.recipe.output">
+                      <div class="row no-margins">
+                        <div class="col no-padding">
+                          <img class="resource-icon tooltipped" data-position="top" data-delay="50"
+                               data-tooltip='res' src="../../images/resources_icon/{{res.id}}.png"/>
+                        </div>
+                        <div class="col">
+                          <p>
+                            {{res.cant * fact.cantActive}}/s
+                            <!--<fmt:formatNumber pattern="#.##/s " value="${inputMap.get(res)}"/>-->
+                            <!--<script>document.write(abbreviateNumber(parseFloat(${inputMap.get(res)}), true)+"/s");</script>-->
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--<c:forEach items="${factories}" var="factory" varStatus="loop">-->
+      <!--<c:if test="${factory.amount != 0}">-->
+      <!--<div class="col s3 factory-main">-->
+      <!--<div class="card factory-central-card">-->
+      <!--<div class="card-content">-->
+      <!--<div class="center-card-title">-->
+      <!--<h8 class="centered-text"><spring:message code="${factory.type.nameCode}"/></h8>-->
+      <!--</div>-->
+      <!--<c:set var="factoriesProduction" value="${factory.factoriesProduction}"/>-->
+      <!--<c:set var="inputMap" value="${factoriesProduction.inputs}"/>-->
+      <!--<div class="factory-consuming">-->
+      <!--<c:if test="${inputMap.size() > 0}">-->
+      <!--<p><spring:message code="game.consuming"/></p>-->
+      <!--<c:forEach items="${inputMap.keySet()}" var="res">-->
+      <!--<div class="row no-margins">-->
+      <!--<div class="col no-padding">-->
+      <!--<img class="resource-icon tooltipped" data-position="top" data-delay="50"-->
+      <!--data-tooltip='<spring:message code="${res.nameCode}"/>' src="<c:url value="/resources/resources_icon/${res.id}.png"/>"/>-->
+      <!--</div>-->
+      <!--<div class="col">-->
+      <!--<p>-->
+      <!--<%&#45;&#45;<fmt:formatNumber pattern="#.##/s " value="${inputMap.get(res)}"/>&#45;&#45;%>-->
+      <!--<script>document.write(abbreviateNumber(parseFloat(${inputMap.get(res)}), true)+"/s");</script>-->
+      <!--</p>-->
+      <!--</div>-->
+      <!--</div>-->
+      <!--</c:forEach>-->
+      <!--</c:if>-->
+      <!--</div>-->
+      <!--<div class="card-image">-->
+      <!--<img class="factory-image" src="<c:url value="/resources/factory_images/${factory.getImage()}"/>"/>-->
+      <!--</div>-->
+      <!--<p id="factoryCant${factory.getType().getId()}" class="centered-text">-->
+      <!--<spring:message code="game.amount"/> <script>document.write(abbreviateNumber(parseFloat(${factory.amount}), true));</script></p>-->
+      <!--<div class="factory-producing">-->
+      <!--<p><spring:message code="game.producing"/></p>-->
+      <!--<c:set var="outputMap" value="${factoriesProduction.getOutputs()}"/>-->
+      <!--<c:forEach items="${outputMap.keySet()}" var="res">-->
+      <!--<div class="row no-margins">-->
+      <!--<div class="col no-padding">-->
+      <!--<img class="resource-icon tooltipped" data-position="top" data-delay="50"-->
+      <!--data-tooltip='<spring:message code="${res.nameCode}"/>' src="<c:url value="/resources/resources_icon/${res.id}.png"/>"/>-->
+      <!--</div>-->
+      <!--<div class="col">-->
+      <!--<p>-->
+      <!--<%&#45;&#45;<fmt:formatNumber pattern="#.##/s " value="${outputMap.get(res)}"/>&#45;&#45;%>-->
+      <!--<script>document.write(abbreviateNumber(parseFloat(${outputMap.get(res)}), true)+"/s");</script>-->
+      <!--</p>-->
+      <!--</div>-->
+      <!--</div>-->
+      <!--</c:forEach>-->
+      <!--</div>-->
+      <!--</div>-->
+      <!--</div>-->
+      <!--</div>-->
+      <!--</c:if>-->
+      <!--<c:if test="${loop.index % 4 == 3 && loop.index != 0}">-->
+      <!--</div>-->
+      <!--<div class="row factory-row">-->
+      <!--</c:if>-->
+      <!--</c:forEach>-->
+      <div class="divider last"></div>
+    </div>
+  </div>
+  <!-- RIGHT PANEL -->
+  <div class="col no-padding s3">
+    <div class="scrollable-y card darken-1">
+      <div class="card-content white-text">
+        <span class="card-title">FACTORIES</span>
+        <div class="divider"></div>
+        <div class="right-description">
+          <div>FACTORY</div>
+          <div>RECIPE</div>
+          <div>UPGRADE</div>
+        </div>
+
+        <div ng-repeat="fact in factories">
+          <div class="divider"></div>
+          <!-- BEGINING OF FACTORY CARD -->
+          <div class="section">
+            <div class="factory-card-container">
+              <div class="row factory-card">
+                <!-- Factory Column -->
+                <div class="col s4 buyFactorySection">
+                  <div class="card-image factory-icon">
+                    <p class="center-align">{{fact.name}}</p>
+                    <img src="../../images/factory_images/{{fact.id}}.jpg" alt="factory_icon"/>
+                  </div>
+                  <p>COST</p>
+                  <div>
+                    <div ng-repeat="res in fact.cost">
+                      <div class="row no-margins">
+                        <div class="col no-padding">
+                          <img class="resource-icon tooltipped" data-position="top" data-delay="50"
+                               data-tooltip='RESNAME' src="../../images/resources_icon/{{res.id}}.png"/>
+                        </div>
+                        <div class="col">
+                          <p>
+                            {{res.cant}}
+                            <!--<fmt:formatNumber pattern="#.##" value="${costMap.get(res)}"/>-->
+                            <!--<script>document.write(abbreviateNumber(parseFloat(${costMap.get(res)}), false));</script>-->
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- Recipe Column -->
+                <div class="col s4">
+                  <div ng-repeat="res in fact.recipe.input">
+                    <div class="row no-margins">
+                      <div class="col no-padding">
+                        <img class="resource-icon tooltipped" data-position="top" data-delay="50"
+                             data-tooltip='RESNAME' src="../../images/resources_icon/{{res.id}}.png"/>
+                      </div>
+                      <div class="col no-padding">
+                        <p>
+                          {{res.cant}}/s
+                          <!--<fmt:formatNumber pattern="#.##/s " value="${inputMap.get(res)}"/>-->
+                          <!--<script>document.write(abbreviateNumber(${inputMap.get(res)}, true) + "/s");</script>-->
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card-image col s12">
+                    <img src="../../images/arrow_ingredients.png" alt="embudo"/>
+                  </div>
+                  <div ng-repeat="res in fact.recipe.output">
+                    <div class="row no-margins">
+                      <div class="col no-padding">
+                        <img class="resource-icon tooltipped" data-position="top" data-delay="50"
+                             data-tooltip='RESNAME' src="../../images/resources_icon/{{res.id}}.png"/>
+                      </div>
+                      <div class="col no-padding">
+                        <p>
+                          {{res.cant}}/s
+                          <!--<fmt:formatNumber pattern="#.##/s " value="${inputMap.get(res)}"/>-->
+                          <!--<script>document.write(abbreviateNumber(${inputMap.get(res)}, true) + "/s");</script>-->
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- Upgrade Column (NEED FIX) -->
+                <div class="col s4 button-container">
+                  <div id="upgradeDisabler${factory.getType()}" class="box black upgradeDisability canBuy"></div>
+                  <div ng-if="fact.cantActive != 0">
+                    <div class="upgrade-button-container">
+                      <div ng-switch="fact.upgrade.type">
+                        <div ng-switch-when="0">
+                          <button type="button" id="upgrade${factory.getType()}" data-factoryid="${factory.getType().getId()}"
+                                  class="waves-effect waves-light upgradeButton btn ${factory.getNextUpgrade().getType()} tooltipped"
+                                  data-position="down" data-delay="50"
+                                  data-tooltip='OUTPUR INCREASE'>
+                            <div class="card-image">
+                              <img class="upgradeImage" src="../../images/upgrade_icons/increase.png" alt="upgrade_icon"/>
+                            </div>
+                          </button>
+                        </div>
+                        <div ng-switch-when="1">
+                          <button type="button" id="upgrade${factory.getType()}" data-factoryid="${factory.getType().getId()}"
+                                  class="waves-effect waves-light upgradeButton btn ${factory.getNextUpgrade().getType()} tooltipped"
+                                  data-position="down" data-delay="50"
+                                  data-tooltip='INPUT REDUCTION'>
+                            <div class="card-image">
+                              <img class="upgradeImage" src="../../images/upgrade_icons/reduce.png" alt="upgrade_icon"/>
+                            </div>
+                          </button>
+                        </div>
+                        <div ng-switch-otherwise>
+                          <button type="button" id="upgrade${factory.getType()}" data-factoryid="${factory.getType().getId()}"
+                                  class="waves-effect waves-light upgradeButton btn ${factory.getNextUpgrade().getType()} tooltipped"
+                                  data-position="down" data-delay="50"
+                                  data-tooltip='COST REDUCTION'>
+                            <div class="card-image">
+                              <img class="upgradeImage" src="../../images/upgrade_icons/cost_reduction.png'/>" alt="upgrade_icon"/>
+                            </div>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row no-margins">
+                      <div class="col no-padding">
+                        <img class="resource-icon tooltipped" data-position="top" data-delay="50"
+                             data-tooltip='<spring:message code="money-type"/>'
+                             src="../../images/resources_icon/3.png"/>
+                      </div>
+                      <div class="col">
+                        <p class="no-margins">
+                          29.99
+                          <!--<fmt:formatNumber pattern="#" value="${factory.getNextUpgrade().cost}"/>-->
+                          <!--<script>document.write(abbreviateNumber(parseFloat(${factory.getNextUpgrade().cost}), false));</script>-->
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Buy Buttons-->
+          <div class="allBuyButtonsContainer">
+            <div class="buyButtonsContainer">
+              <div>
+                <div id="factory1Disabler${factory.getType()}" data-position="top" data-delay="50"
+                     data-tooltip="CANTBUY" class="tooltipped box black buy1Disability canBuy"></div>
+                <img id="buyOne${factory.getType()}" data-amount="1" data-factoryid="${factory.getType().getId()}" class="buyFactory" src="../../images/buttons/buy1.png"/>
+              </div>
+              <div>
+                <div id="factory10Disabler${factory.getType()}"data-position="top" data-delay="50"
+                     data-tooltip="<spring:message code='game.cantBuy'/>" class="tooltipped box black buy10Disability canBuy"></div>
+                <img id="buyTen${factory.getType()}" data-amount="10" data-factoryid="${factory.getType().getId()}" class="buyFactory" src="../../images/buttons/buy10.png"/>
+              </div>
+              <div>
+                <div id="factory100Disabler${factory.getType()}" data-position="top" data-delay="50"
+                     data-tooltip="<spring:message code='game.cantBuy'/>" class="tooltipped box black buy100Disability canBuy"></div>
+                <img id="buyHundred${factory.getType()}" data-amount="100" data-factoryid="${factory.getType().getId()}" class="buyFactory" src="../../images/buttons/buy100.png"/>
+              </div>
+            </div>
+            <div id="maxButtonContainer">
+              <div id="factoryMaxDisabler${factory.getType()}" class="box black buyMaxDisability canBuy"></div>
+              <img id="buyMax${factory.getType()}" data-amount="max" data-factoryid="${factory.getType().getId()}" class="buyFactory" src="../../images/bigButton.png"/>
+              <p id="maxBuy${factory.type.id}" data-refersto="buyMax${factory.getType()}" class="maxText">MAX</p>
+            </div>
+          </div>
+          <!-- END OF FACTORY CARD -->
+        </div>
+        <div class="divider last"></div>
+      </div>
+    </div>
+  </div>
+</div>
