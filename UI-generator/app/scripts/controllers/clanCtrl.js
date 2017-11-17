@@ -35,7 +35,7 @@ define(['clickerQuest', 'services/UserService','services/ClanService'], function
         id: null,
         name: null,
         image: null,
-        score: null,
+        score: null
       },
       myInitialScore: null,
       versusInitialScore: null
