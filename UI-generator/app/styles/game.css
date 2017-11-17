@@ -215,8 +215,9 @@ div.buyFactorySection.col {
 	margin: 0;
 }
 
-#score {
+#score, #ranking {
     font-size: 1.5rem;
+  align-self: flex-start;
 }
 
 p {

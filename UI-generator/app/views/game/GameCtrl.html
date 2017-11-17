@@ -1,6 +1,6 @@
 
 <link rel="stylesheet" href="styles/game.css">
-<div class="row">
+<div class="row" id="outer">
   <!-- LEFT PANEL -->
   <div class="col no-padding s2">
     <div class="scrollable-y card darken-1">
@@ -15,6 +15,8 @@
             <img class="profile" src={{user.image}}/>
           </div>
           <p id="score">SCORE: {{user.score}}
+          </p>
+          <p id="ranking">RANK: {{user.ranking}}
           </p>
         </div>
       </div>
@@ -116,67 +118,6 @@
           </div>
         </div>
       </div>
-      <!--<c:forEach items="${factories}" var="factory" varStatus="loop">-->
-      <!--<c:if test="${factory.amount != 0}">-->
-      <!--<div class="col s3 factory-main">-->
-      <!--<div class="card factory-central-card">-->
-      <!--<div class="card-content">-->
-      <!--<div class="center-card-title">-->
-      <!--<h8 class="centered-text"><spring:message code="${factory.type.nameCode}"/></h8>-->
-      <!--</div>-->
-      <!--<c:set var="factoriesProduction" value="${factory.factoriesProduction}"/>-->
-      <!--<c:set var="inputMap" value="${factoriesProduction.inputs}"/>-->
-      <!--<div class="factory-consuming">-->
-      <!--<c:if test="${inputMap.size() > 0}">-->
-      <!--<p><spring:message code="game.consuming"/></p>-->
-      <!--<c:forEach items="${inputMap.keySet()}" var="res">-->
-      <!--<div class="row no-margins">-->
-      <!--<div class="col no-padding">-->
-      <!--<img class="resource-icon tooltipped" data-position="top" data-delay="50"-->
-      <!--data-tooltip='<spring:message code="${res.nameCode}"/>' src="<c:url value="/resources/resources_icon/${res.id}.png"/>"/>-->
-      <!--</div>-->
-      <!--<div class="col">-->
-      <!--<p>-->
-      <!--<%&#45;&#45;<fmt:formatNumber pattern="#.##/s " value="${inputMap.get(res)}"/>&#45;&#45;%>-->
-      <!--<script>document.write(abbreviateNumber(parseFloat(${inputMap.get(res)}), true)+"/s");</script>-->
-      <!--</p>-->
-      <!--</div>-->
-      <!--</div>-->
-      <!--</c:forEach>-->
-      <!--</c:if>-->
-      <!--</div>-->
-      <!--<div class="card-image">-->
-      <!--<img class="factory-image" src="<c:url value="/resources/factory_images/${factory.getImage()}"/>"/>-->
-      <!--</div>-->
-      <!--<p id="factoryCant${factory.getType().getId()}" class="centered-text">-->
-      <!--<spring:message code="game.amount"/> <script>document.write(abbreviateNumber(parseFloat(${factory.amount}), true));</script></p>-->
-      <!--<div class="factory-producing">-->
-      <!--<p><spring:message code="game.producing"/></p>-->
-      <!--<c:set var="outputMap" value="${factoriesProduction.getOutputs()}"/>-->
-      <!--<c:forEach items="${outputMap.keySet()}" var="res">-->
-      <!--<div class="row no-margins">-->
-      <!--<div class="col no-padding">-->
-      <!--<img class="resource-icon tooltipped" data-position="top" data-delay="50"-->
-      <!--data-tooltip='<spring:message code="${res.nameCode}"/>' src="<c:url value="/resources/resources_icon/${res.id}.png"/>"/>-->
-      <!--</div>-->
-      <!--<div class="col">-->
-      <!--<p>-->
-      <!--<%&#45;&#45;<fmt:formatNumber pattern="#.##/s " value="${outputMap.get(res)}"/>&#45;&#45;%>-->
-      <!--<script>document.write(abbreviateNumber(parseFloat(${outputMap.get(res)}), true)+"/s");</script>-->
-      <!--</p>-->
-      <!--</div>-->
-      <!--</div>-->
-      <!--</c:forEach>-->
-      <!--</div>-->
-      <!--</div>-->
-      <!--</div>-->
-      <!--</div>-->
-      <!--</c:if>-->
-      <!--<c:if test="${loop.index % 4 == 3 && loop.index != 0}">-->
-      <!--</div>-->
-      <!--<div class="row factory-row">-->
-      <!--</c:if>-->
-      <!--</c:forEach>-->
       <div class="divider last"></div>
     </div>
   </div>
@@ -348,3 +289,5 @@
     </div>
   </div>
 </div>
+
+<script src="/scripts/js/game.js"></script>

@@ -26,6 +26,12 @@ define(['clickerQuest','services/UserService'], function(clickerQuest) {
       }
     );
 
+    UserService.getRank(1).then(
+      function (response) {
+        $scope.user.ranking = response.data.rank;
+      }
+    );
+
     // It's important to respect id and position in array
     $scope.resources = [
       {name:'Power', id: 0, stock: 25, production: 50.2},
