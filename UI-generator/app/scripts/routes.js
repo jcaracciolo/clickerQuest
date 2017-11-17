@@ -9,8 +9,8 @@ define([], function() {
                 controller: 'SpicyController'
             },
             '/game': {
-                templateUrl: '/views/game/mainScreenCtrl.html',
-                controller: 'mainScreenCtrl'
+                templateUrl: '/views/game/GameCtrl.html',
+                controller: 'GameCtrl'
             },
             '/profile': {
                 templateUrl: '/views/profile/profileCtrl.html',

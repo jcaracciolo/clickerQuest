@@ -1,7 +1,7 @@
 define(['clickerQuest','services/UserService'], function(clickerQuest) {
 
   'use strict';
-  clickerQuest.controller('mainScreenCtrl', function($scope, UserService) {
+  clickerQuest.controller('GameCtrl', function($scope, UserService) {
 
     $scope.user = {
       username: null,
