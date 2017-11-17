@@ -13,6 +13,10 @@ define(['clickerQuest'], function(clickerquest) {
         return $http.get(this.url + "all");
       }
 
+      this.getAllUsersByPage = function(page, pageSize) {
+        return $http.get(this.url + "all?page=" + page + "&pageSize=" + pageSize);
+      }
+
       this.getWealth = function(userId) {
         return $http.get(this.url + userId + "/wealth");
       }

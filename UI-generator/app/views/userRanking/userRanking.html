@@ -11,27 +11,26 @@
       <div>SCORE</div>
     </div>
     <div ng-repeat="user in users" class="table-row">
-        <p>{{user.ranking}}</p>
+        <p>{{$index+1 + (page-1)*10}}</p>
         <div class="nameAndImage">
-          <img class="itemImg" src="../../images/profile_images/{{user.id}}.jpg"/>
-          <p class="username-link" data-username="${u.username}">{{user.name}}</p>
+          <img class="itemImg" src={{user.profile_image_url}}/>
+          <p class="username-link" data-username="${u.username}">{{user.username}}</p>
         </div>
         <p>
           {{user.score}}
         </p>
     </div>
     <div id="pagination">
-      <c:set var="actualPage" value="${pageNumber}"/>
-      <c:if test="${actualPage > 1}">
+      <div ng-if="page != 1">
         <div>
           <p id="prevPage"><< Previous</p>
         </div>
-      </c:if>
-      <c:if test="${globalRanking.totalPages > actualPage}">
+      </div>
+      <div ng-if="totalPages > page">
         <div>
           <p id="nextPage">Next >></p>
         </div>
-      </c:if>
+      </div>
     </div>
   </div>
 </div>

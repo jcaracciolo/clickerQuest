@@ -42,19 +42,19 @@
       </p>
       <div class="unlocked-factory-cards">
         <div ng-repeat="factory in factories">
-          <div ng-if="fatory.cantActive != 0">
+          <div ng-if="factory.amount != 0">
             <div class="unlocked-factory-card">
               <div>
                 <p class="factory-card-title">
-                  {{factory.name}}
+                  {{factory.type}}
                 </p>
               </div>
               <div>
-                <img class="factory-image" src="../../images/factory_images/{{factory.id}}.jpg"/>
+                <img class="factory-image" src="../../images/factory_images/{{factory.type_id}}.jpg"/>
               </div>
               <div>
                 <p class="cant-factory no-margins">
-                  x{{factory.cantActive}}
+                  x{{factory.amount}}
                   <!--<script>document.write(abbreviateNumber(parseFloat(${factory.amount}), false));</script>-->
                 </p>
               </div>
