@@ -13,6 +13,7 @@ define(['clickerQuest', 'services/ClanService'], function(clickerQuest) {
           $scope.clans = response.data.elements;
           $scope.clans.forEach(function (c) {
             c.image_url = getClanImage(c.id);
+            c.score = formatDecimal(c.score, 2);
           });
 
           $scope.totalPages = response.data.total_pages;

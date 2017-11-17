@@ -13,3 +13,8 @@ function getParameterByName(name, url) {
 function getClanImage(clanId) {
   return "images/clan_icons/" + (clanId % 8 + 1) + ".jpg"
 }
+
+function formatDecimal(num, decimals) {
+  factor = 10 * decimals;
+  return parseFloat(Math.round(num * factor) / factor).toFixed(decimals);
+}

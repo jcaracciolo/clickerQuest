@@ -11,8 +11,11 @@ define(['clickerQuest', 'services/UserService'], function(clickerQuest) {
       UserService.getAllUsersByPage($scope.page, $scope.itemsPerPage).then(
         function (response) {
           $scope.users = response.data.elements;
-          $scope.totalPages = response.data.total_pages;
+          $scope.users.forEach(function (u) {
+            u.score = formatDecimal(u.score, 2);
+          });
 
+          $scope.totalPages = response.data.total_pages;
         }
       );
 
