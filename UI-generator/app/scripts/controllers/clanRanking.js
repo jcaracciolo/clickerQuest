@@ -3,10 +3,12 @@ define(['clickerQuest', 'services/ClanService'], function(clickerQuest) {
     'use strict';
     clickerQuest.controller('clanRanking', function($scope, ClanService) {
 
-      $scope.page = getParameterByName("page", window.location.href);
+      $scope.page = parseInt(getParameterByName("page", window.location.href));
       if (!$scope.page) $scope.page = 1;
 
-      ClanService.getAllClansByPage($scope.page, 20).then(
+      $scope.itemsPerPage = 1;
+
+      ClanService.getAllClansByPage($scope.page, $scope.itemsPerPage).then(
         function (response) {
           $scope.clans = response.data.elements;
           $scope.clans.forEach(function (c) {

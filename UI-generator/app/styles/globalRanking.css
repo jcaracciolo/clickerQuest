@@ -7,7 +7,7 @@
 }
 
 #nextPage, #prevPage {
-    color: white;
+    color: black;
     margin-left: 2rem;
     margin-right: 2rem;
 }
@@ -40,5 +40,5 @@
 
 #nextPage:hover, #prevPage:hover {
     cursor: pointer;
-    color: black;
+    color: white;
 }
