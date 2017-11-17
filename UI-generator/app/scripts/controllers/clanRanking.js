@@ -6,7 +6,7 @@ define(['clickerQuest', 'services/ClanService'], function(clickerQuest) {
       $scope.page = parseInt(getParameterByName("page", window.location.href));
       if (!$scope.page) $scope.page = 1;
 
-      $scope.itemsPerPage = 1;
+      $scope.itemsPerPage = 10;
 
       ClanService.getAllClansByPage($scope.page, $scope.itemsPerPage).then(
         function (response) {
