@@ -9,3 +9,7 @@ function getParameterByName(name, url) {
   if (!results[2]) return '';
   return decodeURIComponent(results[2].replace(/\+/g, " "));
 }
+
+function getClanImage(clanId) {
+  return "images/clan_icons/" + (clanId % 8 + 1) + ".jpg"
+}

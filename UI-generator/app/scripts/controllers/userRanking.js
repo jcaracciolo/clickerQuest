@@ -6,9 +6,7 @@ define(['clickerQuest', 'services/UserService'], function(clickerQuest) {
       $scope.page = getParameterByName("page", window.location.href);
       if (!$scope.page) $scope.page = 1;
 
-      console.log($scope.page);
-
-      UserService.getAllUsersByPage($scope.page, 5).then(
+      UserService.getAllUsersByPage($scope.page, 20).then(
         function (response) {
           $scope.users = response.data.elements;
           $scope.totalPages = response.data.total_pages;

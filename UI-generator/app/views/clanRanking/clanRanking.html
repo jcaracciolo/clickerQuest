@@ -11,9 +11,9 @@
       <div>SCORE</div>
     </div>
     <div ng-repeat="clan in clans" class="table-row">
-        <p>{{clan.ranking}}</p>
+        <p>{{$index+1 + (page-1)*10}}</p>
         <div class="nameAndImage">
-          <img class="itemImg" src="../../images/clan_icons/2.jpg"/>
+          <img class="itemImg" src="{{clan.image_url}}"/>
           <p class="username-link" data-username="${c.name}">{{clan.name}}</p>
         </div>
         <p>
@@ -21,16 +21,16 @@
         </p>
     </div>
     <div id="pagination">
-      <c:if test="${actualPage > 1}">
+      <div ng-if="page != 1">
         <div>
           <p id="prevPage"><< Previous</p>
         </div>
-      </c:if>
-      <c:if test="${globalRanking.totalPages > actualPage}">
+      </div>
+      <div ng-if="totalPages > page">
         <div>
           <p id="nextPage">Next >></p>
         </div>
-      </c:if>
+      </div>
     </div>
   </div>
 </div>
