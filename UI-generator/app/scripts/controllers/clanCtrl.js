@@ -1,7 +1,7 @@
 define(['clickerQuest', 'services/UserService','services/ClanService'], function(clickerQuest) {
 
   'use strict';
-  clickerQuest.controller('clanCtrl', function($scope, $http, ClanService) {
+  clickerQuest.controller('clanCtrl', function($scope, ClanService) {
 
     $scope.clan = {
       id: null,
@@ -46,20 +46,7 @@ define(['clickerQuest', 'services/UserService','services/ClanService'], function
         $scope.battle.myInitialScore = response.data.initial_score;
         $scope.battle.versusInitialScore = response.data.opponent_initial_score;
 
-        var versusbattle = $http.get(response.data.opponent_clan_battl_url);
-
-        versusbattle.then(
-          function (response) {
-            var versusClan = $http.get(response.data.clan_url);
-
-            versusClan.then(
-              function (response) {
-                $scope.battle.versus.id = response.data.id;
-                $scope.battle.versus.name = response.data.name;
-                $scope.battle.versus.image = response.data.image;
-                $scope.battle.versus.score = response.data.score;
-              });
-          });
+      //  TODO: GET VERSUS CLAN WITH CLANID
       });
 
 
