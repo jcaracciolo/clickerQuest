@@ -2,25 +2,29 @@ define(['clickerQuest','services/UserService'], function(clickerQuest) {
 
   'use strict';
   clickerQuest.controller('mainScreenCtrl', function($scope, UserService) {
+
+    $scope.user = {
+      username: null,
+      score: null,
+      image: null,  // TODO: DEFAULT IMAGE
+      ranking: null,
+      clan: {
+        id: null,
+        name: null
+      }
+    };
+
     UserService.getUser(1).then(
       function(response) {
-        $scope.user = response.data
+        $scope.user.username = response.data.username;
+        $scope.user.score = response.data.score;
+        $scope.user.image = response.data.profile_image_url;
     },
       function(response) {
         //TODO error
         console.log(response)
       }
     );
-
-    $scope.user = {
-      username: "Jorgito",
-      score: "55.12",
-      ranking: 65,
-      clan: {
-        id: "0",
-        name: "MY CLAN"
-      }
-    };
 
     // It's important to respect id and position in array
     $scope.resources = [
