@@ -12,6 +12,10 @@
     margin-right: 2rem;
 }
 
+.changePageBtn {
+  margin-bottom: 2rem;
+}
+
 .ranking-container {
     display: flex;
     flex-direction: column;

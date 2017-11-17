@@ -22,12 +22,12 @@
     </div>
     <div id="pagination">
       <div ng-if="page != 1">
-        <div>
+        <div class="changePageBtn">
           <a id="prevPage" ng-href="/#/clanRanking?page={{page-1}}"><< Previous</a>
         </div>
       </div>
       <div ng-if="totalPages > page">
-        <div>
+        <div class="changePageBtn">
           <a id="nextPage" ng-href="/#/clanRanking?page={{page+1}}">Next >></a>
         </div>
       </div>
