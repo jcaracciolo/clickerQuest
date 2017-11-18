@@ -3,7 +3,6 @@ package ar.edu.itba.paw.webapp.DTO.search;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.net.URI;
-import java.util.Collection;
 
 @XmlRootElement
 public class SearchResultDTO {

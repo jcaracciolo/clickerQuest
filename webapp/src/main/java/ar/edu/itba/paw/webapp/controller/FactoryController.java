@@ -2,20 +2,10 @@ package ar.edu.itba.paw.webapp.controller;
 
 
 import ar.edu.itba.paw.interfaces.UserService;
-import ar.edu.itba.paw.model.Factory;
 import ar.edu.itba.paw.model.FactoryType;
-import ar.edu.itba.paw.model.Upgrade;
-import ar.edu.itba.paw.model.User;
-import ar.edu.itba.paw.model.packages.BuyLimits;
-import ar.edu.itba.paw.model.packages.Paginating;
-import ar.edu.itba.paw.webapp.DTO.PaginantingDTO;
-import ar.edu.itba.paw.webapp.DTO.factories.BuyLimitsDTO;
-import ar.edu.itba.paw.webapp.DTO.search.SearchDTO;
-import ar.edu.itba.paw.webapp.DTO.search.SearchResultDTO;
-import ar.edu.itba.paw.webapp.DTO.users.FactoriesDTO;
-import ar.edu.itba.paw.webapp.DTO.users.UpgradeDTO;
-import ar.edu.itba.paw.webapp.DTO.users.UserDTO;
-import org.json.simple.JSONObject;
+import ar.edu.itba.paw.webapp.DTO.factories.AllBaseFactories;
+import ar.edu.itba.paw.webapp.DTO.factories.BaseFactoryDTO;
+import ar.edu.itba.paw.webapp.DTO.factories.BaseFactoryRecipeDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -25,13 +15,6 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-import javax.xml.bind.annotation.XmlElement;
-import java.util.Collection;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import static ar.edu.itba.paw.webapp.DTO.search.SearchResultType.CLAN;
-import static ar.edu.itba.paw.webapp.DTO.search.SearchResultType.USER;
 
 @Path("factories")
 @Component
@@ -47,15 +30,31 @@ public class FactoryController {
     static int userID = 1;
 
     @GET
-    @Path("/{factoryId}/buyLimits")
+    @Path("/all")
     @Produces(value = {MediaType.APPLICATION_JSON,})
-    public Response getFactoriesById(@PathParam("factoryId") final int factoryId) {
-        final User user = us.findById(userID);
-        if (user != null) {
-            final Factory factory = user.getFactories().stream().filter((f) -> f.getType().getId() == factoryId).findFirst().orElse(null);
-            if (factory != null) {
-                return Response.ok(new BuyLimitsDTO(new BuyLimits(user.getWealth(), factory),userID,factoryId)).build();
-            }
+    public Response getAllBaseFactories() {
+        return Response.ok(new AllBaseFactories(uriInfo.getBaseUri())).build();
+    }
+
+    @GET
+    @Path("/{factoryId}")
+    @Produces(value = {MediaType.APPLICATION_JSON,})
+    public Response getBaseFactoryById(@PathParam("factoryId") final int factoryId) {
+        final FactoryType factory= FactoryType.fromId(factoryId);
+        if (factory != null) {
+            return Response.ok(new BaseFactoryDTO(factory, uriInfo.getBaseUri())).build();
+        }
+
+        return Response.status(Response.Status.NOT_FOUND).build();
+    }
+
+    @GET
+    @Path("/{factoryId}/recipe")
+    @Produces(value = {MediaType.APPLICATION_JSON,})
+    public Response getBaseFactoryRecipeById(@PathParam("factoryId") final int factoryId) {
+        final FactoryType factory= FactoryType.fromId(factoryId);
+        if (factory != null) {
+            return Response.ok(new BaseFactoryRecipeDTO(factory)).build();
         }
 
         return Response.status(Response.Status.NOT_FOUND).build();

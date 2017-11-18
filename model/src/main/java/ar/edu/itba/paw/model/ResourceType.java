@@ -5,19 +5,19 @@ import java.util.Optional;
 
 
 public enum ResourceType {
-    CIRCUITS(12,"circuit-type",50),
-    CARDBOARD(11,"cardboard-type",1),
-    COPPER_CABLE(10,"copper-cable-type",5),
-    COPPER(9,"copper-type",1),
-    METAL_SCRAP(8,"metal-scrap-type",11),
-    RUBBER(7,"rubber-type",4),
-    TIRES(6,"tires-type",8),
-    IRON(5,"iron-type",5),
-    PEOPLE(4,"people-type",9),
-    MONEY(3,"money-type",10),
-    GOLD(2,"gold-type",20),
-    PLASTIC(1,"plastic-type",40),
-    POWER(0,"power-type",80);
+    CIRCUITS(12,"CIRCUITS",50),
+    CARDBOARD(11,"CARDBOARD",1),
+    COPPER_CABLE(10,"COPPER_CABLE",5),
+    COPPER(9,"COPPER",1),
+    METAL_SCRAP(8,"METAL_SCRAP",11),
+    RUBBER(7,"RUBBER",4),
+    TIRES(6,"TIRES",8),
+    IRON(5,"IRON",5),
+    PEOPLE(4,"PEOPLE",9),
+    MONEY(3,"MONEY",10),
+    GOLD(2,"GOLD",20),
+    PLASTIC(1,"PLASTIC",40),
+    POWER(0,"POWER",80);
 
     private int id;
     private String nameCode;

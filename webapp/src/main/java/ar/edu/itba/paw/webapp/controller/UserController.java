@@ -2,7 +2,10 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.ClanService;
 import ar.edu.itba.paw.interfaces.UserService;
-import ar.edu.itba.paw.model.*;
+import ar.edu.itba.paw.model.Factory;
+import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.model.Wealth;
+import ar.edu.itba.paw.model.packages.BuyLimits;
 import ar.edu.itba.paw.model.packages.Paginating;
 import ar.edu.itba.paw.webapp.DTO.PaginantingDTO;
 import ar.edu.itba.paw.webapp.DTO.users.*;
@@ -128,6 +131,21 @@ public class UserController {
         } else {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
+    }
+
+    @GET
+    @Path("/{userId}/factories/{factoryId}/buyLimits")
+    @Produces(value = {MediaType.APPLICATION_JSON,})
+    public Response getFactoriesById(@PathParam("factoryId") final int factoryId) {
+        final User user = us.findById(userID);
+        if (user != null) {
+            final Factory factory = getSingleFactory(userID, factoryId);
+            if (factory != null) {
+                return Response.ok(new BuyLimitsDTO(new BuyLimits(user.getWealth(), factory),userID,factoryId)).build();
+            }
+        }
+
+        return Response.status(Response.Status.NOT_FOUND).build();
     }
 
     private Factory getSingleFactory(final long userID, final int factoryId) {

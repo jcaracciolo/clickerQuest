@@ -4,6 +4,9 @@ import ar.edu.itba.paw.model.packages.Implementations.BaseCost;
 import ar.edu.itba.paw.model.packages.Implementations.BaseRecipe;
 import ar.edu.itba.paw.model.packages.PackageBuilder;
 
+import java.util.Arrays;
+import java.util.Optional;
+
 
 public enum FactoryType {
     STOCK_INVESTMENT_BASE(0,"STOCK_INVESTOR"){
@@ -150,6 +153,10 @@ public enum FactoryType {
             }
         }
         return null;
+    }
+
+    public static Optional<FactoryType> fromName(String nameCode){
+        return Arrays.stream(FactoryType.values()).filter((r) -> r.nameCode.equals(nameCode)).findAny();
     }
 
 }

@@ -67,35 +67,37 @@ let kittens = api.kittens.get();
 
 ```json
 {
-  "page": 1,
-  "items_per_page": 20,
-  "total_pages": 1,
-  "total_items": 2,
-  "elements": [
-    {
-        "type": "User",
-        "id": 1,
-        "username": "Wololo",
-        "profile_image_url": "http://localhost:8080/api/resources/profile_images/10.jpg",
-        "score": 86035162.84607725,
-        "clan_id": 20,
-        "clan_url": "http://localhost:8080/api/v1/clans/20",
-        "factories_url": "http://localhost:8080/api/v1/users/1/factories",
-        "wealth_url": "http://localhost:8080/api/v1/users/1/wealth",
-        "rank_url": "http://localhost:8080/api/v1/users/1/rank"
-    },
-    {
-        "type": "User",
-        "id": 2,
-        "username": "aaaa",
-        "profile_image_url": "http://localhost:8080/api/resources/profile_images/2.jpg",
-        "score": 1895.770193289029,
-        "factories_url": "http://localhost:8080/api/v1/users/2/factories",
-        "wealth_url": "http://localhost:8080/api/v1/users/2/wealth",
-        "rank_url": "http://localhost:8080/api/v1/users/2/rank"
-    }
-  ]
- }
+    "page": 1,
+    "items_per_page": 20,
+    "total_pages": 1,
+    "total_items": 2,
+    "elements": [
+        {
+            "type": "User",
+            "id": 1,
+            "username": "Wololo",
+            "profile_image_url": "http://localhost:8080/api/resources/profile_images/10.jpg",
+            "score": 86035162.84607725,
+            "clan_id": 20,
+            "clan_url": "http://localhost:8080/api/v1/clans/20",
+            "factories_url": "http://localhost:8080/api/v1/users/1/factories",
+            "wealth_url": "http://localhost:8080/api/v1/users/1/wealth",
+            "rank_url": "http://localhost:8080/api/v1/users/1/rank"
+        },
+        {
+            "type": "User",
+            "id": 2,
+            "username": "aaaa",
+            "profile_image_url": "http://localhost:8080/api/resources/profile_images/2.jpg",
+            "score": 1895.770193289029,
+            "clan_id": 13,
+            "clan_url": "http://localhost:8080/api/v1/clans/13",
+            "factories_url": "http://localhost:8080/api/v1/users/2/factories",
+            "wealth_url": "http://localhost:8080/api/v1/users/2/wealth",
+            "rank_url": "http://localhost:8080/api/v1/users/2/rank"
+        }
+    ]
+}
 ```
 
 This endpoint retrieves all kittens.
@@ -131,12 +133,13 @@ let max = api.kittens.get(2);
 {
     "id": 1,
     "username": "Wololo",
-    "profile_image_url": "http://localhost:8080/api/v1/resources/profile_images/10.jpg",
+    "profile_image_url": "http://localhost:8080/api/resources/profile_images/10.jpg",
     "score": 86035162.84607725,
     "clan_id": 20,
     "clan_url": "http://localhost:8080/api/v1/clans/20",
     "factories_url": "http://localhost:8080/api/v1/users/1/factories",
-    "wealth_url": "http://localhost:8080/api/v1/users/1/wealth"
+    "wealth_url": "http://localhost:8080/api/v1/users/1/wealth",
+    "rank_url": "http://localhost:8080/api/v1/users/1/rank"
 }
 ```
 
@@ -172,35 +175,72 @@ let max = api.kittens.delete(2);
 ```json
 {
     "user_id": 1,
-    "storage": {
-        "CIRCUITS": 17975792,
-        "CARDBOARD": 189392499810,
-        "COPPER_CABLE": 11891047,
-        "COPPER": 469644832,
-        "METAL_SCRAP": 56935654327,
-        "RUBBER": 190144481,
-        "TIRES": 19174410647,
-        "IRON": 1004331781,
-        "PEOPLE": 213836241177,
-        "MONEY": 109066712070722,
-        "GOLD": 0,
-        "PLASTIC": 123,
-        "POWER": 968678128
-    },
-    "productions": {
-        "CIRCUITS": 2,
-        "CARDBOARD": 14326.523556775875,
-        "COPPER_CABLE": 1.4000000000000004,
-        "COPPER": 28.800000000000004,
-        "METAL_SCRAP": 4451.802047317245,
-        "RUBBER": 3.200000000000003,
-        "TIRES": 1499.0099999999998,
-        "IRON": 79.2,
-        "PEOPLE": 16818.48,
-        "MONEY": 8580025.549999999,
-        "GOLD": 0,
-        "PLASTIC": 0,
-        "POWER": 96.35000000000002
+    "resources": {
+        "CIRCUITS": {
+            "id": 12,
+            "storage": 18452392,
+            "production": 2
+        },
+        "CARDBOARD": {
+            "id": 11,
+            "storage": 192806510374,
+            "production": 14326.523556775875
+        },
+        "COPPER_CABLE": {
+            "id": 10,
+            "storage": 12224667,
+            "production": 1.4000000000000004
+        },
+        "COPPER": {
+            "id": 9,
+            "storage": 476507872,
+            "production": 28.800000000000004
+        },
+        "METAL_SCRAP": {
+            "id": 8,
+            "storage": 57996518755,
+            "production": 4451.802047317245
+        },
+        "RUBBER": {
+            "id": 7,
+            "storage": 190907041,
+            "production": 3.200000000000003
+        },
+        "TIRES": {
+            "id": 6,
+            "storage": 19531624730,
+            "production": 1499.0099999999998
+        },
+        "IRON": {
+            "id": 5,
+            "storage": 1023205141,
+            "production": 79.2
+        },
+        "PEOPLE": {
+            "id": 4,
+            "storage": 217844084961,
+            "production": 16818.48
+        },
+        "MONEY": {
+            "id": 3,
+            "storage": 111111332159287,
+            "production": 8580025.549999999
+        },
+        "GOLD": {
+            "id": 2,
+            "storage": 0,
+            "production": 0
+        },
+        "PLASTIC": {
+            "id": 1,
+            "storage": 123,
+            "production": 0
+        },
+        "POWER": {
+            "id": 0,
+            "storage": 991638333,
+            "production": 96.35000000000002
+        }
     }
 }
 ```
@@ -239,92 +279,76 @@ let max = api.kittens.delete(2);
     "user_id": 1,
     "factories": [
         {
-            "type_id": 1,
+            "id": 1,
             "type": "PEOPLE_RECRUITER",
             "amount": 53392,
-            "input_reduction": 1,
-            "output_multiplier": 1.05,
-            "cost_reduction": 1,
             "level": 1,
             "upgradeURL": "http://localhost:8080/api/v1/users/1/factories/1/upgrade",
-            "buyLimits_url": "http://localhost:8080/api/v1/factories/1/buyLimits"
+            "buyLimits_url": "http://localhost:8080/users/1/factories/1/buyLimits",
+            "recipe_url": "http://localhost:8080/api/v1/users/1/factories/1/recipe"
         },
         {
-            "type_id": 6,
+            "id": 6,
             "type": "BOILER",
             "amount": 187,
-            "input_reduction": 0.9323938199059483,
-            "output_multiplier": 1.05,
-            "cost_reduction": 1,
             "level": 2,
             "upgradeURL": "http://localhost:8080/api/v1/users/1/factories/6/upgrade",
-            "buyLimits_url": "http://localhost:8080/api/v1/factories/6/buyLimits"
+            "buyLimits_url": "http://localhost:8080/users/1/factories/6/buyLimits",
+            "recipe_url": "http://localhost:8080/api/v1/users/1/factories/6/recipe"
         },
         {
-            "type_id": 5,
+            "id": 5,
             "type": "CABLE_MAKER",
             "amount": 8,
-            "input_reduction": 1,
-            "output_multiplier": 1,
-            "cost_reduction": 1,
             "level": 0,
             "upgradeURL": "http://localhost:8080/api/v1/users/1/factories/5/upgrade",
-            "buyLimits_url": "http://localhost:8080/api/v1/factories/5/buyLimits"
+            "buyLimits_url": "http://localhost:8080/users/1/factories/5/buyLimits",
+            "recipe_url": "http://localhost:8080/api/v1/users/1/factories/5/recipe"
         },
         {
-            "type_id": 7,
+            "id": 7,
             "type": "CIRCUIT_MAKER",
             "amount": 1,
-            "input_reduction": 1,
-            "output_multiplier": 1,
-            "cost_reduction": 1,
             "level": 0,
             "upgradeURL": "http://localhost:8080/api/v1/users/1/factories/7/upgrade",
-            "buyLimits_url": "http://localhost:8080/api/v1/factories/7/buyLimits"
+            "buyLimits_url": "http://localhost:8080/users/1/factories/7/buyLimits",
+            "recipe_url": "http://localhost:8080/api/v1/users/1/factories/7/recipe"
         },
         {
-            "type_id": 0,
+            "id": 0,
             "type": "STOCK_INVESTOR",
             "amount": 5917259,
-            "input_reduction": 1,
-            "output_multiplier": 1.45,
-            "cost_reduction": 0.5712090638488149,
             "level": 17,
             "upgradeURL": "http://localhost:8080/api/v1/users/1/factories/0/upgrade",
-            "buyLimits_url": "http://localhost:8080/api/v1/factories/0/buyLimits"
+            "buyLimits_url": "http://localhost:8080/users/1/factories/0/buyLimits",
+            "recipe_url": "http://localhost:8080/api/v1/users/1/factories/0/recipe"
         },
         {
-            "type_id": 2,
+            "id": 2,
             "type": "JUNK_COLLECTOR",
             "amount": 6987,
-            "input_reduction": 1,
-            "output_multiplier": 1.15,
-            "cost_reduction": 0.8693582353988059,
             "level": 5,
             "upgradeURL": "http://localhost:8080/api/v1/users/1/factories/2/upgrade",
-            "buyLimits_url": "http://localhost:8080/api/v1/factories/2/buyLimits"
+            "buyLimits_url": "http://localhost:8080/users/1/factories/2/buyLimits",
+            "recipe_url": "http://localhost:8080/api/v1/users/1/factories/2/recipe"
         },
         {
-            "type_id": 3,
+            "id": 3,
             "type": "METAL_SEPARATOR",
             "amount": 132,
-            "input_reduction": 0.9323938199059483,
-            "output_multiplier": 1,
-            "cost_reduction": 1,
             "level": 1,
             "upgradeURL": "http://localhost:8080/api/v1/users/1/factories/3/upgrade",
-            "buyLimits_url": "http://localhost:8080/api/v1/factories/3/buyLimits"
+            "buyLimits_url": "http://localhost:8080/users/1/factories/3/buyLimits",
+            "recipe_url": "http://localhost:8080/api/v1/users/1/factories/3/recipe"
         },
         {
-            "type_id": 4,
+            "id": 4,
             "type": "RUBBER_SHREDDER",
             "amount": 54,
-            "input_reduction": 1,
-            "output_multiplier": 1,
-            "cost_reduction": 1,
             "level": 0,
             "upgradeURL": "http://localhost:8080/api/v1/users/1/factories/4/upgrade",
-            "buyLimits_url": "http://localhost:8080/api/v1/factories/4/buyLimits"
+            "buyLimits_url": "http://localhost:8080/users/1/factories/4/buyLimits",
+            "recipe_url": "http://localhost:8080/api/v1/users/1/factories/4/recipe"
         }
     ]
 }
@@ -361,15 +385,13 @@ let max = api.kittens.delete(2);
 
 ```json
 {
-    "type_id": 0,
-    "type": "STOCK_INVESTOR",
-    "amount": 5917259,
-    "input_reduction": 1,
-    "output_multiplier": 1.45,
-    "cost_reduction": 0.5712090638488149,
-    "level": 17,
-    "upgradeURL": "http://localhost:8080/api/v1/users/1/factories/0/upgrade",
-    "buyLimits_url": "http://localhost:8080/api/v1/factories/0/buyLimits"
+    "id": 1,
+    "type": "PEOPLE_RECRUITER",
+    "amount": 53392,
+    "level": 1,
+    "upgradeURL": "http://localhost:8080/api/v1/users/1/factories/1/upgrade",
+    "buyLimits_url": "http://localhost:8080/users/1/factories/1/buyLimits",
+    "recipe_url": "http://localhost:8080/api/v1/users/1/factories/1/recipe"
 }
 ```
 
@@ -386,49 +408,6 @@ Parameter | Description
 ID | The ID of the factory's user to retrieve
 FactoryID | The ID of the factoryType to retrieve
 
-## Get an User's factory
-
-```shell
-curl "http://example.com/api/kittens/2"
-  -X DELETE
-  -H "Authorization: meowmeowmeow"
-```
-
-```javascript
-const kittn = require('kittn');
-
-let api = kittn.authorize('meowmeowmeow');
-let max = api.kittens.delete(2);
-```
-
-> The above command returns JSON structured like this:
-
-```json
-{
-    "type_id": 0,
-    "type": "STOCK_INVESTOR",
-    "amount": 5917259,
-    "input_reduction": 1,
-    "output_multiplier": 1.45,
-    "cost_reduction": 0.5712090638488149,
-    "level": 17,
-    "upgradeURL": "http://localhost:8080/api/v1/users/1/factories/0/upgrade",
-    "buyLimits_url": "http://localhost:8080/api/v1/factories/0/buyLimits"
-}
-```
-
-This endpoint returns a given user's specific factory.
-
-### HTTP Request
-
-`GET http://localhost:8080/api/v1/users/<ID>/factories/<FactoryID>`
-
-### URL Parameters
-
-Parameter | Description
---------- | -----------
-ID | The ID of the factory's user to retrieve
-FactoryID | The ID of the factoryType to retrieve
 
 ## Get an User's factory's upgrade
 
@@ -469,6 +448,72 @@ Parameter | Description
 --------- | -----------
 ID | The ID of the factory's user to retrieve
 FactoryID | The ID of the factoryType to retrieve
+
+## Get Your buying limits
+
+```shell
+curl "http://example.com/api/kittens/2"
+  -H "Authorization: meowmeowmeow"
+```
+
+```javascript
+const kittn = require('kittn');
+
+let api = kittn.authorize('meowmeowmeow');
+let max = api.kittens.get(2);
+```
+
+> The above command returns JSON structured like this:
+
+```json
+{
+    "user_id": 1,
+    "factory_id": 0,
+    "max": 32842,
+    "cost_max": {
+        "MONEY": {
+            "id": 3,
+            "storage": 111313757969031,
+            "production": 32842
+        }
+    },
+    "cost_1": {
+        "MONEY": {
+            "id": 3,
+            "storage": 3379992545,
+            "production": 1
+        }
+    },
+    "cost_10": {
+        "MONEY": {
+            "id": 3,
+            "storage": 33799951155,
+            "production": 10
+        }
+    },
+    "cost_100": {
+        "MONEY": {
+            "id": 3,
+            "storage": 338002081999,
+            "production": 100
+        }
+    }
+}
+```
+
+This endpoint retrieves the maximun amount of factories of type <factoryID> which the user can buy with the current resources, and whether or no (and the cost) of buying 1, 10 and 100 of the given factory.
+### HTTP Request
+
+`GET http://localhost:8080/api/v1/users/<ID>/factories/<factoryID>/buyLimits`
+
+### Path Parameters
+
+Parameter | Description
+--------- | -----------
+ID | The ID of the factory's user to retrieve
+FactoryID | The ID of the factoryType to retrieve
+
+
 
 ## Get an User's rank
 
@@ -865,7 +910,76 @@ Code | Description
 
 # Factories
 
-## Get Your buying limits
+## Get All factories
+
+```shell
+curl "http://example.com/api/v1/users/all"
+  -H "Authorization: meowmeowmeow"
+```
+
+```javascript
+const kittn = require('kittn');
+
+let api = kittn.authorize('meowmeowmeow');
+let kittens = api.kittens.get();
+```
+
+> The above command returns JSON structured like this:
+
+```json
+{
+    "factories": [
+        {
+            "id": 0,
+            "type": "STOCK_INVESTOR",
+            "recipe_url": "http://localhost:8080/api/v1/factories/0/recipe"
+        },
+        {
+            "id": 0,
+            "type": "PEOPLE_RECRUITER",
+            "recipe_url": "http://localhost:8080/api/v1/factories/0/recipe"
+        },
+        {
+            "id": 0,
+            "type": "JUNK_COLLECTOR",
+            "recipe_url": "http://localhost:8080/api/v1/factories/0/recipe"
+        },
+        {
+            "id": 0,
+            "type": "METAL_SEPARATOR",
+            "recipe_url": "http://localhost:8080/api/v1/factories/0/recipe"
+        },
+        {
+            "id": 0,
+            "type": "RUBBER_SHREDDER",
+            "recipe_url": "http://localhost:8080/api/v1/factories/0/recipe"
+        },
+        {
+            "id": 0,
+            "type": "CABLE_MAKER",
+            "recipe_url": "http://localhost:8080/api/v1/factories/0/recipe"
+        },
+        {
+            "id": 0,
+            "type": "BOILER",
+            "recipe_url": "http://localhost:8080/api/v1/factories/0/recipe"
+        },
+        {
+            "id": 0,
+            "type": "CIRCUIT_MAKER",
+            "recipe_url": "http://localhost:8080/api/v1/factories/0/recipe"
+        }
+    ]
+}
+```
+
+This endpoint retrieves all factories.
+
+### HTTP Request
+
+`GET http://pawserver.it.itba.edu.ar/paw-2017a-4/api/v1/factories/all`
+
+## Get a Specific Factory
 
 ```shell
 curl "http://example.com/api/kittens/2"
@@ -883,42 +997,69 @@ let max = api.kittens.get(2);
 
 ```json
 {
-    "user_id": 1,
-    "factory_id": 6,
-    "max": 205,
-    "cost_max": {
-        "COPPER_CABLE": 11890000,
-        "IRON": 29725000,
-        "PEOPLE": 1189000
-    },
-    "cost_1": {
-        "COPPER_CABLE": 37600,
-        "IRON": 94000,
-        "PEOPLE": 3760
-    },
-    "cost_10": {
-        "COPPER_CABLE": 385000,
-        "IRON": 962500,
-        "PEOPLE": 38500
-    },
-    "cost_100": {
-        "COPPER_CABLE": 4750000,
-        "IRON": 11875000,
-        "PEOPLE": 475000
+    "id": 0,
+    "type": "STOCK_INVESTOR",
+    "recipe_url": "http://localhost:8080/api/v1/factories/0/recipe"
+}
+```
+
+This endpoint retrieves a specific factory.
+
+### HTTP Request
+
+`GET http://localhost:8080/api/v1/factories/<factoryId>`
+
+### URL Parameters
+
+Parameter | Description
+--------- | -----------
+factoryId | The Id of the factory to retrieve
+
+## Get a Factory's recipe
+
+```shell
+curl "http://example.com/api/kittens/2"
+  -H "Authorization: meowmeowmeow"
+```
+
+```javascript
+const kittn = require('kittn');
+
+let api = kittn.authorize('meowmeowmeow');
+let max = api.kittens.get(2);
+```
+
+> The above command returns JSON structured like this:
+
+```json
+{
+    "factory_id": 1,
+    "factory_type": "PEOPLE_RECRUITER",
+    "recipe": {
+        "PEOPLE": {
+            "id": 4,
+            "production": 0.3
+        },
+        "MONEY": {
+            "id": 3,
+            "storage": 200
+        }
     }
 }
 ```
 
-This endpoint retrieves the maximun amount of factories of type <factoryID> which the user can buy with the current resources, and whether or no (and the cost) of buying 1, 10 and 100 of the given factory.
+This endpoint retrieves a specific factory's recipe.
+
 ### HTTP Request
 
-`GET http://localhost:8080/api/v1/factories/<factoryID>/buyLimits`
+`GET http://localhost:8080/api/v1/factories/<factoryId>/recipe`
 
-### Path Parameters
+### URL Parameters
 
 Parameter | Description
 --------- | -----------
-factoryID | The buylimits' factory Id
+factoryId | The Id of the recipe's factory to retrieve
+
 
 ## Purchase Factories
 
@@ -1006,20 +1147,57 @@ let max = api.kittens.get(2);
 
 ```json
 {
-    "prices": {
-        "CIRCUITS": 52,
-        "GOLD": 21,
-        "MONEY": 10,
-        "CARDBOARD": 1,
-        "METAL_SCRAP": 12,
-        "COPPER_CABLE": 10,
-        "POWER": 46,
-        "TIRES": 9,
-        "PEOPLE": 10,
-        "IRON": 6,
-        "RUBBER": 6,
-        "COPPER": 1,
-        "PLASTIC": 42
+    "CIRCUITS": {
+        "id": 12,
+        "price": 52
+    },
+    "CARDBOARD": {
+        "id": 11,
+        "price": 1
+    },
+    "COPPER_CABLE": {
+        "id": 10,
+        "price": 10
+    },
+    "COPPER": {
+        "id": 9,
+        "price": 1
+    },
+    "METAL_SCRAP": {
+        "id": 8,
+        "price": 12
+    },
+    "RUBBER": {
+        "id": 7,
+        "price": 6
+    },
+    "TIRES": {
+        "id": 6,
+        "price": 9
+    },
+    "IRON": {
+        "id": 5,
+        "price": 6
+    },
+    "PEOPLE": {
+        "id": 4,
+        "price": 10
+    },
+    "MONEY": {
+        "id": 3,
+        "price": 10
+    },
+    "GOLD": {
+        "id": 2,
+        "price": 21
+    },
+    "PLASTIC": {
+        "id": 1,
+        "price": 42
+    },
+    "POWER": {
+        "id": 0,
+        "price": 46
     }
 }
 ```

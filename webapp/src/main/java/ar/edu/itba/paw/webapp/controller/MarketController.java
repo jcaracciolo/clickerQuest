@@ -1,13 +1,9 @@
 package ar.edu.itba.paw.webapp.controller;
 
-import ar.edu.itba.paw.interfaces.ClanService;
-import ar.edu.itba.paw.interfaces.MarketService;
 import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.model.ResourceType;
-import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.webapp.DTO.market.MarketDTO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import javax.ws.rs.*;
@@ -16,7 +12,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
 
 @Path("market")
 @Component

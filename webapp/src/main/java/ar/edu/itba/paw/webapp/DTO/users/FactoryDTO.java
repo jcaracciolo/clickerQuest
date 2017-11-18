@@ -1,11 +1,9 @@
 package ar.edu.itba.paw.webapp.DTO.users;
 
 import ar.edu.itba.paw.model.Factory;
-import ar.edu.itba.paw.webapp.DTO.factories.BuyLimitsDTO;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
 import java.net.URI;
 
 /**
@@ -16,23 +14,14 @@ public class FactoryDTO {
 
     public static String url = "users/%s/factories/%s";
 
-    @XmlElement(name = "type_id")
-    private Integer typeID;
+    @XmlElement(name = "id")
+    private Integer id;
 
     @XmlElement(name = "type")
     private String type;
 
     @XmlElement(name = "amount")
     private double amount;
-
-    @XmlElement(name = "input_reduction")
-    private double inputReduction;
-
-    @XmlElement(name = "output_multiplier")
-    private double outputMultiplier;
-
-    @XmlElement(name = "cost_reduction")
-    private double costReduction;
 
     @XmlElement(name = "level")
     private int level;
@@ -43,18 +32,19 @@ public class FactoryDTO {
     @XmlElement(name = "buyLimits_url")
     private URI buyLimitsURL;
 
+    @XmlElement(name = "recipe_url")
+    private URI recipeURL;
+
     public FactoryDTO(){}
 
     public FactoryDTO(Factory factory, URI baseUri) {
-        typeID = factory.getType().getId();
+        id = factory.getType().getId();
         type = factory.getType().getNameCode();
         amount = factory.getAmount();
-        inputReduction = factory.getInputReduction();
-        outputMultiplier = factory.getOutputMultiplier();
-        costReduction = factory.getCostReduction();
         level = factory.getLevel();
         upgradeURL = baseUri.resolve(String.format(UpgradeDTO.url, factory.getUserid(), factory.getType().getId()));
-        buyLimitsURL = baseUri.resolve(String.format(BuyLimitsDTO.url, factory.getType().getId()));
+        buyLimitsURL = baseUri.resolve(String.format(BuyLimitsDTO.url, factory.getUserid(), factory.getType().getId()));
+        recipeURL = baseUri.resolve(String.format(FactoryRecipeDTO.url, factory.getUserid(), factory.getType().getId()));
 
     }
 }
