@@ -82,7 +82,7 @@ public class FactoryController {
         return Response.status(Response.Status.NOT_FOUND).build();
     }
 
-    private static class UpgradeFactoryQuery {
+    static class UpgradeFactoryQuery {
         Integer factoryId;
     }
 

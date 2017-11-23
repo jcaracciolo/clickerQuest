@@ -148,6 +148,22 @@ public class UserController {
         return Response.status(Response.Status.NOT_FOUND).build();
     }
 
+
+    @GET
+    @Path("/{userId}/factories/{factoryId}/recipe")
+    @Produces(value = {MediaType.APPLICATION_JSON,})
+    public Response getFactoryRecipeById(@PathParam("factoryId") final int factoryId) {
+        final User user = us.findById(userID);
+        if (user != null) {
+            final Factory factory = getSingleFactory(userID, factoryId);
+            if (factory != null) {
+                return Response.ok(new FactoryRecipeDTO(factory)).build();
+            }
+        }
+
+        return Response.status(Response.Status.NOT_FOUND).build();
+    }
+
     private Factory getSingleFactory(final long userID, final int factoryId) {
         Collection<Factory> factories = us.getUserFactories(userID);
         if (factories==null) return null;

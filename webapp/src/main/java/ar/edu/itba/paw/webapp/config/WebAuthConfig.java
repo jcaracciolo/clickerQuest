@@ -18,7 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.concurrent.TimeUnit;
 
-@Configuration
+//@Configuration
 @EnableWebSecurity
 @ComponentScan({"ar.edu.itba.paw.webapp.auth"})
 public class WebAuthConfig extends WebSecurityConfigurerAdapter {
