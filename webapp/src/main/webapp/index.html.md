@@ -175,73 +175,86 @@ let max = api.kittens.delete(2);
 ```json
 {
     "user_id": 1,
-    "resources": {
-        "CIRCUITS": {
+    "resources": [
+        {
             "id": 12,
-            "storage": 18452392,
+            "name": "CIRCUITS",
+            "storage": 19534118,
             "production": 2
         },
-        "CARDBOARD": {
+        {
             "id": 11,
-            "storage": 192806510374,
+            "name": "CARDBOARD",
+            "storage": 200555196884,
             "production": 14326.523556775875
         },
-        "COPPER_CABLE": {
+        {
             "id": 10,
-            "storage": 12224667,
+            "name": "COPPER_CABLE",
+            "storage": 12981876,
             "production": 1.4000000000000004
         },
-        "COPPER": {
+        {
             "id": 9,
-            "storage": 476507872,
+            "name": "COPPER",
+            "storage": 492084727,
             "production": 28.800000000000004
         },
-        "METAL_SCRAP": {
+        {
             "id": 8,
-            "storage": 57996518755,
+            "name": "METAL_SCRAP",
+            "storage": 60404333766,
             "production": 4451.802047317245
         },
-        "RUBBER": {
+        {
             "id": 7,
-            "storage": 190907041,
+            "name": "RUBBER",
+            "storage": 192637803,
             "production": 3.200000000000003
         },
-        "TIRES": {
+        {
             "id": 6,
-            "storage": 19531624730,
+            "name": "TIRES",
+            "storage": 20342383775,
             "production": 1499.0099999999998
         },
-        "IRON": {
+        {
             "id": 5,
-            "storage": 1023205141,
+            "name": "IRON",
+            "storage": 1066041490,
             "production": 79.2
         },
-        "PEOPLE": {
+        {
             "id": 4,
-            "storage": 217844084961,
+            "name": "PEOPLE",
+            "storage": 226940578509,
             "production": 16818.48
         },
-        "MONEY": {
+        {
             "id": 3,
-            "storage": 111111332159287,
+            "name": "MONEY",
+            "storage": 115751950518337,
             "production": 8580025.549999999
         },
-        "GOLD": {
+        {
             "id": 2,
+            "name": "GOLD",
             "storage": 0,
             "production": 0
         },
-        "PLASTIC": {
+        {
             "id": 1,
+            "name": "PLASTIC",
             "storage": 123,
             "production": 0
         },
-        "POWER": {
+        {
             "id": 0,
-            "storage": 991638333,
+            "name": "POWER",
+            "storage": 1043750483,
             "production": 96.35000000000002
         }
-    }
+    ]
 }
 ```
 
@@ -408,6 +421,50 @@ Parameter | Description
 ID | The ID of the factory's user to retrieve
 FactoryID | The ID of the factoryType to retrieve
 
+## Get an User's factory's recipe
+
+```shell
+curl "http://example.com/api/kittens/2"
+  -X DELETE
+  -H "Authorization: meowmeowmeow"
+```
+
+```javascript
+const kittn = require('kittn');
+
+let api = kittn.authorize('meowmeowmeow');
+let max = api.kittens.delete(2);
+```
+
+> The above command returns JSON structured like this:
+
+```json
+{
+    "user_id": 1,
+    "factory_id": 0,
+    "recipe": [
+        {
+            "id": 3,
+            "name": "MONEY",
+            "storage": 3379992545,
+            "production": 1.45
+        }
+    ]
+}
+```
+
+This endpoint returns a given user's specific factory's upgrade.
+### HTTP Request
+
+`GET http://localhost:8080/api/v1/users/<ID>/factories/<FactoryID>/recipe`
+
+### URL Parameters
+
+Parameter | Description
+--------- | -----------
+ID | The ID of the factory's user to retrieve
+FactoryID | The ID of the factoryType to retrieve
+
 
 ## Get an User's factory's upgrade
 
@@ -449,7 +506,7 @@ Parameter | Description
 ID | The ID of the factory's user to retrieve
 FactoryID | The ID of the factoryType to retrieve
 
-## Get Your buying limits
+## Get an User's Buying Limits
 
 ```shell
 curl "http://example.com/api/kittens/2"
@@ -469,35 +526,39 @@ let max = api.kittens.get(2);
 {
     "user_id": 1,
     "factory_id": 0,
-    "max": 32842,
-    "cost_max": {
-        "MONEY": {
+    "max": 34147,
+    "cost_max": [
+        {
             "id": 3,
-            "storage": 111313757969031,
-            "production": 32842
+            "name": "MONEY",
+            "storage": 115749615600134,
+            "production": 34147
         }
-    },
-    "cost_1": {
-        "MONEY": {
+    ],
+    "cost_1": [
+        {
             "id": 3,
+            "name": "MONEY",
             "storage": 3379992545,
             "production": 1
         }
-    },
-    "cost_10": {
-        "MONEY": {
+    ],
+    "cost_10": [
+        {
             "id": 3,
+            "name": "MONEY",
             "storage": 33799951155,
             "production": 10
         }
-    },
-    "cost_100": {
-        "MONEY": {
+    ],
+    "cost_100": [
+        {
             "id": 3,
+            "name": "MONEY",
             "storage": 338002081999,
             "production": 100
         }
-    }
+    ]
 }
 ```
 
@@ -1033,18 +1094,16 @@ let max = api.kittens.get(2);
 
 ```json
 {
-    "factory_id": 1,
-    "factory_type": "PEOPLE_RECRUITER",
-    "recipe": {
-        "PEOPLE": {
-            "id": 4,
-            "production": 0.3
-        },
-        "MONEY": {
+    "factory_id": 0,
+    "factory_type": "STOCK_INVESTOR",
+    "recipe": [
+        {
             "id": 3,
-            "storage": 200
+            "name": "MONEY",
+            "storage": 1000,
+            "production": 1
         }
-    }
+    ]
 }
 ```
 
@@ -1147,58 +1206,73 @@ let max = api.kittens.get(2);
 
 ```json
 {
-    "CIRCUITS": {
-        "id": 12,
-        "price": 52
-    },
-    "CARDBOARD": {
-        "id": 11,
-        "price": 1
-    },
-    "COPPER_CABLE": {
-        "id": 10,
-        "price": 10
-    },
-    "COPPER": {
-        "id": 9,
-        "price": 1
-    },
-    "METAL_SCRAP": {
-        "id": 8,
-        "price": 12
-    },
-    "RUBBER": {
-        "id": 7,
-        "price": 6
-    },
-    "TIRES": {
-        "id": 6,
-        "price": 9
-    },
-    "IRON": {
-        "id": 5,
-        "price": 6
-    },
-    "PEOPLE": {
-        "id": 4,
-        "price": 10
-    },
-    "MONEY": {
-        "id": 3,
-        "price": 10
-    },
-    "GOLD": {
-        "id": 2,
-        "price": 21
-    },
-    "PLASTIC": {
-        "id": 1,
-        "price": 42
-    },
-    "POWER": {
-        "id": 0,
-        "price": 46
-    }
+    "market": [
+        {
+            "id": 12,
+            "name": "CIRCUITS",
+            "price": 52
+        },
+        {
+            "id": 11,
+            "name": "CARDBOARD",
+            "price": 1
+        },
+        {
+            "id": 10,
+            "name": "COPPER_CABLE",
+            "price": 10
+        },
+        {
+            "id": 9,
+            "name": "COPPER",
+            "price": 1
+        },
+        {
+            "id": 8,
+            "name": "METAL_SCRAP",
+            "price": 12
+        },
+        {
+            "id": 7,
+            "name": "RUBBER",
+            "price": 6
+        },
+        {
+            "id": 6,
+            "name": "TIRES",
+            "price": 9
+        },
+        {
+            "id": 5,
+            "name": "IRON",
+            "price": 6
+        },
+        {
+            "id": 4,
+            "name": "PEOPLE",
+            "price": 10
+        },
+        {
+            "id": 3,
+            "name": "MONEY",
+            "price": 10
+        },
+        {
+            "id": 2,
+            "name": "GOLD",
+            "price": 21
+        },
+        {
+            "id": 1,
+            "name": "PLASTIC",
+            "price": 42
+        },
+        {
+            "id": 0,
+            "name": "POWER",
+            "price": 46
+        }
+    ]
 }
 ```
 

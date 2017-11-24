@@ -27,7 +27,7 @@ public class WealthDTO {
     @XmlElement(name = "user_id")
     private long userID;
 
-    @XmlElement(name = "resoruces")
+    @XmlElement(name = "resources")
     private List<ResourceEntryDTO> resources = new ArrayList<>();
 
 

@@ -1,5 +1,8 @@
 package ar.edu.itba.paw.webapp.DTO.market;
 
+import ar.edu.itba.paw.model.ResourceType;
+
+import javax.annotation.Resource;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -9,13 +12,17 @@ public class MarketEntryDTO {
     @XmlElement(name = "id")
     private int id;
 
+    @XmlElement(name = "name")
+    private String name;
+
     @XmlElement(name = "price")
     private Integer price;
 
     public MarketEntryDTO(){}
 
-    public MarketEntryDTO(int id, Integer price) {
-        this.id = id;
+    public MarketEntryDTO(ResourceType resourceType, Integer price) {
+        this.id = resourceType.getId();
+        this.name = resourceType.getNameCode();
         this.price = price;
     }
 }
