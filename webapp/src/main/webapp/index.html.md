@@ -881,13 +881,13 @@ This endpoint joins the user to a clan.
 
 ### HTTP Request
 
-`POST http://localhost:8080/api/v1/clans/<ID>/join`
+`POST http://localhost:8080/api/v1/clans/join`
 
-### URL Parameters
+### Body Parameters
 
 Parameter | Description
 --------- | -----------
-ID | The ID of the clan to join.
+id | The ID of the clan to join.
 
 ### Errors
 Code | Description
@@ -1145,7 +1145,7 @@ This endpoint attempts to purhcase a factory with the
 
 Parameter | Description
 --------- | -----------
-factoryID | The factory's ID to be purchased
+id | The factory's ID to be purchased
 amount | The amount of factories desired to be purchased
 
 ### Errors
@@ -1179,7 +1179,7 @@ This endpoint attempts to upgrade an user's factory.
 
 Parameter | Description
 --------- | -----------
-factoryID | The factory's ID to be upgraded
+id | The factory's ID to be upgraded
 
 ### Errors
 Code | Description
@@ -1306,7 +1306,7 @@ This endpoint attempts to upgrade an user's factory.
 
 Parameter | Description
 --------- | -----------
-resourceType | The resourceType codeName to be purchased
+resource_type | The resourceType codeName to be purchased
 amount | The amount of resources desired to be purchased
 
 
@@ -1340,7 +1340,7 @@ This endpoint attempts to upgrade an user's factory.
 
 Parameter | Description
 --------- | -----------
-resourceType | The resourceType codeName to be sold
+resource_type | The resourceType codeName to be sold
 amount | The amount of resources desired to be sold
 
 

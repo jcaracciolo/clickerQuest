@@ -61,8 +61,8 @@ public class FactoryController {
     }
 
     private static class PurchaseFactoryQuery {
-        Integer factoryID;
-        Integer amount;
+        public Integer id;
+        public Integer amount;
     }
 
     @POST
@@ -70,33 +70,36 @@ public class FactoryController {
     @Path("/purchase")
     public Response purchaseFactory(PurchaseFactoryQuery query) {
 
-        if(query==null || query.amount<=0) return Response.status(Response.Status.BAD_REQUEST).build();
+        if(query==null
+            || query.amount== null
+            || query.amount<=0
+            || query.id==null ) return Response.status(Response.Status.BAD_REQUEST).build();
 
-        if (FactoryType.fromId(query.factoryID) != null) {
-            if(us.purchaseFactory(userID,FactoryType.fromId(query.factoryID),query.amount)) {
-                Response.ok();
+        if (FactoryType.fromId(query.id) != null) {
+            if(us.purchaseFactory(userID,FactoryType.fromId(query.id),query.amount)) {
+                return Response.ok().build();
             } else {
-                Response.status(Response.Status.CONFLICT).build();
+                return Response.status(Response.Status.CONFLICT).build();
             }
         }
         return Response.status(Response.Status.NOT_FOUND).build();
     }
 
-    static class UpgradeFactoryQuery {
-        Integer factoryId;
+    private static class UpgradeFactoryQuery {
+        public Integer id;
     }
 
     @POST
     @Consumes(value = {MediaType.APPLICATION_JSON,})
     @Path("/upgrade")
     public Response upgradeFactory(UpgradeFactoryQuery query) {
-        if(query==null) return Response.status(Response.Status.BAD_REQUEST).build();
+        if(query==null || query.id == null) return Response.status(Response.Status.BAD_REQUEST).build();
 
-        if (FactoryType.fromId(query.factoryId) != null) {
-            if (us.purchaseUpgrade(userID, FactoryType.fromId(query.factoryId))) {
-                Response.ok();
+        if (FactoryType.fromId(query.id) != null) {
+            if (us.purchaseUpgrade(userID, FactoryType.fromId(query.id))) {
+                return Response.ok().build();
             } else {
-                Response.status(Response.Status.CONFLICT).build();
+                return Response.status(Response.Status.CONFLICT).build();
             }
         }
         return Response.status(Response.Status.NOT_FOUND).build();

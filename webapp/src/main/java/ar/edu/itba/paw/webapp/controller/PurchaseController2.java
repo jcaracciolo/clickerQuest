@@ -30,14 +30,14 @@ public class PurchaseController2 {
 
     @RequestMapping(value = "/buyFactory", method = { RequestMethod.POST })
     @ResponseBody
-    public String purchaseFactory(Principal principal, @RequestParam("factoryId") final int factoryId,
+    public String purchaseFactory(Principal principal, @RequestParam("id") final int factoryId,
                                   @RequestParam("amount") final int amount){
         Boolean result = userService.purchaseFactory(
                 userService.findByUsername(principal.getName()).getId(), FactoryType.fromId(factoryId),amount);
         JSONObject j = new JSONObject();
         j.put("result",result);
         j.put("type", "purchaseFactory");
-        j.put("factoryId",factoryId);
+        j.put("id",factoryId);
         return j.toJSONString();
     }
 
@@ -58,14 +58,14 @@ public class PurchaseController2 {
 
     @RequestMapping(value = "/upgradeFactory", method = { RequestMethod.POST })
     @ResponseBody
-    public String upgradeFactory(Principal principal, @RequestParam("factoryId") final int factoryId){
+    public String upgradeFactory(Principal principal, @RequestParam("id") final int factoryId){
         long userId = userService.findByUsername(principal.getName()).getId();
         Boolean result = userService.purchaseUpgrade(userId, FactoryType.fromId(factoryId));
         long factoryLevel = userService.getUserFactories(userId).stream().filter(f -> f.getType().getId() == factoryId).findAny().get().getLevel();
         JSONObject j = new JSONObject();
         j.put("result",result);
         j.put("type", "upgradeFactory");
-        j.put("factoryId",factoryId);
+        j.put("id",factoryId);
         j.put("level",factoryLevel);
         return j.toJSONString();
     }

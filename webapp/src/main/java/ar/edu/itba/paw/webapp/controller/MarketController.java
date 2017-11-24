@@ -43,8 +43,12 @@ public class MarketController {
     @Path("/purchase")
     @Consumes(value = {MediaType.APPLICATION_JSON,})
     public Response purchaseResource(MarketQuery query) {
-        if(query == null || query.resourceType == null || query.amount == null) return Response.status(Response.Status.BAD_REQUEST).build();
+        if(query == null
+        || query.resourceType == null
+        || query.amount == null
+        || (query.amount - Math.floor(query.amount)) <= 0.0001f) return Response.status(Response.Status.BAD_REQUEST).build();
 
+        query.amount = Math.floor(query.amount);
         if(us.findById(userID) == null) return Response.status(Response.Status.UNAUTHORIZED).build();
         if(query.amount<0 || !ResourceType.fromName(query.resourceType).isPresent()) return Response.status(Response.Status.BAD_REQUEST).build();
 
