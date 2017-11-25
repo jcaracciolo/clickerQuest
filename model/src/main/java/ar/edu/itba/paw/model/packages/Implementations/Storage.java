@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static java.math.BigDecimal.ONE;
+import static java.math.BigDecimal.ROUND_CEILING;
 import static java.math.BigDecimal.ZERO;
 
 /**
@@ -61,7 +62,7 @@ public class Storage extends ResourcePackage {
         for (ResourceType resourceType: productions.getResources()){
             long seconds = ChronoUnit.SECONDS.between(lastUpdated.get(resourceType).toInstant(), now.toInstant());
 
-            BigDecimal value = productions.getValue(resourceType).multiply(BigDecimal.valueOf(seconds));
+            BigDecimal value = productions.getValue(resourceType).multiply(BigDecimal.valueOf(seconds)).setScale(0,ROUND_CEILING);
             if(value.signum() <0 ) throw new RuntimeException("Negative Production in storage calculation!");
 
             resourcePackageBuilder.addItem(resourceType, value);

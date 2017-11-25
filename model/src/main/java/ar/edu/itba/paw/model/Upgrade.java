@@ -86,7 +86,7 @@ public class Upgrade {
     }
 
     public boolean isBuyable(Wealth w) {
-        return w.getStorage().getValue(ResourceType.MONEY).compareTo(BigDecimal.valueOf(cost)) > 0;
+        return w.getStorage().getValue(ResourceType.MONEY).compareTo(BigDecimal.valueOf(cost)) >= 0;
     }
 
 

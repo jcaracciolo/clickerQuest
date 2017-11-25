@@ -9,12 +9,14 @@ import ar.edu.itba.paw.model.packages.Validator;
 import java.math.BigDecimal;
 import java.util.Map;
 
+import static java.math.BigDecimal.ZERO;
+
 /**
  * Created by juanfra on 10/04/17.
  */
 public class Recipe extends ResourcePackage{
 
-    private final static Validator<BigDecimal> VALIDATOR = (d) -> d.signum()>=0;
+    private final static Validator<BigDecimal> VALIDATOR = (d) ->  d.compareTo(ZERO)!=0;
     private final static Creator<Recipe> CREATOR = (pb) -> new Recipe(pb.getResources());
 
     private Recipe(Map<ResourceType, BigDecimal> map) {

@@ -39,8 +39,8 @@ public class ResourceEntryDTO {
         Stream.of(ResourceType.values()).forEach((r) -> {
             Double resStorage = null;
             Double resProduction = null;
-            if (storage != null) resStorage = storage.get(r).doubleValue();
-            if (productions != null) resProduction = productions.get(r).doubleValue();
+            if (storage != null && storage.get(r)!=null) resStorage = storage.get(r).doubleValue();
+            if (productions != null && productions.get(r)!=null) resProduction = productions.get(r).doubleValue();
             if (resStorage != null || resProduction != null) {
                 resources.add(new ResourceEntryDTO(r, resStorage, resProduction));
             }

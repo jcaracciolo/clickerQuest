@@ -82,7 +82,7 @@ public class MarketJdbcDaoTest {
         assertTrue(popularities.containsKey(ResourceType.MONEY));
         assertTrue(popularities.containsKey(ResourceType.CARDBOARD));
         assertTrue(popularities.get(ResourceType.MONEY).compareTo(popularities.get(ResourceType.CARDBOARD))<0);
-        assertBigDecimalEquals(popularities.get(ResourceType.MONEY),ZERO,0D);
+        assertNotEquals(popularities.get(ResourceType.MONEY).doubleValue(),0D,0D);
 
     }
 

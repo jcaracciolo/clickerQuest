@@ -104,7 +104,7 @@ public enum FactoryType {
         }
         public BaseRecipe getBaseRecipe() {
             PackageBuilder<BaseRecipe> recipeBuilder = BaseRecipe.packageBuilder();
-            recipeBuilder.putItem(ResourceType.CARDBOARD,BigDecimal.valueOf(10));
+            recipeBuilder.putItem(ResourceType.CARDBOARD,BigDecimal.valueOf(-10));
             recipeBuilder.putItem(ResourceType.POWER,ONE);
             return recipeBuilder.buildPackage();
         }},

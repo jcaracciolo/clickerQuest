@@ -74,7 +74,7 @@ public abstract class ResourcePackage {
         Map<ResourceType, BigDecimal> map = new TreeMap<>();
 
         resources.entrySet().stream()
-                .filter(m -> m.getValue().compareTo(ZERO) > 0)
+                .filter(m -> m.getValue().compareTo(ZERO) < 0)
                 .forEach(m -> map.put(m.getKey(),m.getValue().negate()));
 
         return map;
