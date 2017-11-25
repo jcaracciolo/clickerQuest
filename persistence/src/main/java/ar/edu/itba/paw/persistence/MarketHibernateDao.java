@@ -3,17 +3,21 @@ package ar.edu.itba.paw.persistence;
 import ar.edu.itba.paw.interfaces.MarketDao;
 import ar.edu.itba.paw.model.ResourceType;
 import ar.edu.itba.paw.model.StockMarketEntry;
-import ar.edu.itba.paw.model.User;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
+
+import static java.math.BigDecimal.ONE;
+import static java.math.BigDecimal.ZERO;
 
 /**
  * Created by juanfra on 17/06/17.
@@ -37,40 +41,50 @@ public class MarketHibernateDao implements MarketDao {
         if(sme == null){
             em.persist(stockMarketEntry);
         } else {
-            sme.setAmount(sme.getAmount() + stockMarketEntry.getAmount());
+            sme.setAmount(sme.getAmount().add(stockMarketEntry.getAmount()));
             em.merge(sme);
         }
         return true;
     }
 
     @Override
-    public Map<ResourceType, Double> getPopularities() {
+    public Map<ResourceType, BigDecimal> getPopularities() {
         final TypedQuery<StockMarketEntry> query = em.createQuery( "from StockMarketEntry as s" ,
                 StockMarketEntry.class);
 
         List<StockMarketEntry> entries = query.getResultList();
-        Map<ResourceType,Double> popularities = new HashMap<>();
+        Map<ResourceType, BigDecimal> popularities = new HashMap<>();
         if(entries.isEmpty()) return Collections.emptyMap();
 
-        Double minRes = entries.stream()
+        BigDecimal minRes = entries.stream()
                 .map(StockMarketEntry::getAmount)
-                .reduce((d1,d2)->d1<d2?d1:d2)
+                .reduce(BigDecimal::min)
                 .orElse(null);
 
-        Double min = minRes<0?-minRes:1;
+        if(minRes==null)
+            //TODO log this
+            return Collections.EMPTY_MAP;
 
-        Double total = 0D;
-        for(ResourceType r: ResourceType.values()) total+=min;
+        BigDecimal min = minRes.compareTo(BigDecimal.ZERO)<0?minRes.negate():ONE;
 
-        total += entries.stream()
-                .map(StockMarketEntry::getAmount)
-                .reduce((d1,d2)-> d1+d2).orElse(null);
+        BigDecimal total = ZERO;
+        for(ResourceType r: ResourceType.values()){
+            total = total.add(min);
+        }
 
-        Double finalTotal = total;
+        total = total.add(min);
+
+        BigDecimal finalTotal = total;
         entries.forEach( (e) -> {
-                    double value = e.getAmount() + min;
-                    double popularity = popularityCalculator(value,ResourceType.values().length,finalTotal);
-                    if(popularity<0.5) popularity=0.5;
+                    BigDecimal value = e.getAmount().add(min);
+                    BigDecimal popularity = BigDecimal.valueOf(
+                            popularityCalculator(
+                                    value,
+                                    BigDecimal.valueOf(ResourceType.values().length),
+                                    finalTotal)
+                    );
+
+                    if(popularity.compareTo(BigDecimal.valueOf(0.5))<0) popularity=BigDecimal.valueOf(0.5);
                     popularities.put(e.getResourceType(),popularity);
                 }
         );
@@ -78,8 +92,8 @@ public class MarketHibernateDao implements MarketDao {
         return popularities;
     }
 
-    public double popularityCalculator(double purchases, double totalAmount, double totalSum) {
-        return popularityExponential(purchases * totalAmount / totalSum);
+    public double popularityCalculator(BigDecimal purchases, BigDecimal totalAmount, BigDecimal totalSum) {
+        return popularityExponential(purchases.multiply(totalAmount).divide(totalSum, RoundingMode.HALF_EVEN).doubleValue());
     }
 
     private double popularityExponential(double x) {

@@ -5,6 +5,7 @@ import ar.edu.itba.paw.model.Exception.ValidatorException;
 import ar.edu.itba.paw.model.packages.Implementations.Storage;
 
 import javax.management.openmbean.KeyAlreadyExistsException;
+import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
@@ -14,19 +15,19 @@ import java.util.Map;
  */
 public class PackageBuilder<T extends ResourcePackage> {
 
-    private Map<ResourceType, Double> resources;
+    private Map<ResourceType, BigDecimal> resources;
     private Map<ResourceType, Calendar> lastUpdated;
-    private Validator<Double> validator;
+    private Validator<BigDecimal> validator;
     private Creator<T> creator;
 
-    public PackageBuilder(Validator<Double> validator, Creator<T> creator) {
+    public PackageBuilder(Validator<BigDecimal> validator, Creator<T> creator) {
         resources = new HashMap<>();
         lastUpdated = new HashMap<>();
         this.validator = validator;
         this.creator = creator;
     }
 
-    public PackageBuilder<T> putItem(ResourceType resource, Double amount){
+    public PackageBuilder<T> putItem(ResourceType resource, BigDecimal amount){
         if(!validator.validates(amount)) {
             throw new ValidatorException("Validator invalid " + amount);
         }else if(resources.containsKey(resource)) {
@@ -37,10 +38,10 @@ public class PackageBuilder<T extends ResourcePackage> {
         }
     }
 
-    public PackageBuilder<T> addItem(ResourceType resource,Double amount) {
-        Double toAdd;
+    public PackageBuilder<T> addItem(ResourceType resource, BigDecimal amount) {
+        BigDecimal toAdd;
         if(resources.containsKey(resource)) {
-            toAdd = resources.get(resource) + amount;
+            toAdd = resources.get(resource).add(amount);
         } else {
             toAdd = amount;
         }
@@ -77,11 +78,11 @@ public class PackageBuilder<T extends ResourcePackage> {
         }
     }
 
-    public PackageBuilder<T> putItemWithDate(ResourceType resource,Double amount,Calendar time){
+    public PackageBuilder<T> putItemWithDate(ResourceType resource, BigDecimal amount, Calendar time){
         return this.putItem(resource,amount).setLastUpdated(resource,time);
     }
 
-    public Map<ResourceType, Double> getResources() {
+    public Map<ResourceType, BigDecimal> getResources() {
         return resources;
     }
 

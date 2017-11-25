@@ -6,16 +6,19 @@ import ar.edu.itba.paw.model.packages.PackageBuilder;
 import ar.edu.itba.paw.model.packages.ResourcePackage;
 import ar.edu.itba.paw.model.packages.Validator;
 
+import java.math.BigDecimal;
 import java.util.Map;
+
+import static java.math.BigDecimal.ZERO;
 
 /**
  * Created by juanfra on 08/04/17.
  */
 public class BaseRecipe extends ResourcePackage {
-    private final static Validator<Double> VALIDATOR = (d) -> d!=0;
+    private final static Validator<BigDecimal> VALIDATOR = (d) -> d.compareTo(ZERO)!=0;
     private final static Creator<BaseRecipe> CREATOR = (pb) -> new BaseRecipe(pb.getResources());
 
-    private BaseRecipe(Map<ResourceType, Double> map) {
+    private BaseRecipe(Map<ResourceType, BigDecimal> map) {
         resources = super.generate(map,VALIDATOR);
         formatter = (d) -> formatValue(d,false) + "/s";
     }
@@ -24,18 +27,26 @@ public class BaseRecipe extends ResourcePackage {
         return new PackageBuilder<>(VALIDATOR,CREATOR);
     }
 
-    public Recipe calculateRecipe(double inputReduction, double outputMultiplier, long level){
+    public Recipe calculateRecipe(BigDecimal inputReduction, BigDecimal outputMultiplier, long level){
         PackageBuilder<Recipe> builder = Recipe.packageBuilder();
         resources.forEach(
-                (r,d) -> builder.putItem(r,d>0 ? d*outputMultiplier : d*inputReduction)
+                (r,d) -> builder.putItem(r,
+                        d.compareTo(ZERO)>0 ?
+                        d.multiply(outputMultiplier) :
+                        d.multiply(inputReduction)
+                )
         );
         return builder.buildPackage();
     }
 
-    public FactoriesProduction calculateProduction(double amount, double inputReduction, double outputMultiplier, long level){
+    public FactoriesProduction calculateProduction(BigDecimal amount, BigDecimal inputReduction, BigDecimal outputMultiplier, long level){
         PackageBuilder<FactoriesProduction> builder = FactoriesProduction.packageBuilder();
         resources.forEach(
-                (r,d) -> builder.putItem(r,d>0 ? d*outputMultiplier*amount : d*inputReduction*amount)
+                (r,d) -> builder.putItem(r,
+                        d.compareTo(ZERO)>0 ?
+                                d.multiply(outputMultiplier).multiply(amount) :
+                                d.multiply(inputReduction).multiply(amount)
+                )
         );
         return builder.buildPackage();
     }
@@ -48,11 +59,11 @@ public class BaseRecipe extends ResourcePackage {
         return super.getFormattedOutputs();
     }
 
-    public Map<ResourceType,Double> getInputs() {
+    public Map<ResourceType, BigDecimal> getInputs() {
         return super.getInputs();
     }
 
-    public Map<ResourceType,Double> getOutputs(){
+    public Map<ResourceType, BigDecimal> getOutputs(){
         return super.getOutputs();
     }
 

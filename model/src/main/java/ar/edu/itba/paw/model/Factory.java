@@ -6,7 +6,11 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Map;
+
+import static java.math.RoundingMode.DOWN;
+import static java.math.RoundingMode.HALF_EVEN;
 
 @Entity
 @Table(name = "factories")
@@ -25,16 +29,16 @@ public class Factory implements Comparable<Factory> {
     private FactoryType type;
 
     @Column(name = "amount")
-    private double amount;
+    private BigDecimal amount;
 
     @Column(name = "inputreduction")
-    private double inputReduction;
+    private BigDecimal inputReduction;
 
     @Column(name = "outputmultiplier")
-    private double outputMultiplier;
+    private BigDecimal outputMultiplier;
 
     @Column(name = "costreduction")
-    private double costReduction;
+    private BigDecimal costReduction;
 
     @Column(name = "level")
     private int level;
@@ -91,8 +95,8 @@ public class Factory implements Comparable<Factory> {
         }
     }
 
-    public Factory(long userid, @NotNull FactoryType type, double amount, double inputReduction,
-                   double outputMultiplier, double costReduction, int level) {
+    public Factory(long userid, @NotNull FactoryType type, BigDecimal amount, BigDecimal inputReduction,
+                   BigDecimal outputMultiplier, BigDecimal costReduction, int level) {
         this.userid = userid;
         this.type = type;
         this.amount = amount;
@@ -111,19 +115,19 @@ public class Factory implements Comparable<Factory> {
         return type;
     }
 
-    public double getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
-    public double getInputReduction() {
+    public BigDecimal getInputReduction() {
         return inputReduction;
     }
 
-    public double getOutputMultiplier() {
+    public BigDecimal getOutputMultiplier() {
         return outputMultiplier;
     }
 
-    public double getCostReduction() {
+    public BigDecimal getCostReduction() {
         return costReduction;
     }
 
@@ -149,7 +153,7 @@ public class Factory implements Comparable<Factory> {
 
     public Factory purchaseResult(long amountToBuy) {
         return new Factory(userid,type,
-                amount +amountToBuy,
+                amount.add(BigDecimal.valueOf(amountToBuy)),
                 inputReduction,outputMultiplier,costReduction,level);
     }
 
@@ -170,16 +174,16 @@ public class Factory implements Comparable<Factory> {
         Storage storage = w.getStorage();
 
         for (ResourceType r: cost.getResources()) {
-            if(cost.getValue(r) > storage.getValue(r)){
+            if(cost.getValue(r).compareTo(storage.getValue(r))>0){
                 return false;
             }
         }
 
-        Map<ResourceType,Double> need = getRecipe().getInputs();
+        Map<ResourceType,BigDecimal> need = getRecipe().getInputs();
         Productions productions = w.getProductions();
 
         for (ResourceType r: need.keySet()) {
-            if(need.get(r)*amountToBuy > productions.getValue(r)){
+            if(need.get(r).multiply(BigDecimal.valueOf(amountToBuy)).compareTo(productions.getValue(r)) > 0){
                 return false;
             }
         }
@@ -190,22 +194,34 @@ public class Factory implements Comparable<Factory> {
     /**
      * Given an amount it checks how many factories can be bought for that resource
      */
-    public double maxFactoriesLimitedByStorage(ResourceType resource, double price, Wealth wealth) {
-        double resourcesAvailable = wealth.getStorage().getValue(resource);
-        int a = 1;
-        int b = 1;
-        double c = - 2 * (resourcesAvailable/(costReduction * price) + BaseCost.baseCostOfFactories(amount));
-        double sol1 = (-b + Math.sqrt(b*b - 4*a*c) ) / (2*a);
-        double sol2 = (-b - Math.sqrt(b*b - 4*a*c) ) / (2*a);
-        if(Double.isNaN(sol1)) {
-            return 0;
+    public BigDecimal maxFactoriesLimitedByStorage(ResourceType resource, BigDecimal price, Wealth wealth) {
+        BigDecimal resourcesAvailable = wealth.getStorage().getValue(resource);
+        BigDecimal a = BigDecimal.ONE;
+        BigDecimal b = BigDecimal.ONE;
+        BigDecimal c = BigDecimal.valueOf(-2)
+                .multiply(resourcesAvailable).divide(costReduction.multiply(price),HALF_EVEN)
+                .add(BaseCost.baseCostOfFactories(amount));
+
+        Double delta = b.multiply(b).subtract(a.multiply(c).multiply(BigDecimal.valueOf(4))).doubleValue();
+
+        if(delta < 0) {
+            return BigDecimal.ZERO;
         }
-        return Math.floor(sol1<sol2?sol2:sol1) - amount;
+
+        BigDecimal sol1 = b.negate()
+                .add(BigDecimal.valueOf(Math.sqrt(delta)))
+                .divide(a.multiply(BigDecimal.valueOf(2)), HALF_EVEN);
+
+        BigDecimal sol2 = b.negate()
+                .subtract(BigDecimal.valueOf(Math.sqrt(delta)))
+                .divide(a.multiply(BigDecimal.valueOf(2)), HALF_EVEN);
+
+        return sol1.max(sol2.subtract(amount));
     }
 
-    public double maxFactoriesLimitedByProduction(ResourceType resource, double productionNeeded, Wealth wealth) {
-        double currentProduction = wealth.getProductions().rawMap().get(resource);
-        return Math.floor(currentProduction/productionNeeded);
+    public BigDecimal maxFactoriesLimitedByProduction(ResourceType resource, BigDecimal productionNeeded, Wealth wealth) {
+        BigDecimal currentProduction = wealth.getProductions().rawMap().get(resource);
+        return currentProduction.divide(productionNeeded,HALF_EVEN).setScale(0,DOWN);
     }
 
     public BuyLimits getLimits(Wealth w){
@@ -244,7 +260,7 @@ public class Factory implements Comparable<Factory> {
     }
 
     public boolean isUpgreadable(Wealth w) {
-        if(getAmount()>0) {
+        if(getAmount().signum()>0) {
             return getNextUpgrade().isBuyable(w);
         }
 

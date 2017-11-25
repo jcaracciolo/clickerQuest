@@ -3,6 +3,8 @@ package ar.edu.itba.paw.model;
 import ar.edu.itba.paw.model.packages.UpgradeType;
 import org.jetbrains.annotations.NotNull;
 
+import java.math.BigDecimal;
+
 public class Upgrade {
     private FactoryType factoryType;
     private long level;
@@ -24,30 +26,30 @@ public class Upgrade {
         return new Upgrade(type, level,"Upgrade n°" + level, 300*level);
     }
 
-    public Double getInputReduction(){
+    public BigDecimal getInputReduction(){
         long localLevel = (level+2)/3;
         localLevel = Math.min(localLevel, MAX_UPGRADE_LEVEL);
         if(factoryType.getBaseRecipe().getInputs().isEmpty()){
-            return 1D;
+            return BigDecimal.ONE;
         }
-        return Math.exp(-0.07*localLevel);
+        return BigDecimal.valueOf(Math.exp(-0.07*localLevel));
     }
 
-    public Double getOutputMultiplier(){
+    public BigDecimal getOutputMultiplier(){
         long localLevel;
         if (level > MAX_UPGRADE_LEVEL*3) {
             localLevel = level - MAX_UPGRADE_LEVEL * 2;
         } else {
             localLevel = factoryType.getBaseRecipe().getInputs().isEmpty()? (level+1)/2 : (level+1)/3;
         }
-        return 1+localLevel/20D;
+        return BigDecimal.valueOf(1+localLevel/20D);
     }
 
-    public Double getCostReduction(){
+    public BigDecimal getCostReduction(){
 
         long localLevel = factoryType.getBaseRecipe().getInputs().isEmpty() ? level/2 : level/3;
         localLevel = Math.min(localLevel, MAX_UPGRADE_LEVEL);
-        return Math.exp(-0.07 * localLevel);
+        return BigDecimal.valueOf(Math.exp(-0.07 * localLevel));
     }
 
     public UpgradeType getType(){
@@ -84,7 +86,7 @@ public class Upgrade {
     }
 
     public boolean isBuyable(Wealth w) {
-        return cost <= w.getStorage().getValue(ResourceType.MONEY);
+        return w.getStorage().getValue(ResourceType.MONEY).compareTo(BigDecimal.valueOf(cost)) > 0;
     }
 
 

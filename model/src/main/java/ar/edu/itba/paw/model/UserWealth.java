@@ -2,6 +2,7 @@ package ar.edu.itba.paw.model;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 /**
  * Class needed for being able to map our database to the object paradigm, since Wealth did not
@@ -12,8 +13,8 @@ import java.io.Serializable;
 @Table(name = "wealths")
 @Entity
 class UserWealth {
-    private double production;
-    private double storage;
+    private BigDecimal production;
+    private BigDecimal storage;
     private long lastupdated;
 
     @EmbeddedId
@@ -56,19 +57,19 @@ class UserWealth {
         _id = new UserAndResource(userid,resourceType);
     }
 
-    public double getProduction() {
+    public BigDecimal getProduction() {
         return production;
     }
 
-    public void setProduction(double production) {
+    public void setProduction(BigDecimal production) {
         this.production = production;
     }
 
-    public double getStorage() {
+    public BigDecimal getStorage() {
         return storage;
     }
 
-    public void setStorage(double storage) {
+    public void setStorage(BigDecimal storage) {
         this.storage = storage;
     }
 

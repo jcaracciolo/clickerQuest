@@ -4,11 +4,18 @@ import ar.edu.itba.paw.model.FactoryType;
 import ar.edu.itba.paw.model.ResourceType;
 import ar.edu.itba.paw.model.packages.Implementations.*;
 
+import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+
+import static java.math.BigDecimal.ONE;
+import static java.math.BigDecimal.ROUND_HALF_EVEN;
+import static java.math.BigDecimal.ZERO;
+import static java.math.RoundingMode.CEILING;
+import static java.math.RoundingMode.HALF_EVEN;
 
 /**
  * ResourcePackage represents a map of Resources to a double. Since the game handles numbers of up to trillion, doubles
@@ -34,14 +41,14 @@ import java.util.TreeMap;
  * a validator for it so that when building one there cant be at any given moment an object with an illegal state
  */
 public abstract class ResourcePackage {
-    protected Map<ResourceType,Double> resources;
+    protected Map<ResourceType, BigDecimal> resources;
     protected Formatter formatter;
 
     public Set<ResourceType> getResources(){
         return resources.keySet();
     }
 
-    public Double getValue(ResourceType resource){
+    public BigDecimal getValue(ResourceType resource){
         return resources.get(resource);
     }
 
@@ -49,10 +56,10 @@ public abstract class ResourcePackage {
         return resources.containsKey(resource);
     }
 
-    protected Map<ResourceType,Double> generate(Map<ResourceType,Double> m, Validator<Double> v){
-        Map<ResourceType,Double> newMap = new TreeMap<>();
+    protected Map<ResourceType, BigDecimal> generate(Map<ResourceType, BigDecimal> m, Validator<BigDecimal> v){
+        Map<ResourceType, BigDecimal> newMap = new TreeMap<>();
         for(ResourceType r: m.keySet()) {
-            double value = m.get(r);
+            BigDecimal value = m.get(r);
             if(v.validates(value)) {
                 newMap.put(r,m.get(r));
             } else {
@@ -63,27 +70,27 @@ public abstract class ResourcePackage {
         return newMap;
     }
 
-    protected Map<ResourceType,Double> getInputs(){
-        Map<ResourceType,Double> map = new TreeMap<>();
+    protected Map<ResourceType, BigDecimal> getInputs(){
+        Map<ResourceType, BigDecimal> map = new TreeMap<>();
 
         resources.entrySet().stream()
-                .filter(m -> m.getValue() < 0)
-                .forEach(m -> map.put(m.getKey(),-m.getValue()));
+                .filter(m -> m.getValue().compareTo(ZERO) > 0)
+                .forEach(m -> map.put(m.getKey(),m.getValue().negate()));
 
         return map;
     }
 
-    protected Map<ResourceType,Double> getOutputs(){
-        Map<ResourceType,Double> map = new TreeMap<>();
+    protected Map<ResourceType, BigDecimal> getOutputs(){
+        Map<ResourceType, BigDecimal> map = new TreeMap<>();
 
         resources.entrySet().stream()
-                .filter(m -> m.getValue() > 0)
+                .filter(m -> m.getValue().compareTo(ZERO) > 0)
                 .forEach(m -> map.put(m.getKey(),m.getValue()));
 
         return map;
     }
 
-    public Map<ResourceType,Double> rawMap(){
+    public Map<ResourceType, BigDecimal> rawMap(){
         return generate(resources,(r)-> true);
     }
 
@@ -108,14 +115,15 @@ public abstract class ResourcePackage {
         }
     }
 
-    public static String formatValue(Double value, Boolean integers){
+    public static String formatValue(BigDecimal value, Boolean integers){
 
-        if(value<=1000) {
+        if(value.compareTo(BigDecimal.valueOf(1000)) <= 0) {
             DecimalFormat df = new DecimalFormat(integers?"#":"#.##");
             df.setRoundingMode(RoundingMode.FLOOR);
             return df.format(value);
         }
-        return coolFormat(Math.ceil(value));
+        //setScale 0 is the way to round BIGDECIMAL
+        return coolFormat(value.setScale(0,CEILING).doubleValue());
     }
 
     protected Map<ResourceType,String> getFormattedInputs(){
@@ -172,25 +180,26 @@ public abstract class ResourcePackage {
         }
 
         for(ResourceType r: resources.keySet()) {
-            double d = resources.get(r);
-            double thatD = that.resources.get(r);
+            BigDecimal d = resources.get(r);
+            BigDecimal thatD = that.resources.get(r);
 
-            if(Math.signum(d) != Math.signum(thatD)) {
+            if(d.signum() != thatD.signum()) {
                 return false;
             }
 
-            if(d==0) {
-                if(that.resources.get(r)!=0) {
+            if(d.equals(ZERO)) {
+                if(!that.resources.get(r).equals(ZERO)) {
                     return false;
                 }
-            } else if( Math.abs( thatD/d - 1 ) >= 0.04 ) {
-                return false;
-
+            } else {
+                BigDecimal lambda = thatD.divide(d,ROUND_HALF_EVEN).subtract(ONE).abs();
+                if( lambda.compareTo(BigDecimal.valueOf(0.04))<=0 ) {
+                    return false;
+                }
             }
         }
 
         return true;
-
     }
 
     @Override

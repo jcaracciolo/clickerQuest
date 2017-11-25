@@ -8,6 +8,8 @@ import ar.edu.itba.paw.model.packages.Implementations.BaseCost;
 import ar.edu.itba.paw.model.packages.Implementations.FactoryCost;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
@@ -49,8 +51,8 @@ public class BuyLimits {
                 factory.getRecipe().getInputs()
                         .entrySet().stream().map((e)-> factory.maxFactoriesLimitedByProduction(e.getKey(),e.getValue(),wealth))
         )
-        .min(Double::compare)
-        .map(Double::longValue).orElse(0L);
+        .min(BigDecimal::compareTo)
+        .map(BigDecimal::longValue).orElse(0L);
     }
 
     public FactoryCost getCost1() {
