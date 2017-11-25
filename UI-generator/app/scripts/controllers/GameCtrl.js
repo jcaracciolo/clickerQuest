@@ -1,7 +1,7 @@
-define(['clickerQuest','services/UserService'], function(clickerQuest) {
+define(['clickerQuest','services/UserService', 'services/factoryService'], function(clickerQuest) {
 
   'use strict';
-  clickerQuest.controller('GameCtrl', function($scope, UserService) {
+  clickerQuest.controller('GameCtrl', function($scope, UserService, factoryService) {
 
     $scope.user = {
       username: null,
@@ -43,43 +43,38 @@ define(['clickerQuest','services/UserService'], function(clickerQuest) {
                                   storage: formatDecimal(res.storage, 2),
                                   production: formatDecimal(res.production, 2)})
         });
-        console.log($scope.resources)
       }
     );
 
 
+    $scope.activeFactories = [];
 
-    // It's important to respect id and position in array
-    $scope.factories = [
-      {name:'Stock Investment',
-        id: 0,
-        cantActive: 5,
-        cost: [ {id: 3, cant: 100},
-                {id: 0, cant: 100} ],
-        recipe: {input: [ {id: 1, cant: 2},
-                          {id: 2, cant: 2} ],
-          output: [ {id: 3, cant: 1},
-                    {id: 0, cant:1} ]},
-        upgrade: {type: 1, cost: 600}
-      },
-      {name:'People Recruitment Base',
-        id: 1,
-        cantActive: 3,
-        cost: [ {id: 6, cant: 50} ],
-        recipe: {input: [ {id: 4, cant: 3},
-                          {id: 1, cant: 1} ],
-          output: [ {id: 3, cant: 1} ]},
-        upgrade: {type: 1, cost: 115}
-      },
-      {name:'Junk Collector',
-        id: 2,
-        cantActive: 0,
-        cost: [ {id: 7, cant: 160}],
-        recipe: {input: [ ],
-          output: [ {id: 12, cant: 105} ]},
-        upgrade: {type: 1, cost: 34}
+    UserService.getFactories(1).then(
+      function (response) {
+        $scope.activeFactories = response.data.factories;
+        $scope.activeFactories.sort(function (f1, f2) {
+          return f1.id - f2.id;
+        })
       }
-    ];
+    );
+
+
+    $scope.factories = [];
+
+    factoryService.getAllFactories().then(
+      function (response) {
+        response.data.factories.forEach(function (f) {
+          factoryService.getFactoryRecipe(f.id).then(
+            function (response) {
+              $scope.factories.push(response.data);
+              $scope.factories.sort(function (f1, f2) {
+                return f1.factory_id - f2.factory_id;
+              })
+            }
+          )
+        });
+      }
+    );
 
   });
 

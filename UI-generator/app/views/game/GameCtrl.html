@@ -50,7 +50,7 @@
   <div class="scrollable-y col no-padding s7">
 
     <div class="row factory-row">
-      <div ng-repeat="fact in factories">
+      <div ng-repeat="fact in activeFactories">
 
         <div ng-if="fact.cantActive != 0">
           <!-- Factory Card -->
@@ -58,7 +58,7 @@
             <div class="card factory-central-card">
               <div class="card-content">
                 <div class="center-card-title">
-                  <h8 class="centered-text">{{fact.name}}</h8>
+                  <h8 class="centered-text">{{fact.type}}</h8>
                 </div>
 
                 <!-- Consuming Resources -->
@@ -142,23 +142,25 @@
                 <!-- Factory Column -->
                 <div class="col s4 buyFactorySection">
                   <div class="card-image factory-icon">
-                    <p class="center-align">{{fact.name}}</p>
-                    <img src="../../images/factory_images/{{fact.id}}.jpg" alt="factory_icon"/>
+                    <p class="center-align">{{fact.factory_type}}</p>
+                    <img src="../../images/factory_images/{{fact.factory_id}}.jpg" alt="factory_icon"/>
                   </div>
                   <p>COST</p>
                   <div>
-                    <div ng-repeat="res in fact.cost">
-                      <div class="row no-margins">
-                        <div class="col no-padding">
-                          <img class="resource-icon tooltipped" data-position="top" data-delay="50"
-                               data-tooltip='RESNAME' src="../../images/resources_icon/{{res.id}}.png"/>
-                        </div>
-                        <div class="col">
-                          <p>
-                            {{res.cant}}
-                            <!--<fmt:formatNumber pattern="#.##" value="${costMap.get(res)}"/>-->
-                            <!--<script>document.write(abbreviateNumber(parseFloat(${costMap.get(res)}), false));</script>-->
-                          </p>
+                    <div ng-repeat="res in fact.recipe">
+                      <div ng-if="res.storage != null">
+                        <div class="row no-margins">
+                          <div class="col no-padding">
+                            <img class="resource-icon tooltipped" data-position="top" data-delay="50"
+                                 data-tooltip='RESNAME' src="../../images/resources_icon/{{res.id}}.png"/>
+                          </div>
+                          <div class="col">
+                            <p>
+                              {{res.storage}}
+                              <!--<fmt:formatNumber pattern="#.##" value="${costMap.get(res)}"/>-->
+                              <!--<script>document.write(abbreviateNumber(parseFloat(${costMap.get(res)}), false));</script>-->
+                            </p>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -166,36 +168,40 @@
                 </div>
                 <!-- Recipe Column -->
                 <div class="col s4">
-                  <div ng-repeat="res in fact.recipe.input">
-                    <div class="row no-margins">
-                      <div class="col no-padding">
-                        <img class="resource-icon tooltipped" data-position="top" data-delay="50"
-                             data-tooltip='RESNAME' src="../../images/resources_icon/{{res.id}}.png"/>
-                      </div>
-                      <div class="col no-padding">
-                        <p>
-                          {{res.cant}}/s
-                          <!--<fmt:formatNumber pattern="#.##/s " value="${inputMap.get(res)}"/>-->
-                          <!--<script>document.write(abbreviateNumber(${inputMap.get(res)}, true) + "/s");</script>-->
-                        </p>
+                  <div ng-repeat="res in fact.recipe">
+                    <div ng-if="res.production < 0">
+                      <div class="row no-margins">
+                        <div class="col no-padding">
+                          <img class="resource-icon tooltipped" data-position="top" data-delay="50"
+                               data-tooltip='RESNAME' src="../../images/resources_icon/{{res.id}}.png"/>
+                        </div>
+                        <div class="col no-padding">
+                          <p>
+                            {{-res.production}}/s
+                            <!--<fmt:formatNumber pattern="#.##/s " value="${inputMap.get(res)}"/>-->
+                            <!--<script>document.write(abbreviateNumber(${inputMap.get(res)}, true) + "/s");</script>-->
+                          </p>
+                        </div>
                       </div>
                     </div>
                   </div>
                   <div class="card-image col s12">
                     <img src="../../images/arrow_ingredients.png" alt="embudo"/>
                   </div>
-                  <div ng-repeat="res in fact.recipe.output">
-                    <div class="row no-margins">
-                      <div class="col no-padding">
-                        <img class="resource-icon tooltipped" data-position="top" data-delay="50"
-                             data-tooltip='RESNAME' src="../../images/resources_icon/{{res.id}}.png"/>
-                      </div>
-                      <div class="col no-padding">
-                        <p>
-                          {{res.cant}}/s
-                          <!--<fmt:formatNumber pattern="#.##/s " value="${inputMap.get(res)}"/>-->
-                          <!--<script>document.write(abbreviateNumber(${inputMap.get(res)}, true) + "/s");</script>-->
-                        </p>
+                  <div ng-repeat="res in fact.recipe">
+                    <div ng-if="res.production > 0">
+                      <div class="row no-margins">
+                        <div class="col no-padding">
+                          <img class="resource-icon tooltipped" data-position="top" data-delay="50"
+                               data-tooltip='RESNAME' src="../../images/resources_icon/{{res.id}}.png"/>
+                        </div>
+                        <div class="col no-padding">
+                          <p>
+                            {{res.production}}/s
+                            <!--<fmt:formatNumber pattern="#.##/s " value="${inputMap.get(res)}"/>-->
+                            <!--<script>document.write(abbreviateNumber(${inputMap.get(res)}, true) + "/s");</script>-->
+                          </p>
+                        </div>
                       </div>
                     </div>
                   </div>

@@ -25,8 +25,8 @@ define(['clickerQuest'], function(clickerquest) {
         return $http.get(this.url + userId + "/factories");
       }
 
-      this.getFactories = function(userId, factoryID) {
-        return $http.get(this.url + userId + "/factories/" + factoryID);
+      this.getFactories = function(userId) {
+        return $http.get(this.url + userId + "/factories");
       }
 
       this.getFactory = function(userId, factoryID) {
