@@ -32,22 +32,22 @@ define(['clickerQuest','services/UserService'], function(clickerQuest) {
       }
     );
 
-    // It's important to respect id and position in array
-    $scope.resources = [
-      {name:'Power', id: 0, stock: 25, production: 50.2},
-      {name:'Plastic', id: 1, stock: 25, production: 50.2},
-      {name:'Gold', id: 2, stock: 25, production: 50.2},
-      {name:'Money', id: 3, stock: 25, production: 50.2},
-      {name:'People', id: 4, stock: 25, production: 50.2},
-      {name:'Iron', id: 5, stock: 25, production: 50.2},
-      {name:'Tires', id: 6, stock: 25, production: 50.2},
-      {name:'Rubber', id: 7, stock: 25, production: 50.2},
-      {name:'Metal Scrap', id:8, stock: 25, production: 50.2},
-      {name:'Copper', id: 9, stock: 25, production: 50.2},
-      {name:'Copper Cable', id: 10, stock: 25, production: 50.2},
-      {name:'Cardboard', id: 11, stock: 25, production: 50.2},
-      {name:'Circuits', id: 12, stock: 25, production: 50.2}
-    ];
+
+    $scope.resources = [];
+
+    UserService.getWealth(1).then(
+      function (response) {
+        response.data.resources.forEach(function(res){
+          $scope.resources.push({ name: res.name,
+                                  id: res.id,
+                                  storage: formatDecimal(res.storage, 2),
+                                  production: formatDecimal(res.production, 2)})
+        });
+        console.log($scope.resources)
+      }
+    );
+
+
 
     // It's important to respect id and position in array
     $scope.factories = [
