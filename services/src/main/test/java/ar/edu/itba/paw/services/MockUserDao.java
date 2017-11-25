@@ -57,7 +57,7 @@ class MockUserDao implements UserDao {
 
     @Override
     public Integer getGlobalRanking(long userId) {
-        tables.sort( (d1,d2) -> d1.wealth.calculateScore()<d2.wealth.calculateScore() ? 1 : -1 );
+        tables.sort( (d1,d2) -> d1.wealth.calculateScore().compareTo(d2.wealth.calculateScore())<0 ? 1 : -1 );
         int i = 1;
         for(MockUserDaoData data: tables) {
             if(data.user.getId() == userId){

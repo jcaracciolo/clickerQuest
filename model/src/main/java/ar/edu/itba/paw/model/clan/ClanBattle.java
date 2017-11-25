@@ -1,9 +1,8 @@
 package ar.edu.itba.paw.model.clan;
 
-import ar.edu.itba.paw.model.clan.Clan;
-
 import javax.persistence.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 /**
  * Created by juanfra on 17/06/17.
@@ -22,11 +21,11 @@ public class ClanBattle implements Serializable {
     private Clan versus;
 
     @Column(name = "initialscore", nullable = false)
-    private double initialScore;
+    private BigDecimal initialScore;
 
     ClanBattle(){}
 
-    public ClanBattle(Clan clan, Clan versus, double initialScore) {
+    public ClanBattle(Clan clan, Clan versus, BigDecimal initialScore) {
         this.clan = clan;
         this.versus = versus;
         this.initialScore = initialScore;
@@ -40,7 +39,7 @@ public class ClanBattle implements Serializable {
         return versus;
     }
 
-    public double getInitialScore() {
+    public BigDecimal getInitialScore() {
         return initialScore;
     }
 

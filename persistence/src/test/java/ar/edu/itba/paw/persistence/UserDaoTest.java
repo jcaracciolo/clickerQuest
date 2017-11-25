@@ -15,10 +15,14 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 
+import static ar.edu.itba.paw.persistence.BigDecimalAssert.assertBigDecimalEquals;
+import static java.math.BigDecimal.ONE;
+import static java.math.BigDecimal.ZERO;
 import static junit.framework.TestCase.assertNotNull;
 import static org.junit.Assert.*;
 
@@ -84,8 +88,8 @@ public class UserDaoTest {
         userDao.create(wealth);
         Wealth receivedWealth = userDao.getUserWealth(user.getId());
         assertEquals(ResourceType.values().length,receivedWealth.getStorage().getResources().size());
-        receivedWealth.getProductions().rawMap().forEach((r,d) -> assertEquals(0D,d,0D));
-        receivedWealth.getStorage().rawMap().forEach((r,d) -> assertEquals(0D,d,0D));
+        receivedWealth.getProductions().rawMap().forEach((r,d) -> assertBigDecimalEquals(ZERO,d,0D));
+        receivedWealth.getStorage().rawMap().forEach((r,d) -> assertBigDecimalEquals(ZERO,d,0D));
     }
 
     @Test
@@ -93,8 +97,8 @@ public class UserDaoTest {
         final User user = userDao.create(USERNAME, PASSWORD,IMAGE);
         PackageBuilder<Storage> sb = Storage.packageBuilder();
         PackageBuilder<Productions> pb = Productions.packageBuilder();
-        sb.putItemWithDate(ResourceType.PEOPLE,1D, Calendar.getInstance());
-        pb.putItem(ResourceType.PEOPLE,1D);
+        sb.putItemWithDate(ResourceType.PEOPLE,ONE, Calendar.getInstance());
+        pb.putItem(ResourceType.PEOPLE,ONE);
 
         Wealth wealth = new Wealth(user.getId(), sb.buildPackage(), pb.buildPackage());
         userDao.create(wealth);
@@ -108,14 +112,14 @@ public class UserDaoTest {
         final User user = userDao.create(USERNAME, PASSWORD,IMAGE);
         PackageBuilder<Storage> sb = Storage.packageBuilder();
         PackageBuilder<Productions> pb = Productions.packageBuilder();
-        sb.putItemWithDate(ResourceType.PEOPLE,1D, Calendar.getInstance());
-        pb.putItem(ResourceType.PEOPLE,1D);
+        sb.putItemWithDate(ResourceType.PEOPLE,ONE, Calendar.getInstance());
+        pb.putItem(ResourceType.PEOPLE,ONE);
 
         Wealth wealth = new Wealth(user.getId(), sb.buildPackage(), pb.buildPackage());
         userDao.create(wealth);
 
-        sb.addItem(ResourceType.PEOPLE,1D);
-        pb.addItem(ResourceType.PEOPLE,1D);
+        sb.addItem(ResourceType.PEOPLE,ONE);
+        pb.addItem(ResourceType.PEOPLE,ONE);
         Wealth newWealth = new Wealth(user.getId(), sb.buildPackage(), pb.buildPackage());
         userDao.update(newWealth);
 
@@ -195,8 +199,8 @@ public class UserDaoTest {
         User user3 = userDao.create(USERNAME + "3",PASSWORD,IMAGE);
 
 
-        userDao.update(new Factory(1,FactoryType.PEOPLE_RECRUITING_BASE,3,1,1,1,1));
-        userDao.update(new Factory(2,FactoryType.PEOPLE_RECRUITING_BASE,2,1,1,1,1));
+        userDao.update(new Factory(1,FactoryType.PEOPLE_RECRUITING_BASE,BigDecimal.valueOf(3),ONE,ONE,ONE,1));
+        userDao.update(new Factory(2,FactoryType.PEOPLE_RECRUITING_BASE,BigDecimal.valueOf(2),ONE,ONE,ONE,1));
 
         int rank1 = userDao.getGlobalRanking(user.getId());
         int rank2 = userDao.getGlobalRanking(user2.getId());

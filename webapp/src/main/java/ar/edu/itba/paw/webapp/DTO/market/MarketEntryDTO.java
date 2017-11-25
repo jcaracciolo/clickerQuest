@@ -16,11 +16,11 @@ public class MarketEntryDTO {
     private String name;
 
     @XmlElement(name = "price")
-    private Integer price;
+    private Long price;
 
     public MarketEntryDTO(){}
 
-    public MarketEntryDTO(ResourceType resourceType, Integer price) {
+    public MarketEntryDTO(ResourceType resourceType, Long price) {
         this.id = resourceType.getId();
         this.name = resourceType.getNameCode();
         this.price = price;

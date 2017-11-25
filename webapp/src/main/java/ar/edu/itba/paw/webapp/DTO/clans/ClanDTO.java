@@ -51,7 +51,7 @@ public class ClanDTO {
     public ClanDTO(Clan clan, ClanBattle clanBattle, URI baseUri){
         this.id = clan.getId();
         this.name = clan.getName();
-        this.score = clan.getScore();
+        this.score = clan.getScore().doubleValue();
         this.wins = clan.getWins();
         this.battles = clan.getBattles();
         this.image = ResourceManager.resolveResource(baseUri, "group_icons/" + clan.getImage());

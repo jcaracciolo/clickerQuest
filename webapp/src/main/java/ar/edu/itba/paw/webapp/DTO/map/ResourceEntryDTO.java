@@ -5,6 +5,7 @@ import ar.edu.itba.paw.model.ResourceType;
 import javax.annotation.Resource;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -31,15 +32,15 @@ public class ResourceEntryDTO {
     public ResourceEntryDTO(){}
 
     public static List<ResourceEntryDTO> fillCollection(
-            Map<ResourceType, Double> storage,
-            Map<ResourceType, Double> productions) {
+            Map<ResourceType, BigDecimal> storage,
+            Map<ResourceType, BigDecimal> productions) {
 
         List<ResourceEntryDTO> resources = new ArrayList<>();
         Stream.of(ResourceType.values()).forEach((r) -> {
             Double resStorage = null;
             Double resProduction = null;
-            if (storage != null) resStorage = storage.get(r);
-            if (productions != null) resProduction = productions.get(r);
+            if (storage != null) resStorage = storage.get(r).doubleValue();
+            if (productions != null) resProduction = productions.get(r).doubleValue();
             if (resStorage != null || resProduction != null) {
                 resources.add(new ResourceEntryDTO(r, resStorage, resProduction));
             }

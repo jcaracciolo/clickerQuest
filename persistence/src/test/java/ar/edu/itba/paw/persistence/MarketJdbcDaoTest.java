@@ -15,8 +15,12 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
+import java.math.BigDecimal;
 import java.util.Map;
 
+import static ar.edu.itba.paw.persistence.BigDecimalAssert.assertBigDecimalEquals;
+import static java.math.BigDecimal.ONE;
+import static java.math.BigDecimal.ZERO;
 import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -42,50 +46,50 @@ public class MarketJdbcDaoTest {
 
     @Test
     public void testRegisterNewPurchase() {
-        assertTrue(marketDao.registerPurchase(new StockMarketEntry(ResourceType.MONEY,20)));
+        assertTrue(marketDao.registerPurchase(new StockMarketEntry(ResourceType.MONEY, BigDecimal.valueOf(20))));
     }
 
     @Test
     public void testRegisterMultiplePurchases() {
-        marketDao.registerPurchase(new StockMarketEntry(ResourceType.MONEY,20));
-        assertTrue(marketDao.registerPurchase(new StockMarketEntry(ResourceType.MONEY,20)));
+        marketDao.registerPurchase(new StockMarketEntry(ResourceType.MONEY,BigDecimal.valueOf(20)));
+        assertTrue(marketDao.registerPurchase(new StockMarketEntry(ResourceType.MONEY,BigDecimal.valueOf(20))));
     }
 
     @Test
     public void testPopularity(){
-        marketDao.registerPurchase(new StockMarketEntry(ResourceType.MONEY,20));
-        Map<ResourceType,Double> popularities = marketDao.getPopularities();
+        marketDao.registerPurchase(new StockMarketEntry(ResourceType.MONEY,BigDecimal.valueOf(20)));
+        Map<ResourceType,BigDecimal> popularities = marketDao.getPopularities();
         assertTrue(popularities.containsKey(ResourceType.MONEY));
     }
 
     @Test
     public void testMultiplePopularity(){
-        marketDao.registerPurchase(new StockMarketEntry(ResourceType.MONEY,20));
-        marketDao.registerPurchase(new StockMarketEntry(ResourceType.MONEY,20));
-        marketDao.registerPurchase(new StockMarketEntry(ResourceType.CARDBOARD,20));
-        Map<ResourceType,Double> popularities = marketDao.getPopularities();
+        marketDao.registerPurchase(new StockMarketEntry(ResourceType.MONEY,BigDecimal.valueOf(20)));
+        marketDao.registerPurchase(new StockMarketEntry(ResourceType.MONEY,BigDecimal.valueOf(20)));
+        marketDao.registerPurchase(new StockMarketEntry(ResourceType.CARDBOARD,BigDecimal.valueOf(20)));
+        Map<ResourceType,BigDecimal> popularities = marketDao.getPopularities();
         assertTrue(popularities.containsKey(ResourceType.MONEY));
         assertTrue(popularities.containsKey(ResourceType.CARDBOARD));
-        assertTrue(popularities.get(ResourceType.MONEY) > popularities.get(ResourceType.CARDBOARD));
+        assertTrue(popularities.get(ResourceType.MONEY).compareTo(popularities.get(ResourceType.CARDBOARD))>0);
 
     }
 
     @Test
     public void testPurchaseAndSell(){
-        marketDao.registerPurchase(new StockMarketEntry(ResourceType.MONEY,-20));
-        marketDao.registerPurchase(new StockMarketEntry(ResourceType.CARDBOARD,20));
-        Map<ResourceType,Double> popularities = marketDao.getPopularities();
+        marketDao.registerPurchase(new StockMarketEntry(ResourceType.MONEY,BigDecimal.valueOf(-20)));
+        marketDao.registerPurchase(new StockMarketEntry(ResourceType.CARDBOARD,BigDecimal.valueOf(20)));
+        Map<ResourceType,BigDecimal> popularities = marketDao.getPopularities();
         assertTrue(popularities.containsKey(ResourceType.MONEY));
         assertTrue(popularities.containsKey(ResourceType.CARDBOARD));
-        assertTrue(popularities.get(ResourceType.MONEY) < popularities.get(ResourceType.CARDBOARD));
-        assertNotEquals(popularities.get(ResourceType.MONEY),0D,0D);
+        assertTrue(popularities.get(ResourceType.MONEY).compareTo(popularities.get(ResourceType.CARDBOARD))<0);
+        assertBigDecimalEquals(popularities.get(ResourceType.MONEY),ZERO,0D);
 
     }
 
     @Test
     public void testEmptyPopularities(){
         marketDao.getPopularities().forEach(
-                (r,d) -> assertEquals(1,d,0)
+                (r,d) -> assertBigDecimalEquals(ONE,d,0)
         );
     }
 

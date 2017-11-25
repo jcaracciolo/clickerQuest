@@ -210,9 +210,9 @@ public class HibernateClanDao implements ClanDao {
                 Clan c2 = cb2.getClan();
                 c1.addBattle();
                 c2.addBattle();
-                if (c1.getScore() - cb1.getInitialScore() > c2.getScore() - cb2.getInitialScore()) {
+                if (c1.getScore().subtract(cb1.getInitialScore()).compareTo(c2.getScore().subtract(cb2.getInitialScore()))>0) {
                     c1.addWin();
-                } else if (c1.getScore() - cb1.getInitialScore() < c2.getScore() - cb2.getInitialScore()) {
+                } else if (c1.getScore().subtract(cb1.getInitialScore()).compareTo(c2.getScore().subtract(cb2.getInitialScore()))<0) {
                     c2.addWin();
                 }
                 em.merge(c1);

@@ -12,11 +12,14 @@ import org.junit.rules.ExpectedException;
 
 import javax.management.openmbean.KeyAlreadyExistsException;
 
+import java.math.BigDecimal;
+
+import static ar.edu.itba.paw.model.BigDecimalAssert.assertBigDecimalEquals;
 import static org.junit.Assert.assertEquals;
 
 public class PackageBuilderTest {
 
-    private Validator<Double> VALIDATOR = (d) -> d>=5 && d<15;
+    private Validator<BigDecimal> VALIDATOR = (d) -> d.compareTo(BigDecimal.valueOf(5))>=0 && d.compareTo(BigDecimal.valueOf(15))<0;
     private Creator<TestPackage> CREATOR = TestPackage::new;
 
     private static ResourceType people = ResourceType.PEOPLE;
@@ -40,27 +43,27 @@ public class PackageBuilderTest {
 
     @Test(expected = ValidatorException.class)
     public void testValidatorPutLess() {
-        pb.putItem(people, 2D);
+        pb.putItem(people, BigDecimal.valueOf(2D));
     }
 
     @Test
     public void testValidatorAddMore() {
-        pb.putItem(people, 5D);
+        pb.putItem(people, BigDecimal.valueOf(5D));
         thrown.expect(ValidatorException.class);
-        pb.addItem(people, 10D);
+        pb.addItem(people,  BigDecimal.valueOf(10));
     }
 
     @Test
     public void testValidatorAddLess() {
-        pb.putItem(people, 5D);
+        pb.putItem(people,  BigDecimal.valueOf(5));
         thrown.expect(ValidatorException.class);
-        pb.addItem(people, -10D);
+        pb.addItem(people,  BigDecimal.valueOf(-10));
     }
 
     @Test
     public void testCreator() {
-        pb.putItem(people,5D);
-        pb.addItem(people,3D);
+        pb.putItem(people, BigDecimal.valueOf(5));
+        pb.addItem(people, BigDecimal.valueOf(3));
 
         TestPackage testPackage = pb.buildPackage();
 
@@ -68,7 +71,7 @@ public class PackageBuilderTest {
         testPackage.rawMap().forEach(
                 (r,d) -> {
                     assertEquals(r,people);
-                    assertEquals(d,8D,0);
+                    assertBigDecimalEquals(d,BigDecimal.valueOf(8),0);
                 }
         );
     }
@@ -76,10 +79,10 @@ public class PackageBuilderTest {
     @Test
     public void testRepeatedResources(){
 
-        pb.putItem(people,5D);
-        pb.putItem(cardboard,6D);
+        pb.putItem(people,BigDecimal.valueOf(5));
+        pb.putItem(cardboard,BigDecimal.valueOf(6));
         thrown.expect(KeyAlreadyExistsException.class);
-        pb.putItem(cardboard,6D);
+        pb.putItem(cardboard,BigDecimal.valueOf(6));
     }
 
     @Test
@@ -87,15 +90,15 @@ public class PackageBuilderTest {
 
         Double delta = 0D;
 
-        pb.putItem(people,5D);
-        pb.putItem(cardboard,6D);
-        pb.addItem(people,2.5);
-        pb.addItem(cardboard,3.6);
+        pb.putItem(people,BigDecimal.valueOf(5));
+        pb.putItem(cardboard,BigDecimal.valueOf(6));
+        pb.addItem(people,BigDecimal.valueOf(2.5D));
+        pb.addItem(cardboard,BigDecimal.valueOf(3.6D));
 
         TestPackage testPackage = pb.buildPackage();
         assertEquals(testPackage.getResources().size(),2);
-        assertEquals(testPackage.getValue(people),7.5,delta);
-        assertEquals(testPackage.getValue(cardboard),9.6,delta);
+        assertBigDecimalEquals(testPackage.getValue(people),BigDecimal.valueOf(7.5),delta);
+        assertBigDecimalEquals(testPackage.getValue(cardboard),BigDecimal.valueOf(9.6),delta);
     }
 
 }

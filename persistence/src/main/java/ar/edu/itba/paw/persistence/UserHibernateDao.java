@@ -15,6 +15,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.List;
 
@@ -62,7 +63,7 @@ public class UserHibernateDao implements UserDao{
 
     @Override
     public User create(String username, String password, String profileImage) {
-        final User user = new User(username, password,profileImage,0,null);
+        final User user = new User(username, password,profileImage, BigDecimal.ZERO,null);
         em.persist(user);
         em.flush();
         return user;

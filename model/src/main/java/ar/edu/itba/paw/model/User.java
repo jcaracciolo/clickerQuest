@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -29,7 +30,7 @@ public class User {
     private  String profileImage;
 
     @Column(nullable = false)
-    private  double score;
+    private BigDecimal score;
 
     @Nullable
     @Column(name = "clanid")
@@ -53,11 +54,11 @@ public class User {
         this.password = password;
         this.profileImage = profileImage;
         this.clanId = null;
-        this.score = 0;
+        this.score = BigDecimal.ZERO;
     }
 
-    public User(@NotNull String username,  @NotNull String password,  @NotNull String profileImage,
-                double score, @Nullable Integer clanId) {
+    public User(@NotNull String username, @NotNull String password, @NotNull String profileImage,
+                BigDecimal score, @Nullable Integer clanId) {
         this.username = username;
         this.password = password;
         this.profileImage = profileImage;
@@ -65,7 +66,7 @@ public class User {
         this.score = score;
     }
 
-    public User(long id, String username, String password, String profileImage, double score, Integer id1) {
+    public User(long id, String username, String password, String profileImage, BigDecimal score, Integer id1) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -98,7 +99,7 @@ public class User {
         return password;
     }
 
-    public double getScore() {
+    public BigDecimal getScore() {
         return score;
     }
 

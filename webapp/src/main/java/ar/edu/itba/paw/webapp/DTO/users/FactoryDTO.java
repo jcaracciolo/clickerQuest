@@ -40,7 +40,7 @@ public class FactoryDTO {
     public FactoryDTO(Factory factory, URI baseUri) {
         id = factory.getType().getId();
         type = factory.getType().getNameCode();
-        amount = factory.getAmount();
+        amount = factory.getAmount().doubleValue();
         level = factory.getLevel();
         upgradeURL = baseUri.resolve(String.format(UpgradeDTO.url, factory.getUserid(), factory.getType().getId()));
         buyLimitsURL = baseUri.resolve(String.format(BuyLimitsDTO.url, factory.getUserid(), factory.getType().getId()));

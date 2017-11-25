@@ -18,6 +18,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.jws.soap.SOAPBinding;
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -25,6 +26,9 @@ import java.util.stream.Stream;
 import static ar.edu.itba.paw.model.FactoryType.CABLE_MAKER_BASE;
 import static ar.edu.itba.paw.model.FactoryType.PEOPLE_RECRUITING_BASE;
 import static ar.edu.itba.paw.model.FactoryType.STOCK_INVESTMENT_BASE;
+import static ar.edu.itba.paw.services.BigDecimalAssert.assertBigDecimalEquals;
+import static java.math.BigDecimal.ONE;
+import static java.math.BigDecimal.ZERO;
 import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -56,9 +60,9 @@ public class UserServiceImplTest {
 
     private Wealth w = Wealth.createWealth(id);
 
-    private double initialMoneyProduction = STOCK_INVESTMENT_BASE.getBaseRecipe().getValue(ResourceType.MONEY);
-    private double initialPeopleProduction = PEOPLE_RECRUITING_BASE.getBaseRecipe().getValue(ResourceType.PEOPLE);
-    private double initialMoney = ResourceType.initialMoney();
+    private BigDecimal initialMoneyProduction = STOCK_INVESTMENT_BASE.getBaseRecipe().getValue(ResourceType.MONEY);
+    private BigDecimal initialPeopleProduction = PEOPLE_RECRUITING_BASE.getBaseRecipe().getValue(ResourceType.PEOPLE);
+    private BigDecimal initialMoney = ResourceType.initialMoney();
 
     @Before
     public void setup(){
@@ -68,9 +72,9 @@ public class UserServiceImplTest {
         Mockito.when(marketDao.registerPurchase(Matchers.any(StockMarketEntry.class))).thenReturn(true);
 
         //Setup userdao mock
-        Mockito.when(userDao.create(username,password,img)).thenReturn(new User(id,username,password,img,id,null));
+        Mockito.when(userDao.create(username,password,img)).thenReturn(new User(id,username,password,img,BigDecimal.valueOf(id),null));
         Mockito.when(userDao.getUserWealth(id)).thenReturn(w);
-        Mockito.when(userDao.findById(id)).thenReturn(new User(id,username,password,img,id,null));
+        Mockito.when(userDao.findById(id)).thenReturn(new User(id,username,password,img,BigDecimal.valueOf(id),null));
 
     }
 
@@ -96,7 +100,7 @@ public class UserServiceImplTest {
     @Test
     public void testGetUserByUsername(){
         mockCreateUser(id,username);
-        Mockito.when(userDao.findByUsername(username)).thenReturn(new User(id,username,password,img,id,null));
+        Mockito.when(userDao.findByUsername(username)).thenReturn(new User(id,username,password,img,BigDecimal.valueOf(id),null));
 
         User user = userService.create(username,password,img);
         User u1 = userService.findByUsername(user.getUsername());
@@ -131,8 +135,8 @@ public class UserServiceImplTest {
         Wealth wealth = userService.getUserWealth(id);
 
         assertNotNull(wealth);
-        Map<ResourceType,Double> storageMap = wealth.getStorage().rawMap();
-        Map<ResourceType,Double> productionsMap = wealth.getProductions().rawMap();
+        Map<ResourceType,BigDecimal> storageMap = wealth.getStorage().rawMap();
+        Map<ResourceType,BigDecimal> productionsMap = wealth.getProductions().rawMap();
         assertFalse(storageMap.isEmpty());
         assertFalse(productionsMap.isEmpty());
 
@@ -140,9 +144,9 @@ public class UserServiceImplTest {
         storageMap.forEach(
                 (r,d)-> {
                     if(r==ResourceType.MONEY) {
-                        assertEquals(d,initialMoney,0D);
+                        assertBigDecimalEquals(d,initialMoney,0D);
                     } else {
-                        assertEquals(d,0,0D);
+                        assertBigDecimalEquals(d,ZERO,0D);
                     }
                 }
         );
@@ -150,7 +154,7 @@ public class UserServiceImplTest {
 
        productionsMap.forEach(
                 (r,d) -> {
-                            assertEquals(d,0D,0D);
+                            assertBigDecimalEquals(d,ZERO,0D);
                 }
         );
     }
@@ -163,7 +167,7 @@ public class UserServiceImplTest {
                     switch (factoryType){
                         case PEOPLE_RECRUITING_BASE:
                         case STOCK_INVESTMENT_BASE:
-                            return new Factory(id,factoryType,1,1,1,1,1);
+                            return new Factory(id,factoryType,ONE,ONE,ONE,ONE,1);
                     }
                     return factoryType.defaultFactory(id);
                 }).collect(Collectors.toList());
@@ -181,7 +185,7 @@ public class UserServiceImplTest {
         Mockito.when(userDao.getUserWealth(id)).thenReturn(Wealth.createWealth(id));
 
         Factory origFactory = FactoryType.PEOPLE_RECRUITING_BASE.defaultFactory(id);
-        Factory resultFactory = new Factory(id,FactoryType.PEOPLE_RECRUITING_BASE,2,1,1,1,1);
+        Factory resultFactory = new Factory(id,FactoryType.PEOPLE_RECRUITING_BASE,BigDecimal.valueOf(2),ONE,ONE,ONE,1);
 
         Wealth resultWealth = Wealth.createWealth(id).purchaseResult(origFactory,1);
 
@@ -211,7 +215,7 @@ public class UserServiceImplTest {
                     switch (factoryType){
                         case PEOPLE_RECRUITING_BASE:
                         case STOCK_INVESTMENT_BASE:
-                            return new Factory(id,factoryType,1,1,1,1,1);
+                            return new Factory(id,factoryType,ONE,ONE,ONE,ONE,1);
                     }
                     return factoryType.defaultFactory(id);
                 }).collect(Collectors.toList());
@@ -232,15 +236,15 @@ public class UserServiceImplTest {
         assertTrue(userService.purchaseFactory(user.getId(), PEOPLE_RECRUITING_BASE,1));
         assertTrue(userService.purchaseFactory(user.getId(), PEOPLE_RECRUITING_BASE,1));
         assertTrue(userService.purchaseFactory(user.getId(), PEOPLE_RECRUITING_BASE,1));
-        double factory1Cost = new Factory(user.getId(), PEOPLE_RECRUITING_BASE,1D,1,1,1,0)
+        BigDecimal factory1Cost = new Factory(user.getId(), PEOPLE_RECRUITING_BASE,ONE,ONE,ONE,ONE,0)
                 .getCost().getValue(ResourceType.MONEY);
-        double factory2Cost = new Factory(user.getId(), PEOPLE_RECRUITING_BASE,2D,1,1,1,0)
+        BigDecimal factory2Cost = new Factory(user.getId(), PEOPLE_RECRUITING_BASE,BigDecimal.valueOf(2),ONE,ONE,ONE,0)
                 .getCost().getValue(ResourceType.MONEY);
-        double factory3Cost = new Factory(user.getId(), PEOPLE_RECRUITING_BASE,3D,1,1,1,0)
+        BigDecimal factory3Cost = new Factory(user.getId(), PEOPLE_RECRUITING_BASE,BigDecimal.valueOf(3),ONE,ONE,ONE,0)
                 .getCost().getValue(ResourceType.MONEY);
         Wealth wealth = userService.getUserWealth(user.getId());
-        assertEquals(wealth.getStorage().getValue(ResourceType.MONEY),
-                initialMoney - (factory1Cost + factory2Cost + factory3Cost),
+        assertBigDecimalEquals(wealth.getStorage().getValue(ResourceType.MONEY),
+                initialMoney.subtract(factory1Cost.add(factory2Cost).add(factory3Cost)),
                 0D);
 
 
@@ -250,8 +254,8 @@ public class UserServiceImplTest {
     public void testPurchaseUpgradeSuccess(){
         Mockito.when(userDao.getUserWealth(id)).thenReturn(Wealth.createWealth(id));
 
-        Factory origFactory = new Factory(id,FactoryType.PEOPLE_RECRUITING_BASE,1,1,1,1,1);
-        Factory resultFactory = new Factory(id,FactoryType.PEOPLE_RECRUITING_BASE,1,1,1,1,2);
+        Factory origFactory = new Factory(id,FactoryType.PEOPLE_RECRUITING_BASE,ONE,ONE,ONE,ONE,1);
+        Factory resultFactory = new Factory(id,FactoryType.PEOPLE_RECRUITING_BASE,ONE,ONE,ONE,ONE,2);
 
         Wealth resultWealth = Wealth.createWealth(id).upgradeResult(origFactory);
 
@@ -277,8 +281,8 @@ public class UserServiceImplTest {
     public void testPurchaseUpgradeFail(){
         Mockito.when(userDao.getUserWealth(id)).thenReturn(Wealth.createWealth(id));
 
-        Factory origFactory = new Factory(id,FactoryType.PEOPLE_RECRUITING_BASE,1,1,1,1,1);
-        Factory resultFactory = new Factory(id,FactoryType.PEOPLE_RECRUITING_BASE,1,1,1,1,2);
+        Factory origFactory = new Factory(id,FactoryType.PEOPLE_RECRUITING_BASE,ONE,ONE,ONE,ONE,1);
+        Factory resultFactory = new Factory(id,FactoryType.PEOPLE_RECRUITING_BASE,ONE,ONE,ONE,ONE,2);
 
         Wealth resultWealth = Wealth.createWealth(id).upgradeResult(origFactory);
 
@@ -304,7 +308,7 @@ public class UserServiceImplTest {
     public void testPurchaseResourceSuccess() {
         Mockito.when(userDao.getUserWealth(id)).thenReturn(Wealth.createWealth(id));
 
-        Double amount = 1D;
+        BigDecimal amount = ONE;
         Wealth resultWealth = Wealth.createWealth(id).addResource(ResourceType.CARDBOARD,amount);
 
         User origUser = new User(id,username,password,img);
@@ -313,7 +317,7 @@ public class UserServiceImplTest {
         Mockito.when(userDao.update(origUser)).thenReturn(resultUser);
         Mockito.when(userDao.update(resultWealth)).thenReturn(resultWealth);
 
-        assertTrue(userService.purchaseResourceType(id, ResourceType.CARDBOARD,amount));
+        assertTrue(userService.purchaseResourceType(id, ResourceType.CARDBOARD,amount.doubleValue()));
 
 //        Mockito.verify(userDao,Mockito.times(1)).update(resultWealth);
 //        Mockito.verify(userDao,Mockito.times(1)).update(resultUser);
@@ -340,9 +344,9 @@ public class UserServiceImplTest {
     @Test
     public void testSellResourceSuccess() {
 
-        Double amount = 1D;
+        BigDecimal amount = ONE;
         Wealth origWealth = Wealth.createWealth(id).addResource(ResourceType.CARDBOARD,amount);
-        Wealth resultWealth = origWealth.addResource(ResourceType.CARDBOARD,-amount);
+        Wealth resultWealth = origWealth.addResource(ResourceType.CARDBOARD,amount.negate());
 
         User origUser = new User(id,username,password,img);
         User resultUser = new User(id,username,password,img,resultWealth.calculateScore(),null);
@@ -351,7 +355,7 @@ public class UserServiceImplTest {
         Mockito.when(userDao.update(origUser)).thenReturn(resultUser);
         Mockito.when(userDao.update(resultWealth)).thenReturn(resultWealth);
 
-        assertTrue(userService.sellResourceType(id, ResourceType.CARDBOARD,amount));
+        assertTrue(userService.sellResourceType(id, ResourceType.CARDBOARD,amount.doubleValue()));
 
 //        Mockito.verify(userDao,Mockito.times(1)).update(resultWealth);
 //        Mockito.verify(userDao,Mockito.times(1)).update(resultUser);
@@ -360,8 +364,8 @@ public class UserServiceImplTest {
     @Test
     public void testSellResourceFail() {
 
-        Double amount = 2D;
-        Wealth origWealth = Wealth.createWealth(id).addResource(ResourceType.CARDBOARD,amount-1);
+        BigDecimal amount = BigDecimal.valueOf(2);
+        Wealth origWealth = Wealth.createWealth(id).addResource(ResourceType.CARDBOARD,amount.subtract(ONE));
 
         User origUser = new User(id,username,password,img);
 
@@ -369,7 +373,7 @@ public class UserServiceImplTest {
         Mockito.when(userDao.update(origUser)).thenReturn(origUser);
         Mockito.when(userDao.update(origWealth)).thenReturn(origWealth);
 
-        assertFalse(userService.sellResourceType(id, ResourceType.CARDBOARD,amount));
+        assertFalse(userService.sellResourceType(id, ResourceType.CARDBOARD,amount.doubleValue()));
 
 //        Mockito.verify(userDao,Mockito.times(0)).update(origWealth);
 //        Mockito.verify(userDao,Mockito.times(0)).update(origUser);
@@ -383,7 +387,7 @@ public class UserServiceImplTest {
         int pages = (int)Math.ceil(totalUsers/(double)perPage);
         List<User> list = new ArrayList<>();
         for(int i = 0;i<perPage;i++){
-            list.add(new User(i+1,username+i,password,img,500+i,null));
+            list.add(new User(i+1,username+i,password,img,BigDecimal.valueOf(500+i),null));
         }
         Mockito.when(userDao.globalUsers(firstPage,perPage)).thenReturn(new Paginating<User>(firstPage,perPage,totalUsers,pages,list));
         Paginating<User> users = userService.globalUsers(firstPage,perPage);
@@ -395,17 +399,17 @@ public class UserServiceImplTest {
         assertEquals(users.getItems().size(),perPage);
         Set<User> uniqueUsers = new HashSet<>();
         users.getItems().forEach((u)->assertTrue(uniqueUsers.add(u)));
-        Double score = 500D+perPage;
+        BigDecimal score = BigDecimal.valueOf(500D+perPage);
         for(User u : users.getItems()){
-            assertTrue(u.getScore()<score);
+            assertTrue(u.getScore().compareTo(score)<0);
             score = u.getScore();
         }
     }
 
     private void mockCreateUser(int id, String usr){
-        Mockito.when(userDao.create(usr,password,img)).thenReturn(new User(id,usr,password,img,id,null));
+        Mockito.when(userDao.create(usr,password,img)).thenReturn(new User(id,usr,password,img,BigDecimal.valueOf(id),null));
         Mockito.when(userDao.getUserWealth(id)).thenReturn(w);
-        Mockito.when(userDao.findById(id)).thenReturn(new User(id,usr,password,img,id,null));
+        Mockito.when(userDao.findById(id)).thenReturn(new User(id,usr,password,img,BigDecimal.valueOf(id),null));
 
     }
 }

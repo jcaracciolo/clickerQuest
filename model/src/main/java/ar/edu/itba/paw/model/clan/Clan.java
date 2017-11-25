@@ -4,9 +4,12 @@ import ar.edu.itba.paw.model.User;
 import org.jetbrains.annotations.NotNull;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
+
+import static java.math.BigDecimal.ZERO;
 
 /**
  * Created by juanfra on 17/05/17.
@@ -16,7 +19,7 @@ import java.util.stream.Stream;
 public class Clan implements Iterable<User> {
     @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "clanid")
-    private final Set<User> users = new TreeSet<User>((u1,u2) ->  u1.getScore()<u2.getScore()?1:-1 );
+    private final Set<User> users = new TreeSet<User>((u1, u2) ->  u1.getScore().compareTo(u2.getScore())<0?1:-1 );
 
     @Id
     @Column(name = "clanid")
@@ -28,7 +31,7 @@ public class Clan implements Iterable<User> {
     private String name;
 
     @Column(name = "score", nullable = false)
-    private double score;
+    private BigDecimal score;
 
     @Column(name = "wins", nullable = false)
     private int wins = 0;
@@ -48,7 +51,7 @@ public class Clan implements Iterable<User> {
 
     @PostLoad
     private void postLoad() {
-        this.score = users.stream().map(User::getScore).reduce((a,b)->a+b).orElse(0D);
+        this.score = users.stream().map(User::getScore).reduce(BigDecimal::add).orElse(ZERO);
         if (image.equals("null")) {
             Random r = new Random();
             image = (Math.abs(r.nextInt()%7) + 1) + ".jpg";
@@ -59,7 +62,7 @@ public class Clan implements Iterable<User> {
         this.name = name;
         this.id = id;
         this.users.addAll(users);
-        this.score = users.stream().map(User::getScore).reduce((a,b)->a+b).orElse(0D);
+        this.score = users.stream().map(User::getScore).reduce(BigDecimal::add).orElse(ZERO);
         this.image = (Math.abs(new Random().nextInt()%7) + 1) + ".jpg";;
     }
 
@@ -75,8 +78,8 @@ public class Clan implements Iterable<User> {
         return isInClan(user.getId());
     }
 
-    public double getClanScore() {
-        return users.stream().map(User::getScore).reduce((d1,d2)->d1+d2).orElse(0D);
+    public BigDecimal getClanScore() {
+        return users.stream().map(User::getScore).reduce(BigDecimal::add).orElse(ZERO);
     }
 
     @Override
@@ -122,7 +125,7 @@ public class Clan implements Iterable<User> {
         return id;
     }
 
-    public double getScore() {
+    public BigDecimal getScore() {
         return score;
     }
 

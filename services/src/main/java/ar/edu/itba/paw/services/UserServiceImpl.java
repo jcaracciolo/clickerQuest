@@ -17,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -54,7 +55,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Wealth getUserWealth(long userid) {
         Wealth w = userDao.getUserWealth(userid);
-        Map<ResourceType,Double> storageRaw = w.getStorage().rawMap();
+        Map<ResourceType,BigDecimal> storageRaw = w.getStorage().rawMap();
 
         if(storageRaw.size() < ResourceType.values().length) {
             PackageBuilder<Storage> storageB = Storage.packageBuilder();
@@ -64,8 +65,8 @@ public class UserServiceImpl implements UserService {
             Stream.of(ResourceType.values()).filter(
                     resType -> storageRaw.keySet().stream().noneMatch(r -> r == resType))
                     .forEach(   resType -> {
-                        storageB.putItem(resType,0D);
-                        productionsB.putItem(resType,0D);
+                        storageB.putItem(resType,BigDecimal.ZERO);
+                        productionsB.putItem(resType,BigDecimal.ZERO);
                     });
 
             w.getStorage().rawMap().forEach(storageB::putItem);
@@ -216,7 +217,7 @@ public class UserServiceImpl implements UserService {
             factories.remove(factory);
             factories.add(newFactory);
             Wealth newWealth = w.calculateProductions(factories);
-            newWealth = newWealth.addResource(ResourceType.MONEY,-factory.getNextUpgrade().getCost());
+            newWealth = newWealth.addResource(ResourceType.MONEY,BigDecimal.valueOf(-factory.getNextUpgrade().getCost()));
             userDao.update(newFactory);
             updateWealth(newWealth);
             return true;
@@ -233,7 +234,7 @@ public class UserServiceImpl implements UserService {
 
         Wealth wealth = getUserWealth(userid);
         double cost = (resourceType.getPrice()) * amount;
-        if( wealth.getStorage().getValue(resourceType) <  amount ) {
+        if( wealth.getStorage().getValue(resourceType).compareTo(BigDecimal.valueOf(amount)) <  0 ) {
             return false;
         }
 
@@ -242,12 +243,12 @@ public class UserServiceImpl implements UserService {
         wealth.getStorage().rawMap().forEach(wbuilder::putItem);
         wealth.getStorage().getLastUpdated().forEach(wbuilder::setLastUpdated);
 
-        wbuilder.addItem(resourceType,-amount);
-        wbuilder.addItem(ResourceType.MONEY,cost);
+        wbuilder.addItem(resourceType,BigDecimal.valueOf(-amount));
+        wbuilder.addItem(ResourceType.MONEY,BigDecimal.valueOf(cost));
 
         Wealth newWealth = new Wealth(userid,wbuilder.buildPackage(),wealth.getProductions());
         updateWealth(newWealth);
-        marketDao.registerPurchase(new StockMarketEntry(resourceType,-amount));
+        marketDao.registerPurchase(new StockMarketEntry(resourceType,BigDecimal.valueOf(-amount)));
 
         return true;
     }
@@ -259,7 +260,7 @@ public class UserServiceImpl implements UserService {
         }
         Wealth wealth = getUserWealth(userid);
         double cost = (resourceType.getPrice()) * amount;
-        if( wealth.getStorage().getValue(ResourceType.MONEY) <  cost ) {
+        if( wealth.getStorage().getValue(ResourceType.MONEY).compareTo(BigDecimal.valueOf(cost)) <  0 ) {
             return false;
         }
 
@@ -268,12 +269,12 @@ public class UserServiceImpl implements UserService {
         wealth.getStorage().rawMap().forEach(wbuilder::putItem);
         wealth.getStorage().getLastUpdated().forEach(wbuilder::setLastUpdated);
 
-        wbuilder.addItem(ResourceType.MONEY,-cost);
-        wbuilder.addItem(resourceType,amount);
+        wbuilder.addItem(ResourceType.MONEY,BigDecimal.valueOf(-cost));
+        wbuilder.addItem(resourceType,BigDecimal.valueOf(amount));
 
         Wealth newWealth = new Wealth(userid,wbuilder.buildPackage(),wealth.getProductions());
         updateWealth(newWealth);
-        marketDao.registerPurchase(new StockMarketEntry(resourceType,amount));
+        marketDao.registerPurchase(new StockMarketEntry(resourceType,BigDecimal.valueOf(amount)));
 
         return true;
     }
@@ -304,7 +305,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Paginating<User> globalUsers(int pag, int userPerPage) {
         Paginating<User> users = userDao.globalUsers(pag,userPerPage);
-        users.sort((u1,u2)->u1.getScore()<u2.getScore()?1:-1);
+        users.sort((u1,u2)->u1.getScore().compareTo(u2.getScore())<0?1:-1);
         return users;
     }
 

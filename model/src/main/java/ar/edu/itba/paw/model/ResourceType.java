@@ -23,21 +23,21 @@ public enum ResourceType {
     private int id;
     private String nameCode;
     private double price;
-    private double popularity;
+    private BigDecimal popularity;
 
     ResourceType(int id, String name, double price) {
         this.id = id;
         this.nameCode = name;
         this.price = price;
-        this.popularity = 1;
+        this.popularity = BigDecimal.ONE;
     }
 
-    public void setPopularity(double popularity) {
+    public void setPopularity(BigDecimal popularity) {
         this.popularity = popularity;
     }
 
     public long getPrice() {
-        return (long) Math.ceil(price * popularity);
+        return popularity.multiply(BigDecimal.valueOf(price)).longValue();
     }
 
     public long getBasePrice() {

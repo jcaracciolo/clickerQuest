@@ -8,6 +8,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.Map;
 
 /**
@@ -23,7 +24,7 @@ public class MarketServiceImpl implements MarketService {
 
     @Scheduled(fixedDelay=refreshTime)
     public void updatePrices(){
-        Map<ResourceType,Double> popularities = marketDao.getPopularities();
+        Map<ResourceType,BigDecimal> popularities = marketDao.getPopularities();
         popularities.forEach(ResourceType::setPopularity);
     }
 }

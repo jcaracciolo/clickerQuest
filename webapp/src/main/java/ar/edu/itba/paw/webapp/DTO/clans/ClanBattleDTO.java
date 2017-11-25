@@ -41,12 +41,12 @@ public class ClanBattleDTO {
     public ClanBattleDTO(ClanBattle battleOwner, @Nullable ClanBattle battleVersus, URI baseUri){
         clanURL = baseUri.resolve(String.format(ClanDTO.url, battleOwner.getClan().getId()));
         clanId = battleOwner.getClan().getId();
-        initialScore = battleOwner.getInitialScore();
+        initialScore = battleOwner.getInitialScore().doubleValue();
         if(battleVersus!=null) {
             opponentId = battleOwner.getVersus().getId();
             opponentClanBattleURL = baseUri.resolve(String.format(ClanDTO.url, battleVersus.getClan().getId()));
             opponentClanBattleURL = baseUri.resolve(String.format(ClanBattleDTO.url, battleVersus.getClan().getId()));
-            opponentInitialScore = battleVersus.getInitialScore();
+            opponentInitialScore = battleVersus.getInitialScore().doubleValue();
         }
     }
 

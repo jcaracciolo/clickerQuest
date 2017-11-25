@@ -13,7 +13,7 @@ import java.util.function.Consumer;
  * Created by juanfra on 17/05/17.
  */
 public class ClanBuilder implements Iterable<User> {
-    private Set<User> users = new TreeSet<User>((u1, u2) ->  u1.getScore()>u2.getScore()?1:-1 );
+    private Set<User> users = new TreeSet<User>((u1, u2) ->  u1.getScore().compareTo(u2.getScore())>0?1:-1 );
     private int id;
     private String name;
 

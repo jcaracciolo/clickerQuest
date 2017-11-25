@@ -7,6 +7,7 @@ import ar.edu.itba.paw.webapp.DTO.map.ResourceEntryDTO;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -54,9 +55,9 @@ public class BuyLimitsDTO {
 
     }
 
-    private Map<ResourceType, Double> multiplyProductions(Map<ResourceType, Double> map, long factor) {
+    private Map<ResourceType, BigDecimal> multiplyProductions(Map<ResourceType, BigDecimal> map, long factor) {
         for (ResourceType k: map.keySet()) {
-            map.put(k, map.get(k) * factor);
+            map.put(k, map.get(k).multiply(BigDecimal.valueOf(factor)));
         }
         return map;
     }

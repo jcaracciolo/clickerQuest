@@ -51,7 +51,7 @@ public class UserDTO {
         id = user.getId();
         username = user.getUsername();
         profileImageUrl = ResourceManager.resolveResource(baseUri,"profile_images/" + user.getProfileImage());
-        score = user.getScore();
+        score = user.getScore().doubleValue();
         if(user.getClanId() != null) {
             clanId = user.getClanId();
             clanUrl = baseUri.resolve(String.format(ClanDTO.url, clanId));
