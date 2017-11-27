@@ -3,6 +3,10 @@ define(['clickerQuest','services/UserService', 'services/factoryService'], funct
   'use strict';
   clickerQuest.controller('GameCtrl', function($scope, UserService, factoryService) {
 
+    $scope.buyFactory = function(factId) {
+                          console.log("BUYING" + factId)
+                        };
+
     $scope.user = {
       username: null,
       score: null,

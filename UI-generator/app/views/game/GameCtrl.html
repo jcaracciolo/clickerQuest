@@ -1,25 +1,7 @@
-
 <link rel="stylesheet" href="styles/game.css">
 
-<!-- Modal Trigger -->
-<div class="col">
-  <a class="waves-effect waves-light btn modal-trigger" href="#demoModal">Modal</a>
-</div>
-<!-- Modal Structure -->
-<div id="demoModal" class="modal">
-  <div class="modal-content">
-    <h4>Modal header</h4>
-    <p>A bunch of text</p>
-  </div>
-  <div class="modal-footer">
-    <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Agree</a>
-  </div>
-</div>
-
-
-
 <!-- Market Modal -->
-<div id="maarketModal" class="modal">
+<div id="marketModal" class="modal">
   <div class="modal-content">
     <h4>MARKET</h4>
     <p>WELCOME TO THE MARKET</p>
@@ -29,11 +11,11 @@
         <div id="market-buy-resource-wrapper" class="col s3 dropdown-wrapper">
           <select name="resources" id="market.buy.resources" required>
             <option value="" disabled selected>SELECT RESOURCE</option>
-            <!--<c:forEach items="${storage.resources}" var="resource">-->
-              <!--<c:if test="${resource != 'MONEY'}">-->
-                <!--<option value="<c:out value='${resource.id}'/>"><spring:message code="${resource.nameCode}"/><fmt:formatNumber pattern=" ($#.##)">${resource.price}</fmt:formatNumber></option>-->
-              <!--</c:if>-->
-            <!--</c:forEach>-->
+            <c:forEach items="${storage.resources}" var="resource">
+              <c:if test="${resource != 'MONEY'}">
+                <option value="<c:out value='${resource.id}'/>"><spring:message code="${resource.nameCode}"/><fmt:formatNumber pattern=" ($#.##)">${resource.price}</fmt:formatNumber></option>
+              </c:if>
+            </c:forEach>
           </select>
         </div>
         <div class="col s2">
@@ -352,7 +334,7 @@
           <!-- Buy Buttons-->
           <div class="allBuyButtonsContainer">
             <div class="buyButtonsContainer">
-              <div>
+              <div ng-click="buyFactory('asd')">
                 <div id="factory1Disabler${factory.getType()}" data-position="top" data-delay="50"
                      data-tooltip="CANTBUY" class="tooltipped box black buy1Disability canBuy"></div>
                 <img id="buyOne${factory.getType()}" data-amount="1" data-factoryid="${factory.getType().getId()}" class="buyFactory" src="../../images/buttons/buy1.png"/>

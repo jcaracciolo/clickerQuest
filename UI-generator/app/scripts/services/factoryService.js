@@ -17,6 +17,11 @@ define(['clickerQuest'], function(clickerquest) {
         return $http.get(this.url + factoryId + "/recipe");
       };
 
+      this.buyFactory = function (factoryId, amount) {
+        const body = JSON.stringify({id: factoryId, amount: amount});
+        return $http.post(this.url + "purchase", body)
+      }
+
     });
 
 });
