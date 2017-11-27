@@ -1,5 +1,101 @@
 
 <link rel="stylesheet" href="styles/game.css">
+
+<!-- Modal Trigger -->
+<div class="col">
+  <a class="waves-effect waves-light btn modal-trigger" href="#demoModal">Modal</a>
+</div>
+<!-- Modal Structure -->
+<div id="demoModal" class="modal">
+  <div class="modal-content">
+    <h4>Modal header</h4>
+    <p>A bunch of text</p>
+  </div>
+  <div class="modal-footer">
+    <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Agree</a>
+  </div>
+</div>
+
+
+
+<!-- Market Modal -->
+<div id="maarketModal" class="modal">
+  <div class="modal-content">
+    <h4>MARKET</h4>
+    <p>WELCOME TO THE MARKET</p>
+
+    <form action="" name="market.buy">
+      <div class="row market-block">
+        <div id="market-buy-resource-wrapper" class="col s3 dropdown-wrapper">
+          <select name="resources" id="market.buy.resources" required>
+            <option value="" disabled selected>SELECT RESOURCE</option>
+            <!--<c:forEach items="${storage.resources}" var="resource">-->
+              <!--<c:if test="${resource != 'MONEY'}">-->
+                <!--<option value="<c:out value='${resource.id}'/>"><spring:message code="${resource.nameCode}"/><fmt:formatNumber pattern=" ($#.##)">${resource.price}</fmt:formatNumber></option>-->
+              <!--</c:if>-->
+            <!--</c:forEach>-->
+          </select>
+        </div>
+        <div class="col s2">
+          <input maxlength="5" type="text" name="quantity" id="market.buy.quantity" placeholder="<spring:message code="game.market.quantity"/>">
+        </div>
+        <div id="market-buy-unit-wrapper" class="col s3 dropdown-wrapper">
+          <select name="unit" id="market.buy.unit">
+            <option value="" disabled selected>SELECT UNIT</option>
+            <option value="none"><i>NO UNIT</i></option>
+            <option value="K">K</option>
+            <option value="M">M</option>
+            <option value="B">B</option>
+            <option value="T">T</option>
+          </select>
+        </div>
+        <div class="col s2">
+          <p id="market.buy.price" class="calculatedPrice"></p>
+        </div>
+        <div class="col s2">
+          <spring:message code="buttonFolder" var="buttonsFolder"/>
+          <img id="market.buy" class="marketButton" src='<c:url value="/resources/${buttonsFolder}/buy.png"/>'/>
+        </div>
+      </div>
+    </form>
+
+    <form action="" name="market.sell">
+      <div class="row market-block">
+        <div id="market-sell-resources-wrapper" class="col s3 dropdown-wrapper">
+          <select name="resources" id="market.sell.resources" required>
+            <option value="" disabled selected><spring:message code="game.market.selectResource"/> </option>
+            <c:forEach items="${storage.resources}" var="resource">
+              <c:if test="${resource != 'MONEY'}">
+                <option value="<c:out value='${resource.id}'/>"><spring:message code="${resource.nameCode}"/><fmt:formatNumber pattern=" ($#)">${resource.price}</fmt:formatNumber></option>
+              </c:if>
+            </c:forEach>
+          </select>
+        </div>
+        <div class="col s2">
+          <input maxlength="5" type="text" name="quantity" id="market.sell.quantity" placeholder="<spring:message code="game.market.quantity"/>">
+        </div>
+        <div id="market-sell-unit-wrapper" class="col s3 dropdown-wrapper">
+          <select name="unit" id="market.sell.unit">
+            <option value="" disabled selected><spring:message code="game.market.selectUnit"/> </option>
+            <option value="none"><i><spring:message code="game.market.noUnit"/></i></option>
+            <option value="K">K</option>
+            <option value="M">M</option>
+            <option value="B">B</option>
+            <option value="T">T</option>
+          </select>
+        </div>
+        <div class="col s2">
+          <p id="market.sell.price" class="calculatedPrice"></p>
+        </div>
+        <div class="col s2">
+          <spring:message code="buttonFolder" var="buttonsFolder"/>
+          <img id="market.sell" class="marketButton" src='<c:url value="/resources/${buttonsFolder}/sell.png"/>'/>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
 <div class="row" id="outer">
   <!-- LEFT PANEL -->
   <div class="col no-padding s2">

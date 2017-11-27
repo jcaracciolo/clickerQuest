@@ -1,4 +1,4 @@
-var url=window.location.href.split("/")
+var url=window.location.href.split("/");
 var userId =url[url.length - 2];
 sessionStorage.removeItem("user");
 

@@ -86,7 +86,6 @@ define(['clickerQuest','services/UserService', 'services/factoryService'], funct
 
     UserService.getFactories(1).then(
       function (response) {
-        console.log("asd");
         response.data.factories.forEach(function (f) {
           if (f.amount != 0) {
             $scope.activeFactories.push(f);
