@@ -233,8 +233,9 @@ public class UserServiceImpl implements UserService {
         }
 
         Wealth wealth = getUserWealth(userid);
-        double cost = (resourceType.getPrice()) * amount;
-        if( wealth.getStorage().getValue(resourceType).compareTo(BigDecimal.valueOf(amount)) <  0 ) {
+        BigDecimal bigAmount = BigDecimal.valueOf(amount);
+        BigDecimal cost = (resourceType.getPrice()).multiply(bigAmount);
+        if( wealth.getStorage().getValue(resourceType).compareTo(bigAmount) <  0 ) {
             return false;
         }
 
@@ -244,7 +245,7 @@ public class UserServiceImpl implements UserService {
         wealth.getStorage().getLastUpdated().forEach(wbuilder::setLastUpdated);
 
         wbuilder.addItem(resourceType,BigDecimal.valueOf(-amount));
-        wbuilder.addItem(ResourceType.MONEY,BigDecimal.valueOf(cost));
+        wbuilder.addItem(ResourceType.MONEY,cost);
 
         Wealth newWealth = new Wealth(userid,wbuilder.buildPackage(),wealth.getProductions());
         updateWealth(newWealth);
@@ -259,8 +260,9 @@ public class UserServiceImpl implements UserService {
             return false;
         }
         Wealth wealth = getUserWealth(userid);
-        double cost = (resourceType.getPrice()) * amount;
-        if( wealth.getStorage().getValue(ResourceType.MONEY).compareTo(BigDecimal.valueOf(cost)) <  0 ) {
+        BigDecimal bigAmount = BigDecimal.valueOf(amount);
+        BigDecimal cost = (resourceType.getPrice()).multiply(bigAmount);
+        if( wealth.getStorage().getValue(ResourceType.MONEY).compareTo(cost) <  0 ) {
             return false;
         }
 
@@ -269,7 +271,7 @@ public class UserServiceImpl implements UserService {
         wealth.getStorage().rawMap().forEach(wbuilder::putItem);
         wealth.getStorage().getLastUpdated().forEach(wbuilder::setLastUpdated);
 
-        wbuilder.addItem(ResourceType.MONEY,BigDecimal.valueOf(-cost));
+        wbuilder.addItem(ResourceType.MONEY,cost.negate());
         wbuilder.addItem(resourceType,BigDecimal.valueOf(amount));
 
         Wealth newWealth = new Wealth(userid,wbuilder.buildPackage(),wealth.getProductions());

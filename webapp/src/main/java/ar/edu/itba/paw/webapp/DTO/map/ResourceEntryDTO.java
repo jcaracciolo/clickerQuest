@@ -2,7 +2,6 @@ package ar.edu.itba.paw.webapp.DTO.map;
 
 import ar.edu.itba.paw.model.ResourceType;
 
-import javax.annotation.Resource;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.math.BigDecimal;
@@ -22,7 +21,7 @@ public class ResourceEntryDTO {
     @XmlElement(name = "production")
     private Double production;
 
-    public ResourceEntryDTO(ResourceType resourceType, Double storage, Double production) {
+    ResourceEntryDTO(ResourceType resourceType, Double storage, Double production) {
         this.id = resourceType.getId();
         this.name = resourceType.getNameCode();
         this.storage = storage;

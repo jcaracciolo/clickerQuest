@@ -199,7 +199,7 @@ public class Wealth {
 
     public BigDecimal calculateScore() {
         return productions.rawMap().entrySet().stream()
-                .map((e) -> e.getValue().multiply(BigDecimal.valueOf(e.getKey().getBasePrice())))
+                .map((e) -> e.getValue().multiply(e.getKey().getBasePrice()))
                 .reduce(BigDecimal::add)
                 .orElse(BigDecimal.ZERO);
     }

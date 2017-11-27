@@ -5,6 +5,7 @@ import ar.edu.itba.paw.model.ResourceType;
 import javax.annotation.Resource;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.math.BigDecimal;
 
 @XmlRootElement
 public class MarketEntryDTO {
@@ -16,11 +17,11 @@ public class MarketEntryDTO {
     private String name;
 
     @XmlElement(name = "price")
-    private Long price;
+    private BigDecimal price;
 
     public MarketEntryDTO(){}
 
-    public MarketEntryDTO(ResourceType resourceType, Long price) {
+    public MarketEntryDTO(ResourceType resourceType, BigDecimal price) {
         this.id = resourceType.getId();
         this.name = resourceType.getNameCode();
         this.price = price;

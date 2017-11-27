@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.model;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Arrays;
 import java.util.Optional;
 
@@ -22,13 +23,13 @@ public enum ResourceType {
 
     private int id;
     private String nameCode;
-    private double price;
+    private BigDecimal price;
     private BigDecimal popularity;
 
     ResourceType(int id, String name, double price) {
         this.id = id;
         this.nameCode = name;
-        this.price = price;
+        this.price = BigDecimal.valueOf(price);
         this.popularity = BigDecimal.ONE;
     }
 
@@ -36,12 +37,12 @@ public enum ResourceType {
         this.popularity = popularity;
     }
 
-    public long getPrice() {
-        return popularity.multiply(BigDecimal.valueOf(price)).longValue();
+    public BigDecimal getPrice() {
+        return popularity.multiply(price);
     }
 
-    public long getBasePrice() {
-        return (long) Math.ceil(price);
+    public BigDecimal getBasePrice() {
+        return price.setScale(0, RoundingMode.CEILING);
     }
 
     public String getNameCode() {

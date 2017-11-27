@@ -77,11 +77,10 @@ public class MarketHibernateDao implements MarketDao {
         BigDecimal finalTotal = total;
         entries.forEach( (e) -> {
                     BigDecimal value = e.getAmount().add(min);
-                    BigDecimal popularity = BigDecimal.valueOf(
-                            popularityCalculator(
+                    BigDecimal popularity = popularityCalculator(
                                     value,
                                     BigDecimal.valueOf(ResourceType.values().length),
-                                    finalTotal)
+                                    finalTotal
                     );
 
                     if(popularity.compareTo(BigDecimal.valueOf(0.5))<0) popularity=BigDecimal.valueOf(0.5);
@@ -92,14 +91,14 @@ public class MarketHibernateDao implements MarketDao {
         return popularities;
     }
 
-    public double popularityCalculator(BigDecimal purchases, BigDecimal totalAmount, BigDecimal totalSum) {
+    public BigDecimal popularityCalculator(BigDecimal purchases, BigDecimal totalAmount, BigDecimal totalSum) {
         return popularityExponential(purchases.multiply(totalAmount).divide(totalSum, RoundingMode.HALF_EVEN).doubleValue());
     }
 
-    private double popularityExponential(double x) {
+    private BigDecimal popularityExponential(double x) {
         double slope = 0.15;
-        double max = 3D;
-        return ( (1+1/max) - Math.exp(-(x-1) * slope) ) * max;
+        BigDecimal max = BigDecimal.valueOf(3);
+        return BigDecimal.valueOf( (1+1/max.doubleValue()) - Math.exp(-(x-1) * slope) ).multiply(max);
     }
 
 }

@@ -193,7 +193,7 @@ public abstract class ResourcePackage {
                 }
             } else {
                 BigDecimal lambda = thatD.divide(d,ROUND_HALF_EVEN).subtract(ONE).abs();
-                if( lambda.compareTo(BigDecimal.valueOf(0.04))<=0 ) {
+                if( lambda.compareTo(BigDecimal.valueOf(0.04))>=0 ) {
                     return false;
                 }
             }
