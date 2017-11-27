@@ -47,18 +47,6 @@ define(['clickerQuest','services/UserService', 'services/factoryService'], funct
     );
 
 
-    $scope.activeFactories = [];
-
-    UserService.getFactories(1).then(
-      function (response) {
-        $scope.activeFactories = response.data.factories;
-        $scope.activeFactories.sort(function (f1, f2) {
-          return f1.id - f2.id;
-        })
-      }
-    );
-
-
     $scope.factories = [];
 
     factoryService.getAllFactories().then(
@@ -66,7 +54,25 @@ define(['clickerQuest','services/UserService', 'services/factoryService'], funct
         response.data.factories.forEach(function (f) {
           factoryService.getFactoryRecipe(f.id).then(
             function (response) {
-              $scope.factories.push(response.data);
+              var factInfo = { factory_id: response.data.factory_id,
+                                factory_type: response.data.factory_type,
+                                cost: [],
+                                recipe: { input: [],
+                                          output: []
+                                        }
+                            };
+              response.data.recipe.forEach(function (elem) {
+                if (elem.storage != null) {
+                  factInfo.cost.push(elem);
+                }
+                if (elem.production < 0) {
+                  factInfo.recipe.input.push(elem);
+                }
+                if (elem.production > 0) {
+                  factInfo.recipe.output.push(elem);
+                }
+              });
+              $scope.factories.push(factInfo);
               $scope.factories.sort(function (f1, f2) {
                 return f1.factory_id - f2.factory_id;
               })
@@ -76,6 +82,24 @@ define(['clickerQuest','services/UserService', 'services/factoryService'], funct
       }
     );
 
+    $scope.activeFactories = [];
+
+    UserService.getFactories(1).then(
+      function (response) {
+        console.log("asd");
+        response.data.factories.forEach(function (f) {
+          if (f.amount != 0) {
+            $scope.activeFactories.push(f);
+          }
+        });
+        $scope.activeFactories.sort(function (f1, f2) {
+          return f1.id - f2.id;
+        })
+      }
+    );
+
   });
+
+
 
 });

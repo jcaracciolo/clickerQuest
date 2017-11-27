@@ -20,7 +20,7 @@ public class BaseFactoryDTO {
     public BaseFactoryDTO(){}
 
     public BaseFactoryDTO(FactoryType factoryType, URI baseUri) {
-        this.id = id;
+        this.id = factoryType.getId();
         this.type = factoryType.getNameCode();
         this.recipe_url = baseUri.resolve(String.format(BaseFactoryRecipeDTO.url, id));
     }
